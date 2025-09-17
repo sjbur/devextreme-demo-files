@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.viz.js)
 * Version: 25.2.0
-* Build date: Thu Sep 11 2025
+* Build date: Wed Sep 17 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -14225,7 +14225,7 @@ var _default = exports["default"] = DOMComponent;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = exports.WIDGET_CLASS = exports.HOVER_STATE_CLASS = exports.FOCUSED_STATE_CLASS = exports.EMPTY_ACTIVE_STATE_UNIT = void 0;
+exports["default"] = exports.WIDGET_CLASS = exports.HOVER_STATE_CLASS = exports.FOCUSED_STATE_CLASS = exports.EMPTY_ACTIVE_STATE_UNIT = exports.ACTIVE_STATE_CLASS = void 0;
 __webpack_require__(64044);
 __webpack_require__(69331);
 __webpack_require__(638);
@@ -14244,6 +14244,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const WIDGET_CLASS = exports.WIDGET_CLASS = 'dx-widget';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const ACTIVE_STATE_CLASS = exports.ACTIVE_STATE_CLASS = 'dx-state-active';
 const FOCUSED_STATE_CLASS = exports.FOCUSED_STATE_CLASS = 'dx-state-focused';
 const HOVER_STATE_CLASS = exports.HOVER_STATE_CLASS = 'dx-state-hover';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
@@ -14663,7 +14664,7 @@ class Widget extends _dom_component.default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   event) {
     this.option('isActive', value);
-    $element.toggleClass('dx-state-active', value);
+    $element.toggleClass(ACTIVE_STATE_CLASS, value);
   }
   _updatedHover() {
     const hoveredElement = this._options.silent('hoveredElement');
@@ -33101,11 +33102,12 @@ var _default = exports["default"] = Animator;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VALIDATE_WHEEL_TIMEOUT = exports.TopPocketState = exports.ShowScrollbarMode = exports.SCROLL_LINE_HEIGHT = exports.SCROLLVIEW_TOP_POCKET_CLASS = exports.SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = exports.SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = exports.SCROLLVIEW_REACHBOTTOM_CLASS = exports.SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_READY_CLASS = exports.SCROLLVIEW_PULLDOWN_LOADING_CLASS = exports.SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = exports.SCROLLVIEW_PULLDOWN_IMAGE_CLASS = exports.SCROLLVIEW_PULLDOWN = exports.SCROLLVIEW_CONTENT_CLASS = exports.SCROLLVIEW_BOTTOM_POCKET_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SCROLL_CONTENT_CLASS = exports.SCROLLABLE_SCROLL_CLASS = exports.SCROLLABLE_SCROLLBAR_SIMULATED = exports.SCROLLABLE_SCROLLBAR_CLASS = exports.SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = exports.SCROLLABLE_SCROLLBARS_HIDDEN = exports.SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = exports.SCROLLABLE_DISABLED_CLASS = exports.SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTAINER_CLASS = exports.PULLDOWN_ICON_CLASS = exports.KEY_CODES = exports.HOVER_ENABLED_STATE = exports.HIDE_SCROLLBAR_TIMEOUT = exports.DIRECTION_VERTICAL = exports.DIRECTION_HORIZONTAL = exports.DIRECTION_BOTH = void 0;
+exports.VALIDATE_WHEEL_TIMEOUT = exports.TopPocketState = exports.ShowScrollbarMode = exports.SCROLL_LINE_HEIGHT = exports.SCROLLVIEW_TOP_POCKET_CLASS = exports.SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = exports.SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = exports.SCROLLVIEW_REACHBOTTOM_CLASS = exports.SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_READY_CLASS = exports.SCROLLVIEW_PULLDOWN_LOADING_CLASS = exports.SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = exports.SCROLLVIEW_PULLDOWN_IMAGE_CLASS = exports.SCROLLVIEW_PULLDOWN = exports.SCROLLVIEW_CONTENT_CLASS = exports.SCROLLVIEW_BOTTOM_POCKET_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SCROLL_CONTENT_CLASS = exports.SCROLLABLE_SCROLL_CLASS = exports.SCROLLABLE_SCROLLBAR_SIMULATED = exports.SCROLLABLE_SCROLLBAR_CLASS = exports.SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = exports.SCROLLABLE_SCROLLBARS_HIDDEN = exports.SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = exports.SCROLLABLE_DISABLED_CLASS = exports.SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTAINER_CLASS = exports.SCROLLABLE_CLASS = exports.PULLDOWN_ICON_CLASS = exports.KEY_CODES = exports.HOVER_ENABLED_STATE = exports.HIDE_SCROLLBAR_TIMEOUT = exports.DIRECTION_VERTICAL = exports.DIRECTION_HORIZONTAL = exports.DIRECTION_BOTH = void 0;
 const SCROLL_LINE_HEIGHT = exports.SCROLL_LINE_HEIGHT = 40;
 const DIRECTION_VERTICAL = exports.DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = exports.DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = exports.DIRECTION_BOTH = 'both';
+const SCROLLABLE_CLASS = exports.SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 const SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
@@ -34272,6 +34274,7 @@ var _type = __webpack_require__(11528);
 var _window = __webpack_require__(3104);
 var _m_support = _interopRequireDefault(__webpack_require__(85991));
 var _dom_component = _interopRequireDefault(__webpack_require__(22331));
+var _consts = __webpack_require__(21363);
 var _scrollable = __webpack_require__(91284);
 var _scrollable2 = _interopRequireDefault(__webpack_require__(25689));
 var _scrollable3 = __webpack_require__(55350);
@@ -34280,11 +34283,6 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
-const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
@@ -34354,10 +34352,10 @@ class Scrollable extends _dom_component.default {
     }
   }
   _initScrollableMarkup() {
-    const $element = this.$element().addClass(SCROLLABLE_CLASS);
-    const $container = (0, _renderer.default)('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
-    const $wrapper = (0, _renderer.default)('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
-    const $content = (0, _renderer.default)('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
+    const $element = this.$element().addClass(_consts.SCROLLABLE_CLASS);
+    const $container = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_CONTAINER_CLASS);
+    const $wrapper = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_WRAPPER_CLASS);
+    const $content = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_CONTENT_CLASS);
     this._$container = $container;
     this._$wrapper = $wrapper;
     this._$content = $content;
@@ -34439,7 +34437,7 @@ class Scrollable extends _dom_component.default {
     const {
       disabled
     } = this.option();
-    this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, disabled);
+    this.$element().toggleClass(_consts.SCROLLABLE_DISABLED_CLASS, disabled);
     if (this.option('disabled')) {
       this._lock();
     } else {
@@ -34676,7 +34674,7 @@ class Scrollable extends _dom_component.default {
   scrollToElement(element, offset) {
     const $element = (0, _renderer.default)(element);
     const elementInsideContent = this.$content().find(element).length;
-    const elementIsInsideContent = $element.parents(`.${SCROLLABLE_CLASS}`).length - $element.parents(`.${SCROLLABLE_CONTENT_CLASS}`).length === 0;
+    const elementIsInsideContent = $element.parents(`.${_consts.SCROLLABLE_CLASS}`).length - $element.parents(`.${_consts.SCROLLABLE_CONTENT_CLASS}`).length === 0;
     if (!elementInsideContent || !elementIsInsideContent) {
       return;
     }
@@ -48426,6 +48424,7 @@ var _layout_element = __webpack_require__(23323);
 var _renderer = __webpack_require__(15232);
 var _title = __webpack_require__(69638);
 var _utils = __webpack_require__(98013);
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/default-param-last */
 /* eslint-disable no-return-assign */
@@ -50438,6 +50437,7 @@ var _version = __webpack_require__(1956);
 var _errors_warnings = _interopRequireDefault(__webpack_require__(38355));
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -50735,11 +50735,11 @@ var _themes = __webpack_require__(84560);
 var _renderer2 = __webpack_require__(15232);
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
@@ -51984,6 +51984,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.plugin = exports.LoadingIndicator = void 0;
 var _utils = __webpack_require__(98013);
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -53563,7 +53564,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.RectSvgElement = exports.PathSvgElement = exports.ArcSvgElement = void 0;
 exports.Renderer = Renderer;
-exports.TextSvgElement = exports.SvgElement = void 0;
+exports.getBackup = exports.TextSvgElement = exports.SvgElement = void 0;
 exports.getFuncIri = getFuncIri;
 exports.processHatchingAttrs = processHatchingAttrs;
 exports.refreshPaths = void 0;
@@ -53577,6 +53578,7 @@ var _window = __webpack_require__(3104);
 var _animation = __webpack_require__(82645);
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/default-param-last */
@@ -53665,7 +53667,7 @@ const DEFAULTS = {
   scaleY: 1,
   'pointer-events': null
 };
-const getBackup = (0, _call_once.default)(() => {
+const getBackup = exports.getBackup = (0, _call_once.default)(() => {
   const backupContainer = _dom_adapter.default.createElement('div');
   const backupCounter = 0;
   backupContainer.style.left = '-9999px';
@@ -60252,6 +60254,7 @@ var _extend = __webpack_require__(52576);
 var _type = __webpack_require__(11528);
 var _layout_element = __webpack_require__(23323);
 var _utils = __webpack_require__(98013);
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
@@ -60614,6 +60617,7 @@ var _plaque = __webpack_require__(16706);
 var _renderer2 = __webpack_require__(15232);
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-base-to-string */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
@@ -60621,7 +60625,6 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 /* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
@@ -62924,6 +62927,7 @@ var _utils = __webpack_require__(98013);
 var _base_gauge = __webpack_require__(90678);
 var _circular_gauge = _interopRequireDefault(__webpack_require__(40414));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable prefer-spread */
@@ -83497,6 +83501,7 @@ var _softblue = _interopRequireDefault(__webpack_require__(56829));
 var _index3 = _interopRequireDefault(__webpack_require__(55073));
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -87172,7 +87177,7 @@ Object.defineProperty(exports, "refreshPaths", ({
 }));
 var _iterator = __webpack_require__(21274);
 var _renderer = __webpack_require__(15232);
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); } /* eslint-disable prefer-rest-params */ /* eslint-disable no-bitwise */ /* eslint-disable @typescript-eslint/init-declarations */ /* eslint-disable func-names */ /* eslint-disable import/no-mutable-exports */ /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable @typescript-eslint/no-shadow */ /* eslint-disable no-param-reassign */ /* eslint-disable @typescript-eslint/explicit-module-boundary-types */ /* eslint-disable @typescript-eslint/no-unsafe-return */ /* eslint-disable @typescript-eslint/explicit-function-return-type */ /* eslint-disable prefer-destructuring */ /* eslint-disable @typescript-eslint/no-unused-expressions */
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); } /* eslint-disable import/no-import-module-exports */ /* eslint-disable prefer-rest-params */ /* eslint-disable no-bitwise */ /* eslint-disable @typescript-eslint/init-declarations */ /* eslint-disable func-names */ /* eslint-disable import/no-mutable-exports */ /* eslint-disable @typescript-eslint/no-shadow */ /* eslint-disable no-param-reassign */ /* eslint-disable @typescript-eslint/explicit-module-boundary-types */ /* eslint-disable @typescript-eslint/no-unsafe-return */ /* eslint-disable @typescript-eslint/explicit-function-return-type */ /* eslint-disable prefer-destructuring */ /* eslint-disable @typescript-eslint/no-unused-expressions */
 const {
   floor
 } = Math;
@@ -87263,6 +87268,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.ControlBar = ControlBar;
 var _utils = __webpack_require__(98013);
 var _utils2 = __webpack_require__(91548);
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -88276,6 +88282,7 @@ var _extend2 = __webpack_require__(52576);
 var _iterator = __webpack_require__(21274);
 var _object = __webpack_require__(22263);
 var _legend = __webpack_require__(56358);
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -90658,6 +90665,7 @@ var _window = __webpack_require__(3104);
 var _utils = __webpack_require__(98013);
 var _event_emitter = __webpack_require__(13612);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -91691,7 +91699,6 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.generateDataKey = generateDataKey;
 /* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 let nextDataKey = 1;

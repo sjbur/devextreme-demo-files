@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.web.js)
 * Version: 25.2.0
-* Build date: Thu Sep 11 2025
+* Build date: Wed Sep 17 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -20583,7 +20583,7 @@ var _default = exports["default"] = DOMComponent;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = exports.WIDGET_CLASS = exports.HOVER_STATE_CLASS = exports.FOCUSED_STATE_CLASS = exports.EMPTY_ACTIVE_STATE_UNIT = void 0;
+exports["default"] = exports.WIDGET_CLASS = exports.HOVER_STATE_CLASS = exports.FOCUSED_STATE_CLASS = exports.EMPTY_ACTIVE_STATE_UNIT = exports.ACTIVE_STATE_CLASS = void 0;
 __webpack_require__(64044);
 __webpack_require__(69331);
 __webpack_require__(638);
@@ -20602,6 +20602,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const WIDGET_CLASS = exports.WIDGET_CLASS = 'dx-widget';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const ACTIVE_STATE_CLASS = exports.ACTIVE_STATE_CLASS = 'dx-state-active';
 const FOCUSED_STATE_CLASS = exports.FOCUSED_STATE_CLASS = 'dx-state-focused';
 const HOVER_STATE_CLASS = exports.HOVER_STATE_CLASS = 'dx-state-hover';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
@@ -21021,7 +21022,7 @@ class Widget extends _dom_component.default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   event) {
     this.option('isActive', value);
-    $element.toggleClass('dx-state-active', value);
+    $element.toggleClass(ACTIVE_STATE_CLASS, value);
   }
   _updatedHover() {
     const hoveredElement = this._options.silent('hoveredElement');
@@ -59614,6 +59615,9 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
     const eventTarget = eventArgs.originalEvent.target;
     const $targetCell = this._getCellElementFromTarget(eventTarget);
     const isCommandCell = $targetCell.is(_const2.COMMAND_CELL_SELECTOR);
+    if (this.isOriginalTabHandlerRequired($targetCell, eventArgs)) {
+      return false;
+    }
     if (isCommandCell) {
       return !this._targetCellTabHandler(eventArgs, direction);
     }
@@ -59649,42 +59653,47 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
     }
     return true;
   }
+  isOriginalTabHandlerRequired($cell, event) {
+    const eventTarget = event.originalEvent.target;
+    const elementType = this._getElementType(eventTarget);
+    const $lastInteractiveElement = (0, _m_keyboard_navigation_utils.getInteractiveElement)($cell, !event.shift);
+    if (elementType !== 'cell' || $lastInteractiveElement.length === 0) {
+      return false;
+    }
+    return eventTarget !== $lastInteractiveElement.get(0);
+  }
   _targetCellTabHandler(eventArgs, direction) {
     const $event = eventArgs.originalEvent;
     let eventTarget = $event.target;
     let elementType = this._getElementType(eventTarget);
     let $cell = this._getCellElementFromTarget(eventTarget);
-    const $lastInteractiveElement = elementType === 'cell' && this._getInteractiveElement($cell, !eventArgs.shift);
-    let isOriginalHandlerRequired = false;
-    if (!(0, _m_keyboard_navigation_utils.isEditorCell)(this, $cell) && $lastInteractiveElement !== null && $lastInteractiveElement !== void 0 && $lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
-      isOriginalHandlerRequired = true;
-    } else {
-      if (this._focusedCellPosition.rowIndex === undefined && (0, _renderer.default)(eventTarget).hasClass(_const.ROW_CLASS)) {
-        this._updateFocusedCellPosition($cell);
-      }
-      elementType = this._getElementType(eventTarget);
-      if (this.isRowFocusType()) {
-        this.setCellFocusType();
-        if (elementType === 'row' && (0, _m_keyboard_navigation_utils.isDataRow)((0, _renderer.default)(eventTarget))) {
-          eventTarget = this.getFirstValidCellInRow((0, _renderer.default)(eventTarget));
-          elementType = this._getElementType(eventTarget);
-        }
-      }
-      const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
-      $cell = nextCellInfo.$cell;
-      if (!$cell) {
-        return false;
-      }
-      $cell = this._checkNewLineTransition($event, $cell);
-      if (!$cell) {
-        return false;
-      }
-      this._focusCell($cell, !nextCellInfo.isHighlighted);
-      if (!(0, _m_keyboard_navigation_utils.isEditorCell)(this, $cell)) {
-        this._focusInteractiveElement($cell, eventArgs.shift);
+    if (!(0, _m_keyboard_navigation_utils.isEditorCell)(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
+      return true;
+    }
+    if (this._focusedCellPosition.rowIndex === undefined && (0, _renderer.default)(eventTarget).hasClass(_const.ROW_CLASS)) {
+      this._updateFocusedCellPosition($cell);
+    }
+    if (this.isRowFocusType()) {
+      this.setCellFocusType();
+      if (elementType === 'row' && (0, _m_keyboard_navigation_utils.isDataRow)((0, _renderer.default)(eventTarget))) {
+        eventTarget = this.getFirstValidCellInRow((0, _renderer.default)(eventTarget));
+        elementType = this._getElementType(eventTarget);
       }
     }
-    return isOriginalHandlerRequired;
+    const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+    $cell = nextCellInfo.$cell;
+    if (!$cell) {
+      return false;
+    }
+    $cell = this._checkNewLineTransition($event, $cell);
+    if (!$cell) {
+      return false;
+    }
+    this._focusCell($cell, !nextCellInfo.isHighlighted);
+    if (!(0, _m_keyboard_navigation_utils.isEditorCell)(this, $cell)) {
+      this._focusInteractiveElement($cell, eventArgs.shift);
+    }
+    return false;
   }
   _getNextCellByTabKey($event, direction, elementType) {
     let $cell = this._getNextCell(direction, elementType);
@@ -60120,7 +60129,7 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
   }
   _focusInteractiveElement($cell, isLast) {
     if (!$cell) return;
-    const $focusedElement = this._getInteractiveElement($cell, isLast);
+    const $focusedElement = (0, _m_keyboard_navigation_utils.getInteractiveElement)($cell, isLast);
     _m_utils.default.focusAndSelectElement(this, $focusedElement);
   }
   _focus($cell, disableFocus, skipFocusEvent) {
@@ -60777,10 +60786,6 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
   }
   _isFastEditingAllowed() {
     return this._isCellEditMode() && this.option('keyboardNavigation.editOnKeyPress');
-  }
-  _getInteractiveElement($cell, isLast) {
-    const $focusedElement = $cell.find(_const2.INTERACTIVE_ELEMENTS_SELECTOR).filter(':visible');
-    return isLast ? $focusedElement.last() : $focusedElement.first();
   }
   _applyTabIndexToElement($element) {
     const tabIndex = this.option('tabIndex') ?? 0;
@@ -61555,6 +61560,8 @@ exports.KeyboardNavigationController = KeyboardNavigationController;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.getInteractiveElement = getInteractiveElement;
+exports.getInteractiveElements = getInteractiveElements;
 exports.isAdaptiveItem = isAdaptiveItem;
 exports.isCellInHeaderRow = isCellInHeaderRow;
 exports.isDataRow = isDataRow;
@@ -61621,6 +61628,13 @@ function isFixedColumnIndexOffsetRequired(that, column) {
 function shouldPreventScroll(that) {
   const keyboardController = that.getController('keyboardNavigation');
   return keyboardController._isVirtualScrolling() ? that.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
+}
+function getInteractiveElements($cell) {
+  return $cell.find(_const2.INTERACTIVE_ELEMENTS_SELECTOR).filter(':visible');
+}
+function getInteractiveElement($cell, isLast) {
+  const $focusedElement = getInteractiveElements($cell);
+  return isLast ? $focusedElement.last() : $focusedElement.first();
 }
 
 /***/ }),
@@ -76639,6 +76653,7 @@ var _index4 = __webpack_require__(58529);
 var _view3 = __webpack_require__(93825);
 var _view4 = __webpack_require__(5061);
 var _index5 = __webpack_require__(8197);
+var _common_props_context = __webpack_require__(46578);
 var _config_context = __webpack_require__(11024);
 var _view5 = __webpack_require__(32643);
 var _root_element_updater = __webpack_require__(16314);
@@ -76663,22 +76678,25 @@ function MainViewComponent(_ref) {
     ContextMenu,
     EditPopup,
     config,
-    rootElementRef,
+    commonProps,
     accessibilityDescription,
     accessibilityStatus,
     onKeyDown
   } = _ref;
   return (0, _inferno.createFragment)([(0, _inferno.createComponentVNode)(2, _config_context.ConfigContext.Provider, {
     "value": config,
-    children: (0, _inferno.createComponentVNode)(2, _root_element_updater.RootElementUpdater, {
-      "rootElementRef": rootElementRef,
-      "className": CLASSES.cardView,
-      children: (0, _inferno.createVNode)(1, "div", "dx-cardview-root-container", [(0, _inferno.createComponentVNode)(2, _index5.A11yStatusContainer, {
-        "statusText": accessibilityStatus
-      }), (0, _inferno.createVNode)(1, "div", "dx-cardview-header-container", [(0, _inferno.createComponentVNode)(2, Toolbar), (0, _inferno.createComponentVNode)(2, HeaderPanel)], 4), (0, _inferno.createComponentVNode)(2, Content), (0, _inferno.createComponentVNode)(2, FilterPanel), (0, _inferno.createVNode)(1, "div", null, (0, _inferno.createComponentVNode)(2, Pager), 0), (0, _inferno.createComponentVNode)(2, HeaderFilterPopup), (0, _inferno.createComponentVNode)(2, EditPopup), (0, _inferno.createComponentVNode)(2, ColumnChooser), (0, _inferno.createComponentVNode)(2, ContextMenu)], 4, {
-        "role": 'group',
-        "aria-label": accessibilityDescription,
-        "onKeyDown": onKeyDown
+    children: (0, _inferno.createComponentVNode)(2, _common_props_context.CommonPropsContext.Provider, {
+      "value": commonProps,
+      children: (0, _inferno.createComponentVNode)(2, _root_element_updater.RootElementUpdater, {
+        "rootElementRef": commonProps.rootElementRef,
+        "className": CLASSES.cardView,
+        children: (0, _inferno.createVNode)(1, "div", "dx-cardview-root-container", [(0, _inferno.createComponentVNode)(2, _index5.A11yStatusContainer, {
+          "statusText": accessibilityStatus
+        }), (0, _inferno.createVNode)(1, "div", "dx-cardview-header-container", [(0, _inferno.createComponentVNode)(2, Toolbar), (0, _inferno.createComponentVNode)(2, HeaderPanel)], 4), (0, _inferno.createComponentVNode)(2, Content), (0, _inferno.createComponentVNode)(2, FilterPanel), (0, _inferno.createVNode)(1, "div", null, (0, _inferno.createComponentVNode)(2, Pager), 0), (0, _inferno.createComponentVNode)(2, HeaderFilterPopup), (0, _inferno.createComponentVNode)(2, EditPopup), (0, _inferno.createComponentVNode)(2, ColumnChooser), (0, _inferno.createComponentVNode)(2, ContextMenu)], 4, {
+          "role": 'group',
+          "aria-label": accessibilityDescription,
+          "onKeyDown": onKeyDown
+        })
       })
     })
   })], 4);
@@ -76704,10 +76722,16 @@ class MainView extends _view.View {
       disabled: this.options.oneWay('disabled').value,
       templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value
     }));
+    this.commonProps = {
+      rootElementRef: {
+        current: this.root
+      }
+    };
   }
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   getProps() {
+    this.commonProps.rootElementRef.current = this.root;
     return (0, _index.computed)(() => ({
       Toolbar: this.toolbar.asInferno(),
       Content: this.content.asInferno(),
@@ -76719,9 +76743,7 @@ class MainView extends _view.View {
       EditPopup: this.editPopup.asInferno(),
       ContextMenu: this.contextMenu.asInferno(),
       config: this.config.value,
-      rootElementRef: {
-        current: this.root
-      },
+      commonProps: this.commonProps,
       onKeyDown: event => {
         this.keyboardNavigation.onKeyDown(event);
       },
@@ -78068,8 +78090,8 @@ var _inferno = __webpack_require__(76231);
 var _m_resize_observer = __webpack_require__(57785);
 var _error_row = __webpack_require__(35085);
 var _no_data_text = __webpack_require__(36568);
-var _load_panel = __webpack_require__(57082);
 var _scrollable = __webpack_require__(90882);
+var _load_panel = __webpack_require__(95643);
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const CLASSES = exports.CLASSES = {
   contentView: 'dx-gridcore-contentview'
@@ -78198,6 +78220,50 @@ Object.keys(_options).forEach(function (key) {
   });
 });
 var _view = __webpack_require__(31123);
+
+/***/ }),
+
+/***/ 95643:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.LoadPanel = void 0;
+var _inferno = __webpack_require__(76231);
+var _window = __webpack_require__(3104);
+var _index = __webpack_require__(6257);
+var _common_props_context = __webpack_require__(46578);
+var _load_panel = __webpack_require__(57082);
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+class LoadPanel extends _index.BaseInfernoComponent {
+  calculatePosition(rootElement) {
+    const window = (0, _window.getWindow)();
+    if (rootElement.offsetHeight > window.innerHeight) {
+      return {
+        of: window,
+        boundary: rootElement,
+        collision: 'fit'
+      };
+    }
+    return {
+      of: rootElement
+    };
+  }
+  render() {
+    const {
+      rootElementRef
+    } = this.context[_common_props_context.CommonPropsContext.id];
+    const loadPanelProperties = _extends({
+      container: rootElementRef.current,
+      position: this.calculatePosition(rootElementRef.current)
+    }, this.props);
+    return (0, _inferno.normalizeProps)((0, _inferno.createComponentVNode)(2, _load_panel.LoadPanel, _extends({}, loadPanelProperties)));
+  }
+}
+exports.LoadPanel = LoadPanel;
 
 /***/ }),
 
@@ -78539,6 +78605,24 @@ class BaseContextMenuView extends _view.View {
   }
 }
 exports.BaseContextMenuView = BaseContextMenuView;
+
+/***/ }),
+
+/***/ 46578:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.CommonPropsContext = void 0;
+var _index = __webpack_require__(6257);
+const CommonPropsContext = exports.CommonPropsContext = (0, _index.createContext)({
+  rootElementRef: {
+    current: null
+  }
+});
 
 /***/ }),
 
@@ -100191,7 +100275,7 @@ const BasePaginationDefaultProps = exports.BasePaginationDefaultProps = _extends
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
-  showPageSizeSelector: true,
+  showPageSizeSelector: 'auto',
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
@@ -100506,11 +100590,44 @@ class PaginationContent extends _index.InfernoComponent {
   getPagesContainerVisible() {
     return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
   }
-  getPagesContainerVisibility() {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
-      return 'hidden';
+  getPageSizeSelectorVisible() {
+    const {
+      showPageSizeSelector,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons
+    } = this.props;
+    if (showPageSizeSelector === false) {
+      return false;
     }
-    return undefined;
+    if (showPageSizeSelector === true) {
+      return true;
+    }
+    if (showPageSizeSelector === 'auto') {
+      const shouldHideBasedOnPageCount = pageCount === 1 && hasKnownLastPage;
+      const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons);
+      if (shouldHideBasedOnPageCount && !hasExplicitVisibleComponents) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+  getPagesContainerVisibility() {
+    const {
+      pagesNavigatorVisible,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons,
+      showPageSizeSelector
+    } = this.props;
+    const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
+    const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons) || showPageSizeSelector === true;
+    const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
+    const result = shouldHide ? 'hidden' : undefined;
+    return result;
   }
   getIsLargeDisplayMode() {
     const displayMode = this.getNormalizedDisplayMode();
@@ -100548,7 +100665,6 @@ class PaginationContent extends _index.InfernoComponent {
       isGridCompatibilityMode,
       rtlEnabled,
       visible,
-      showPageSizeSelector,
       allowedPageSizesRef,
       pageSize,
       pageSizeChangedInternal,
@@ -100593,7 +100709,7 @@ class PaginationContent extends _index.InfernoComponent {
       "focusStateEnabled": focusStateEnabled,
       "hoverStateEnabled": hoverStateEnabled
     }, elementAttr, {
-      children: [showPageSizeSelector && (0, _inferno.createComponentVNode)(2, _selector.PageSizeSelector, {
+      children: [this.getPageSizeSelectorVisible() && (0, _inferno.createComponentVNode)(2, _selector.PageSizeSelector, {
         "rootElementRef": allowedPageSizesRef,
         "isLargeDisplayMode": this.getIsLargeDisplayMode(),
         "itemCount": itemCount,
@@ -103106,7 +103222,7 @@ var _extend = __webpack_require__(52576);
 var _resizable = _interopRequireDefault(__webpack_require__(28416));
 var _m_tooltip = __webpack_require__(33476);
 var _m_classes = __webpack_require__(80126);
-var _m_recurrence = __webpack_require__(55122);
+var _validate_rule = __webpack_require__(25152);
 var _text_utils = __webpack_require__(46942);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DEFAULT_HORIZONTAL_HANDLES = 'left right';
@@ -103304,7 +103420,7 @@ class Appointment extends _dom_component.default {
   }
   _renderRecurrenceClass() {
     const rule = this.dataAccessors.get('recurrenceRule', this.rawAppointment);
-    if ((0, _m_recurrence.getRecurrenceProcessor)().isValidRecurrenceRule(rule)) {
+    if ((0, _validate_rule.validateRRule)(rule)) {
       this.$element().addClass(_m_classes.RECURRENCE_APPOINTMENT_CLASS);
     }
   }
@@ -103445,8 +103561,8 @@ var _uiCollection_widget = _interopRequireDefault(__webpack_require__(7607));
 var _date2 = __webpack_require__(55594);
 var _constants = __webpack_require__(25307);
 var _m_classes = __webpack_require__(80126);
-var _m_recurrence = __webpack_require__(55122);
 var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
+var _generate_dates = __webpack_require__(20532);
 var _appointment_adapter = __webpack_require__(36791);
 var _get_targeted_appointment = __webpack_require__(31985);
 var _appointment_groups_utils = __webpack_require__(11649);
@@ -104263,7 +104379,7 @@ class SchedulerAppointments extends _uiCollection_widget.default {
       const startViewDate = this.invoke('getStartViewDate');
       const endViewDate = this.invoke('getEndViewDate');
       const timezoneCalculator = this.option('timeZoneCalculator');
-      const recurrentDates = (0, _m_recurrence.getRecurrenceProcessor)().generateDates({
+      const recurrentDates = (0, _generate_dates.generateDates)({
         rule: recurrenceRule,
         exception: recurrenceException,
         start: startDate,
@@ -106508,377 +106624,6 @@ function hide() {
 
 /***/ }),
 
-/***/ 55122:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.getRecurrenceProcessor = getRecurrenceProcessor;
-var _errors = _interopRequireDefault(__webpack_require__(87129));
-var _date = _interopRequireDefault(__webpack_require__(41380));
-var _iterator = __webpack_require__(21274);
-var _date2 = __webpack_require__(55594);
-var _rrule = __webpack_require__(4755);
-var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-/* eslint-disable max-classes-per-file, spellcheck/spell-checker */
-
-const toMs = _date.default.dateToMilliseconds;
-const {
-  addOffsets
-} = _date2.dateUtilsTs;
-const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
-const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
-const days = {
-  SU: 0,
-  MO: 1,
-  TU: 2,
-  WE: 3,
-  TH: 4,
-  FR: 5,
-  SA: 6
-};
-const loggedWarnings = [];
-const MS_IN_HOUR = 1000 * 60 * 60;
-const MS_IN_DAY = MS_IN_HOUR * 24;
-const RRULE_BROKEN_TIMEZONES = ['Etc/GMT-13', 'MIT', 'Pacific/Apia', 'Pacific/Enderbury', 'Pacific/Tongatapu', 'Etc/GMT-14', 'Pacific/Kiritimati'];
-let recurrenceProcessor = null;
-function getRecurrenceProcessor() {
-  if (!recurrenceProcessor) {
-    recurrenceProcessor = new RecurrenceProcessor();
-  }
-  return recurrenceProcessor;
-}
-class RecurrenceProcessor {
-  constructor() {
-    this.rRule = null;
-    this.rRuleSet = null;
-    this.validator = new RecurrenceValidator();
-  }
-  generateDates(options) {
-    if (!options.rule) {
-      return [];
-    }
-    const recurrenceRule = this.evalRecurrenceRule(options.rule);
-    const {
-      rule
-    } = recurrenceRule;
-    if (!recurrenceRule.isValid || !rule.freq) {
-      return [];
-    }
-    const rruleIntervalParams = this._createRruleIntervalParams(options);
-    this._initializeRRule(options, rruleIntervalParams.startIntervalDate, rule.until);
-    return this.rRuleSet.between(rruleIntervalParams.minViewDate, rruleIntervalParams.maxViewDate, true).filter(date => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime).map(date => this._convertRruleResult(rruleIntervalParams, options, date));
-  }
-  _createRruleIntervalParams(options) {
-    const {
-      start,
-      min,
-      max,
-      appointmentTimezoneOffset
-    } = options;
-    // NOTE: Get local timezone offset of each Rrule date params.
-    const clientOffsets = {
-      startDate: _m_utils_time_zone.default.getClientTimezoneOffset(start),
-      minViewDate: _m_utils_time_zone.default.getClientTimezoneOffset(min),
-      maxViewDate: _m_utils_time_zone.default.getClientTimezoneOffset(max)
-    };
-    const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
-    // NOTE: Remove local timezone offsets from Rrule date params.
-    const startIntervalDate = addOffsets(options.start, -clientOffsets.startDate, appointmentTimezoneOffset);
-    const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
-    // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
-    const minViewDate = new Date(minViewTime - duration);
-    const maxViewDate = addOffsets(options.max, -clientOffsets.maxViewDate, appointmentTimezoneOffset);
-    // NOTE: Check DST after start date without local timezone offset conversion.
-    const startDateDSTDifferenceMs = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
-    const switchToSummerTime = startDateDSTDifferenceMs < 0;
-    return {
-      startIntervalDate,
-      minViewTime,
-      minViewDate,
-      maxViewDate,
-      startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
-      appointmentDuration: duration
-    };
-  }
-  _convertRruleResult(rruleIntervalParams, options, rruleDate) {
-    const convertedBackDate = addOffsets(rruleDate, ...this._getLocalMachineOffset(rruleDate), -options.appointmentTimezoneOffset, rruleIntervalParams.startIntervalDateDSTShift);
-    const convertedDateDSTShift = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
-    const switchToSummerTime = convertedDateDSTShift < 0;
-    const resultDate = addOffsets(convertedBackDate, convertedDateDSTShift);
-    const resultDateDSTShift = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
-    if (resultDateDSTShift && switchToSummerTime) {
-      return new Date(resultDate.getTime() + resultDateDSTShift);
-    }
-    return resultDate;
-  }
-  _getLocalMachineOffset(rruleDate) {
-    const machineTimezoneOffset = _m_utils_time_zone.default.getClientTimezoneOffset(rruleDate);
-    const machineTimezoneName = _m_utils_time_zone.default.getMachineTimezoneName();
-    const result = [machineTimezoneOffset];
-    // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
-    // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
-    // UPD: 05.09.2023 - The issue still hasn't been fixed in the Rule package.
-    // RRule returns results that are one day greater than expected.
-    // Therefore, for broken from RRule point of view timezones, we subtract one day from the result.
-    const brokenTimezonesOffset = -13;
-    const isTimezoneOffsetInBrokenRange = machineTimezoneOffset / MS_IN_HOUR <= brokenTimezonesOffset;
-    const isTimezoneNameInBrokenNames = !machineTimezoneName || RRULE_BROKEN_TIMEZONES.some(timezone => machineTimezoneName.includes(timezone));
-    if (isTimezoneOffsetInBrokenRange && isTimezoneNameInBrokenNames) {
-      result.push(-MS_IN_DAY);
-    }
-    return result;
-  }
-  evalRecurrenceRule(rule) {
-    const result = {
-      rule: {},
-      isValid: false
-    };
-    if (rule) {
-      result.rule = this._parseRecurrenceRule(rule);
-      result.isValid = this.validator.validateRRule(result.rule, rule);
-    }
-    return result;
-  }
-  isValidRecurrenceRule(rule) {
-    return this.evalRecurrenceRule(rule).isValid;
-  }
-  daysFromByDayRule(rule) {
-    let result = [];
-    if (rule.byday) {
-      if (Array.isArray(rule.byday)) {
-        result = rule.byday;
-      } else {
-        result = rule.byday.split(',');
-      }
-    }
-    return result.map(item => {
-      const match = item.match(/[A-Za-z]+/);
-      return Boolean(match) && match[0];
-    }).filter(item => Boolean(item));
-  }
-  getAsciiStringByDate(date) {
-    const currentOffset = date.getTimezoneOffset() * toMs('minute');
-    const offsetDate = new Date(date.getTime() + currentOffset);
-    return `${offsetDate.getFullYear() + `0${offsetDate.getMonth() + 1}`.slice(-2) + `0${offsetDate.getDate()}`.slice(-2)}T${`0${offsetDate.getHours()}`.slice(-2)}${`0${offsetDate.getMinutes()}`.slice(-2)}${`0${offsetDate.getSeconds()}`.slice(-2)}Z`;
-  }
-  getRecurrenceString(object) {
-    if (!object || !object.freq) {
-      return;
-    }
-    let result = '';
-    // eslint-disable-next-line guard-for-in, no-restricted-syntax
-    for (const field in object) {
-      let value = object[field];
-      if (field === 'interval' && value < 2) {
-        continue;
-      }
-      if (field === 'until') {
-        value = this.getAsciiStringByDate(value);
-      }
-      result += `${field}=${value};`;
-    }
-    result = result.substring(0, result.length - 1);
-    return result.toUpperCase();
-  }
-  _parseExceptionToRawArray(value) {
-    return /(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/.exec(value);
-  }
-  getDateByAsciiString(exceptionText) {
-    if (typeof exceptionText !== 'string') {
-      return exceptionText;
-    }
-    const result = this._parseExceptionToRawArray(exceptionText);
-    if (!result) {
-      return null;
-    }
-    const [year, month, date, hours, minutes, seconds, isUtc] = this._createDateTuple(result);
-    if (isUtc) {
-      return new Date(Date.UTC(year, month, date, hours, minutes, seconds));
-    }
-    return new Date(year, month, date, hours, minutes, seconds);
-  }
-  _dispose() {
-    if (this.rRuleSet) {
-      // @ts-expect-error
-      delete this.rRuleSet;
-      this.rRuleSet = null;
-    }
-    if (this.rRule) {
-      // @ts-expect-error
-      delete this.rRule;
-      this.rRule = null;
-    }
-  }
-  _getTimeZoneOffset() {
-    return new Date().getTimezoneOffset();
-  }
-  _initializeRRule(options, startDateUtc, until) {
-    const ruleOptions = _rrule.RRule.parseString(options.rule);
-    const {
-      firstDayOfWeek
-    } = options;
-    ruleOptions.dtstart = startDateUtc;
-    if (!ruleOptions.wkst && firstDayOfWeek) {
-      const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
-      ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
-    }
-    if (until) {
-      ruleOptions.until = addOffsets(until, -_m_utils_time_zone.default.getClientTimezoneOffset(until), options.appointmentTimezoneOffset);
-    }
-    this._createRRule(ruleOptions);
-    if (options.exception) {
-      const exceptionStrings = options.exception;
-      const exceptionDates = exceptionStrings.split(',').map(rule => this.getDateByAsciiString(rule)).filter(Boolean);
-      exceptionDates.forEach(date => {
-        const rruleTimezoneOffsets = typeof options.getExceptionDateTimezoneOffsets === 'function' ? options.getExceptionDateTimezoneOffsets(date) : [-_m_utils_time_zone.default.getClientTimezoneOffset(date), options.appointmentTimezoneOffset];
-        const exceptionDateInPseudoUtc = addOffsets(date, ...rruleTimezoneOffsets);
-        this.rRuleSet.exdate(exceptionDateInPseudoUtc);
-      });
-    }
-  }
-  _createRRule(ruleOptions) {
-    this._dispose();
-    this.rRuleSet = new _rrule.RRuleSet();
-    this.rRule = new _rrule.RRule(ruleOptions);
-    this.rRuleSet.rrule(this.rRule);
-  }
-  _parseRecurrenceRule(recurrenceRule) {
-    const ruleObject = {};
-    const ruleParts = recurrenceRule.split(';');
-    for (let i = 0, len = ruleParts.length; i < len; i++) {
-      const rule = ruleParts[i].split('=');
-      const ruleName = rule[0].toLowerCase();
-      const ruleValue = rule[1];
-      ruleObject[ruleName] = ruleValue;
-    }
-    const count = parseInt(ruleObject.count, 10);
-    if (!isNaN(count)) {
-      ruleObject.count = count;
-    }
-    if (ruleObject.interval) {
-      const interval = parseInt(ruleObject.interval, 10);
-      if (!isNaN(interval)) {
-        ruleObject.interval = interval;
-      }
-    } else {
-      ruleObject.interval = 1;
-    }
-    if (ruleObject.freq && ruleObject.until) {
-      ruleObject.until = this.getDateByAsciiString(ruleObject.until);
-    }
-    return ruleObject;
-  }
-  _createDateTuple(parseResult) {
-    const isUtc = parseResult[8] !== undefined;
-    parseResult.shift();
-    if (parseResult[3] === undefined) {
-      parseResult.splice(3);
-    } else {
-      parseResult.splice(3, 1);
-      parseResult.splice(6);
-    }
-    parseResult.unshift('');
-    return [parseInt(parseResult[1], 10), parseInt(parseResult[2], 10) - 1, parseInt(parseResult[3], 10), parseInt(parseResult[4], 10) || 0, parseInt(parseResult[5], 10) || 0, parseInt(parseResult[6], 10) || 0, isUtc];
-  }
-}
-class RecurrenceValidator {
-  validateRRule(rule, recurrence) {
-    if (this._brokenRuleNameExists(rule) || !freqNames.includes(rule.freq) || this._wrongCountRule(rule) || this._wrongIntervalRule(rule) || this._wrongDayOfWeek(rule) || this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) || this._wrongUntilRule(rule)) {
-      this._logBrokenRule(recurrence);
-      return false;
-    }
-    return true;
-  }
-  _wrongUntilRule(rule) {
-    let wrongUntil = false;
-    const {
-      until
-    } = rule;
-    if (until !== undefined && !(until instanceof Date)) {
-      wrongUntil = true;
-    }
-    return wrongUntil;
-  }
-  _wrongCountRule(rule) {
-    let wrongCount = false;
-    const {
-      count
-    } = rule;
-    if (count && typeof count === 'string') {
-      wrongCount = true;
-    }
-    return wrongCount;
-  }
-  _wrongByMonthDayRule(rule) {
-    let wrongByMonthDay = false;
-    const byMonthDay = rule.bymonthday;
-    // eslint-disable-next-line radix
-    if (byMonthDay && isNaN(parseInt(byMonthDay))) {
-      wrongByMonthDay = true;
-    }
-    return wrongByMonthDay;
-  }
-  _wrongByMonth(rule) {
-    let wrongByMonth = false;
-    const byMonth = rule.bymonth;
-    // eslint-disable-next-line radix
-    if (byMonth && isNaN(parseInt(byMonth))) {
-      wrongByMonth = true;
-    }
-    return wrongByMonth;
-  }
-  _wrongIntervalRule(rule) {
-    let wrongInterval = false;
-    const {
-      interval
-    } = rule;
-    if (interval && typeof interval === 'string') {
-      wrongInterval = true;
-    }
-    return wrongInterval;
-  }
-  _wrongDayOfWeek(rule) {
-    const byDay = rule.byday;
-    const daysByRule = getRecurrenceProcessor().daysFromByDayRule(rule);
-    let brokenDaysExist = false;
-    if (byDay === '') {
-      brokenDaysExist = true;
-    }
-    (0, _iterator.each)(daysByRule, (_, day) => {
-      if (!Object.prototype.hasOwnProperty.call(days, day)) {
-        brokenDaysExist = true;
-        return false;
-      }
-      return undefined;
-    });
-    return brokenDaysExist;
-  }
-  _brokenRuleNameExists(rule) {
-    let brokenRuleExists = false;
-    (0, _iterator.each)(rule, ruleName => {
-      if (!ruleNames.includes(ruleName)) {
-        brokenRuleExists = true;
-        return false;
-      }
-      return undefined;
-    });
-    return brokenRuleExists;
-  }
-  _logBrokenRule(recurrence) {
-    if (!loggedWarnings.includes(recurrence)) {
-      _errors.default.log('W0006', recurrence);
-      loggedWarnings.push(recurrence);
-    }
-  }
-}
-
-/***/ }),
-
 /***/ 84056:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -106900,7 +106645,8 @@ var _button_group = _interopRequireDefault(__webpack_require__(17809));
 var _editor = _interopRequireDefault(__webpack_require__(78694));
 var _form = _interopRequireDefault(__webpack_require__(74075));
 var _themes = __webpack_require__(52071);
-var _m_recurrence = __webpack_require__(55122);
+var _base = __webpack_require__(57872);
+var _days_from_by_day_rule = __webpack_require__(2165);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file, spellcheck/spell-checker */
 
@@ -106961,12 +106707,10 @@ const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 const getStylingModeFunc = () => (0, _themes.isFluent)((0, _themes.current)()) ? 'filled' : undefined;
 class RecurrenceRule {
   constructor(rule) {
-    this._recurrenceProcessor = (0, _m_recurrence.getRecurrenceProcessor)();
-    this._recurrenceProcessor = (0, _m_recurrence.getRecurrenceProcessor)();
-    this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(rule).rule;
+    this._recurrenceRule = (0, _base.parseRecurrenceRule)(rule);
   }
   makeRules(string) {
-    this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(string).rule;
+    this._recurrenceRule = (0, _base.parseRecurrenceRule)(string);
   }
   makeRule(field, value) {
     if (!value || Array.isArray(value) && !value.length) {
@@ -106995,13 +106739,13 @@ class RecurrenceRule {
     return 'never';
   }
   getRecurrenceString() {
-    return this._recurrenceProcessor.getRecurrenceString(this._recurrenceRule);
+    return (0, _base.getRecurrenceString)(this._recurrenceRule);
   }
   getRules() {
     return this._recurrenceRule;
   }
   getDaysFromByDayRule() {
-    return this._recurrenceProcessor.daysFromByDayRule(this._recurrenceRule);
+    return (0, _days_from_by_day_rule.daysFromByDayRule)(this._recurrenceRule);
   }
 }
 class RecurrenceEditor extends _editor.default {
@@ -107299,8 +107043,7 @@ class RecurrenceEditor extends _editor.default {
     this._changeEditorValue();
   }
   _changeEditorValue() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this.option('value', this._recurrenceRule.getRecurrenceString() || '');
+    this.option('value', this._recurrenceRule.getRecurrenceString() ?? '');
   }
   _daysOfWeekByRules() {
     let daysByRule = this._recurrenceRule.getDaysFromByDayRule();
@@ -107659,13 +107402,13 @@ var _m_widget_notify_scheduler = _interopRequireDefault(__webpack_require__(3206
 var _m_header = __webpack_require__(84829);
 var _m_compact_appointments_helper = __webpack_require__(64787);
 var _m_loading = __webpack_require__(73922);
-var _m_recurrence = __webpack_require__(55122);
 var _m_subscribes = _interopRequireDefault(__webpack_require__(58713));
 var _m_utils = __webpack_require__(5327);
 var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
 var _remote = __webpack_require__(89755);
 var _index = __webpack_require__(97777);
 var _index2 = __webpack_require__(34396);
+var _validate_rule = __webpack_require__(25152);
 var _scheduler_options_base_widget = __webpack_require__(13367);
 var _m_desktop_tooltip_strategy = __webpack_require__(93048);
 var _m_mobile_tooltip_strategy = __webpack_require__(96588);
@@ -108792,7 +108535,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   }
   _checkRecurringAppointment(rawAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent, recurrenceEditMode) {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
-    if (!(0, _m_recurrence.getRecurrenceProcessor)().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
+    if (!(0, _validate_rule.validateRRule)(recurrenceRule) || !this._editing.allowUpdating) {
       callback();
       return;
     }
@@ -114164,6 +113907,373 @@ exports.calculateStartViewDate = calculateStartViewDate;
 
 /***/ }),
 
+/***/ 57872:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.parseRecurrenceRule = exports.getRecurrenceString = exports.getDateByAsciiString = exports.getAsciiStringByDate = void 0;
+var _date = _interopRequireDefault(__webpack_require__(41380));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const toMs = _date.default.dateToMilliseconds;
+const getAsciiStringByDate = date => {
+  const currentOffset = date.getTimezoneOffset() * toMs('minute');
+  const offsetDate = new Date(date.getTime() + currentOffset);
+  return `${offsetDate.getFullYear() + `0${offsetDate.getMonth() + 1}`.slice(-2) + `0${offsetDate.getDate()}`.slice(-2)}T${`0${offsetDate.getHours()}`.slice(-2)}${`0${offsetDate.getMinutes()}`.slice(-2)}${`0${offsetDate.getSeconds()}`.slice(-2)}Z`;
+};
+exports.getAsciiStringByDate = getAsciiStringByDate;
+const getRecurrenceString = rule => {
+  if (!(rule !== null && rule !== void 0 && rule.freq)) {
+    return undefined;
+  }
+  const result = Object.entries(rule).reduce((acc, _ref) => {
+    let [field, value] = _ref;
+    if (field === 'freq' || field === 'interval' && value < 2) {
+      return acc;
+    }
+    if (field === 'until') {
+      return `${acc}${field}=${getAsciiStringByDate(value)};`;
+    }
+    return `${acc}${field}=${value};`;
+  }, `freq=${rule.freq};`);
+  return result.substring(0, result.length - 1).toUpperCase();
+};
+exports.getRecurrenceString = getRecurrenceString;
+const createDateTuple = parseResult => {
+  const isUtc = parseResult[8] !== undefined;
+  parseResult.shift();
+  if (parseResult[3] === undefined) {
+    parseResult.splice(3);
+  } else {
+    parseResult.splice(3, 1);
+    parseResult.splice(6);
+  }
+  parseResult.unshift('');
+  return [parseInt(parseResult[1], 10), parseInt(parseResult[2], 10) - 1, parseInt(parseResult[3], 10), parseInt(parseResult[4], 10) || 0, parseInt(parseResult[5], 10) || 0, parseInt(parseResult[6], 10) || 0, isUtc];
+};
+const parseExceptionToRawArray = value => /(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/.exec(value);
+const getDateByAsciiString = exceptionText => {
+  if (typeof exceptionText !== 'string') {
+    return exceptionText;
+  }
+  const result = parseExceptionToRawArray(exceptionText);
+  if (!result) {
+    return null;
+  }
+  const [year, month, date, hours, minutes, seconds, isUtc] = createDateTuple(result);
+  if (isUtc) {
+    return new Date(Date.UTC(year, month, date, hours, minutes, seconds));
+  }
+  return new Date(year, month, date, hours, minutes, seconds);
+};
+exports.getDateByAsciiString = getDateByAsciiString;
+const parseRecurrenceRule = recurrenceRule => {
+  const emptyRule = {
+    interval: 1
+  };
+  if (!recurrenceRule) {
+    return emptyRule;
+  }
+  const ruleParts = recurrenceRule.split(';');
+  const ruleObject = ruleParts.reduce((result, part) => {
+    const rule = part.split('=');
+    const ruleName = rule[0].toLowerCase();
+    const ruleValue = rule[1];
+    switch (ruleName) {
+      case 'count':
+      case 'interval':
+        {
+          const value = parseInt(ruleValue, 10);
+          if (!isNaN(value)) {
+            result[ruleName] = value;
+          }
+          break;
+        }
+      default:
+        result[ruleName] = ruleValue;
+    }
+    return result;
+  }, emptyRule);
+  if (ruleObject.freq && ruleObject.until) {
+    ruleObject.until = getDateByAsciiString(ruleObject.until);
+  }
+  return ruleObject;
+};
+exports.parseRecurrenceRule = parseRecurrenceRule;
+
+/***/ }),
+
+/***/ 2165:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.daysFromByDayRule = void 0;
+const isString = str => Boolean(str);
+const daysFromByDayRule = rule => {
+  let result = [];
+  if (rule.byday) {
+    if (Array.isArray(rule.byday)) {
+      result = rule.byday;
+    } else {
+      result = rule.byday.split(',');
+    }
+  }
+  return result.map(item => {
+    const match = /[A-Za-z]+/.exec(item);
+    return match && String(match[0]);
+  }).filter(isString);
+};
+exports.daysFromByDayRule = daysFromByDayRule;
+
+/***/ }),
+
+/***/ 20532:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.generateDates = void 0;
+var _date = __webpack_require__(55594);
+var _rrule = __webpack_require__(4755);
+var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
+var _base = __webpack_require__(57872);
+var _validate_rule = __webpack_require__(25152);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const {
+  addOffsets
+} = _date.dateUtilsTs;
+const MS_IN_HOUR = 1000 * 60 * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
+const RRULE_BROKEN_TIMEZONES = ['Etc/GMT-13', 'MIT', 'Pacific/Apia', 'Pacific/Enderbury', 'Pacific/Tongatapu', 'Etc/GMT-14', 'Pacific/Kiritimati'];
+const getRruleParams = options => {
+  const {
+    start,
+    min,
+    max,
+    appointmentTimezoneOffset
+  } = options;
+  // NOTE: Get local timezone offset of each Rrule date params.
+  const clientOffsets = {
+    startDate: _m_utils_time_zone.default.getClientTimezoneOffset(start),
+    minViewDate: _m_utils_time_zone.default.getClientTimezoneOffset(min),
+    maxViewDate: _m_utils_time_zone.default.getClientTimezoneOffset(max)
+  };
+  const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
+  // NOTE: Remove local timezone offsets from Rrule date params.
+  const startIntervalDate = addOffsets(options.start, -clientOffsets.startDate, appointmentTimezoneOffset);
+  const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
+  // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
+  const minViewDate = new Date(minViewTime - duration);
+  const maxViewDate = addOffsets(options.max, -clientOffsets.maxViewDate, appointmentTimezoneOffset);
+  // NOTE: Check DST after start date without local timezone offset conversion.
+  const startDateDSTDifferenceMs = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
+  const switchToSummerTime = startDateDSTDifferenceMs < 0;
+  return {
+    startIntervalDate,
+    minViewTime,
+    minViewDate,
+    maxViewDate,
+    startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
+    appointmentDuration: duration
+  };
+};
+const getLocalMachineOffset = rruleDate => {
+  const machineTimezoneOffset = _m_utils_time_zone.default.getClientTimezoneOffset(rruleDate);
+  const machineTimezoneName = _m_utils_time_zone.default.getMachineTimezoneName();
+  const result = [machineTimezoneOffset];
+  // NOTE: Workaround for the RRule bug with timezones greater than GMT+12
+  // (e.g. Apia Standard Time GMT+13)
+  // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+  // UPD: 05.09.2023 - The issue still hasn't been fixed in the Rule package.
+  // RRule returns results that are one day greater than expected.
+  // Therefore, for broken from RRule point of view timezones, we subtract one day from the result.
+  const brokenTimezonesOffset = -13;
+  const isTimezoneOffsetInBrokenRange = machineTimezoneOffset / MS_IN_HOUR <= brokenTimezonesOffset;
+  const isTimezoneNameInBrokenNames = !machineTimezoneName || RRULE_BROKEN_TIMEZONES.some(timezone => machineTimezoneName.includes(timezone));
+  if (isTimezoneOffsetInBrokenRange && isTimezoneNameInBrokenNames) {
+    result.push(-MS_IN_DAY);
+  }
+  return result;
+};
+const convertRruleResult = (rruleIntervalParams, options, rruleDate) => {
+  const convertedBackDate = addOffsets(rruleDate, ...getLocalMachineOffset(rruleDate), -options.appointmentTimezoneOffset, rruleIntervalParams.startIntervalDateDSTShift);
+  const convertedDateDSTShift = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
+  const switchToSummerTime = convertedDateDSTShift < 0;
+  const resultDate = addOffsets(convertedBackDate, convertedDateDSTShift);
+  const resultDateDSTShift = _m_utils_time_zone.default.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
+  if (resultDateDSTShift && switchToSummerTime) {
+    return new Date(resultDate.getTime() + resultDateDSTShift);
+  }
+  return resultDate;
+};
+const createRRule = (options, startDateUtc, until) => {
+  const ruleOptions = _rrule.RRule.parseString(String(options.rule));
+  const {
+    firstDayOfWeek
+  } = options;
+  ruleOptions.dtstart = startDateUtc;
+  if (!ruleOptions.wkst && firstDayOfWeek) {
+    const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
+    ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
+  }
+  if (until) {
+    ruleOptions.until = addOffsets(until, -_m_utils_time_zone.default.getClientTimezoneOffset(until), options.appointmentTimezoneOffset);
+  }
+  const rRuleSet = new _rrule.RRuleSet();
+  const rRule = new _rrule.RRule(ruleOptions);
+  rRuleSet.rrule(rRule);
+  if (options.exception) {
+    const exceptionStrings = options.exception;
+    const exceptionDates = exceptionStrings.split(',').map(rule => (0, _base.getDateByAsciiString)(rule)).filter(Boolean);
+    exceptionDates.forEach(date => {
+      const rruleTimezoneOffsets = typeof options.getExceptionDateTimezoneOffsets === 'function' ? options.getExceptionDateTimezoneOffsets(date) : [-_m_utils_time_zone.default.getClientTimezoneOffset(date), options.appointmentTimezoneOffset];
+      const exceptionDateInPseudoUtc = addOffsets(date, ...rruleTimezoneOffsets);
+      rRuleSet.exdate(exceptionDateInPseudoUtc);
+    });
+  }
+  return rRuleSet;
+};
+const generateDates = options => {
+  if (!options.rule) {
+    return [];
+  }
+  const rule = (0, _base.parseRecurrenceRule)(options.rule);
+  const isValid = (0, _validate_rule.validateRRuleObject)(rule, options.rule);
+  if (!isValid) {
+    return [];
+  }
+  const rruleIntervalParams = getRruleParams(options);
+  const {
+    startIntervalDate,
+    maxViewDate,
+    minViewDate,
+    minViewTime,
+    appointmentDuration
+  } = rruleIntervalParams;
+  const rRuleSet = createRRule(options, startIntervalDate, rule.until);
+  return rRuleSet.between(minViewDate, maxViewDate, true).filter(date => date.getTime() + appointmentDuration >= minViewTime).map(date => convertRruleResult(rruleIntervalParams, options, date));
+};
+exports.generateDates = generateDates;
+
+/***/ }),
+
+/***/ 25152:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.validateRRuleObject = exports.validateRRule = void 0;
+var _errors = _interopRequireDefault(__webpack_require__(87129));
+var _m_iterator = __webpack_require__(26044);
+var _base = __webpack_require__(57872);
+var _days_from_by_day_rule = __webpack_require__(2165);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable spellcheck/spell-checker */
+
+const loggedWarnings = [];
+const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
+const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
+const days = {
+  SU: 0,
+  MO: 1,
+  TU: 2,
+  WE: 3,
+  TH: 4,
+  FR: 5,
+  SA: 6
+};
+const wrongUntilRule = rule => {
+  const {
+    until
+  } = rule;
+  return until !== undefined && !(until instanceof Date);
+};
+const wrongCountRule = rule => {
+  const {
+    count
+  } = rule;
+  return Boolean(count && typeof count === 'string');
+};
+const wrongByMonthDayRule = rule => {
+  const byMonthDay = rule.bymonthday;
+  return Boolean(byMonthDay && isNaN(parseInt(byMonthDay, 10)));
+};
+const wrongByMonth = rule => {
+  const byMonth = rule.bymonth;
+  return Boolean(byMonth && isNaN(parseInt(byMonth, 10)));
+};
+const wrongIntervalRule = rule => {
+  const {
+    interval
+  } = rule;
+  return Boolean(interval && typeof interval === 'string');
+};
+const wrongDayOfWeek = rule => {
+  const byDay = rule.byday;
+  const daysByRule = (0, _days_from_by_day_rule.daysFromByDayRule)(rule);
+  let brokenDaysExist = false;
+  if (byDay === '') {
+    brokenDaysExist = true;
+  }
+  (0, _m_iterator.each)(daysByRule, (_, day) => {
+    if (!Object.prototype.hasOwnProperty.call(days, day)) {
+      brokenDaysExist = true;
+      return false;
+    }
+    return undefined;
+  });
+  return brokenDaysExist;
+};
+const brokenRuleNameExists = rule => {
+  let brokenRuleExists = false;
+  (0, _m_iterator.each)(rule, ruleName => {
+    if (!ruleNames.includes(ruleName)) {
+      brokenRuleExists = true;
+      return false;
+    }
+    return undefined;
+  });
+  return brokenRuleExists;
+};
+const logBrokenRule = recurrence => {
+  if (!loggedWarnings.includes(recurrence)) {
+    _errors.default.log('W0006', recurrence);
+    loggedWarnings.push(recurrence);
+  }
+};
+const validateRRuleObject = (rule, recurrence) => {
+  if (brokenRuleNameExists(rule) || !rule.freq || !freqNames.includes(rule.freq) || wrongCountRule(rule) || wrongIntervalRule(rule) || wrongDayOfWeek(rule) || wrongByMonthDayRule(rule) || wrongByMonth(rule) || wrongUntilRule(rule)) {
+    logBrokenRule(recurrence);
+    return false;
+  }
+  return true;
+};
+exports.validateRRuleObject = validateRRuleObject;
+const validateRRule = ruleString => {
+  if (!ruleString) {
+    return false;
+  }
+  const rule = (0, _base.parseRecurrenceRule)(ruleString);
+  const isValid = validateRRuleObject(rule, ruleString);
+  return isValid;
+};
+exports.validateRRule = validateRRule;
+
+/***/ }),
+
 /***/ 13367:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -115022,7 +115132,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.AppointmentDataAccessor = void 0;
 var _data = __webpack_require__(31000);
 var _date_serialization = _interopRequireDefault(__webpack_require__(71051));
-var _m_recurrence = __webpack_require__(55122);
+var _validate_rule = __webpack_require__(25152);
 var _data_accessor = __webpack_require__(83811);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -115112,7 +115222,7 @@ class AppointmentDataAccessor extends _data_accessor.DataAccessor {
   }
   isRecurrent(appointment) {
     const recurrenceRule = this.get('recurrenceRule', appointment);
-    const isRecurrent = (0, _m_recurrence.getRecurrenceProcessor)().isValidRecurrenceRule(recurrenceRule);
+    const isRecurrent = (0, _validate_rule.validateRRule)(recurrenceRule);
     return isRecurrent;
   }
 }
@@ -115731,7 +115841,8 @@ const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
       name: 'dateNavigator'
     }, {
       location: 'after',
-      name: 'viewSwitcher'
+      name: 'viewSwitcher',
+      locateInMenu: 'auto'
     }]
   }
 };
@@ -117186,7 +117297,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.getAppointmentsOccurrences = void 0;
 var _date = __webpack_require__(55594);
-var _m_recurrence = __webpack_require__(55122);
+var _generate_dates = __webpack_require__(20532);
+var _validate_rule = __webpack_require__(25152);
 var _get_recurrence_exception = __webpack_require__(72736);
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const getAppointmentsOccurrences = (appointment, _ref, timeZoneCalculator) => {
@@ -117194,12 +117306,11 @@ const getAppointmentsOccurrences = (appointment, _ref, timeZoneCalculator) => {
     firstDayOfWeek,
     interval
   } = _ref;
-  const recurrenceProcessor = (0, _m_recurrence.getRecurrenceProcessor)();
-  if (!recurrenceProcessor.isValidRecurrenceRule(appointment.recurrenceRule)) {
+  if (!(0, _validate_rule.validateRRule)(appointment.recurrenceRule)) {
     return [appointment];
   }
   const recurrenceException = (0, _get_recurrence_exception.getRecurrenceException)(appointment.recurrenceException, appointment.startDate, timeZoneCalculator);
-  const startDates = recurrenceProcessor.generateDates({
+  const startDates = (0, _generate_dates.generateDates)({
     rule: appointment.recurrenceRule,
     exception: recurrenceException,
     start: appointment.startDate,
@@ -117937,9 +118048,9 @@ var _extend = __webpack_require__(52576);
 var _type = __webpack_require__(11528);
 var _date2 = __webpack_require__(55594);
 var _m_text_utils = __webpack_require__(9680);
-var _m_recurrence = __webpack_require__(55122);
 var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
 var _index = __webpack_require__(34396);
+var _generate_dates = __webpack_require__(20532);
 var _appointment_adapter = __webpack_require__(36791);
 var _appointment_groups_utils = __webpack_require__(11649);
 var _m_cell_position_calculator = __webpack_require__(94089);
@@ -118254,7 +118365,7 @@ class DateGeneratorBaseStrategy {
       viewOffset
     } = this.options;
     const option = this._createRecurrenceOptions(appointment);
-    const generatedStartDates = (0, _m_recurrence.getRecurrenceProcessor)().generateDates(option);
+    const generatedStartDates = (0, _generate_dates.generateDates)(option);
     return generatedStartDates.map(date => {
       const utcDate = _m_utils_time_zone.default.createUTCDateWithLocalOffset(date);
       utcDate.setTime(utcDate.getTime() + duration);
@@ -118366,7 +118477,7 @@ class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
     const validGroupIndices = this.groupCount ? groupIndices : [0];
     validGroupIndices.forEach(groupIndex => {
       const option = this._createRecurrenceOptions(appointment, groupIndex);
-      const generatedStartDates = (0, _m_recurrence.getRecurrenceProcessor)().generateDates(option);
+      const generatedStartDates = (0, _generate_dates.generateDates)(option);
       const recurrentInfo = generatedStartDates.map(date => {
         const startDate = new Date(date);
         const utcDate = _m_utils_time_zone.default.createUTCDateWithLocalOffset(date);
@@ -136704,10 +136815,10 @@ var _iterator = __webpack_require__(21274);
 var _size = __webpack_require__(57653);
 var _template_manager = __webpack_require__(49194);
 var _type = __webpack_require__(11528);
-var _data_helper = _interopRequireDefault(__webpack_require__(87755));
 var _m_element = __webpack_require__(93630);
 var _m_selectors = __webpack_require__(62238);
 var _widget = _interopRequireDefault(__webpack_require__(89275));
+var _m_data_helper = _interopRequireDefault(__webpack_require__(16780));
 var _item = _interopRequireDefault(__webpack_require__(30845));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -137064,7 +137175,12 @@ class CollectionWidget extends _widget.default {
     if ($target.length) {
       this._refreshActiveDescendant();
       this._refreshItemId($target, needCleanItemId);
-      this._toggleFocusClass(isFocused, $target);
+      const {
+        focusStateEnabled
+      } = this.option();
+      if (focusStateEnabled) {
+        this._toggleFocusClass(isFocused, $target);
+      }
     }
     this._updateParentActiveDescendant();
   }
@@ -137824,7 +137940,7 @@ class CollectionWidget extends _widget.default {
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = _item.default;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-CollectionWidget.include(_data_helper.default);
+CollectionWidget.include(_m_data_helper.default);
 var _default = exports["default"] = CollectionWidget;
 
 /***/ }),
@@ -140681,6 +140797,7 @@ var _window = __webpack_require__(3104);
 var _themes = __webpack_require__(52071);
 var _menu_base = _interopRequireDefault(__webpack_require__(91162));
 var _overlay = _interopRequireDefault(__webpack_require__(79384));
+var _consts = __webpack_require__(21363);
 var _scrollable = _interopRequireDefault(__webpack_require__(85326));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -140697,7 +140814,6 @@ const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-const SCROLLABLE_CLASS = 'dx-scrollable';
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
 const FOCUS_LEFT = 'left';
@@ -140873,7 +140989,7 @@ class ContextMenu extends _menu_base.default {
     }
   }
   _scrollToElement($element) {
-    const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
+    const $scrollableElement = $element.closest(`.${_consts.SCROLLABLE_CLASS}`);
     const scrollableInstance = _scrollable.default.getInstance($scrollableElement.get(0));
     scrollableInstance === null || scrollableInstance === void 0 || scrollableInstance.scrollToElement($element);
   }
@@ -141234,12 +141350,12 @@ class ContextMenu extends _menu_base.default {
       }
     });
   }
-  _setSubMenuHeight($submenu, $anchor, isNestedSubmenu) {
+  _setSubMenuHeight($submenu, $anchor) {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     const contentHeight = (0, _size.getOuterHeight)($itemsContainer);
-    const maxHeight = this._getMaxHeight($anchor, !isNestedSubmenu);
+    const maxHeight = this._getMaxHeight($anchor, false);
     const menuHeight = Math.min(contentHeight, maxHeight);
-    $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
+    $submenu.css('height', menuHeight);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getMaxUsableSpace(_offsetTop, windowHeight, _anchorHeight) {
@@ -141259,13 +141375,28 @@ class ContextMenu extends _menu_base.default {
     const availableHeight = considerAnchorHeight ? this._getMaxUsableSpace(offsetTop, windowHeight, anchorHeight) : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
     return availableHeight - SUBMENU_PADDING;
   }
+  _setOverlayMaxHeight($subMenu) {
+    var _this$_overlay3;
+    if (!$subMenu) {
+      return;
+    }
+    (_this$_overlay3 = this._overlay) === null || _this$_overlay3 === void 0 || _this$_overlay3.option({
+      maxHeight: () => {
+        const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        const outerHeight = (0, _size.getOuterHeight)($content);
+        const borderWidth = this._getSubmenuBorderWidth();
+        return outerHeight + borderWidth * 2;
+      }
+    });
+    $subMenu.css('height', '100%');
+  }
   _dimensionChanged() {
     if (!this._shownSubmenus) {
       return;
     }
     this._shownSubmenus.forEach($submenu => {
       const $item = $submenu.closest(`.${DX_MENU_ITEM_CLASS}`);
-      this._setSubMenuHeight($submenu, $item, true);
+      this._setSubMenuHeight($submenu, $item);
       this._scrollToElement($item);
       const submenuPosition = this._getSubmenuPosition($item);
       _position.default.setup($submenu, submenuPosition);
@@ -141293,7 +141424,7 @@ class ContextMenu extends _menu_base.default {
       return;
     }
     const $item = $submenu === null || $submenu === void 0 ? void 0 : $submenu.closest(`.${DX_MENU_ITEM_CLASS}`);
-    this._setSubMenuHeight($submenu, $item, true);
+    this._setSubMenuHeight($submenu, $item);
     if (!this._isSubmenuVisible($submenu) && $item) {
       this._drawSubmenu($item);
     }
@@ -141309,14 +141440,14 @@ class ContextMenu extends _menu_base.default {
     return $submenu.css('visibility') === 'visible';
   }
   _drawSubmenu($itemElement) {
-    var _this$_overlay3;
+    var _this$_overlay4;
     const {
       animation: animationOption
     } = this.option();
     const animation = animationOption ? animationOption.show : {};
     const $submenu = $itemElement.children(`.${DX_SUBMENU_CLASS}`);
     const submenuPosition = this._getSubmenuPosition($itemElement);
-    if ((_this$_overlay3 = this._overlay) !== null && _this$_overlay3 !== void 0 && _this$_overlay3.option('visible')) {
+    if ((_this$_overlay4 = this._overlay) !== null && _this$_overlay4 !== void 0 && _this$_overlay4.option('visible')) {
       if (!(0, _type.isDefined)(this._shownSubmenus)) {
         this._shownSubmenus = [];
       }
@@ -141414,10 +141545,10 @@ class ContextMenu extends _menu_base.default {
       return;
     }
     if ($submenu.length === 0) {
-      var _this$_overlay4;
+      var _this$_overlay5;
       const $prevSubmenu = (0, _renderer.default)($itemElement.parents(`.${DX_SUBMENU_CLASS}`)[0]);
       this._hideSubmenu($prevSubmenu);
-      if (!actionArgs.canceled && (_this$_overlay4 = this._overlay) !== null && _this$_overlay4 !== void 0 && _this$_overlay4.option('visible')) {
+      if (!actionArgs.canceled && (_this$_overlay5 = this._overlay) !== null && _this$_overlay5 !== void 0 && _this$_overlay5.option('visible')) {
         this.option('visible', false);
       }
     } else {
@@ -141461,9 +141592,9 @@ class ContextMenu extends _menu_base.default {
     _animation.fx.stop($container.get(0), true);
   }
   _hideAllShownSubmenus() {
-    var _this$_overlay5;
+    var _this$_overlay6;
     const shownSubmenus = (0, _extend.extend)([], this._shownSubmenus);
-    const $expandedItems = ((_this$_overlay5 = this._overlay) === null || _this$_overlay5 === void 0 ? void 0 : _this$_overlay5.$content().find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`)) ?? (0, _renderer.default)();
+    const $expandedItems = ((_this$_overlay6 = this._overlay) === null || _this$_overlay6 === void 0 ? void 0 : _this$_overlay6.$content().find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`)) ?? (0, _renderer.default)();
     $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
     (0, _iterator.each)(shownSubmenus, (_, $submenu) => {
       this._hideSubmenu($submenu);
@@ -141530,7 +141661,7 @@ class ContextMenu extends _menu_base.default {
     }
     const position = this._positionContextMenu(event);
     if (position) {
-      var _this$_overlay6, _this$_overlay7, _event$originalEvent;
+      var _this$_overlay7, _this$_overlay8, _event$originalEvent;
       if (!this._overlay) {
         this._renderContextMenuOverlay();
         this._overlay.$content().addClass(this._widgetClass());
@@ -141539,21 +141670,15 @@ class ContextMenu extends _menu_base.default {
         this._attachClickEvent();
         this._renderItems(this._dataAdapter.getRootNodes());
       }
-      const $subMenu = (0, _renderer.default)((_this$_overlay6 = this._overlay) === null || _this$_overlay6 === void 0 ? void 0 : _this$_overlay6.content()).children(`.${DX_SUBMENU_CLASS}`);
+      const $subMenu = (0, _renderer.default)((_this$_overlay7 = this._overlay) === null || _this$_overlay7 === void 0 ? void 0 : _this$_overlay7.content()).children(`.${DX_SUBMENU_CLASS}`);
       this._setOptionWithoutOptionChange('visible', true);
-      (_this$_overlay7 = this._overlay) === null || _this$_overlay7 === void 0 || _this$_overlay7.option({
+      (_this$_overlay8 = this._overlay) === null || _this$_overlay8 === void 0 || _this$_overlay8.option({
         height: () => this._getMaxHeight(position.of),
-        maxHeight: () => {
-          const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-          const outerHeight = (0, _size.getOuterHeight)($content);
-          const borderWidth = this._getSubmenuBorderWidth();
-          return outerHeight + borderWidth * 2;
-        },
         position
       });
-      if ($subMenu.length) {
-        this._setSubMenuHeight($subMenu, position.of, false);
-      }
+      this._setOverlayMaxHeight($subMenu);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._planPostRenderActions($subMenu, true);
       if (this._overlay) {
         promise = this._overlay.show();
       }
@@ -141567,21 +141692,21 @@ class ContextMenu extends _menu_base.default {
     return promise;
   }
   _renderItems(nodes, submenuContainer) {
-    var _this$_overlay8;
+    var _this$_overlay9;
     super._renderItems(nodes, submenuContainer);
-    const $submenu = (0, _renderer.default)((_this$_overlay8 = this._overlay) === null || _this$_overlay8 === void 0 ? void 0 : _this$_overlay8.content()).children(`.${DX_SUBMENU_CLASS}`);
+    const $submenu = (0, _renderer.default)((_this$_overlay9 = this._overlay) === null || _this$_overlay9 === void 0 ? void 0 : _this$_overlay9.content()).children(`.${DX_SUBMENU_CLASS}`);
     if ($submenu.length) {
       this._initScrollable($submenu);
     }
   }
   _setAriaAttributes() {
-    var _this$_overlay9;
+    var _this$_overlay10;
     this._overlayContentId = `dx-${new _guid.default()}`;
     this.setAria('owns', this._overlayContentId);
     this.setAria({
       id: this._overlayContentId,
       role: 'menu'
-    }, (_this$_overlay9 = this._overlay) === null || _this$_overlay9 === void 0 ? void 0 : _this$_overlay9.$content());
+    }, (_this$_overlay10 = this._overlay) === null || _this$_overlay10 === void 0 ? void 0 : _this$_overlay10.$content());
   }
   _cleanAriaAttributes() {
     if (this._overlay) {
@@ -141665,8 +141790,12 @@ class ContextMenu extends _menu_base.default {
   hide() {
     return this.toggle(false);
   }
-  _postProcessRenderItems($submenu) {
-    this._setSubmenuVisible($submenu);
+  _postProcessRenderItems($subMenu, isRootSubMenu) {
+    if (!isRootSubMenu) {
+      this._setSubmenuVisible($subMenu);
+      return;
+    }
+    this._setOverlayMaxHeight($subMenu);
   }
 }
 (0, _component_registrator.default)('dxContextMenu', ContextMenu);
@@ -155970,9 +156099,10 @@ class Form extends _widget.default {
       throw _ui.default.Error('E1063');
     }
     const smartPasteText = text ?? (await navigator.clipboard.readText());
-    if ((0, _type.isDefined)(smartPasteText)) {
-      this._showLoadPanel();
+    if (!(0, _type.isDefined)(text) && !smartPasteText) {
+      return;
     }
+    this._showLoadPanel();
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map(item => {
       var _item$aiOptions;
@@ -189731,11 +189861,12 @@ var _default = exports["default"] = Animator;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VALIDATE_WHEEL_TIMEOUT = exports.TopPocketState = exports.ShowScrollbarMode = exports.SCROLL_LINE_HEIGHT = exports.SCROLLVIEW_TOP_POCKET_CLASS = exports.SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = exports.SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = exports.SCROLLVIEW_REACHBOTTOM_CLASS = exports.SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_READY_CLASS = exports.SCROLLVIEW_PULLDOWN_LOADING_CLASS = exports.SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = exports.SCROLLVIEW_PULLDOWN_IMAGE_CLASS = exports.SCROLLVIEW_PULLDOWN = exports.SCROLLVIEW_CONTENT_CLASS = exports.SCROLLVIEW_BOTTOM_POCKET_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SCROLL_CONTENT_CLASS = exports.SCROLLABLE_SCROLL_CLASS = exports.SCROLLABLE_SCROLLBAR_SIMULATED = exports.SCROLLABLE_SCROLLBAR_CLASS = exports.SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = exports.SCROLLABLE_SCROLLBARS_HIDDEN = exports.SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = exports.SCROLLABLE_DISABLED_CLASS = exports.SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTAINER_CLASS = exports.PULLDOWN_ICON_CLASS = exports.KEY_CODES = exports.HOVER_ENABLED_STATE = exports.HIDE_SCROLLBAR_TIMEOUT = exports.DIRECTION_VERTICAL = exports.DIRECTION_HORIZONTAL = exports.DIRECTION_BOTH = void 0;
+exports.VALIDATE_WHEEL_TIMEOUT = exports.TopPocketState = exports.ShowScrollbarMode = exports.SCROLL_LINE_HEIGHT = exports.SCROLLVIEW_TOP_POCKET_CLASS = exports.SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = exports.SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = exports.SCROLLVIEW_REACHBOTTOM_CLASS = exports.SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_TEXT_CLASS = exports.SCROLLVIEW_PULLDOWN_READY_CLASS = exports.SCROLLVIEW_PULLDOWN_LOADING_CLASS = exports.SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = exports.SCROLLVIEW_PULLDOWN_IMAGE_CLASS = exports.SCROLLVIEW_PULLDOWN = exports.SCROLLVIEW_CONTENT_CLASS = exports.SCROLLVIEW_BOTTOM_POCKET_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SCROLL_CONTENT_CLASS = exports.SCROLLABLE_SCROLL_CLASS = exports.SCROLLABLE_SCROLLBAR_SIMULATED = exports.SCROLLABLE_SCROLLBAR_CLASS = exports.SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = exports.SCROLLABLE_SCROLLBARS_HIDDEN = exports.SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = exports.SCROLLABLE_DISABLED_CLASS = exports.SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTAINER_CLASS = exports.SCROLLABLE_CLASS = exports.PULLDOWN_ICON_CLASS = exports.KEY_CODES = exports.HOVER_ENABLED_STATE = exports.HIDE_SCROLLBAR_TIMEOUT = exports.DIRECTION_VERTICAL = exports.DIRECTION_HORIZONTAL = exports.DIRECTION_BOTH = void 0;
 const SCROLL_LINE_HEIGHT = exports.SCROLL_LINE_HEIGHT = 40;
 const DIRECTION_VERTICAL = exports.DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = exports.DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = exports.DIRECTION_BOTH = 'both';
+const SCROLLABLE_CLASS = exports.SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_SIMULATED_CLASS = exports.SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 const SCROLLABLE_CONTENT_CLASS = exports.SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const SCROLLABLE_WRAPPER_CLASS = exports.SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
@@ -190902,6 +191033,7 @@ var _type = __webpack_require__(11528);
 var _window = __webpack_require__(3104);
 var _m_support = _interopRequireDefault(__webpack_require__(85991));
 var _dom_component = _interopRequireDefault(__webpack_require__(22331));
+var _consts = __webpack_require__(21363);
 var _scrollable = __webpack_require__(91284);
 var _scrollable2 = _interopRequireDefault(__webpack_require__(25689));
 var _scrollable3 = __webpack_require__(55350);
@@ -190910,11 +191042,6 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
-const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
@@ -190984,10 +191111,10 @@ class Scrollable extends _dom_component.default {
     }
   }
   _initScrollableMarkup() {
-    const $element = this.$element().addClass(SCROLLABLE_CLASS);
-    const $container = (0, _renderer.default)('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
-    const $wrapper = (0, _renderer.default)('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
-    const $content = (0, _renderer.default)('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
+    const $element = this.$element().addClass(_consts.SCROLLABLE_CLASS);
+    const $container = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_CONTAINER_CLASS);
+    const $wrapper = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_WRAPPER_CLASS);
+    const $content = (0, _renderer.default)('<div>').addClass(_consts.SCROLLABLE_CONTENT_CLASS);
     this._$container = $container;
     this._$wrapper = $wrapper;
     this._$content = $content;
@@ -191069,7 +191196,7 @@ class Scrollable extends _dom_component.default {
     const {
       disabled
     } = this.option();
-    this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, disabled);
+    this.$element().toggleClass(_consts.SCROLLABLE_DISABLED_CLASS, disabled);
     if (this.option('disabled')) {
       this._lock();
     } else {
@@ -191306,7 +191433,7 @@ class Scrollable extends _dom_component.default {
   scrollToElement(element, offset) {
     const $element = (0, _renderer.default)(element);
     const elementInsideContent = this.$content().find(element).length;
-    const elementIsInsideContent = $element.parents(`.${SCROLLABLE_CLASS}`).length - $element.parents(`.${SCROLLABLE_CONTENT_CLASS}`).length === 0;
+    const elementIsInsideContent = $element.parents(`.${_consts.SCROLLABLE_CLASS}`).length - $element.parents(`.${_consts.SCROLLABLE_CONTENT_CLASS}`).length === 0;
     if (!elementInsideContent || !elementIsInsideContent) {
       return;
     }
@@ -204103,6 +204230,7 @@ class DropDownMenu extends _widget.default {
       },
       deferRendering: false,
       preventScrollEvents: false,
+      _ignorePreventScrollEventsDeprecation: true,
       contentTemplate: contentElement => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error
@@ -207785,6 +207913,7 @@ var _version = __webpack_require__(1956);
 var _errors_warnings = _interopRequireDefault(__webpack_require__(38355));
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -209274,7 +209403,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.RectSvgElement = exports.PathSvgElement = exports.ArcSvgElement = void 0;
 exports.Renderer = Renderer;
-exports.TextSvgElement = exports.SvgElement = void 0;
+exports.getBackup = exports.TextSvgElement = exports.SvgElement = void 0;
 exports.getFuncIri = getFuncIri;
 exports.processHatchingAttrs = processHatchingAttrs;
 exports.refreshPaths = void 0;
@@ -209288,6 +209417,7 @@ var _window = __webpack_require__(3104);
 var _animation = __webpack_require__(82645);
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/default-param-last */
@@ -209376,7 +209506,7 @@ const DEFAULTS = {
   scaleY: 1,
   'pointer-events': null
 };
-const getBackup = (0, _call_once.default)(() => {
+const getBackup = exports.getBackup = (0, _call_once.default)(() => {
   const backupContainer = _dom_adapter.default.createElement('div');
   const backupCounter = 0;
   backupContainer.style.left = '-9999px';
@@ -216692,6 +216822,7 @@ var _softblue = _interopRequireDefault(__webpack_require__(56829));
 var _index3 = _interopRequireDefault(__webpack_require__(55073));
 var _utils = __webpack_require__(98013);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -216976,7 +217107,7 @@ Object.defineProperty(exports, "refreshPaths", ({
 }));
 var _iterator = __webpack_require__(21274);
 var _renderer = __webpack_require__(15232);
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); } /* eslint-disable prefer-rest-params */ /* eslint-disable no-bitwise */ /* eslint-disable @typescript-eslint/init-declarations */ /* eslint-disable func-names */ /* eslint-disable import/no-mutable-exports */ /* eslint-disable @typescript-eslint/naming-convention */ /* eslint-disable @typescript-eslint/no-shadow */ /* eslint-disable no-param-reassign */ /* eslint-disable @typescript-eslint/explicit-module-boundary-types */ /* eslint-disable @typescript-eslint/no-unsafe-return */ /* eslint-disable @typescript-eslint/explicit-function-return-type */ /* eslint-disable prefer-destructuring */ /* eslint-disable @typescript-eslint/no-unused-expressions */
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); } /* eslint-disable import/no-import-module-exports */ /* eslint-disable prefer-rest-params */ /* eslint-disable no-bitwise */ /* eslint-disable @typescript-eslint/init-declarations */ /* eslint-disable func-names */ /* eslint-disable import/no-mutable-exports */ /* eslint-disable @typescript-eslint/no-shadow */ /* eslint-disable no-param-reassign */ /* eslint-disable @typescript-eslint/explicit-module-boundary-types */ /* eslint-disable @typescript-eslint/no-unsafe-return */ /* eslint-disable @typescript-eslint/explicit-function-return-type */ /* eslint-disable prefer-destructuring */ /* eslint-disable @typescript-eslint/no-unused-expressions */
 const {
   floor
 } = Math;
