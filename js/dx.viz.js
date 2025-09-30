@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.viz.js)
 * Version: 25.2.0
-* Build date: Wed Sep 17 2025
+* Build date: Tue Sep 30 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -63370,6 +63370,8 @@ const dxBarGauge = exports.dxBarGauge = _base_gauge.BaseGauge.inherit({
   _buildNodes() {
     const that = this;
     const options = that._options.silent();
+    const legendOptions = that._themeManager.theme('legend');
+    legendOptions._incidentOccurred = that._incidentOccurred;
     that._palette = that._themeManager.createPalette(options.palette, {
       useHighlight: true,
       extensionMode: options.paletteExtensionMode
@@ -92116,7 +92118,7 @@ viz.dxRangeSelector = __webpack_require__(30185);
 viz.dxVectorMap = __webpack_require__(85148);
 viz.map = {};
 viz.map.sources = {};
-viz.map.projection = (__webpack_require__(99094).projection);
+viz.map.projection = (__webpack_require__(99094)/* .projection */ .Q);
 
 /* Sparklines (dx.module-viz-sparklines.js) */
 viz.dxSparkline = __webpack_require__(71871);
@@ -92143,9 +92145,9 @@ viz.gauges = {
   __internals: {}
 };
 viz._dashboard = {};
-viz._dashboard.Renderer = (__webpack_require__(63022).Renderer);
-viz._dashboard.SvgElement = (__webpack_require__(63022).SvgElement);
-viz._dashboard.patchFontOptions = (__webpack_require__(28779).patchFontOptions);
+viz._dashboard.Renderer = (__webpack_require__(63022)/* .Renderer */ .A4);
+viz._dashboard.SvgElement = (__webpack_require__(63022)/* .SvgElement */ .hJ);
+viz._dashboard.patchFontOptions = (__webpack_require__(28779)/* .patchFontOptions */ .a1);
 module.exports = viz;
 
 /***/ }),
@@ -104349,7 +104351,9 @@ const defaultMessages = exports.defaultMessages = {
     "dxMultiView-itemAriaLabel": "{0} of {1}",
     "dxSplitter-resizeHandleAriaLabel": "Split bar",
     "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
-    "dxStepper-optionalMark": "(Optional)"
+    "dxStepper-optionalMark": "(Optional)",
+    "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+    "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
   }
 };
 
@@ -113987,6 +113991,14 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
    */
   E1064: 'AI returned {1} for the {0} field, but this field only accepts {2} values. Update the \'instruction\' for this field.',
   /**
+   * @name ErrorsUIWidgets.E1065
+   */
+  E1065: 'The browser does not support Web Speech API (SpeechRecognition)',
+  /**
+  * @name ErrorsUIWidgets.E1066
+  */
+  E1066: 'All AI columns must have names.',
+  /**
   * @name ErrorsUIWidgets.W1001
   */
   W1001: 'The "key" option cannot be modified after initialization',
@@ -114346,32 +114358,346 @@ module.exports["default"] = exports.default;
 /***/ }),
 
 /***/ 63022:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+var __webpack_unused_export__;
 
 
-
-exports["default"] = void 0;
-var Renderer = _interopRequireWildcard(__webpack_require__(15232));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-var _default = exports["default"] = Renderer;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.ArcSvgElement;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.PathSvgElement;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.RectSvgElement;
+  }
+});
+Object.defineProperty(exports, "A4", ({
+  enumerable: true,
+  get: function () {
+    return _renderer.Renderer;
+  }
+}));
+Object.defineProperty(exports, "hJ", ({
+  enumerable: true,
+  get: function () {
+    return _renderer.SvgElement;
+  }
+}));
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.TextSvgElement;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.getBackup;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.getFuncIri;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.processHatchingAttrs;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _renderer.refreshPaths;
+  }
+});
+var _renderer = __webpack_require__(15232);
 
 /***/ }),
 
 /***/ 28779:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+var __webpack_unused_export__;
 
 
-
-exports["default"] = void 0;
-var Utils = _interopRequireWildcard(__webpack_require__(98013));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-var _default = exports["default"] = Utils;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.PANE_PADDING;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.adjustVisualRange;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.convertAngleToRendererSpace;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.convertPolarToXY;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.convertVisualRangeObject;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.convertXYToPolar;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.decreaseGaps;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.degreesToRadians;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.enumParser;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.extractColor;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getAddFunction;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getAdjustedLog10;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getAppropriateFormat;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getCategoriesInfo;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getCosAndSin;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getDecimalOrder;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getDistance;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getLog;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getLogExt;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getNextDefsSvgId;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getPower;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getVerticallyShiftedAngularCoords;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.getVizRangeObject;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.isRelativeHeightPane;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.map;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.mergeMarginOptions;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.normalizeAngle;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.normalizeArcParams;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.normalizeBBox;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.normalizeEnum;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.normalizePanesHeight;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.parseScalar;
+  }
+});
+Object.defineProperty(exports, "a1", ({
+  enumerable: true,
+  get: function () {
+    return _utils.patchFontOptions;
+  }
+}));
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.pointInCanvas;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.processSeriesTemplate;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.raiseTo;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.raiseToExt;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.rangesAreEqual;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.rotateBBox;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.roundValue;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.setCanvasValues;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.unique;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.updatePanesCanvases;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _utils.valueOf;
+  }
+});
+var _utils = __webpack_require__(98013);
 
 /***/ }),
 
@@ -114591,17 +114917,17 @@ module.exports["default"] = exports.default;
 /***/ }),
 
 /***/ 99094:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
-exports["default"] = void 0;
-var Projection = _interopRequireWildcard(__webpack_require__(56984));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-var _default = exports["default"] = Projection;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
+Object.defineProperty(exports, "Q", ({
+  enumerable: true,
+  get: function () {
+    return _projection.projection;
+  }
+}));
+var _projection = __webpack_require__(56984);
 
 /***/ }),
 

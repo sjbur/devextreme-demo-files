@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.messages.lt.js)
 * Version: 25.2.0
-* Build date: Wed Sep 17 2025
+* Build date: Tue Sep 30 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -802,7 +802,9 @@
             "dxMultiView-itemAriaLabel": "{0} of {1}",
             "dxSplitter-resizeHandleAriaLabel": "Split bar",
             "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
-            "dxStepper-optionalMark": "(Optional)"
+            "dxStepper-optionalMark": "(Optional)",
+            "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+            "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
         }
     });
 }));

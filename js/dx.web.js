@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.web.js)
 * Version: 25.2.0
-* Build date: Wed Sep 17 2025
+* Build date: Tue Sep 30 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -13200,6 +13200,68 @@ class Widget extends _index.InfernoWrapperComponent {
 }
 exports.Widget = Widget;
 Widget.defaultProps = WidgetDefaultProps;
+
+/***/ }),
+
+/***/ 85690:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.SpeechRecognitionAdapter = exports.NOT_SUPPORTED_ERROR = void 0;
+var _window = __webpack_require__(3104);
+var _ui = _interopRequireDefault(__webpack_require__(35185));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const NOT_SUPPORTED_ERROR = exports.NOT_SUPPORTED_ERROR = 'E1065';
+const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
+class SpeechRecognitionAdapter {
+  constructor(config, events) {
+    const window = (0, _window.getWindow)();
+    // @ts-expect-error SpeechRecognition API is not supported in TS
+    const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognitionConstructor) {
+      _ui.default.log(NOT_SUPPORTED_ERROR);
+      return;
+    }
+    this._speechRecognition = new SpeechRecognitionConstructor();
+    this.applyConfig(config);
+    this._attachEvents(events);
+  }
+  _attachEvents(events) {
+    if (!this._speechRecognition) {
+      return;
+    }
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._speechRecognition.onend = events.onEnd;
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._speechRecognition.onresult = events.onResult;
+    this._speechRecognition.onerror = events.onError;
+  }
+  applyConfig() {
+    let config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    Object.entries(config).forEach(_ref => {
+      let [key, value] = _ref;
+      if (this._speechRecognition && !EVENT_NAMES.includes(key)) {
+        this._speechRecognition[key] = value;
+      }
+    });
+  }
+  start() {
+    var _this$_speechRecognit;
+    (_this$_speechRecognit = this._speechRecognition) === null || _this$_speechRecognit === void 0 || _this$_speechRecognit.start();
+  }
+  stop() {
+    var _this$_speechRecognit2;
+    (_this$_speechRecognit2 = this._speechRecognition) === null || _this$_speechRecognit2 === void 0 || _this$_speechRecognit2.stop();
+  }
+  dispose() {
+    this._speechRecognition = null;
+  }
+}
+exports.SpeechRecognitionAdapter = SpeechRecognitionAdapter;
 
 /***/ }),
 
@@ -38742,6 +38804,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _m_widget_base = _interopRequireDefault(__webpack_require__(77456));
 __webpack_require__(15241);
+__webpack_require__(15075);
 __webpack_require__(79495);
 __webpack_require__(45573);
 __webpack_require__(43983);
@@ -38808,7 +38871,7 @@ var _m_widget_base = _interopRequireDefault(__webpack_require__(99335));
 var _m_core = _interopRequireDefault(__webpack_require__(54353));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
-_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'selection', 'editorFactory', 'columnChooser', 'grouping', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'groupPanelKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
+_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'grouping', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'groupPanelKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
 class DataGrid extends _m_widget_base.default {
   _defaultOptionsRules() {
     // @ts-expect-error
@@ -38931,6 +38994,18 @@ var _m_adaptivity = __webpack_require__(8468);
 var _m_core = _interopRequireDefault(__webpack_require__(54353));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 _m_core.default.registerModule('adaptivity', _m_adaptivity.adaptivityModule);
+
+/***/ }),
+
+/***/ 15075:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _m_ai_column_controller = __webpack_require__(50567);
+var _m_core = _interopRequireDefault(__webpack_require__(54353));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+_m_core.default.registerModule('aiColumnController', _m_ai_column_controller.aiColumnControllerModule);
 
 /***/ }),
 
@@ -40231,6 +40306,7 @@ var _form = _interopRequireDefault(__webpack_require__(74075));
 var _themes = __webpack_require__(52071);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
+var _utils = __webpack_require__(90608);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file */
 
@@ -40855,7 +40931,7 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
   }
   updateHidingQueue(columns) {
     const that = this;
-    const hideableColumns = columns.filter(column => column.visible && !column.type && !column.fixed && !((0, _type.isDefined)(column.groupIndex) && column.groupIndex >= 0));
+    const hideableColumns = (0, _utils.getHideableColumns)(columns);
     let columnsHasHidingPriority;
     let i;
     that._hidingColumnsQueue = [];
@@ -40863,9 +40939,10 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
       return that._hidingColumnsQueue;
     }
     for (i = 0; i < hideableColumns.length; i++) {
-      if ((0, _type.isDefined)(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+      const column = hideableColumns[i];
+      if ((0, _type.isDefined)(column.hidingPriority) && column.hidingPriority >= 0) {
         columnsHasHidingPriority = true;
-        that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
+        that._hidingColumnsQueue[column.hidingPriority] = column;
       }
     }
     if (columnsHasHidingPriority) {
@@ -41336,6 +41413,93 @@ const adaptivityModule = exports.adaptivityModule = {
     }
   }
 };
+
+/***/ }),
+
+/***/ 90608:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getHideableColumns = getHideableColumns;
+var _type = __webpack_require__(11528);
+const HIDEABLE_COMMAND_COLUMNS = ['ai'];
+function isHideableColumn(column) {
+  const isGroup = ((column === null || column === void 0 ? void 0 : column.groupIndex) ?? -1) >= 0;
+  return column.visible === true && (!(0, _type.isDefined)(column.type) || HIDEABLE_COMMAND_COLUMNS.includes(column.type)) && !column.fixed && !isGroup;
+}
+function getHideableColumns(columns) {
+  return columns.filter(isHideableColumn);
+}
+
+/***/ }),
+
+/***/ 92806:
+/***/ (function(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.CLASSES = exports.AI_COLUMN_NAME = void 0;
+const AI_COLUMN_NAME = exports.AI_COLUMN_NAME = 'ai';
+const CLASSES = exports.CLASSES = {
+  aiColumn: 'dx-command-ai'
+};
+
+/***/ }),
+
+/***/ 50567:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.aiColumnControllerModule = exports.AiColumnController = void 0;
+var _m_modules = __webpack_require__(74854);
+var _m_ai_column_controller_utils = __webpack_require__(52969);
+class AiColumnController extends _m_modules.Controller {
+  init() {
+    this.columnsController = this.getController('columns');
+    this.addAiCommandColumn();
+  }
+  addAiCommandColumn() {
+    const aiColumnOptions = (0, _m_ai_column_controller_utils.getAiCommandColumnOptions)();
+    this.columnsController.addCommandColumn(aiColumnOptions);
+  }
+}
+exports.AiColumnController = AiColumnController;
+const aiColumnControllerModule = exports.aiColumnControllerModule = {
+  controllers: {
+    aiColumn: AiColumnController
+  }
+};
+
+/***/ }),
+
+/***/ 52969:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getAiCommandColumnOptions = void 0;
+var _const = __webpack_require__(92806);
+const getAiCommandColumnOptions = () => ({
+  type: _const.AI_COLUMN_NAME,
+  command: _const.AI_COLUMN_NAME,
+  cssClass: _const.CLASSES.aiColumn,
+  fixed: false
+});
+exports.getAiCommandColumnOptions = getAiCommandColumnOptions;
 
 /***/ }),
 
@@ -43575,7 +43739,7 @@ var _default = exports["default"] = ColumnStateMixin;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
+exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COMMAND_COLUMNS_WITH_REQUIRED_NAMES = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
 const USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
 const USER_STATE_FIELD_NAMES = exports.USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
 // eslint-disable-next-line @stylistic/max-len
@@ -43609,6 +43773,7 @@ const COLUMN_INDEX_OPTIONS = exports.COLUMN_INDEX_OPTIONS = {
 const GROUP_LOCATION = exports.GROUP_LOCATION = 'group';
 const COLUMN_CHOOSER_LOCATION = exports.COLUMN_CHOOSER_LOCATION = 'columnChooser';
 const UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = ['fixed', 'fixedPosition', 'type', 'buttons'];
+const COMMAND_COLUMNS_WITH_REQUIRED_NAMES = exports.COMMAND_COLUMNS_WITH_REQUIRED_NAMES = ['ai'];
 
 /***/ }),
 
@@ -43639,14 +43804,23 @@ var _abstract_store = _interopRequireDefault(__webpack_require__(77735));
 var _filtering = _interopRequireDefault(__webpack_require__(56417));
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _m_inflector = _interopRequireDefault(__webpack_require__(66122));
+var _const = __webpack_require__(92806);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
-var _const = __webpack_require__(87396);
-var _const2 = __webpack_require__(48795);
+var _const2 = __webpack_require__(87396);
+var _const3 = __webpack_require__(48795);
 var _m_columns_controller_utils = __webpack_require__(63904);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); } /* eslint-disable prefer-destructuring */
 class ColumnsController extends _m_modules.default.Controller {
+  getCommonColumnSettings(column) {
+    if (!(column !== null && column !== void 0 && column.type)) {
+      return this.option('commonColumnSettings');
+    }
+    return column.type === _const.AI_COLUMN_NAME ? {
+      allowHiding: true
+    } : {};
+  }
   init(isApplyingUserState) {
     this._dataController = this.getController('data');
     this._focusController = this.getController('focus');
@@ -43674,7 +43848,7 @@ class ColumnsController extends _m_modules.default.Controller {
       type: 'expand',
       command: 'expand',
       width: 'auto',
-      cssClass: _const2.COMMAND_EXPAND_CLASS,
+      cssClass: _const3.COMMAND_EXPAND_CLASS,
       allowEditing: false,
       allowGrouping: false,
       allowSorting: false,
@@ -43713,7 +43887,7 @@ class ColumnsController extends _m_modules.default.Controller {
     const that = this;
     let column;
     const columnIndexes = [];
-    path.replace(_const2.COLUMN_OPTION_REGEXP, (_, columnIndex) => {
+    path.replace(_const3.COLUMN_OPTION_REGEXP, (_, columnIndex) => {
       // eslint-disable-next-line radix
       columnIndexes.push(parseInt(columnIndex));
       return '';
@@ -43787,7 +43961,7 @@ class ColumnsController extends _m_modules.default.Controller {
   _columnOptionChanged(args) {
     let columnOptionValue = {};
     const column = this.getColumnByPath(args.fullName);
-    const columnOptionName = args.fullName.replace(_const2.COLUMN_OPTION_REGEXP, '');
+    const columnOptionName = args.fullName.replace(_const3.COLUMN_OPTION_REGEXP, '');
     if (column) {
       if (columnOptionName) {
         columnOptionValue[columnOptionName] = args.value;
@@ -43803,7 +43977,7 @@ class ColumnsController extends _m_modules.default.Controller {
     const {
       component
     } = this;
-    if (args.fullName.replace(_const2.COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
+    if (args.fullName.replace(_const3.COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
       component._requireResize = true;
     }
   }
@@ -43867,7 +44041,7 @@ class ColumnsController extends _m_modules.default.Controller {
     return this._dataSourceApplied;
   }
   getCommonSettings(column) {
-    const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions = this.option('grouping') ?? {};
     const groupPanelOptions = this.option('groupPanel') ?? {};
     return (0, _extend.extend)({
@@ -43992,7 +44166,7 @@ class ColumnsController extends _m_modules.default.Controller {
         for (let j = 0; j < visibleColumns.length; j++) {
           const prevColumn = visibleColumns[j - 1];
           const column = visibleColumns[j];
-          if (!column.fixed || column.fixedPosition === _const.StickyPosition.Sticky) {
+          if (!column.fixed || column.fixedPosition === _const2.StickyPosition.Sticky) {
             if (i === 0) {
               if (column.isBand && column.colspan) {
                 transparentColspan += column.colspan;
@@ -44070,7 +44244,7 @@ class ColumnsController extends _m_modules.default.Controller {
       fixedPosition: rtlEnabled ? 'right' : 'left'
     }, expandColumn, {
       index: column.index,
-      type: column.type || _const2.GROUP_COMMAND_COLUMN_NAME
+      type: column.type || _const3.GROUP_COMMAND_COLUMN_NAME
     }));
     return expandColumns;
   }
@@ -44176,7 +44350,7 @@ class ColumnsController extends _m_modules.default.Controller {
           var _parentBandColumns$, _parentBandColumns$2;
           column.fixed = ((_parentBandColumns$ = parentBandColumns[0]) === null || _parentBandColumns$ === void 0 ? void 0 : _parentBandColumns$.fixed) ?? column.fixed;
           column.fixedPosition = ((_parentBandColumns$2 = parentBandColumns[0]) === null || _parentBandColumns$2 === void 0 ? void 0 : _parentBandColumns$2.fixedPosition) ?? column.fixedPosition;
-          if (column.fixed && column.fixedPosition !== _const.StickyPosition.Sticky) {
+          if (column.fixed && column.fixedPosition !== _const2.StickyPosition.Sticky) {
             const isDefaultCommandColumn = !!column.command && !_m_utils.default.isCustomCommandColumn(this._columns, column);
             let isFixedToEnd = column.fixedPosition === 'right';
             if (rtlEnabled && !isDefaultCommandColumn) {
@@ -44226,10 +44400,10 @@ class ColumnsController extends _m_modules.default.Controller {
       });
       // The order of processing is important
       if (rowspanExpandColumns <= rowIndex) {
-        rowspanExpandColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const2.DETAIL_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
+        rowspanExpandColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const3.DETAIL_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
       }
       if (rowspanGroupColumns <= rowIndex) {
-        rowspanGroupColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const2.GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
+        rowspanGroupColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const3.GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
       }
     }
     result.push((0, _m_columns_controller_utils.getDataColumns)(result));
@@ -44277,7 +44451,7 @@ class ColumnsController extends _m_modules.default.Controller {
     const sourceColumn = that._columns[columnIndex];
     if (sourceColumn && (sourceColumn.allowReordering || sourceColumn.allowGrouping || sourceColumn.allowHiding)) {
       if (sourceLocation === targetLocation) {
-        if (sourceLocation === _const2.COLUMN_CHOOSER_LOCATION) {
+        if (sourceLocation === _const3.COLUMN_CHOOSER_LOCATION) {
           return false;
         }
         // @ts-expect-error
@@ -44286,10 +44460,10 @@ class ColumnsController extends _m_modules.default.Controller {
         toVisibleIndex = (0, _type.isObject)(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
         return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
       }
-      if (sourceLocation === _const2.GROUP_LOCATION && targetLocation !== _const2.COLUMN_CHOOSER_LOCATION || targetLocation === _const2.GROUP_LOCATION) {
+      if (sourceLocation === _const3.GROUP_LOCATION && targetLocation !== _const3.COLUMN_CHOOSER_LOCATION || targetLocation === _const3.GROUP_LOCATION) {
         return sourceColumn && sourceColumn.allowGrouping;
       }
-      if (sourceLocation === _const2.COLUMN_CHOOSER_LOCATION || targetLocation === _const2.COLUMN_CHOOSER_LOCATION) {
+      if (sourceLocation === _const3.COLUMN_CHOOSER_LOCATION || targetLocation === _const3.COLUMN_CHOOSER_LOCATION) {
         return sourceColumn && sourceColumn.allowHiding;
       }
       return true;
@@ -44308,11 +44482,11 @@ class ColumnsController extends _m_modules.default.Controller {
       // @ts-expect-error
       toVisibleIndex = (0, _type.isObject)(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
       targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
-      if ((0, _type.isDefined)(column.groupIndex) && sourceLocation === _const2.GROUP_LOCATION) {
+      if ((0, _type.isDefined)(column.groupIndex) && sourceLocation === _const3.GROUP_LOCATION) {
         if (targetGroupIndex > column.groupIndex) {
           targetGroupIndex--;
         }
-        if (targetLocation !== _const2.GROUP_LOCATION) {
+        if (targetLocation !== _const3.GROUP_LOCATION) {
           options.groupIndex = undefined;
         } else {
           prevGroupIndex = column.groupIndex;
@@ -44320,20 +44494,20 @@ class ColumnsController extends _m_modules.default.Controller {
           (0, _m_columns_controller_utils.updateColumnGroupIndexes)(that);
         }
       }
-      if (targetLocation === _const2.GROUP_LOCATION) {
+      if (targetLocation === _const3.GROUP_LOCATION) {
         options.groupIndex = (0, _m_columns_controller_utils.moveColumnToGroup)(that, column, targetGroupIndex);
         column.groupIndex = prevGroupIndex;
       } else if (toVisibleIndex >= 0) {
         const targetColumn = that._columns[toIndex];
         if (!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-          options.visibleIndex = _const2.MAX_SAFE_INTEGER;
+          options.visibleIndex = _const3.MAX_SAFE_INTEGER;
         } else if ((0, _m_columns_controller_utils.isColumnFixed)(that, column) ^ (0, _m_columns_controller_utils.isColumnFixed)(that, targetColumn)) {
-          options.visibleIndex = _const2.MAX_SAFE_INTEGER;
+          options.visibleIndex = _const3.MAX_SAFE_INTEGER;
         } else {
           options.visibleIndex = targetColumn.visibleIndex;
         }
       }
-      const isVisible = targetLocation !== _const2.COLUMN_CHOOSER_LOCATION;
+      const isVisible = targetLocation !== _const3.COLUMN_CHOOSER_LOCATION;
       if (column.visible !== isVisible) {
         options.visible = isVisible;
       }
@@ -44498,7 +44672,7 @@ class ColumnsController extends _m_modules.default.Controller {
       column.alignment = column.alignment || (0, _m_columns_controller_utils.getAlignmentByDataType)(dataType, this.option('rtlEnabled'));
       column.format = column.format || _m_utils.default.getFormatByDataType(dataType);
       column.customizeText = column.customizeText || (0, _m_columns_controller_utils.getCustomizeTextByDataType)(dataType);
-      column.defaultFilterOperations = column.defaultFilterOperations || !lookup && _const2.DATATYPE_OPERATIONS[dataType] || [];
+      column.defaultFilterOperations = column.defaultFilterOperations || !lookup && _const3.DATATYPE_OPERATIONS[dataType] || [];
       if (!(0, _type.isDefined)(column.filterOperations)) {
         (0, _m_columns_controller_utils.setFilterOperationsAsDefaultValues)(column);
       }
@@ -44833,12 +45007,14 @@ class ColumnsController extends _m_modules.default.Controller {
     }
     for (i = 0; i < columns.length; i++) {
       result[i] = {};
-      (0, _iterator.each)(_const2.USER_STATE_FIELD_NAMES, handleStateField);
+      (0, _iterator.each)(_const3.USER_STATE_FIELD_NAMES, handleStateField);
     }
     return result;
   }
   setName(column) {
-    column.name = column.name || column.dataField || column.type;
+    if (!(0, _m_columns_controller_utils.isColumnNameRequired)(column)) {
+      column.name = column.name || column.dataField || column.type;
+    }
   }
   setUserState(state) {
     const that = this;
@@ -44869,8 +45045,9 @@ class ColumnsController extends _m_modules.default.Controller {
   }
   _checkColumns() {
     const usedNames = {};
-    let hasEditableColumnWithoutName = false;
     const duplicatedNames = [];
+    let hasEditableColumnWithoutName = false;
+    let hasColumnsWithoutRequiredNames = false;
     this._columns.forEach(column => {
       var _column$columns;
       const {
@@ -44883,12 +45060,17 @@ class ColumnsController extends _m_modules.default.Controller {
           duplicatedNames.push(`"${name}"`);
         }
         usedNames[name] = true;
+      } else if ((0, _m_columns_controller_utils.isColumnNameRequired)(column)) {
+        hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
       }
     });
     if (duplicatedNames.length) {
       _ui.default.log('E1059', duplicatedNames.join(', '));
+    }
+    if (hasColumnsWithoutRequiredNames) {
+      _ui.default.log('E1066');
     }
     if (hasEditableColumnWithoutName) {
       _ui.default.log('E1060');
@@ -45118,7 +45300,7 @@ class ColumnsController extends _m_modules.default.Controller {
     return _m_utils.default.isCustomCommandColumn(this._columns, commandColumn);
   }
   getColumnId(column) {
-    if (column.command && column.type === _const2.GROUP_COMMAND_COLUMN_NAME) {
+    if (column.command && column.type === _const3.GROUP_COMMAND_COLUMN_NAME) {
       if (_m_utils.default.isCustomCommandColumn(this._columns, column)) {
         return `type:${column.type}`;
       }
@@ -45189,7 +45371,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.applyUserState = exports.addExpandColumn = void 0;
 exports.assignColumns = assignColumns;
-exports.isFirstOrLastColumn = exports.isColumnFixed = exports.getValueDataType = exports.getSerializationFormat = exports.getRowCount = exports.getParentBandColumns = exports.getFixedPosition = exports.getDataColumns = exports.getCustomizeTextByDataType = exports.getColumnIndexByVisibleIndex = exports.getColumnFullPath = exports.getColumnByIndexes = exports.getChildrenByBandColumn = exports.getAlignmentByDataType = exports.fireOptionChanged = exports.fireColumnsChanged = exports.findColumn = exports.digitsCount = exports.defaultSetCellValue = exports.customizeTextForBooleanDataType = exports.createColumnsFromOptions = exports.createColumnsFromDataSource = exports.createColumn = exports.convertOwnerBandToColumnReference = exports.columnOptionCore = exports.calculateColspan = void 0;
+exports.isFirstOrLastColumn = exports.isColumnNameRequired = exports.isColumnFixed = exports.getValueDataType = exports.getSerializationFormat = exports.getRowCount = exports.getParentBandColumns = exports.getFixedPosition = exports.getDataColumns = exports.getCustomizeTextByDataType = exports.getColumnIndexByVisibleIndex = exports.getColumnFullPath = exports.getColumnByIndexes = exports.getChildrenByBandColumn = exports.getAlignmentByDataType = exports.fireOptionChanged = exports.fireColumnsChanged = exports.findColumn = exports.digitsCount = exports.defaultSetCellValue = exports.customizeTextForBooleanDataType = exports.createColumnsFromOptions = exports.createColumnsFromDataSource = exports.createColumn = exports.convertOwnerBandToColumnReference = exports.columnOptionCore = exports.calculateColspan = void 0;
 exports.isSortOrderValid = isSortOrderValid;
 exports.updateSortOrderWhenGrouping = exports.updateSerializers = exports.updateIndexes = exports.updateColumnVisibleIndexes = exports.updateColumnSortIndexes = exports.updateColumnIndexes = exports.updateColumnGroupIndexes = exports.updateColumnChanges = exports.strictParseNumber = exports.sortColumns = exports.setFilterOperationsAsDefaultValues = exports.resetColumnsCache = exports.resetBandColumnsCache = exports.processExpandColumns = exports.processBandColumns = exports.numberToString = exports.moveColumnToGroup = exports.mergeColumns = void 0;
 var _number = _interopRequireDefault(__webpack_require__(52771));
@@ -46116,6 +46298,13 @@ const isFirstOrLastColumn = function (that, targetColumn, rowIndex) {
   return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
 };
 exports.isFirstOrLastColumn = isFirstOrLastColumn;
+const isColumnNameRequired = function (_ref) {
+  let {
+    type = ''
+  } = _ref;
+  return _const3.COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
+};
+exports.isColumnNameRequired = isColumnNameRequired;
 
 /***/ }),
 
@@ -69949,7 +70138,6 @@ class ResizingController extends _m_modules.default.ViewController {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
-    const wordWrapEnabled = this.option('wordWrapEnabled');
     const hasUndefinedColumnWidth = visibleColumns.some(column => !(0, _type.isDefined)(column.width));
     let needBestFit = this._needBestFit();
     let hasMinWidth = false;
@@ -69985,6 +70173,7 @@ class ResizingController extends _m_modules.default.ViewController {
       }
       return undefined;
     });
+    this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
     this._setVisibleWidths(visibleColumns, []);
     const $element = this.component.$element();
     if (needBestFit) {
@@ -69994,7 +70183,6 @@ class ResizingController extends _m_modules.default.ViewController {
       this._toggleBestFitMode(true);
       resetBestFitMode = true;
     }
-    this._toggleContentMinHeight(wordWrapEnabled); // T1047239
     if ($element && $element.get(0) && this._maxWidth) {
       delete this._maxWidth;
       $element[0].style.maxWidth = '';
@@ -70044,9 +70232,7 @@ class ResizingController extends _m_modules.default.ViewController {
         if (needBestFit || isColumnWidthsCorrected || hasUndefinedColumnWidth) {
           this._setVisibleWidths(visibleColumns, resultWidths);
         }
-        if (wordWrapEnabled) {
-          this._toggleContentMinHeight(false);
-        }
+        this._toggleContentMinHeight(false);
       });
     });
   }
@@ -79676,7 +79862,7 @@ class EditingController {
       }
       const insertChange = changes.find(change => change.key === editCardKey && change.type === 'insert');
       const oldData = (insertChange === null || insertChange === void 0 ? void 0 : insertChange.data) ?? oldItem.data;
-      const newData = (0, _data.applyChanges)([oldData], changes, {
+      const newData = insertChange ? _extends({}, oldData, changes) : (0, _data.applyChanges)([oldData], changes, {
         keyExpr: this.dataController.dataSource.peek().key(),
         immutable: true
       })[0];
@@ -79717,7 +79903,7 @@ class EditingController {
     this.changes.value = [...this.changes.peek(), {
       type: 'insert',
       key: newItemKey,
-      data: {}
+      data: eventArgs.data
     }];
     this.editCardKey.value = newItemKey;
   }
@@ -82487,7 +82673,6 @@ var _index = __webpack_require__(74636);
 var _columns_controller = __webpack_require__(88195);
 var _data_controller = __webpack_require__(22893);
 var _index2 = __webpack_require__(61519);
-var _index3 = __webpack_require__(15238);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class ItemsController {
   constructor(dataController, columnsController, searchController) {
@@ -82516,7 +82701,7 @@ class ItemsController {
     const fields = columns.map((column, index) => {
       const value = column.calculateFieldValue(data);
       const displayValue = column.calculateDisplayValue(data);
-      const formattedText = _format_helper.default.format((0, _index3.parseValue)(column, displayValue), column.format);
+      const formattedText = _format_helper.default.format(displayValue, column.format);
       const text = column.customizeText ? column.customizeText({
         value: displayValue,
         valueText: formattedText
@@ -96912,6 +97097,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _m_widget_base = _interopRequireDefault(__webpack_require__(7444));
 __webpack_require__(30816);
+__webpack_require__(26191);
 __webpack_require__(22697);
 __webpack_require__(62434);
 __webpack_require__(53343);
@@ -96969,7 +97155,7 @@ var _m_widget_base = _interopRequireDefault(__webpack_require__(99335));
 var _m_core = _interopRequireDefault(__webpack_require__(99477));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const TREELIST_CLASS = 'dx-treelist';
-_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'selection', 'editorFactory', 'columnChooser', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editing', 'grouping', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
+_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editing', 'grouping', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
 class TreeList extends _m_widget_base.default {
   _initMarkup() {
     // @ts-expect-error
@@ -97030,6 +97216,18 @@ var _m_adaptivity = __webpack_require__(8468);
 var _m_core = _interopRequireDefault(__webpack_require__(99477));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 _m_core.default.registerModule('adaptivity', _m_adaptivity.adaptivityModule);
+
+/***/ }),
+
+/***/ 26191:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _m_ai_column_controller = __webpack_require__(50567);
+var _m_core = _interopRequireDefault(__webpack_require__(99477));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+_m_core.default.registerModule('aiColumnController', _m_ai_column_controller.aiColumnControllerModule);
 
 /***/ }),
 
@@ -100590,30 +100788,6 @@ class PaginationContent extends _index.InfernoComponent {
   getPagesContainerVisible() {
     return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
   }
-  getPageSizeSelectorVisible() {
-    const {
-      showPageSizeSelector,
-      pageCount,
-      hasKnownLastPage,
-      showInfo,
-      showNavigationButtons
-    } = this.props;
-    if (showPageSizeSelector === false) {
-      return false;
-    }
-    if (showPageSizeSelector === true) {
-      return true;
-    }
-    if (showPageSizeSelector === 'auto') {
-      const shouldHideBasedOnPageCount = pageCount === 1 && hasKnownLastPage;
-      const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons);
-      if (shouldHideBasedOnPageCount && !hasExplicitVisibleComponents) {
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
   getPagesContainerVisibility() {
     const {
       pagesNavigatorVisible,
@@ -100665,6 +100839,7 @@ class PaginationContent extends _index.InfernoComponent {
       isGridCompatibilityMode,
       rtlEnabled,
       visible,
+      showPageSizeSelector,
       allowedPageSizesRef,
       pageSize,
       pageSizeChangedInternal,
@@ -100709,7 +100884,7 @@ class PaginationContent extends _index.InfernoComponent {
       "focusStateEnabled": focusStateEnabled,
       "hoverStateEnabled": hoverStateEnabled
     }, elementAttr, {
-      children: [this.getPageSizeSelectorVisible() && (0, _inferno.createComponentVNode)(2, _selector.PageSizeSelector, {
+      children: [showPageSizeSelector && (0, _inferno.createComponentVNode)(2, _selector.PageSizeSelector, {
         "rootElementRef": allowedPageSizesRef,
         "isLargeDisplayMode": this.getIsLargeDisplayMode(),
         "itemCount": itemCount,
@@ -102539,12 +102714,28 @@ const updateRecurrenceItemVisibility = (recurrenceRuleExpr, value, form) => {
   form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
   (_form$getEditor = form.getEditor(recurrenceRuleExpr)) === null || _form$getEditor === void 0 || _form$getEditor.changeValueByVisibility(value);
 };
+const defaultFormOptions = {
+  showValidationSummary: true,
+  scrollingEnabled: true,
+  colCount: 'auto',
+  colCountByScreen: {
+    lg: 2,
+    xs: 1
+  },
+  showColonAfterLabel: false,
+  labelLocation: 'top',
+  screenByWidth: width => width < SCREEN_SIZE_OF_SINGLE_COLUMN || _devices.default.current().deviceType !== 'desktop' ? 'xs' : 'lg',
+  elementAttr: {
+    class: E2E_TEST_CLASSES.form
+  }
+};
 class AppointmentForm {
   constructor(scheduler) {
     // NOTE: flag to prevent double value set during form updating
     this.isFormUpdating = false;
     this.scheduler = scheduler;
-    this.form = null;
+    const element = (0, _renderer.default)('<div>');
+    this.form = this.scheduler.createComponent(element, _form.default, _extends({}, defaultFormOptions));
   }
   get dxForm() {
     return this.form;
@@ -102573,7 +102764,7 @@ class AppointmentForm {
     } = dataAccessors;
     const isRecurrence = Boolean(dataAccessors.get('recurrenceRule', formData));
     const colSpan = isRecurrence ? 1 : 2;
-    const mainItems = [...this._createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing), ...this.scheduler.createResourceEditorModel()];
+    const mainItems = [...this.createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing), ...this.scheduler.createResourceEditorModel()];
     changeSize(isRecurrence);
     const items = [{
       itemType: 'group',
@@ -102589,42 +102780,27 @@ class AppointmentForm {
       name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
       visible: isRecurrence,
       colSpan,
-      items: this._createRecurrenceEditor(expr)
+      items: this.createRecurrenceEditor(expr)
     }];
-    const element = (0, _renderer.default)('<div>');
-    this.scheduler.createComponent(element, _form.default, {
+    this.form.option({
       items,
-      showValidationSummary: true,
-      scrollingEnabled: true,
-      colCount: 'auto',
-      colCountByScreen: {
-        lg: 2,
-        xs: 1
-      },
-      formData,
-      showColonAfterLabel: false,
-      labelLocation: 'top',
-      onInitialized: e => {
-        this.form = e.component;
-      },
-      screenByWidth: width => width < SCREEN_SIZE_OF_SINGLE_COLUMN || _devices.default.current().deviceType !== 'desktop' ? 'xs' : 'lg',
-      elementAttr: {
-        class: E2E_TEST_CLASSES.form
-      }
+      formData
     });
   }
-  _dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
+  dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
     validateAppointmentFormDate(args.component, args.value, args.previousValue);
     const value = _date_serialization.default.deserializeDate(args.value);
     const previousValue = _date_serialization.default.deserializeDate(args.previousValue);
     const dateEditor = this.form.getEditor(dateExpr);
+    // @ts-expect-error should be fixed in the future
     const dateValue = _date_serialization.default.deserializeDate(dateEditor.option('value'));
     if (!this.isFormUpdating && dateValue && value && isNeedCorrect(dateValue, value)) {
       const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
+      // @ts-expect-error should be fixed in the future
       dateEditor.option('value', new Date(value.getTime() + duration));
     }
   }
-  _createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, cssClass) {
+  createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, cssClass) {
     let visible = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
     const noTzTitle = _message.default.format('dxScheduler-noTimezoneTitle');
     return {
@@ -102649,6 +102825,7 @@ class AppointmentForm {
           } = this;
           const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
           if (isMainTimeZone) {
+            // @ts-expect-error should be fixed in the future
             secondTimezoneEditor.option('value', args.value);
           }
         }
@@ -102656,16 +102833,16 @@ class AppointmentForm {
       visible
     };
   }
-  _createDateBoxItems(dataExprs, allowTimeZoneEditing) {
+  createDateBoxItems(dataExprs, allowTimeZoneEditing) {
     const colSpan = allowTimeZoneEditing ? 2 : 1;
     const firstDayOfWeek = this.scheduler.getFirstDayOfWeek();
     return [this.createDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate', E2E_TEST_CLASSES.startDateEditor, args => {
-      this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => endValue < startValue);
-    }), this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, true, E2E_TEST_CLASSES.startDateTimeZoneEditor, allowTimeZoneEditing), this.createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate', E2E_TEST_CLASSES.endDateEditor, args => {
-      this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => endValue < startValue);
-    }), this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, E2E_TEST_CLASSES.endDateTimeZoneEditor, allowTimeZoneEditing)];
+      this.dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => endValue < startValue);
+    }), this.createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, true, E2E_TEST_CLASSES.startDateTimeZoneEditor, allowTimeZoneEditing), this.createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate', E2E_TEST_CLASSES.endDateEditor, args => {
+      this.dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => endValue < startValue);
+    }), this.createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, E2E_TEST_CLASSES.endDateTimeZoneEditor, allowTimeZoneEditing)];
   }
-  _changeFormItemDateType(name, groupName, isAllDay) {
+  changeFormItemDateType(name, groupName, isAllDay) {
     const editorPath = this.getEditorPath(name, groupName);
     const itemEditorOptions = this.form.itemOption(editorPath).editorOptions;
     const type = isAllDay ? 'date' : 'datetime';
@@ -102674,7 +102851,7 @@ class AppointmentForm {
     });
     this.form.itemOption(editorPath, 'editorOptions', newEditorOption);
   }
-  _createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
+  createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
     return [{
       name: this.normalizeEditorName(dataExprs.textExpr),
       dataField: dataExprs.textExpr,
@@ -102694,7 +102871,7 @@ class AppointmentForm {
         lg: 2,
         xs: 1
       },
-      items: this._createDateBoxItems(dataExprs, allowTimeZoneEditing)
+      items: this.createDateBoxItems(dataExprs, allowTimeZoneEditing)
     }, {
       itemType: 'group',
       colSpan: 2,
@@ -102718,21 +102895,26 @@ class AppointmentForm {
             } = args;
             const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
             const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
+            // @ts-expect-error should be fixed in the future
             const startDate = _date_serialization.default.deserializeDate(startDateEditor.option('value'));
             if (!this.isFormUpdating && startDate) {
               if (value) {
                 const allDayStartDate = _date.default.trimTime(startDate);
+                // @ts-expect-error should be fixed in the future
                 startDateEditor.option('value', new Date(allDayStartDate));
+                // @ts-expect-error should be fixed in the future
                 endDateEditor.option('value', new Date(allDayStartDate));
               } else {
                 const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
                 const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
+                // @ts-expect-error should be fixed in the future
                 startDateEditor.option('value', startDateWithStartHour);
+                // @ts-expect-error should be fixed in the future
                 endDateEditor.option('value', endDate);
               }
             }
-            this._changeFormItemDateType(dataExprs.startDateExpr, 'Main', value);
-            this._changeFormItemDateType(dataExprs.endDateExpr, 'Main', value);
+            this.changeFormItemDateType(dataExprs.startDateExpr, 'Main', value);
+            this.changeFormItemDateType(dataExprs.endDateExpr, 'Main', value);
           }
         }
       }, {
@@ -102778,7 +102960,7 @@ class AppointmentForm {
       colSpan: 2
     }];
   }
-  _createRecurrenceEditor(dataExprs) {
+  createRecurrenceEditor(dataExprs) {
     return [{
       name: this.normalizeEditorName(dataExprs.recurrenceRuleExpr),
       dataField: dataExprs.recurrenceRuleExpr,
@@ -102873,7 +103055,7 @@ exports.AppointmentForm = AppointmentForm;
 
 /***/ }),
 
-/***/ 27483:
+/***/ 98771:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -102881,7 +103063,405 @@ exports.AppointmentForm = AppointmentForm;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.AppointmentPopup = exports.ACTION_TO_APPOINTMENT = void 0;
+exports.AppointmentForm = exports.APPOINTMENT_FORM_GROUP_NAMES = void 0;
+__webpack_require__(84056);
+__webpack_require__(23116);
+__webpack_require__(4575);
+__webpack_require__(91029);
+__webpack_require__(60695);
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _data_source = _interopRequireDefault(__webpack_require__(14479));
+var _devices = _interopRequireDefault(__webpack_require__(65951));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _date = _interopRequireDefault(__webpack_require__(41380));
+var _date_serialization = _interopRequireDefault(__webpack_require__(71051));
+var _extend = __webpack_require__(52576);
+var _form = _interopRequireDefault(__webpack_require__(74075));
+var _themes = __webpack_require__(52071);
+var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
+const APPOINTMENT_FORM_GROUP_NAMES = exports.APPOINTMENT_FORM_GROUP_NAMES = {
+  Main: 'mainGroup',
+  Recurrence: 'recurrenceGroup'
+};
+// TODO: Remove duplication in the scheduler's popup testing model.
+// NOTE: These CSS classes allow access the editors
+// from e2e testcafe tests.
+const E2E_TEST_CLASSES = {
+  form: 'e2e-dx-scheduler-form',
+  textEditor: 'e2e-dx-scheduler-form-text',
+  descriptionEditor: 'e2e-dx-scheduler-form-description',
+  startDateEditor: 'e2e-dx-scheduler-form-start-date',
+  endDateEditor: 'e2e-dx-scheduler-form-end-date',
+  startDateTimeZoneEditor: 'e2e-dx-scheduler-form-start-date-timezone',
+  endDateTimeZoneEditor: 'e2e-dx-scheduler-form-end-date-timezone',
+  allDaySwitch: 'e2e-dx-scheduler-form-all-day-switch',
+  recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch'
+};
+const createTimeZoneDataSource = () => new _data_source.default({
+  store: _m_utils_time_zone.default.getTimeZonesCache(),
+  paginate: true,
+  pageSize: 10
+});
+const getStylingModeFunc = () => (0, _themes.isFluent)((0, _themes.current)()) ? 'filled' : undefined;
+const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
+const validateAppointmentFormDate = (editor, value, previousValue) => {
+  const isCurrentDateCorrect = value === null || Boolean(value);
+  const isPreviousDateCorrect = previousValue === null || Boolean(previousValue);
+  if (!isCurrentDateCorrect && isPreviousDateCorrect) {
+    editor.option('value', previousValue);
+  }
+};
+const updateRecurrenceItemVisibility = (recurrenceRuleExpr, value, form) => {
+  var _form$getEditor;
+  form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
+  (_form$getEditor = form.getEditor(recurrenceRuleExpr)) === null || _form$getEditor === void 0 || _form$getEditor.changeValueByVisibility(value);
+};
+class AppointmentForm {
+  constructor(scheduler) {
+    // NOTE: flag to prevent double value set during form updating
+    this.isFormUpdating = false;
+    this.scheduler = scheduler;
+    this.form = null;
+  }
+  get dxForm() {
+    return this.form;
+  }
+  set readOnly(value) {
+    this.form.option('readOnly', value);
+    const {
+      recurrenceRuleExpr
+    } = this.scheduler.getDataAccessors().expr;
+    const recurrenceEditor = this.form.getEditor(recurrenceRuleExpr);
+    recurrenceEditor === null || recurrenceEditor === void 0 || recurrenceEditor.option('readOnly', value);
+  }
+  get formData() {
+    return this.form.option('formData');
+  }
+  set formData(value) {
+    this.form.option('formData', value);
+  }
+  create(triggerResize, changeSize, formData) {
+    const {
+      allowTimeZoneEditing
+    } = this.scheduler.getEditingConfig();
+    const dataAccessors = this.scheduler.getDataAccessors();
+    const {
+      expr
+    } = dataAccessors;
+    const isRecurrence = Boolean(dataAccessors.get('recurrenceRule', formData));
+    const colSpan = isRecurrence ? 1 : 2;
+    const mainItems = [...this.createMainItems(expr, triggerResize, changeSize, allowTimeZoneEditing), ...this.scheduler.createResourceEditorModel()];
+    changeSize(isRecurrence);
+    const items = [{
+      itemType: 'group',
+      name: APPOINTMENT_FORM_GROUP_NAMES.Main,
+      colCountByScreen: {
+        lg: 2,
+        xs: 1
+      },
+      colSpan,
+      items: mainItems
+    }, {
+      itemType: 'group',
+      name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
+      visible: isRecurrence,
+      colSpan,
+      items: this.createRecurrenceEditor(expr)
+    }];
+    const element = (0, _renderer.default)('<div>');
+    this.scheduler.createComponent(element, _form.default, {
+      items,
+      showValidationSummary: true,
+      scrollingEnabled: true,
+      colCount: 'auto',
+      colCountByScreen: {
+        lg: 2,
+        xs: 1
+      },
+      formData,
+      showColonAfterLabel: false,
+      labelLocation: 'top',
+      onInitialized: e => {
+        this.form = e.component;
+      },
+      screenByWidth: width => width < SCREEN_SIZE_OF_SINGLE_COLUMN || _devices.default.current().deviceType !== 'desktop' ? 'xs' : 'lg',
+      elementAttr: {
+        class: E2E_TEST_CLASSES.form
+      }
+    });
+  }
+  dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
+    validateAppointmentFormDate(args.component, args.value, args.previousValue);
+    const value = _date_serialization.default.deserializeDate(args.value);
+    const previousValue = _date_serialization.default.deserializeDate(args.previousValue);
+    const dateEditor = this.form.getEditor(dateExpr);
+    const dateValue = _date_serialization.default.deserializeDate(dateEditor.option('value'));
+    if (!this.isFormUpdating && dateValue && value && isNeedCorrect(dateValue, value)) {
+      const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
+      dateEditor.option('value', new Date(value.getTime() + duration));
+    }
+  }
+  createTimezoneEditor(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, cssClass) {
+    let visible = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+    const noTzTitle = _message.default.format('dxScheduler-noTimezoneTitle');
+    return {
+      name: this.normalizeEditorName(timeZoneExpr),
+      dataField: timeZoneExpr,
+      editorType: 'dxSelectBox',
+      visibleIndex,
+      colSpan,
+      cssClass,
+      label: {
+        text: ' '
+      },
+      editorOptions: {
+        displayExpr: 'title',
+        valueExpr: 'id',
+        placeholder: noTzTitle,
+        searchEnabled: true,
+        dataSource: createTimeZoneDataSource(),
+        onValueChanged: args => {
+          const {
+            form
+          } = this;
+          const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
+          if (isMainTimeZone) {
+            secondTimezoneEditor.option('value', args.value);
+          }
+        }
+      },
+      visible
+    };
+  }
+  createDateBoxItems(dataExprs, allowTimeZoneEditing) {
+    const colSpan = allowTimeZoneEditing ? 2 : 1;
+    const firstDayOfWeek = this.scheduler.getFirstDayOfWeek();
+    return [this.createDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate', E2E_TEST_CLASSES.startDateEditor, args => {
+      this.dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => endValue < startValue);
+    }), this.createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, true, E2E_TEST_CLASSES.startDateTimeZoneEditor, allowTimeZoneEditing), this.createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate', E2E_TEST_CLASSES.endDateEditor, args => {
+      this.dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => endValue < startValue);
+    }), this.createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, E2E_TEST_CLASSES.endDateTimeZoneEditor, allowTimeZoneEditing)];
+  }
+  changeFormItemDateType(name, groupName, isAllDay) {
+    const editorPath = this.getEditorPath(name, groupName);
+    const itemEditorOptions = this.form.itemOption(editorPath).editorOptions;
+    const type = isAllDay ? 'date' : 'datetime';
+    const newEditorOption = _extends({}, itemEditorOptions, {
+      type
+    });
+    this.form.itemOption(editorPath, 'editorOptions', newEditorOption);
+  }
+  createMainItems(dataExprs, triggerResize, changeSize, allowTimeZoneEditing) {
+    return [{
+      name: this.normalizeEditorName(dataExprs.textExpr),
+      dataField: dataExprs.textExpr,
+      cssClass: E2E_TEST_CLASSES.textEditor,
+      editorType: 'dxTextBox',
+      colSpan: 2,
+      label: {
+        text: _message.default.format('dxScheduler-editorLabelTitle')
+      },
+      editorOptions: {
+        stylingMode: getStylingModeFunc()
+      }
+    }, {
+      itemType: 'group',
+      colSpan: 2,
+      colCountByScreen: {
+        lg: 2,
+        xs: 1
+      },
+      items: this.createDateBoxItems(dataExprs, allowTimeZoneEditing)
+    }, {
+      itemType: 'group',
+      colSpan: 2,
+      colCountByScreen: {
+        lg: 2,
+        xs: 2
+      },
+      items: [{
+        name: this.normalizeEditorName(dataExprs.allDayExpr),
+        dataField: dataExprs.allDayExpr,
+        cssClass: `dx-appointment-form-switch ${E2E_TEST_CLASSES.allDaySwitch}`,
+        editorType: 'dxSwitch',
+        label: {
+          text: _message.default.format('dxScheduler-allDay'),
+          location: 'right'
+        },
+        editorOptions: {
+          onValueChanged: args => {
+            const {
+              value
+            } = args;
+            const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
+            const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
+            const startDate = _date_serialization.default.deserializeDate(startDateEditor.option('value'));
+            if (!this.isFormUpdating && startDate) {
+              if (value) {
+                const allDayStartDate = _date.default.trimTime(startDate);
+                startDateEditor.option('value', new Date(allDayStartDate));
+                endDateEditor.option('value', new Date(allDayStartDate));
+              } else {
+                const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
+                const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
+                startDateEditor.option('value', startDateWithStartHour);
+                endDateEditor.option('value', endDate);
+              }
+            }
+            this.changeFormItemDateType(dataExprs.startDateExpr, 'Main', value);
+            this.changeFormItemDateType(dataExprs.endDateExpr, 'Main', value);
+          }
+        }
+      }, {
+        editorType: 'dxSwitch',
+        dataField: 'repeat',
+        cssClass: `dx-appointment-form-switch ${E2E_TEST_CLASSES.recurrenceSwitch}`,
+        name: 'visibilityChanged',
+        label: {
+          text: _message.default.format('dxScheduler-editorLabelRecurrence'),
+          location: 'right'
+        },
+        editorOptions: {
+          onValueChanged: args => {
+            const {
+              form
+            } = this;
+            const colSpan = args.value ? 1 : 2;
+            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main, 'colSpan', colSpan);
+            form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'colSpan', colSpan);
+            updateRecurrenceItemVisibility(dataExprs.recurrenceRuleExpr, args.value, form);
+            changeSize(args.value);
+            triggerResize();
+          }
+        }
+      }]
+    }, {
+      itemType: 'empty',
+      colSpan: 2
+    }, {
+      name: this.normalizeEditorName(dataExprs.descriptionExpr),
+      dataField: dataExprs.descriptionExpr,
+      cssClass: E2E_TEST_CLASSES.descriptionEditor,
+      editorType: 'dxTextArea',
+      colSpan: 2,
+      label: {
+        text: _message.default.format('dxScheduler-editorLabelDescription')
+      },
+      editorOptions: {
+        stylingMode: getStylingModeFunc()
+      }
+    }, {
+      itemType: 'empty',
+      colSpan: 2
+    }];
+  }
+  createRecurrenceEditor(dataExprs) {
+    return [{
+      name: this.normalizeEditorName(dataExprs.recurrenceRuleExpr),
+      dataField: dataExprs.recurrenceRuleExpr,
+      editorType: 'dxRecurrenceEditor',
+      editorOptions: {
+        firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+        timeZoneCalculator: this.scheduler.getTimeZoneCalculator(),
+        getStartDateTimeZone: () => this.scheduler.getDataAccessors().get('startDateTimeZone', this.formData)
+      },
+      label: {
+        text: ' ',
+        visible: false
+      }
+    }];
+  }
+  setEditorsType(allDay) {
+    const {
+      startDateExpr,
+      endDateExpr
+    } = this.scheduler.getDataAccessors().expr;
+    const startDateItemPath = this.getEditorPath(startDateExpr, 'Main');
+    const endDateItemPath = this.getEditorPath(endDateExpr, 'Main');
+    const startDateFormItem = this.form.itemOption(startDateItemPath);
+    const endDateFormItem = this.form.itemOption(endDateItemPath);
+    if (startDateFormItem && endDateFormItem) {
+      const startDateEditorOptions = startDateFormItem.editorOptions;
+      const endDateEditorOptions = endDateFormItem.editorOptions;
+      startDateEditorOptions.type = endDateEditorOptions.type = allDay ? 'date' : 'datetime';
+      this.form.itemOption(startDateItemPath, 'editorOptions', startDateEditorOptions);
+      this.form.itemOption(endDateItemPath, 'editorOptions', endDateEditorOptions);
+    }
+  }
+  updateRecurrenceEditorStartDate(date, expression) {
+    const options = {
+      startDate: date
+    };
+    this.setEditorOptions(expression, 'Recurrence', options);
+  }
+  setEditorOptions(name, groupName, options) {
+    const editorPath = this.getEditorPath(name, groupName);
+    const editor = this.form.itemOption(editorPath);
+    editor && this.form.itemOption(editorPath, 'editorOptions', (0, _extend.extend)({}, editor.editorOptions, options));
+  }
+  updateFormData(formData) {
+    this.isFormUpdating = true;
+    this.form.option('formData', formData);
+    const dataAccessors = this.scheduler.getDataAccessors();
+    const {
+      expr
+    } = dataAccessors;
+    const rawStartDate = dataAccessors.get('startDate', formData);
+    const allDay = dataAccessors.get('allDay', formData);
+    const startDate = new Date(rawStartDate);
+    this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
+    this.setEditorsType(allDay);
+    this.isFormUpdating = false;
+  }
+  createDateBoxEditor(dataField, colSpan, firstDayOfWeek, label, cssClass, onValueChanged) {
+    return {
+      editorType: 'dxDateBox',
+      name: this.normalizeEditorName(dataField),
+      dataField,
+      colSpan,
+      cssClass,
+      label: {
+        text: _message.default.format(label)
+      },
+      validationRules: [{
+        type: 'required'
+      }],
+      editorOptions: {
+        stylingMode: getStylingModeFunc(),
+        width: '100%',
+        calendarOptions: {
+          firstDayOfWeek
+        },
+        onValueChanged,
+        useMaskBehavior: true
+      }
+    };
+  }
+  getEditorPath(name, groupName) {
+    const normalizedName = this.normalizeEditorName(name);
+    return `${APPOINTMENT_FORM_GROUP_NAMES[groupName]}.${normalizedName}`;
+  }
+  normalizeEditorName(name) {
+    // NOTE: This ternary operator covers the "recurrenceRuleExpr: null/''" scenarios.
+    return name ? name.replace(/\./g, '_') : name;
+  }
+}
+exports.AppointmentForm = AppointmentForm;
+
+/***/ }),
+
+/***/ 24419:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AppointmentPopup = exports.APPOINTMENT_POPUP_CLASS = exports.ACTION_TO_APPOINTMENT = void 0;
 var _visibility_change = __webpack_require__(18029);
 var _message = _interopRequireDefault(__webpack_require__(4671));
 var _devices = _interopRequireDefault(__webpack_require__(65951));
@@ -102896,7 +103476,296 @@ var _appointment_groups_utils = __webpack_require__(11649);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const toMs = _date.default.dateToMilliseconds;
-const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
+const APPOINTMENT_POPUP_CLASS = exports.APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
+const DAY_IN_MS = toMs('day');
+const POPUP_CONFIG = {
+  height: 'auto',
+  maxHeight: '100%',
+  showCloseButton: false,
+  showTitle: false,
+  preventScrollEvents: false,
+  enableBodyScroll: false,
+  defaultOptionsRules: [{
+    device: () => _devices.default.current().android,
+    options: {
+      showTitle: false
+    }
+  }],
+  _ignorePreventScrollEventsDeprecation: true
+};
+const ACTION_TO_APPOINTMENT = exports.ACTION_TO_APPOINTMENT = {
+  CREATE: 0,
+  UPDATE: 1,
+  EXCLUDE_FROM_SERIES: 2
+};
+class AppointmentPopup {
+  constructor(scheduler, form) {
+    this.scheduler = scheduler;
+    this.form = form;
+    this.popup = null;
+    this.state = {
+      action: null,
+      lastEditData: null,
+      saveChangesLocker: false,
+      appointment: {
+        data: null
+      }
+    };
+  }
+  get visible() {
+    return this.popup ? this.popup.option('visible') : false;
+  }
+  show(appointment, config) {
+    this.state.appointment.data = appointment;
+    this.state.action = config.action;
+    this.state.excludeInfo = config.excludeInfo;
+    if (!this.popup) {
+      const popupConfig = this._createPopupConfig();
+      this.popup = this._createPopup(popupConfig);
+    }
+    this.popup.option('toolbarItems', (0, _index.getPopupToolbarItems)(config.isToolbarVisible, e => this._doneButtonClickHandler(e)));
+    this.popup.show();
+  }
+  hide() {
+    this.popup.hide();
+  }
+  dispose() {
+    var _this$popup;
+    (_this$popup = this.popup) === null || _this$popup === void 0 || _this$popup.$element().remove();
+  }
+  _createPopup(options) {
+    const popupElement = (0, _renderer.default)('<div>').addClass(APPOINTMENT_POPUP_CLASS).appendTo(this.scheduler.getElement());
+    return this.scheduler.createComponent(popupElement, _ui.default, options);
+  }
+  _createPopupConfig() {
+    return _extends({}, POPUP_CONFIG, {
+      onHiding: () => this.scheduler.focus(),
+      contentTemplate: () => this._createPopupContent(),
+      onShowing: e => this._onShowing(e),
+      wrapperAttr: {
+        class: APPOINTMENT_POPUP_CLASS
+      }
+    });
+  }
+  _onShowing(e) {
+    this._updateForm();
+    e.component.$overlayContent().attr('aria-label', _message.default.format('dxScheduler-ariaEditForm'));
+    const arg = {
+      form: this.form.dxForm,
+      popup: this.popup,
+      appointmentData: this.state.appointment.data,
+      cancel: false
+    };
+    this.scheduler.getAppointmentFormOpening()(arg);
+    this.scheduler.processActionResult(arg, canceled => {
+      if (canceled) {
+        e.cancel = true;
+      } else {
+        this.updatePopupFullScreenMode();
+      }
+    });
+  }
+  _createPopupContent() {
+    this._createForm();
+    return this.form.dxForm.$element(); // TODO
+  }
+  _createFormData(rawAppointment) {
+    const appointment = this._createAppointmentAdapter(rawAppointment);
+    const resourceManager = this.scheduler.getResourceManager();
+    const rawAppointmentGroupValues = (0, _appointment_groups_utils.getRawAppointmentGroupValues)(rawAppointment, resourceManager.resources);
+    return _extends({}, rawAppointment, rawAppointmentGroupValues, {
+      repeat: Boolean(appointment.recurrenceRule)
+    });
+  }
+  _createForm() {
+    const rawAppointment = this.state.appointment.data;
+    const formData = this._createFormData(rawAppointment);
+    this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
+  }
+  _isReadOnly(rawAppointment) {
+    const appointment = this._createAppointmentAdapter(rawAppointment);
+    if (rawAppointment && appointment.disabled) {
+      return true;
+    }
+    if (this.state.action === ACTION_TO_APPOINTMENT.CREATE) {
+      return false;
+    }
+    return !this.scheduler.getEditingConfig().allowUpdating;
+  }
+  _createAppointmentAdapter(rawAppointment) {
+    return new _appointment_adapter.AppointmentAdapter(rawAppointment, this.scheduler.getDataAccessors());
+  }
+  _updateForm() {
+    const {
+      data
+    } = this.state.appointment;
+    const appointment = this._createFormData(data);
+    const formData = this._createAppointmentAdapter(appointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment').source;
+    this.form.readOnly = this._isReadOnly(formData);
+    this.form.updateFormData(formData);
+  }
+  triggerResize() {
+    if (this.popup) {
+      (0, _visibility_change.triggerResizeEvent)(this.popup.$element());
+    }
+  }
+  changeSize(isRecurrence) {
+    if (this.popup) {
+      const isFullScreen = (0, _index.isPopupFullScreenNeeded)();
+      const maxWidth = isFullScreen ? '100%' : (0, _index.getMaxWidth)(isRecurrence);
+      this.popup.option('fullScreen', isFullScreen);
+      this.popup.option('maxWidth', maxWidth);
+    }
+  }
+  updatePopupFullScreenMode() {
+    if (this.form.dxForm && this.visible) {
+      // TODO
+      const {
+        formData
+      } = this.form;
+      const dataAccessors = this.scheduler.getDataAccessors();
+      const isRecurrence = dataAccessors.get('recurrenceRule', formData);
+      this.changeSize(isRecurrence);
+    }
+  }
+  saveChangesAsync(isShowLoadPanel) {
+    // @ts-expect-error
+    const deferred = new _deferred.Deferred();
+    const validation = this.form.dxForm.validate();
+    isShowLoadPanel && this._showLoadPanel();
+    (0, _deferred.when)((validation === null || validation === void 0 ? void 0 : validation.complete) || validation).done(validation => {
+      if (validation && !validation.isValid) {
+        (0, _m_loading.hide)();
+        deferred.resolve(false);
+        return;
+      }
+      const {
+        repeat
+      } = this.form.formData;
+      const adapter = this._createAppointmentAdapter(this.form.formData);
+      const clonedAdapter = adapter.clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
+      const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
+      this._addMissingDSTTime(adapter, clonedAdapter);
+      if (shouldClearRecurrenceRule) {
+        clonedAdapter.recurrenceRule = '';
+      }
+      const appointment = clonedAdapter.source;
+      delete appointment.repeat; // TODO
+      switch (this.state.action) {
+        case ACTION_TO_APPOINTMENT.CREATE:
+          this.scheduler.addAppointment(appointment).done(deferred.resolve);
+          break;
+        case ACTION_TO_APPOINTMENT.UPDATE:
+          this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
+          break;
+        case ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES:
+          this.scheduler.updateAppointment(this.state.excludeInfo.sourceAppointment, this.state.excludeInfo.updatedAppointment);
+          this.scheduler.addAppointment(appointment).done(deferred.resolve);
+          break;
+        default:
+          break;
+      }
+      deferred.done(() => {
+        (0, _m_loading.hide)();
+        this.state.lastEditData = appointment;
+      });
+    });
+    return deferred.promise();
+  }
+  _doneButtonClickHandler(e) {
+    e.cancel = true;
+    this.saveEditDataAsync();
+  }
+  saveEditDataAsync() {
+    // @ts-expect-error
+    const deferred = new _deferred.Deferred();
+    if (this._tryLockSaveChanges()) {
+      (0, _deferred.when)(this.saveChangesAsync(true)).done(() => {
+        if (this.state.lastEditData) {
+          // TODO
+          const adapter = this._createAppointmentAdapter(this.state.lastEditData);
+          const {
+            startDate,
+            endDate,
+            allDay
+          } = adapter;
+          const startTime = startDate.getTime();
+          const endTime = endDate.getTime();
+          const inAllDayRow = allDay || endTime - startTime >= DAY_IN_MS;
+          const resourceManager = this.scheduler.getResourceManager();
+          const appointmentGroupValues = (0, _appointment_groups_utils.getAppointmentGroupValues)(this.state.lastEditData, resourceManager.resources);
+          this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
+          this.state.lastEditData = null;
+        }
+        this._unlockSaveChanges();
+        deferred.resolve();
+      });
+    }
+    return deferred.promise();
+  }
+  _showLoadPanel() {
+    const container = this.popup.$overlayContent();
+    (0, _m_loading.show)({
+      container,
+      position: {
+        of: container
+      }
+    });
+  }
+  _tryLockSaveChanges() {
+    if (this.state.saveChangesLocker === false) {
+      this.state.saveChangesLocker = true;
+      return true;
+    }
+    return false;
+  }
+  _unlockSaveChanges() {
+    this.state.saveChangesLocker = false;
+  }
+  // NOTE: Fix ticket T1102713
+  _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+    const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
+    clonedAppointmentAdapter.startDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.startDate, clonedAppointmentAdapter.startDate);
+    if (clonedAppointmentAdapter.endDate) {
+      clonedAppointmentAdapter.endDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.endDate, clonedAppointmentAdapter.endDate);
+    }
+  }
+  _addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
+    var _timeZoneCalculator$g, _timeZoneCalculator$g2;
+    const originTimezoneShift = (_timeZoneCalculator$g = timeZoneCalculator.getOffsets(originFormDate)) === null || _timeZoneCalculator$g === void 0 ? void 0 : _timeZoneCalculator$g.common;
+    const clonedTimezoneShift = (_timeZoneCalculator$g2 = timeZoneCalculator.getOffsets(clonedDate)) === null || _timeZoneCalculator$g2 === void 0 ? void 0 : _timeZoneCalculator$g2.common;
+    const shiftDifference = originTimezoneShift - clonedTimezoneShift;
+    return shiftDifference ? new Date(clonedDate.getTime() + shiftDifference * toMs('hour')) : clonedDate;
+  }
+}
+exports.AppointmentPopup = AppointmentPopup;
+
+/***/ }),
+
+/***/ 27483:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AppointmentPopup = exports.APPOINTMENT_POPUP_CLASS = exports.ACTION_TO_APPOINTMENT = void 0;
+var _visibility_change = __webpack_require__(18029);
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _devices = _interopRequireDefault(__webpack_require__(65951));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _date = _interopRequireDefault(__webpack_require__(41380));
+var _deferred = __webpack_require__(87739);
+var _ui = _interopRequireDefault(__webpack_require__(10720));
+var _index = __webpack_require__(8181);
+var _m_loading = __webpack_require__(73922);
+var _appointment_adapter = __webpack_require__(36791);
+var _appointment_groups_utils = __webpack_require__(11649);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const toMs = _date.default.dateToMilliseconds;
+const APPOINTMENT_POPUP_CLASS = exports.APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 const DAY_IN_MS = toMs('day');
 const POPUP_CONFIG = {
   height: 'auto',
@@ -105763,11 +106632,13 @@ exports.SchedulerHeader = SchedulerHeader;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.nextWeek = exports.isOneView = exports.getViewName = exports.getStep = exports.getNextIntervalDate = exports.getCaptionInterval = exports.getCaption = void 0;
+exports.nextWeek = exports.getViewText = exports.getViewName = exports.getStep = exports.getNextIntervalDate = exports.getCaptionInterval = exports.getCaption = exports.formatViews = void 0;
 var _date = _interopRequireDefault(__webpack_require__(38662));
 var _date2 = _interopRequireDefault(__webpack_require__(41380));
 var _type = __webpack_require__(11528);
+var _message = _interopRequireDefault(__webpack_require__(33881));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const DAY_FORMAT = 'd';
 const DAYS_IN_WORK_WEEK = 5;
 const {
@@ -106034,12 +106905,28 @@ const STEP_MAP = {
   timelineMonth: 'month',
   agenda: 'agenda'
 };
+const getViewName = view => {
+  if ((0, _type.isObject)(view)) {
+    return view.name ?? view.type;
+  }
+  return view;
+};
+exports.getViewName = getViewName;
+const getViewText = view => {
+  const viewName = getViewName(view);
+  const viewText = _message.default.format(`dxScheduler-switcher${viewName}`);
+  if (!viewText) {
+    return viewName ?? '';
+  }
+  return viewText;
+};
+exports.getViewText = getViewText;
+const formatViews = views => views.map(view => _extends({}, view, {
+  text: getViewText(view)
+}));
+exports.formatViews = formatViews;
 const getStep = type => STEP_MAP[type];
 exports.getStep = getStep;
-const getViewName = view => view.name ?? view.type;
-exports.getViewName = getViewName;
-const isOneView = (views, selectedView) => views.length === 1 && getViewName(views[0]) === selectedView;
-exports.isOneView = isOneView;
 
 /***/ }),
 
@@ -106061,7 +106948,7 @@ const ClASS = {
   dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content'
 };
 const getViewsAndSelectedView = header => {
-  const views = header.option('views');
+  const views = (0, _m_utils.formatViews)(header.option('views'));
   const selectedView = header.option('currentView').name;
   const isSelectedViewInViews = views.some(view => view.name === selectedView);
   return {
@@ -106069,24 +106956,24 @@ const getViewsAndSelectedView = header => {
     views
   };
 };
+const isViewSwitcherVisible = views => views.length > 1;
 const getTabViewSwitcher = (header, item) => {
   const {
     selectedView,
     views
   } = getViewsAndSelectedView(header);
+  const isVisible = isViewSwitcherVisible(views);
   // @ts-expect-error
   const stylingMode = (0, _themes.isFluent)() ? 'outlined' : 'contained';
-  const items = views.map(view => _extends({}, view, {
-    text: view.name
-  }));
   return _extends({
     widget: 'dxButtonGroup',
     locateInMenu: 'auto',
     location: 'after',
     name: 'viewSwitcher',
     cssClass: ClASS.container,
+    visible: isVisible,
     options: {
-      items,
+      items: views,
       keyExpr: 'name',
       selectedItemKeys: [selectedView],
       stylingMode,
@@ -106108,20 +106995,21 @@ const getDropDownViewSwitcher = (header, item) => {
     selectedView,
     views
   } = getViewsAndSelectedView(header);
-  const isOnlyOneView = (0, _m_utils.isOneView)(views, selectedView);
+  const isVisible = isViewSwitcherVisible(views);
   return _extends({
     widget: 'dxDropDownButton',
     locateInMenu: 'never',
     location: 'after',
     name: 'viewSwitcher',
     cssClass: ClASS.container,
+    visible: isVisible,
     options: {
       items: views,
       useSelectMode: true,
       keyExpr: 'name',
       selectedItemKey: selectedView,
-      displayExpr: 'name',
-      showArrowIcon: !isOnlyOneView,
+      displayExpr: 'text',
+      showArrowIcon: true,
       elementAttr: {
         class: ClASS.dropDownButton
       },
@@ -106131,17 +107019,10 @@ const getDropDownViewSwitcher = (header, item) => {
       onContentReady: e => {
         const viewSwitcher = e.component;
         header._addEvent('currentView', view => {
-          const currentViews = header.option('views');
-          viewSwitcher.option('showArrowIcon', !(0, _m_utils.isOneView)(currentViews, view.name));
           viewSwitcher.option('selectedItemKey', (0, _m_utils.getViewName)(view));
         });
       },
       dropDownOptions: {
-        onShowing: e => {
-          if (isOnlyOneView) {
-            e.cancel = true;
-          }
-        },
         width: 'max-content',
         _wrapperClassExternal: ClASS.dropDownButtonContent
       }
@@ -107369,7 +108250,7 @@ var _default = exports["default"] = RecurrenceEditor;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = void 0;
+exports["default"] = exports.POPUP_DIALOG_CLASS = void 0;
 var _visibility_change = __webpack_require__(18029);
 var _date = _interopRequireDefault(__webpack_require__(38662));
 var _message = _interopRequireDefault(__webpack_require__(4671));
@@ -107396,6 +108277,8 @@ var _date3 = __webpack_require__(55594);
 var _a11y_status_render = __webpack_require__(24988);
 var _a11y_status_text = __webpack_require__(71883);
 var _m_form = __webpack_require__(8107);
+var _m_legacy_form = __webpack_require__(98771);
+var _m_legacy_popup = __webpack_require__(24419);
 var _m_popup = __webpack_require__(27483);
 var _m_appointment_collection = _interopRequireDefault(__webpack_require__(5311));
 var _m_widget_notify_scheduler = _interopRequireDefault(__webpack_require__(32060));
@@ -107439,6 +108322,7 @@ const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+const POPUP_DIALOG_CLASS = exports.POPUP_DIALOG_CLASS = 'dx-dialog';
 const WIDGET_SMALL_WIDTH = 400;
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = `${FULL_DATE_FORMAT}Z`;
@@ -108076,7 +108960,8 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       allowUpdating: Boolean(editing),
       allowDeleting: Boolean(editing),
       allowResizing: Boolean(editing),
-      allowDragging: Boolean(editing)
+      allowDragging: Boolean(editing),
+      legacyForm: false
     };
     if ((0, _type.isObject)(editing)) {
       this._editing = (0, _extend.extend)(this._editing, editing);
@@ -108195,7 +109080,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       getCalculatedEndDate: startDateWithStartHour => this._workSpace.calculateEndDate(startDateWithStartHour),
       getTimeZoneCalculator: () => this.timeZoneCalculator
     };
-    return new _m_form.AppointmentForm(scheduler);
+    return this._editing.legacyForm ? new _m_legacy_form.AppointmentForm(scheduler) : new _m_form.AppointmentForm(scheduler);
   }
   createAppointmentPopup(form) {
     const scheduler = {
@@ -108215,7 +109100,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
       }
     };
-    return new _m_popup.AppointmentPopup(scheduler, form);
+    return this._editing.legacyForm ? new _m_legacy_popup.AppointmentPopup(scheduler, form) : new _m_popup.AppointmentPopup(scheduler, form);
   }
   _getAppointmentTooltipOptions() {
     const that = this;
@@ -108574,7 +109459,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     if (isPopupEditing) {
       this._appointmentPopup.show(singleRawAppointment, {
         isToolbarVisible: true,
-        action: _m_popup.ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
+        action: _m_legacy_popup.ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
         excludeInfo: {
           sourceAppointment: rawAppointment,
           updatedAppointment: appointment.source
@@ -108622,7 +109507,11 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       }],
       popupOptions: {
         wrapperAttr: {
-          class: 'dx-dialog'
+          class: POPUP_DIALOG_CLASS
+        },
+        onHidden: () => {
+          var _this$_appointments;
+          (_this$_appointments = this._appointments) === null || _this$_appointments === void 0 || _this$_appointments.focus();
         }
       }
     });
@@ -108841,7 +109730,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       delete this._editAppointmentData; // TODO
       this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
         isToolbarVisible: true,
-        action: _m_popup.ACTION_TO_APPOINTMENT.CREATE
+        action: _m_legacy_popup.ACTION_TO_APPOINTMENT.CREATE
       });
     } else {
       const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
@@ -108849,7 +109738,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this._editAppointmentData = rawAppointment; // TODO
         this._appointmentPopup.show(rawAppointment, {
           isToolbarVisible: this._editing.allowUpdating,
-          action: _m_popup.ACTION_TO_APPOINTMENT.UPDATE
+          action: _m_legacy_popup.ACTION_TO_APPOINTMENT.UPDATE
         });
       }, false, true);
     }
@@ -115468,7 +116357,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 class Loader {
   constructor(config, dataSourceOptions) {
     this.items = [];
-    this.data = []; // TODO(9): probably we dont need it. Used in getGroupPanelData
+    this.data = [];
     this.unsubscribe = _common.noop;
     this.dataSource = (0, _utils.normalizeDataSource)(config.dataSource, dataSourceOptions);
     this.isSharedDataSource = config.dataSource instanceof _data_source.default;
@@ -115742,24 +116631,10 @@ var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _date = _interopRequireDefault(__webpack_require__(41380));
 var _themes = __webpack_require__(52071);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
-const DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OPTIONS = {
-  indicatorTime: undefined,
-  renovateRender: true,
-  _draggingMode: 'outlook',
-  _appointmentTooltipOffset: {
-    x: 0,
-    y: 0
-  },
-  _appointmentCountPerCell: 2,
-  _collectorOffset: 0,
-  _appointmentOffset: 26,
-  appointmentPopupTemplate: 'appointmentPopup',
-  disabledExpr: 'disabled',
-  allowMultipleCellSelection: true
-};
 const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
   views: ['day', 'week'],
   currentView: 'day',
@@ -115845,6 +116720,24 @@ const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
       locateInMenu: 'auto'
     }]
   }
+};
+const DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OPTIONS = {
+  indicatorTime: undefined,
+  renovateRender: true,
+  editing: _extends({
+    legacyForm: false
+  }, DEFAULT_SCHEDULER_OPTIONS.editing),
+  _draggingMode: 'outlook',
+  _appointmentTooltipOffset: {
+    x: 0,
+    y: 0
+  },
+  _appointmentCountPerCell: 2,
+  _collectorOffset: 0,
+  _appointmentOffset: 26,
+  appointmentPopupTemplate: 'appointmentPopup',
+  disabledExpr: 'disabled',
+  allowMultipleCellSelection: true
 };
 const DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = exports.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = {
   integrationOptions: {
@@ -123606,6 +124499,31 @@ class SchedulerWorkSpace extends _ui3.default {
       this._$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
     }
   }
+  updateHeaderPanelScrollbarPadding() {
+    if ((0, _window.hasWindow)() && this._$headerPanelContainer) {
+      const scrollbarWidth = this._getScrollbarWidth();
+      this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
+    }
+  }
+  _getScrollbarWidth() {
+    if (!this._dateTableScrollable) {
+      return 0;
+    }
+    const $container = this._dateTableScrollable.$element().find('.dx-scrollable-container');
+    if (!$container.length) {
+      return 0;
+    }
+    const containerElement = $container.get(0);
+    if (!containerElement) {
+      return 0;
+    }
+    const hasVerticalScrollbar = containerElement.scrollHeight > containerElement.clientHeight;
+    if (hasVerticalScrollbar) {
+      const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+      return scrollbarWidth;
+    }
+    return 0;
+  }
   _isGroupsSpecified(groupValues) {
     var _this$option3;
     return ((_this$option3 = this.option('groups')) === null || _this$option3 === void 0 ? void 0 : _this$option3.length) && groupValues;
@@ -123743,6 +124661,7 @@ class SchedulerWorkSpace extends _ui3.default {
     this._dateTableScrollable.update();
     (_this$_headerScrollab = this._headerScrollable) === null || _this$_headerScrollab === void 0 || _this$_headerScrollab.update();
     (_this$_sidebarScrolla = this._sidebarScrollable) === null || _this$_sidebarScrolla === void 0 || _this$_sidebarScrolla.update();
+    this.updateHeaderPanelScrollbarPadding();
   }
   _getTimePanelRowCount() {
     return this._getCellCountInDay();
@@ -139815,7 +140734,7 @@ class ColorBox extends _m_drop_down_editor.default {
     if (!newValue) return false;
     const color = new _color.default(newValue);
     if (color.colorIsInvalid) {
-      this._input().val(oldValue);
+      this._input().val(oldValue === null ? undefined : oldValue);
       return;
     }
     // @ts-expect-error ts-error
@@ -140199,7 +141118,6 @@ class ColorView extends _editor.default {
   _getDefaultOptions() {
     return _extends({}, super._getDefaultOptions(), {
       value: null,
-      // @ts-expect-error ts-error
       matchValue: null,
       onEnterKeyPressed: undefined,
       editAlphaChannel: false,
@@ -147842,9 +148760,6 @@ const custom = params => {
     // @ts-expect-error trigger should be typed on type 'EventsEngineType'
     _events_engine.default.trigger($firstButton, 'focus');
   };
-  const onHidden = e => {
-    (0, _renderer.default)(e.element).remove();
-  };
   const animation = {
     show: {
       type: 'pop',
@@ -147920,7 +148835,6 @@ const custom = params => {
     height: 'auto',
     ignoreChildEvents: false,
     onContentReady,
-    onHidden,
     onHiding: () => {
       deferred.reject();
     },
@@ -147936,7 +148850,13 @@ const custom = params => {
     visualContainer: window,
     width
   };
-  const options = _extends({}, configuration, popupOptions);
+  const options = _extends({}, configuration, popupOptions, {
+    onHidden: e => {
+      var _popupOptions$onHidde;
+      (0, _renderer.default)(e.element).remove();
+      popupOptions === null || popupOptions === void 0 || (_popupOptions$onHidde = popupOptions.onHidden) === null || _popupOptions$onHidde === void 0 || _popupOptions$onHidde.call(popupOptions, e);
+    }
+  });
   // @ts-expect-error Incorrect constructor usage
   popupInstance = new _m_popup.default($element, options);
   popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME).addClass(DX_DIALOG_ROOT_CLASSNAME);
@@ -153000,9 +153920,8 @@ class FileUploader extends _editor.default {
       return;
     }
     this._isCustomClickEvent = true;
-    _events_engine.default.triggerHandler(this._$fileInput, {
-      type: 'click'
-    });
+    // @ts-expect-error update events_engine interface to support trigger method
+    _events_engine.default.trigger(this._$fileInput, 'click');
     this._isCustomClickEvent = false;
   }
   _attachSelectFileDialogHandlers(target) {
@@ -156077,6 +156996,8 @@ class Form extends _widget.default {
           (_this$_smartPastedAct = this._smartPastedAction) === null || _this$_smartPastedAct === void 0 || _this$_smartPastedAct.call(this, {
             aiResult
           });
+        }, () => {
+          this._hideLoadPanel();
         });
         this._processCommandCompletion();
       },
@@ -195612,6 +196533,328 @@ exports.SliderTooltipPositionController = SliderTooltipPositionController;
 
 /***/ }),
 
+/***/ 84166:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.SPEECH_TO_TEXT_LISTENING_CLASS = exports.SPEECH_TO_TEXT_CLASS = void 0;
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _devices = _interopRequireDefault(__webpack_require__(65951));
+var _common = __webpack_require__(17781);
+var _button = _interopRequireDefault(__webpack_require__(64973));
+var _themes = __webpack_require__(52071);
+var _speech_recognition_adapter = __webpack_require__(85690);
+var _widget = _interopRequireDefault(__webpack_require__(89275));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const SPEECH_TO_TEXT_CLASS = exports.SPEECH_TO_TEXT_CLASS = 'dx-speech-to-text';
+const SPEECH_TO_TEXT_LISTENING_CLASS = exports.SPEECH_TO_TEXT_LISTENING_CLASS = 'dx-speech-to-text-listening';
+const DEFAULT_INITIAL_ICON = 'micoutline';
+const DEFAULT_LISTENING_ICON = 'stopfilled';
+var SpeechToTextState;
+(function (SpeechToTextState) {
+  SpeechToTextState["INITIAL"] = "initial";
+  SpeechToTextState["LISTENING"] = "listening";
+  SpeechToTextState["DISABLED"] = "disabled";
+})(SpeechToTextState || (SpeechToTextState = {}));
+const ACTIONS = ['onStartClick', 'onStopClick', 'onResult', 'onError'];
+class SpeechToText extends _widget.default {
+  _getDefaultOptions() {
+    return _extends({}, super._getDefaultOptions(), {
+      activeStateEnabled: true,
+      customSpeechRecognizer: {
+        enabled: false,
+        isListening: false
+      },
+      hoverStateEnabled: true,
+      startIcon: DEFAULT_INITIAL_ICON,
+      stopIcon: DEFAULT_LISTENING_ICON,
+      startText: '',
+      stopText: '',
+      useInkRipple: false,
+      onStartClick: undefined,
+      onStopClick: undefined,
+      onResult: undefined,
+      onError: undefined
+    });
+  }
+  _initSpeechRecognitionAdapter() {
+    const {
+      speechRecognitionConfig = {}
+    } = this.option();
+    if (this._isCustomSpeechRecognitionEnabled()) {
+      return;
+    }
+    this._speechRecognitionAdapter = new _speech_recognition_adapter.SpeechRecognitionAdapter(speechRecognitionConfig, {
+      onEnd: this._handleSpeechRecognitionEnd.bind(this),
+      onResult: this._handleSpeechRecognitionResult.bind(this),
+      onError: this._handleSpeechRecognitionError.bind(this)
+    });
+  }
+  _isCustomSpeechRecognitionEnabled() {
+    const {
+      customSpeechRecognizer
+    } = this.option();
+    return Boolean(customSpeechRecognizer === null || customSpeechRecognizer === void 0 ? void 0 : customSpeechRecognizer.enabled);
+  }
+  _init() {
+    this._actions = {};
+    super._init();
+    this._handleCustomEngineState();
+    this._createActions();
+    this._initSpeechRecognitionAdapter();
+  }
+  _initMarkup() {
+    super._initMarkup();
+    this.$element().addClass(SPEECH_TO_TEXT_CLASS);
+    this._renderButton();
+    this._updateButtonState();
+  }
+  _createActions() {
+    ACTIONS.forEach(action => {
+      this._setAction(action);
+    });
+  }
+  _setAction(action) {
+    this._actions[action] = this._createActionByOption(action, {
+      excludeValidators: ['disabled', 'readOnly']
+    }) || _common.noop;
+  }
+  _attachFeedbackEvents() {}
+  _renderButton() {
+    this._button = this._createComponent(this.$element(), _button.default, this._getButtonOptions());
+  }
+  _getButtonOptions() {
+    const {
+      activeStateEnabled,
+      disabled,
+      focusStateEnabled,
+      height,
+      hint,
+      hoverStateEnabled,
+      stylingMode,
+      type,
+      useInkRipple,
+      width
+    } = this.option();
+    return {
+      activeStateEnabled,
+      disabled,
+      focusStateEnabled,
+      height,
+      hint,
+      hoverStateEnabled,
+      stylingMode,
+      type,
+      useInkRipple,
+      width,
+      icon: this._getCurrentIcon(),
+      text: this._getCurrentText(),
+      onClick: e => {
+        this._handleButtonClick(e);
+      }
+    };
+  }
+  _defaultOptionsRules() {
+    const rules = [...super._defaultOptionsRules(), {
+      device: () => _devices.default.real().deviceType === 'desktop' && !_devices.default.isSimulator(),
+      options: {
+        focusStateEnabled: true
+      }
+    }, {
+      device: () => (0, _themes.isMaterial)((0, _themes.current)()),
+      options: {
+        useInkRipple: true
+      }
+    }];
+    return rules;
+  }
+  _getCurrentIcon() {
+    const {
+      startIcon,
+      stopIcon
+    } = this.option();
+    return this._isListening() ? stopIcon : startIcon;
+  }
+  _getCurrentAriaLabel() {
+    return this._isListening() ? _message.default.format('dxSpeechToText-ariaLabelStop') : _message.default.format('dxSpeechToText-ariaLabelStart');
+  }
+  _getCurrentAriaPressed() {
+    return this._isListening();
+  }
+  _getCurrentText() {
+    const {
+      startText,
+      stopText
+    } = this.option();
+    return this._isListening() ? stopText ?? '' : startText ?? '';
+  }
+  _emitNativeEvent(name, event) {
+    var _this$_actions$name, _this$_actions;
+    (_this$_actions$name = (_this$_actions = this._actions)[name]) === null || _this$_actions$name === void 0 || _this$_actions$name.call(_this$_actions, {
+      component: this,
+      element: this.element(),
+      event
+    });
+  }
+  _emitDxEvent(name, event) {
+    var _this$_actions$name2, _this$_actions2;
+    (_this$_actions$name2 = (_this$_actions2 = this._actions)[name]) === null || _this$_actions$name2 === void 0 || _this$_actions$name2.call(_this$_actions2, {
+      component: this,
+      element: this.element(),
+      event
+    });
+  }
+  _handleButtonClick(e) {
+    if (this._state === SpeechToTextState.DISABLED) {
+      return;
+    }
+    if (this._isListening()) {
+      this._handleStopClick(e);
+    } else {
+      this._handleStartClick(e);
+    }
+  }
+  _handleStartClick(e) {
+    if (!this._isCustomSpeechRecognitionEnabled()) {
+      var _this$_speechRecognit;
+      this._setState(SpeechToTextState.LISTENING);
+      (_this$_speechRecognit = this._speechRecognitionAdapter) === null || _this$_speechRecognit === void 0 || _this$_speechRecognit.start();
+    }
+    this._emitDxEvent('onStartClick', e.event);
+  }
+  _handleStopClick(e) {
+    if (!this._isCustomSpeechRecognitionEnabled()) {
+      var _this$_speechRecognit2;
+      this._setState(SpeechToTextState.INITIAL);
+      (_this$_speechRecognit2 = this._speechRecognitionAdapter) === null || _this$_speechRecognit2 === void 0 || _this$_speechRecognit2.stop();
+    }
+    this._emitDxEvent('onStopClick', e.event);
+  }
+  _handleSpeechRecognitionEnd() {
+    if (this._state !== SpeechToTextState.DISABLED && !this._isCustomSpeechRecognitionEnabled()) {
+      this._setState(SpeechToTextState.INITIAL);
+    }
+  }
+  _handleSpeechRecognitionResult(event) {
+    this._emitNativeEvent('onResult', event);
+  }
+  _handleSpeechRecognitionError(event) {
+    this._emitNativeEvent('onError', event);
+  }
+  _setState(newState) {
+    if (this._state === newState) {
+      return;
+    }
+    this._state = newState;
+    this._updateButtonState();
+    this._updateCssClasses();
+  }
+  _updateButtonState() {
+    var _this$_button;
+    (_this$_button = this._button) === null || _this$_button === void 0 || _this$_button.option({
+      icon: this._getCurrentIcon(),
+      text: this._getCurrentText(),
+      elementAttr: {
+        'aria-label': this._getCurrentAriaLabel(),
+        'aria-pressed': this._getCurrentAriaPressed()
+      }
+    });
+  }
+  _updateCssClasses() {
+    this.$element().toggleClass(SPEECH_TO_TEXT_LISTENING_CLASS, this._isListening());
+  }
+  _updateSpeechRecognitionConfig(args) {
+    var _this$_speechRecognit3;
+    const options = _widget.default.getOptionsFromContainer(args);
+    (_this$_speechRecognit3 = this._speechRecognitionAdapter) === null || _this$_speechRecognit3 === void 0 || _this$_speechRecognit3.applyConfig(options);
+  }
+  _optionChanged(args) {
+    var _this$_button2, _this$_button3;
+    const {
+      name,
+      value
+    } = args;
+    switch (name) {
+      case 'customSpeechRecognizer':
+        this._handleCustomEngineState();
+        break;
+      case 'speechRecognitionConfig':
+        this._updateSpeechRecognitionConfig(args);
+        break;
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'height':
+      case 'hint':
+      case 'hoverStateEnabled':
+      case 'stylingMode':
+      case 'type':
+      case 'width':
+        (_this$_button2 = this._button) === null || _this$_button2 === void 0 || _this$_button2.option(name, value);
+        break;
+      case 'disabled':
+        (_this$_button3 = this._button) === null || _this$_button3 === void 0 || _this$_button3.option(name, value);
+        this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
+        break;
+      case 'startIcon':
+      case 'stopIcon':
+      case 'startText':
+      case 'stopText':
+        this._updateButtonState();
+        break;
+      case 'onStartClick':
+      case 'onStopClick':
+      case 'onResult':
+      case 'onError':
+        this._setAction(name);
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+  _handleCustomEngineState() {
+    const {
+      customSpeechRecognizer
+    } = this.option();
+    const {
+      enabled,
+      isListening: isListeningState
+    } = customSpeechRecognizer ?? {};
+    const isListening = enabled && isListeningState !== undefined ? isListeningState : false;
+    const targetState = isListening ? SpeechToTextState.LISTENING : SpeechToTextState.INITIAL;
+    this._setState(targetState);
+  }
+  _isListening() {
+    return this._state === SpeechToTextState.LISTENING;
+  }
+  _cleanButton() {
+    var _this$_button4;
+    (_this$_button4 = this._button) === null || _this$_button4 === void 0 || _this$_button4.dispose();
+    this._button = undefined;
+  }
+  _clean() {
+    this._cleanButton();
+    this._setState(SpeechToTextState.INITIAL);
+    super._clean();
+  }
+  _dispose() {
+    var _this$_speechRecognit4;
+    this._actions = {};
+    (_this$_speechRecognit4 = this._speechRecognitionAdapter) === null || _this$_speechRecognit4 === void 0 || _this$_speechRecognit4.dispose();
+    this._speechRecognitionAdapter = null;
+    super._dispose();
+  }
+}
+(0, _component_registrator.default)('dxSpeechToText', SpeechToText);
+var _default = exports["default"] = SpeechToText;
+
+/***/ }),
+
 /***/ 24251:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -206853,7 +208096,8 @@ class TreeViewBase extends _hierarchical_collection_widget.default {
       this._toggleSelectedClass($node, nodeSelection);
       this.setAria('selected', nodeSelection, $node);
       if (this._showCheckboxes()) {
-        this._getCheckBoxInstance($node).option('value', nodeSelection);
+        var _this$_getCheckBoxIns;
+        (_this$_getCheckBoxIns = this._getCheckBoxInstance($node)) === null || _this$_getCheckBoxIns === void 0 || _this$_getCheckBoxIns.option('value', nodeSelection);
       }
     });
     if (this._selectAllEnabled()) {
@@ -206871,9 +208115,9 @@ class TreeViewBase extends _hierarchical_collection_widget.default {
     const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
     const $parentNode = (0, _renderer.default)($node.parents(`.${NODE_CLASS}`)[0]);
     if (this._showCheckboxes()) {
-      var _this$_getCheckBoxIns;
+      var _this$_getCheckBoxIns2;
       const parentValue = parentNode === null || parentNode === void 0 ? void 0 : parentNode.internalFields.selected;
-      (_this$_getCheckBoxIns = this._getCheckBoxInstance($parentNode)) === null || _this$_getCheckBoxIns === void 0 || _this$_getCheckBoxIns.option('value', parentValue);
+      (_this$_getCheckBoxIns2 = this._getCheckBoxInstance($parentNode)) === null || _this$_getCheckBoxIns2 === void 0 || _this$_getCheckBoxIns2.option('value', parentValue);
       this._toggleSelectedClass($parentNode, parentValue);
     }
     const {
@@ -217645,6 +218889,7 @@ ui.dxResponsiveBox = __webpack_require__(43597);
 ui.dxScrollView = __webpack_require__(91374);
 ui.dxSelectBox = __webpack_require__(60695);
 ui.dxSlider = __webpack_require__(56220);
+ui.dxSpeechToText = __webpack_require__(27493);
 ui.dxSpeedDialAction = __webpack_require__(67924);
 ui.dxStepper = __webpack_require__(87244);
 ui.dxSplitter = __webpack_require__(78254);
@@ -229909,7 +231154,9 @@ const defaultMessages = exports.defaultMessages = {
     "dxMultiView-itemAriaLabel": "{0} of {1}",
     "dxSplitter-resizeHandleAriaLabel": "Split bar",
     "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
-    "dxStepper-optionalMark": "(Optional)"
+    "dxStepper-optionalMark": "(Optional)",
+    "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+    "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
   }
 };
 
@@ -241453,6 +242700,7 @@ const DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-floating-tool
 const DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-properties-panel-toolbar-container';
 const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + '-loading-indicator';
 const DIAGRAM_FLOATING_PANEL_OFFSET = 12;
+const DIAGRAM_PROPERTIES_PANEL_NS_OFFSET = 16;
 const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM_MODE = 'disabled';
@@ -241833,18 +243081,20 @@ class Diagram extends _ui.default {
   }
   _updatePropertiesToolbarPosition($container, $parent, isServerSide) {
     if (isServerSide) return;
+    const offset = this.option('useNativeScrolling') ? DIAGRAM_PROPERTIES_PANEL_NS_OFFSET : DIAGRAM_FLOATING_PANEL_OFFSET;
     _position.default.setup($container, {
       my: 'right bottom',
       at: 'right bottom',
       of: $parent,
-      offset: '-' + DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
+      offset: `-${offset}px -${offset}px`
     });
   }
   _renderPropertiesPanel($parent) {
     const isServerSide = !(0, _window.hasWindow)();
     const $propertiesPanel = (0, _renderer.default)('<div>').appendTo($parent);
-    const offsetX = DIAGRAM_FLOATING_PANEL_OFFSET;
-    const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? (0, _size.getOuterHeight)(this._propertiesToolbar.$element()) : 0);
+    const offset = this.option('useNativeScrolling') ? DIAGRAM_PROPERTIES_PANEL_NS_OFFSET : DIAGRAM_FLOATING_PANEL_OFFSET;
+    const offsetX = offset;
+    const offsetY = 2 * offset + (!isServerSide ? (0, _size.getOuterHeight)(this._propertiesToolbar.$element()) : 0);
     this._propertiesPanel = this._createComponent($propertiesPanel, _uiDiagram11.default, {
       isMobileView: this.isMobileScreenSize(),
       isVisible: this._isPropertiesPanelVisible(),
@@ -254081,7 +255331,7 @@ class GanttDialog {
       return;
     }
     const isRefresh = this._popupInstance._isVisible() && this._dialogInfo && this._dialogInfo instanceof this.infoMap[name];
-    this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions);
+    this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions, this);
     this._popupInstance.option({
       showTitle: !!this._dialogInfo.getTitle(),
       title: this._dialogInfo.getTitle(),
@@ -254098,7 +255348,9 @@ class GanttDialog {
     }
   }
   hide() {
-    this._popupInstance.hide();
+    if (this._dialogInfo.shouldHidePopup()) {
+      this._popupInstance.hide();
+    }
     if (this._afterClosing) {
       this._afterClosing();
     }
@@ -254106,11 +255358,12 @@ class GanttDialog {
 }
 exports.GanttDialog = GanttDialog;
 class DialogInfoBase {
-  constructor(parameters, applyAction, hideAction, editingOptions) {
+  constructor(parameters, applyAction, hideAction, editingOptions, owner) {
     this._parameters = parameters;
     this._applyAction = applyAction;
     this._hideAction = hideAction;
     this._editingOptions = editingOptions;
+    this._owner = owner;
   }
   _getFormItems() {
     return {};
@@ -254179,6 +255432,9 @@ class DialogInfoBase {
     return formData;
   }
   isValidated() {
+    return true;
+  }
+  shouldHidePopup() {
     return true;
   }
 }
@@ -254288,8 +255544,10 @@ class TaskEditDialogInfo extends DialogInfoBase {
             text: '...',
             hint: _message.default.format('dxGantt-dialogEditResourceListHint'),
             onClick: () => {
+              const formData = this.getFormData();
               const showTaskEditDialogCallback = () => {
                 this._parameters.showTaskEditDialogCommand.execute();
+                this._restoreFormData(formData);
               };
               this._parameters.showResourcesDialogCommand.execute(showTaskEditDialogCallback);
             }
@@ -254297,6 +255555,19 @@ class TaskEditDialogInfo extends DialogInfoBase {
         }]
       }
     }];
+  }
+  _restoreFormData(formData) {
+    const newForm = this._owner._dialogInfo._form;
+    const titleEdit = newForm.getEditor('title');
+    const assignedEdit = newForm.getEditor('assigned.items');
+    const startEdit = newForm.getEditor('start');
+    const endEdit = newForm.getEditor('end');
+    const progressEdit = newForm.getEditor('progress');
+    titleEdit.option('value', formData.title);
+    assignedEdit.option('value', formData.assigned.items);
+    startEdit.option('value', formData.start);
+    endEdit.option('value', formData.end);
+    progressEdit.option('value', formData.progress);
   }
   _getValidationMessage(isStartDependencies, correctDate) {
     if (isStartDependencies) {
@@ -254392,6 +255663,9 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
         }]
       }
     }];
+  }
+  shouldHidePopup() {
+    return false;
   }
 }
 class ConfirmDialogInfo extends DialogInfoBase {
@@ -257787,20 +259061,6 @@ module.exports["default"] = exports.default;
 
 /***/ }),
 
-/***/ 35982:
-/***/ (function(module, exports, __webpack_require__) {
-
-
-
-exports["default"] = void 0;
-var _m_field_chooser = __webpack_require__(62989);
-// deprecated
-var _default = exports["default"] = _m_field_chooser.FieldChooser;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
-
-/***/ }),
-
 /***/ 49406:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -257833,9 +259093,8 @@ module.exports["default"] = exports.default;
 
 
 exports["default"] = void 0;
-var _uiPivot_grid = _interopRequireDefault(__webpack_require__(35982));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var _default = exports["default"] = _uiPivot_grid.default;
+var _m_field_chooser = __webpack_require__(62989);
+var _default = exports["default"] = _m_field_chooser.FieldChooser;
 module.exports = exports.default;
 module.exports["default"] = exports.default;
 
@@ -259009,6 +260268,20 @@ var _default = exports["default"] = _m_sortable.default; // STYLE sortable
  * @action
  * @hidden
  */
+module.exports = exports.default;
+module.exports["default"] = exports.default;
+
+/***/ }),
+
+/***/ 27493:
+/***/ (function(module, exports, __webpack_require__) {
+
+
+
+exports["default"] = void 0;
+var _speech_to_text = _interopRequireDefault(__webpack_require__(84166));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var _default = exports["default"] = _speech_to_text.default; // STYLE speechToText
 module.exports = exports.default;
 module.exports["default"] = exports.default;
 
@@ -260817,6 +262090,14 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
    * @name ErrorsUIWidgets.E1064
    */
   E1064: 'AI returned {1} for the {0} field, but this field only accepts {2} values. Update the \'instruction\' for this field.',
+  /**
+   * @name ErrorsUIWidgets.E1065
+   */
+  E1065: 'The browser does not support Web Speech API (SpeechRecognition)',
+  /**
+  * @name ErrorsUIWidgets.E1066
+  */
+  E1066: 'All AI columns must have names.',
   /**
   * @name ErrorsUIWidgets.W1001
   */
