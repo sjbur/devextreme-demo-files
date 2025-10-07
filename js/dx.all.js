@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.js)
 * Version: 25.2.0
-* Build date: Tue Sep 30 2025
+* Build date: Tue Oct 07 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -123921,12 +123921,12 @@ var _position = __webpack_require__(41639);
 var _size = __webpack_require__(57653);
 var _type = __webpack_require__(11528);
 var _window = __webpack_require__(3104);
-var _ui = _interopRequireDefault(__webpack_require__(20876));
-var _ui2 = _interopRequireDefault(__webpack_require__(35185));
-var _ui3 = _interopRequireDefault(__webpack_require__(11118));
+var _ui = _interopRequireDefault(__webpack_require__(35185));
+var _ui2 = _interopRequireDefault(__webpack_require__(11118));
 var _scroll = __webpack_require__(11371);
 var _index2 = __webpack_require__(19747);
 var _index3 = __webpack_require__(34396);
+var _scrollable = _interopRequireDefault(__webpack_require__(85326));
 var _constants = __webpack_require__(25307);
 var _global_cache = __webpack_require__(23710);
 var _m_appointment_drag_behavior = _interopRequireDefault(__webpack_require__(80621));
@@ -123953,7 +123953,7 @@ const DRAGGING_MOUSE_FAULT = 10;
 // @ts-expect-error Widget exposes a static abstract() helper not typed in its d.ts
 const {
   abstract
-} = _ui3.default;
+} = _ui2.default;
 const toMs = _date.default.dateToMilliseconds;
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -124013,7 +124013,7 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS = {
   },
   generateNewData: true
 };
-class SchedulerWorkSpace extends _ui3.default {
+class SchedulerWorkSpace extends _ui2.default {
   constructor() {
     super(...arguments);
     this.viewDirection = 'vertical';
@@ -124506,23 +124506,9 @@ class SchedulerWorkSpace extends _ui3.default {
     }
   }
   _getScrollbarWidth() {
-    if (!this._dateTableScrollable) {
-      return 0;
-    }
-    const $container = this._dateTableScrollable.$element().find('.dx-scrollable-container');
-    if (!$container.length) {
-      return 0;
-    }
-    const containerElement = $container.get(0);
-    if (!containerElement) {
-      return 0;
-    }
-    const hasVerticalScrollbar = containerElement.scrollHeight > containerElement.clientHeight;
-    if (hasVerticalScrollbar) {
-      const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
-      return scrollbarWidth;
-    }
-    return 0;
+    const containerElement = (0, _renderer.default)(this._dateTableScrollable.container()).get(0);
+    const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+    return scrollbarWidth;
   }
   _isGroupsSpecified(groupValues) {
     var _this$option3;
@@ -125257,7 +125243,7 @@ class SchedulerWorkSpace extends _ui3.default {
     const min = this.getStartViewDate();
     const max = this.getEndViewDate();
     if (date < min || date > max) {
-      throwWarning && _ui2.default.log('W1008', date);
+      throwWarning && _ui.default.log('W1008', date);
       return false;
     }
     return true;
@@ -125821,7 +125807,7 @@ class SchedulerWorkSpace extends _ui3.default {
   _initDateTableScrollable() {
     const $dateTableScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
     // @ts-expect-error
-    this._dateTableScrollable = this._createComponent($dateTableScrollable, _ui.default, this._dateTableScrollableConfig());
+    this._dateTableScrollable = this._createComponent($dateTableScrollable, _scrollable.default, this._dateTableScrollableConfig());
     this._scrollSync.dateTable = (0, _scroll.getMemoizeScrollTo)(() => this._dateTableScrollable);
   }
   _createWorkSpaceElements() {
@@ -125880,13 +125866,13 @@ class SchedulerWorkSpace extends _ui3.default {
   _createHeaderScrollable() {
     const $headerScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS).appendTo(this._$headerTablesContainer);
     // @ts-expect-error
-    this._headerScrollable = this._createComponent($headerScrollable, _ui.default, this._headerScrollableConfig());
+    this._headerScrollable = this._createComponent($headerScrollable, _scrollable.default, this._headerScrollableConfig());
     this._scrollSync.header = (0, _scroll.getMemoizeScrollTo)(() => this._headerScrollable);
   }
   _createSidebarScrollable() {
     const $timePanelScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS).appendTo(this._$flexContainer);
     // @ts-expect-error
-    this._sidebarScrollable = this._createComponent($timePanelScrollable, _ui.default, {
+    this._sidebarScrollable = this._createComponent($timePanelScrollable, _scrollable.default, {
       useKeyboard: false,
       showScrollbar: 'never',
       direction: 'vertical',
