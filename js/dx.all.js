@@ -8403,6 +8403,7 @@ const config = {
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
   versionAssertions: [],
+  copyStylesToShadowDom: true,
   floatingActionButtonConfig: {
     icon: 'add',
     closeIcon: 'close',
@@ -11505,7 +11506,8 @@ class InfernoWrapperComponent extends InfernoComponent {
       const indexInRemoved = el.dxClasses.removed.indexOf(value);
       if (indexInRemoved > -1) {
         el.dxClasses.removed.splice(indexInRemoved, 1);
-      } else if (!el.dxClasses.added.includes(value)) {
+      }
+      if (!el.dxClasses.added.includes(value)) {
         el.dxClasses.added.push(value);
       }
     });
@@ -11513,7 +11515,8 @@ class InfernoWrapperComponent extends InfernoComponent {
       const indexInAdded = el.dxClasses.added.indexOf(value);
       if (indexInAdded > -1) {
         el.dxClasses.added.splice(indexInAdded, 1);
-      } else if (!el.dxClasses.removed.includes(value)) {
+      }
+      if (!el.dxClasses.removed.includes(value)) {
         el.dxClasses.removed.push(value);
       }
     });
@@ -13219,6 +13222,7 @@ const NOT_SUPPORTED_ERROR = exports.NOT_SUPPORTED_ERROR = 'E1065';
 const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
 class SpeechRecognitionAdapter {
   constructor(config, events) {
+    this._isListening = false;
     const window = (0, _window.getWindow)();
     // @ts-expect-error SpeechRecognition API is not supported in TS
     const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -13235,7 +13239,14 @@ class SpeechRecognitionAdapter {
       return;
     }
     // eslint-disable-next-line spellcheck/spell-checker
-    this._speechRecognition.onend = events.onEnd;
+    this._speechRecognition.onstart = () => {
+      this._isListening = true;
+    };
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._speechRecognition.onend = event => {
+      this._isListening = false;
+      events.onEnd(event);
+    };
     // eslint-disable-next-line spellcheck/spell-checker
     this._speechRecognition.onresult = events.onResult;
     this._speechRecognition.onerror = events.onError;
@@ -13251,14 +13262,23 @@ class SpeechRecognitionAdapter {
   }
   start() {
     var _this$_speechRecognit;
+    if (this._isListening) {
+      return;
+    }
     (_this$_speechRecognit = this._speechRecognition) === null || _this$_speechRecognit === void 0 || _this$_speechRecognit.start();
   }
   stop() {
     var _this$_speechRecognit2;
+    if (!this._isListening) {
+      return;
+    }
     (_this$_speechRecognit2 = this._speechRecognition) === null || _this$_speechRecognit2 === void 0 || _this$_speechRecognit2.stop();
   }
   dispose() {
     this._speechRecognition = null;
+  }
+  isAvailable() {
+    return Boolean(this._speechRecognition);
   }
 }
 exports.SpeechRecognitionAdapter = SpeechRecognitionAdapter;
@@ -17660,7 +17680,9 @@ const inRange = function (value, minValue, maxValue) {
 };
 exports.inRange = inRange;
 function getExponent(value) {
-  return Math.abs(parseInt(value.toExponential().split('e')[1], 10));
+  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+  const [_, exponentString] = value.toExponential().split('e');
+  return Math.abs(parseInt(exponentString, 10));
 }
 function getExponentialNotation(value) {
   const parts = value.toExponential().split('e');
@@ -17675,48 +17697,55 @@ function multiplyInExponentialForm(value, exponentShift) {
   const exponentialNotation = getExponentialNotation(value);
   return parseFloat(`${exponentialNotation.mantissa}e${exponentialNotation.exponent + exponentShift}`);
 }
-// T570217
-function isEdgeBug() {
-  const value = 0.0003;
-  const correctValue = '0.000300';
-  const precisionValue = 3;
-  return correctValue !== value.toPrecision(precisionValue);
-}
+const EXP_TO_CHANGE_NOTATION = 7;
+const MAX_PRECISION = 15;
+const MIN_PRECISION = 7;
 function adjust(value, interval) {
-  let precision = getPrecision(interval || 0) + 2;
-  const separatedValue = value.toString().split('.');
-  const sourceValue = value;
   const absValue = Math.abs(value);
-  let separatedAdjustedValue;
-  const isExponentValue = (0, _type.isExponential)(value);
   const integerPart = absValue > 1 ? 10 : 0;
-  if (separatedValue.length === 1) {
+  const precision = getPrecision(interval ?? 0) + 2;
+  const finalPrecision = precision > EXP_TO_CHANGE_NOTATION ? MAX_PRECISION : MIN_PRECISION;
+  const [integerValuePart, fractionalValuePart] = value.toString().split('.');
+  const sourceValue = value;
+  const isExponentValue = (0, _type.isExponential)(value);
+  if (isExponentValue) {
+    return adjustExponential(value, finalPrecision);
+  }
+  if (!fractionalValuePart) {
     return value;
   }
-  if (!isExponentValue) {
-    if ((0, _type.isExponential)(interval)) {
-      precision = separatedValue[0].length + getExponent(interval);
-    }
-    value = absValue;
-    value = value - Math.floor(value) + integerPart;
+  if ((0, _type.isExponential)(interval)) {
+    const expPrecision = integerValuePart.length + getExponent(interval);
+    return parseFloat(sourceValue.toPrecision(expPrecision));
   }
-  precision = isEdgeBug() && getExponent(value) > 6 || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
-  if (!isExponentValue) {
-    separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
-    if (separatedAdjustedValue[0] === integerPart.toString()) {
-      return parseFloat(`${separatedValue[0]}.${separatedAdjustedValue[1]}`);
-    }
+  const fractionalPart = absValue - Math.floor(absValue);
+  const adjustedValue = integerPart + fractionalPart;
+  const separatedAdjustedValue = parseFloat(adjustedValue.toPrecision(finalPrecision)).toString().split('.');
+  const isIntPartNotChanged = separatedAdjustedValue[0] === integerPart.toString();
+  if (isIntPartNotChanged) {
+    return parseFloat(`${integerValuePart}.${separatedAdjustedValue[1]}`);
   }
-  return parseFloat(sourceValue.toPrecision(precision));
+  return parseFloat(sourceValue.toPrecision(finalPrecision));
+}
+function adjustExponential(value, precision) {
+  const expValue = value.toExponential();
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [mantissa, _exponent] = expValue.split('e');
+  if (!mantissa.includes('.')) {
+    return parseFloat(expValue);
+  }
+  return parseFloat(value.toPrecision(precision));
 }
 function getPrecision(value) {
   const str = value.toString();
-  if (str.indexOf('.') < 0) {
+  if (!str.includes('.')) {
     return 0;
   }
-  const mantissa = str.split('.');
-  const positionOfDelimiter = mantissa[1].indexOf('e');
-  return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [_, fractionalPart] = str.split('.');
+  const positionOfDelimiter = fractionalPart.indexOf('e');
+  return positionOfDelimiter >= 0 ? positionOfDelimiter : fractionalPart.length;
 }
 function getRoot(x, n) {
   if (x < 0 && n % 2 !== 1) {
@@ -18346,7 +18375,7 @@ var _default = exports["default"] = {
 /***/ }),
 
 /***/ 17113:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -18354,12 +18383,14 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.addShadowDomStyles = addShadowDomStyles;
+exports.computeStyleSheetsHash = computeStyleSheetsHash;
 exports.getShadowElementsFromPoint = getShadowElementsFromPoint;
+var _config = _interopRequireDefault(__webpack_require__(66636));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DX_RULE_PREFIX = 'dx-';
 let ownerDocumentStyleSheet = null;
 function createConstructedStyleSheet(rootNode) {
   try {
-    // eslint-disable-next-line no-undef
     return new CSSStyleSheet();
   } catch (err) {
     const styleElement = rootNode.ownerDocument.createElement('style');
@@ -18386,17 +18417,49 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
     targetStyleSheet.insertRule(rule.cssText, targetStyleSheet.cssRules.length);
   }
 }
+const FNV_OFFSET_BASIS = 2166136261;
+const sheetHashes = new WeakMap();
+function computeStyleSheetsHash(styleSheets) {
+  let hash = FNV_OFFSET_BASIS;
+  for (const sheet of styleSheets) {
+    if (sheetHashes.has(sheet)) {
+      hash ^= sheetHashes.get(sheet);
+      continue;
+    }
+    let localHash = FNV_OFFSET_BASIS;
+    try {
+      for (const rule of sheet.cssRules) {
+        const text = rule.cssText;
+        for (let i = 0; i < text.length; i++) {
+          localHash ^= text.charCodeAt(i);
+          localHash += (localHash << 1) + (localHash << 4) + (localHash << 7) + (localHash << 8) + (localHash << 24);
+        }
+      }
+    } catch (_) {
+      // ignore
+    }
+    localHash >>>= 0;
+    sheetHashes.set(sheet, localHash);
+    hash ^= localHash;
+  }
+  return hash >>> 0;
+}
+const styleSheetHashes = new WeakMap();
 function addShadowDomStyles($element) {
   var _el$getRootNode;
-  const el = $element.get(0);
-  const root = (_el$getRootNode = el.getRootNode) === null || _el$getRootNode === void 0 ? void 0 : _el$getRootNode.call(el);
-  if (!(root !== null && root !== void 0 && root.host)) {
+  if (!(0, _config.default)().copyStylesToShadowDom) {
     return;
   }
+  const el = $element.get(0);
+  const root = (_el$getRootNode = el.getRootNode) === null || _el$getRootNode === void 0 ? void 0 : _el$getRootNode.call(el);
+  if (!(root !== null && root !== void 0 && root.host)) return;
   if (!ownerDocumentStyleSheet) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
     processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
   }
+  const localHash = computeStyleSheetsHash(root.styleSheets);
+  if (styleSheetHashes.get(root) === localHash) return;
+  styleSheetHashes.set(root, localHash);
   const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);
   root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
@@ -18432,10 +18495,7 @@ function getShadowElementsFromPoint(x, y, root) {
     const el = elementQueue.shift();
     for (let i = 0; i < el.childNodes.length; i++) {
       const childNode = el.childNodes[i];
-      // eslint-disable-next-line no-undef
-      if (childNode.nodeType === Node.ELEMENT_NODE && isPositionInElementRectangle(childNode, x, y)
-      // eslint-disable-next-line no-undef
-      && getComputedStyle(childNode).pointerEvents !== 'none') {
+      if (childNode.nodeType === Node.ELEMENT_NODE && isPositionInElementRectangle(childNode, x, y) && getComputedStyle(childNode).pointerEvents !== 'none') {
         elementQueue.push(childNode);
       }
     }
@@ -38804,7 +38864,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _m_widget_base = _interopRequireDefault(__webpack_require__(77456));
 __webpack_require__(15241);
-__webpack_require__(15075);
+__webpack_require__(60008);
 __webpack_require__(79495);
 __webpack_require__(45573);
 __webpack_require__(43983);
@@ -38834,6 +38894,7 @@ __webpack_require__(85646);
 __webpack_require__(83189);
 __webpack_require__(30131);
 __webpack_require__(22949);
+__webpack_require__(37442);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // NOTE: Order of imports important here and shouldn't be changed.
 /* eslint-disable simple-import-sort/imports */
@@ -38871,7 +38932,7 @@ var _m_widget_base = _interopRequireDefault(__webpack_require__(99335));
 var _m_core = _interopRequireDefault(__webpack_require__(54353));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
-_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'grouping', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'groupPanelKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
+_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'grouping', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'groupPanelKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'toast', 'gridView']);
 class DataGrid extends _m_widget_base.default {
   _defaultOptionsRules() {
     // @ts-expect-error
@@ -38997,15 +39058,23 @@ _m_core.default.registerModule('adaptivity', _m_adaptivity.adaptivityModule);
 
 /***/ }),
 
-/***/ 15075:
+/***/ 60008:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 var _m_ai_column_controller = __webpack_require__(50567);
+var _m_ai_column_view = __webpack_require__(90170);
 var _m_core = _interopRequireDefault(__webpack_require__(54353));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-_m_core.default.registerModule('aiColumnController', _m_ai_column_controller.aiColumnControllerModule);
+_m_core.default.registerModule('aiColumn', {
+  controllers: {
+    aiColumn: _m_ai_column_controller.AiColumnController
+  },
+  views: {
+    aiColumnView: _m_ai_column_view.AiColumnView
+  }
+});
 
 /***/ }),
 
@@ -39370,6 +39439,29 @@ var _m_sticky_columns = __webpack_require__(67624);
 var _m_core = _interopRequireDefault(__webpack_require__(54353));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 _m_core.default.registerModule('stickyColumns', _m_sticky_columns.stickyColumnsModule);
+
+/***/ }),
+
+/***/ 37442:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _m_toast_controller = __webpack_require__(39859);
+var _m_toast_view = __webpack_require__(66982);
+var _m_core = _interopRequireDefault(__webpack_require__(54353));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+_m_core.default.registerModule('toast', {
+  defaultOptions() {
+    return {};
+  },
+  controllers: {
+    toastViewController: _m_toast_controller.ToastViewController
+  },
+  views: {
+    toastView: _m_toast_view.ToastView
+  }
+});
 
 /***/ }),
 
@@ -41461,25 +41553,42 @@ const CLASSES = exports.CLASSES = {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.aiColumnControllerModule = exports.AiColumnController = void 0;
+exports.AiColumnController = void 0;
 var _m_modules = __webpack_require__(74854);
-var _m_ai_column_controller_utils = __webpack_require__(52969);
 class AiColumnController extends _m_modules.Controller {
   init() {
-    this.columnsController = this.getController('columns');
-    this.addAiCommandColumn();
+    this.dataController = this.getController('data');
+    this.dataChangedHandler = this.handleDataChanged.bind(this);
+    this.dataController.changed.add(this.dataChangedHandler);
+    this.createAction('onAIColumnRequestCreating');
+    this.createAction('onAIColumnResponseReceived');
   }
-  addAiCommandColumn() {
-    const aiColumnOptions = (0, _m_ai_column_controller_utils.getAiCommandColumnOptions)();
-    this.columnsController.addCommandColumn(aiColumnOptions);
+  createAIColumnRequest() {
+    const options = {};
+    this.executeAction('onAIColumnRequestCreating', options);
+  }
+  receiveAIColumnResponse() {
+    const options = {};
+    this.executeAction('onAIColumnResponseReceived', options);
+  }
+  handleDataChanged(e) {}
+  showResult(columnName, data) {
+    // TODO
+  }
+  // API methods
+  publicMethods() {
+    return ['abortAIColumnRequest', 'sendAIColumnRequest', 'refreshAIColumn', 'clearAIColumn', 'getAIColumnText'];
+  }
+  abortAIColumnRequest(columnName) {}
+  sendAIColumnRequest(columnName) {}
+  refreshAIColumn(columnName) {}
+  clearAIColumn(columnName) {}
+  getAIColumnText(columnName, key) {}
+  dispose() {
+    this.dataController.changed.remove(this.dataChangedHandler);
   }
 }
 exports.AiColumnController = AiColumnController;
-const aiColumnControllerModule = exports.aiColumnControllerModule = {
-  controllers: {
-    aiColumn: AiColumnController
-  }
-};
 
 /***/ }),
 
@@ -41500,6 +41609,31 @@ const getAiCommandColumnOptions = () => ({
   fixed: false
 });
 exports.getAiCommandColumnOptions = getAiCommandColumnOptions;
+
+/***/ }),
+
+/***/ 90170:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AiColumnView = void 0;
+var _m_modules = __webpack_require__(74854);
+var _m_ai_column_controller_utils = __webpack_require__(52969);
+class AiColumnView extends _m_modules.View {
+  addAiCommandColumn() {
+    this.columnsController.addCommandColumn((0, _m_ai_column_controller_utils.getAiCommandColumnOptions)());
+  }
+  init() {
+    this.columnsController = this.getController('columns');
+    this.aiColumnController = this.getController('aiColumn');
+    this.addAiCommandColumn();
+  }
+}
+exports.AiColumnView = AiColumnView;
 
 /***/ }),
 
@@ -46362,7 +46496,6 @@ const HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight';
 const BLOCK_SEPARATOR_CLASS = 'dx-block-separator';
 const HEADER_ROW_CLASS = 'dx-header-row';
 const WIDGET_CLASS = 'dx-widget';
-const DRAGGING_COMMAND_CELL_CLASS = 'dx-drag-command-cell';
 const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
 const DRAGGING_DELTA = 5;
@@ -46704,7 +46837,6 @@ class DraggingHeaderView extends _m_modules.default.View {
     const {
       columnElement
     } = options;
-    const isCommandColumn = !!options.sourceColumn.type;
     that._isDragging = true;
     that._dragOptions = options;
     that._dropOptions = {
@@ -46723,10 +46855,10 @@ class DraggingHeaderView extends _m_modules.default.View {
     that._controller.drag(that._dropOptions);
     that.element().css({
       textAlign: columnElement === null || columnElement === void 0 ? void 0 : columnElement.css('textAlign'),
-      height: columnElement && (isCommandColumn && columnElement.get(0).clientHeight || (0, _size.getHeight)(columnElement)),
-      width: columnElement && (isCommandColumn && columnElement.get(0).clientWidth || (0, _size.getWidth)(columnElement)),
+      height: columnElement && (0, _size.getHeight)(columnElement),
+      width: columnElement && (0, _size.getWidth)(columnElement),
       whiteSpace: columnElement === null || columnElement === void 0 ? void 0 : columnElement.css('whiteSpace')
-    }).addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS)).toggleClass(DRAGGING_COMMAND_CELL_CLASS, isCommandColumn).text(isCommandColumn ? '' : options.sourceColumn.caption);
+    }).addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS)).text(options.sourceColumn.caption);
     that.element().appendTo(_swatch_container.default.getSwatchContainer(columnElement));
   }
   moveHeader(args) {
@@ -54591,6 +54723,7 @@ class ErrorHandlingController extends _m_modules.default.ViewController {
     this._resizingController = this.getController('resizing');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
+    this._toastViewController = this.getController('toastViewController');
     this._rowsView = this.getView('rowsView');
   }
   _createErrorRow(error, $tableElements) {
@@ -54684,6 +54817,11 @@ class ErrorHandlingController extends _m_modules.default.ViewController {
       default:
         super.optionChanged(args);
     }
+  }
+  showToastError(message) {
+    this._toastViewController.showToast(message, {
+      type: 'error'
+    });
   }
 }
 exports.ErrorHandlingController = ErrorHandlingController;
@@ -67148,6 +67286,111 @@ exports.isFixedEdge = isFixedEdge;
 
 /***/ }),
 
+/***/ 39859:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ToastViewController = void 0;
+var _m_modules = __webpack_require__(74854);
+class ToastViewController extends _m_modules.ViewController {
+  constructor() {
+    super(...arguments);
+    this._toastView = null;
+  }
+  init() {
+    this._toastView = this.getView('toastView');
+  }
+  showToast(message) {
+    var _this$_toastView;
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    (_this$_toastView = this._toastView) === null || _this$_toastView === void 0 || _this$_toastView.showToast(message, options);
+  }
+  async hideToast() {
+    var _this$_toastView2;
+    await ((_this$_toastView2 = this._toastView) === null || _this$_toastView2 === void 0 ? void 0 : _this$_toastView2.hideToast());
+  }
+  dispose() {
+    var _this$_toastView3;
+    (_this$_toastView3 = this._toastView) === null || _this$_toastView3 === void 0 || _this$_toastView3.dispose();
+  }
+}
+exports.ToastViewController = ToastViewController;
+
+/***/ }),
+
+/***/ 66982:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ToastView = void 0;
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _m_modules = __webpack_require__(74854);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const DEFAULT_POSITION = {
+  my: 'center bottom',
+  at: 'center bottom'
+};
+class ToastView extends _m_modules.View {
+  constructor() {
+    super(...arguments);
+    this._toastInstance = null;
+    this._$toastContainer = null;
+  }
+  _ensureToastContainer() {
+    if (!this._$toastContainer) {
+      this._$toastContainer = (0, _renderer.default)('<div>').appendTo(this.component.$element());
+    }
+  }
+  _createToastInstance(options) {
+    this._ensureToastContainer();
+    if (this._toastInstance) {
+      return this._toastInstance;
+    }
+    this._toastInstance = this._$toastContainer.dxToast(_extends({
+      position: _extends({}, DEFAULT_POSITION, {
+        of: this.component.$element()
+      })
+    }, options, {
+      visible: false
+    })).dxToast('instance');
+    return this._toastInstance;
+  }
+  showToast(message) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    const toast = this._createToastInstance(options);
+    toast === null || toast === void 0 || toast.option(_extends({}, options, {
+      message,
+      visible: true
+    }));
+  }
+  async hideToast() {
+    var _this$_toastInstance;
+    await ((_this$_toastInstance = this._toastInstance) === null || _this$_toastInstance === void 0 ? void 0 : _this$_toastInstance.hide());
+  }
+  dispose() {
+    if (this._toastInstance) {
+      this._toastInstance.dispose();
+      this._toastInstance = null;
+    }
+    if (this._$toastContainer) {
+      this._$toastContainer.remove();
+      this._$toastContainer = null;
+    }
+  }
+}
+exports.ToastView = ToastView;
+
+/***/ }),
+
 /***/ 76097:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -69928,7 +70171,7 @@ const IMPORTANT_MARGIN_CLASS = 'important-margin';
 const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
-const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView'];
+const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView', 'toastView', 'aiColumnView'];
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container'
 };
@@ -97097,7 +97340,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _m_widget_base = _interopRequireDefault(__webpack_require__(7444));
 __webpack_require__(30816);
-__webpack_require__(26191);
+__webpack_require__(71132);
 __webpack_require__(22697);
 __webpack_require__(62434);
 __webpack_require__(53343);
@@ -97123,6 +97366,7 @@ __webpack_require__(43644);
 __webpack_require__(47890);
 __webpack_require__(4788);
 __webpack_require__(40190);
+__webpack_require__(60446);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // NOTE: Order of imports important here and shouldn't be changed.
 /* eslint-disable simple-import-sort/imports */
@@ -97155,7 +97399,7 @@ var _m_widget_base = _interopRequireDefault(__webpack_require__(99335));
 var _m_core = _interopRequireDefault(__webpack_require__(99477));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const TREELIST_CLASS = 'dx-treelist';
-_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editing', 'grouping', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'gridView']);
+_m_core.default.registerModulesOrder(['stateStoring', 'columns', 'aiColumn', 'selection', 'editorFactory', 'columnChooser', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editing', 'grouping', 'masterDetail', 'validating', 'adaptivity', 'data', 'virtualScrolling', 'columnHeaders', 'filterRow', 'headerPanel', 'headerFilter', 'sorting', 'search', 'rows', 'pager', 'columnsResizingReordering', 'contextMenu', 'keyboardNavigation', 'headersKeyboardNavigation', 'errorHandling', 'summary', 'columnFixing', 'export', 'toast', 'gridView']);
 class TreeList extends _m_widget_base.default {
   _initMarkup() {
     // @ts-expect-error
@@ -97219,15 +97463,23 @@ _m_core.default.registerModule('adaptivity', _m_adaptivity.adaptivityModule);
 
 /***/ }),
 
-/***/ 26191:
+/***/ 71132:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 var _m_ai_column_controller = __webpack_require__(50567);
+var _m_ai_column_view = __webpack_require__(90170);
 var _m_core = _interopRequireDefault(__webpack_require__(99477));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-_m_core.default.registerModule('aiColumnController', _m_ai_column_controller.aiColumnControllerModule);
+_m_core.default.registerModule('aiColumn', {
+  controllers: {
+    aiColumn: _m_ai_column_controller.AiColumnController
+  },
+  views: {
+    aiColumnView: _m_ai_column_view.AiColumnView
+  }
+});
 
 /***/ }),
 
@@ -97492,6 +97744,26 @@ var _m_sticky_columns = __webpack_require__(67624);
 var _m_core = _interopRequireDefault(__webpack_require__(99477));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 _m_core.default.registerModule('stickyColumns', _m_sticky_columns.stickyColumnsModule);
+
+/***/ }),
+
+/***/ 60446:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _m_toast_controller = __webpack_require__(39859);
+var _m_toast_view = __webpack_require__(66982);
+var _m_core = _interopRequireDefault(__webpack_require__(99477));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+_m_core.default.registerModule('toast', {
+  controllers: {
+    toastViewController: _m_toast_controller.ToastViewController
+  },
+  views: {
+    toastView: _m_toast_view.ToastView
+  }
+});
 
 /***/ }),
 
@@ -107352,7 +107624,6 @@ class CompactAppointmentsHelper {
     return {
       clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
       dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
-      dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate,
       isButtonClick: true,
       _loopFocus: true
     };
@@ -108628,7 +108899,6 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.updateAppointmentDataSource();
         this.repaint();
         break;
-      case 'dropDownAppointmentTemplate':
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
       case '_appointmentCountPerCell':
@@ -109797,10 +110067,6 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   hideAppointmentTooltip() {
     var _this$_appointmentToo2;
     (_this$_appointmentToo2 = this._appointmentTooltip) === null || _this$_appointmentToo2 === void 0 || _this$_appointmentToo2.hide();
-  }
-  scrollToTime(hours, minutes, date) {
-    _ui.default.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
-    this._workSpace.scrollToTime(hours, minutes, date);
   }
   scrollTo(date, groupValues, allDay) {
     this._workSpace.scrollTo(date, groupValues, allDay);
@@ -115195,12 +115461,6 @@ class SchedulerOptionsBaseWidget extends _ui.default {
     const options = super._getDefaultOptions();
     return (0, _m_extend.extend)(true, options, _extends({}, _constants.DEFAULT_SCHEDULER_OPTIONS, _constants.DEFAULT_SCHEDULER_INTERNAL_OPTIONS, _constants.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS));
   }
-  _setDeprecatedOptions() {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-    // @ts-expect-error
-    (0, _m_extend.extend)(this._deprecatedOptions, _constants.DEPRECATED_SCHEDULER_OPTIONS);
-  }
   _defaultOptionsRules() {
     // @ts-expect-error
     const rules = super._defaultOptionsRules();
@@ -115714,6 +115974,7 @@ const TOOLTIP_APPOINTMENT_ITEM_MARKER = `${TOOLTIP_APPOINTMENT_ITEM}-marker`;
 const TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = `${TOOLTIP_APPOINTMENT_ITEM}-marker-body`;
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button-container`;
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button`;
+const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 class TooltipStrategyBase {
   constructor(options) {
     this.asyncTemplatePromises = new Set();
@@ -115803,18 +116064,17 @@ class TooltipStrategyBase {
     const itemListContent = this._createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
       // @ts-expect-error
-      [this._getItemListTemplateName()]: new _function_template.FunctionTemplate(options => {
+      appointmentTooltip: new _function_template.FunctionTemplate(options => {
         const $container = (0, _renderer.default)(options.container);
         $container.append(itemListContent);
         return $container;
       })
     });
-    const template = this._options.getAppointmentTemplate(`${this._getItemListTemplateName()}Template`);
+    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this._createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
   _createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
     const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
-    const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
     // @ts-expect-error
     return new _function_template.FunctionTemplate(options => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -115824,11 +116084,11 @@ class TooltipStrategyBase {
       } = (0, _promise.createPromise)();
       this.asyncTemplatePromises.add(promise);
       return template.render({
-        model: isEmptyDropDownAppointmentTemplate ? {
+        model: {
           appointmentData,
           targetedAppointmentData,
           isButtonClicked
-        } : appointmentData,
+        },
         container: options.container,
         index,
         onRendered: () => {
@@ -115837,12 +116097,6 @@ class TooltipStrategyBase {
         }
       });
     });
-  }
-  _getItemListTemplateName() {
-    return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
-  }
-  _isEmptyDropDownAppointmentTemplate() {
-    return !this._extraOptions.dropDownAppointmentTemplate || this._extraOptions.dropDownAppointmentTemplate === 'dropDownAppointment';
   }
   _onListItemClick(e) {
     this.hide();
@@ -116624,7 +116878,7 @@ exports.macroTaskArrayMap = macroTaskArrayMap;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.DEPRECATED_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS_RULES = exports.DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = void 0;
+exports.DEFAULT_SCHEDULER_OPTIONS_RULES = exports.DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = void 0;
 var _message = _interopRequireDefault(__webpack_require__(4671));
 var _devices = _interopRequireDefault(__webpack_require__(65951));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
@@ -116634,7 +116888,6 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
-const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
   views: ['day', 'week'],
   currentView: 'day',
@@ -116648,7 +116901,6 @@ const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
   dataSource: null,
   customizeDateNavigatorText: undefined,
   appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
-  dropDownAppointmentTemplate: DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME,
   appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
   dataCellTemplate: undefined,
   timeCellTemplate: undefined,
@@ -116742,12 +116994,6 @@ const DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OP
 const DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = exports.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = {
   integrationOptions: {
     useDeferUpdateForTemplates: false
-  }
-};
-const DEPRECATED_SCHEDULER_OPTIONS = exports.DEPRECATED_SCHEDULER_OPTIONS = {
-  dropDownAppointmentTemplate: {
-    since: '19.2',
-    message: 'appointmentTooltipTemplate'
   }
 };
 const DEFAULT_SCHEDULER_OPTIONS_RULES = exports.DEFAULT_SCHEDULER_OPTIONS_RULES = [{
@@ -122381,7 +122627,7 @@ class SchedulerAgenda extends _m_work_space.default {
     const startDateHour = newDate.getHours();
     const startDateMinutes = newDate.getMinutes();
     if (this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
-      this.scrollToTime(startDateHour, startDateMinutes, newDate);
+      this.scrollTo(newDate);
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -122922,24 +123168,6 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
   }
   getWorkSpaceLeftOffset() {
     return 0;
-  }
-  scrollToTime(hours, minutes, date) {
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
-    const scrollable = this.getScrollable();
-    const offset = this.option('rtlEnabled') ? (0, _position.getBoundingRect)(this.getScrollableContainer().get(0)).width : 0;
-    if (this.option('templatesRenderAsynchronously')) {
-      setTimeout(() => {
-        scrollable.scrollBy({
-          left: coordinates.left - scrollable.scrollLeft() - offset,
-          top: 0
-        });
-      });
-    } else {
-      scrollable.scrollBy({
-        left: coordinates.left - scrollable.scrollLeft() - offset,
-        top: 0
-      });
-    }
   }
   renderRAllDayPanel() {}
   renderRTimeTable() {}
@@ -124502,7 +124730,7 @@ class SchedulerWorkSpace extends _ui2.default {
   updateHeaderPanelScrollbarPadding() {
     if ((0, _window.hasWindow)() && this._$headerPanelContainer) {
       const scrollbarWidth = this._getScrollbarWidth();
-      this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
+      // this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
     }
   }
   _getScrollbarWidth() {
@@ -125189,17 +125417,6 @@ class SchedulerWorkSpace extends _ui2.default {
       }
     });
     return result;
-  }
-  scrollToTime(hours, minutes, date) {
-    if (!this._isValidScrollDate(date)) {
-      return;
-    }
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
-    const scrollable = this.getScrollable();
-    scrollable.scrollBy({
-      top: coordinates.top - scrollable.scrollTop(),
-      left: 0
-    });
   }
   scrollTo(date, groupValues) {
     let allDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -127208,9 +127425,6 @@ class SchedulerWorkSpaceMonth extends _m_work_space_indicator.default {
   }
   _getHeaderDate() {
     return this._getViewStartByOptions();
-  }
-  scrollToTime() {
-    return (0, _common.noop)();
   }
   renderRAllDayPanel() {}
   renderRTimeTable() {}
@@ -154936,7 +155150,7 @@ function renderLabelMark(markOptions) {
     return (0, _renderer.default)();
   }
   const markClass = markOptions.showRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS;
-  return (0, _renderer.default)('<span>').addClass(markClass).text(markText);
+  return (0, _renderer.default)('<span>').addClass(markClass).attr('aria-hidden', 'true').text(markText);
 }
 function renderLabel(_ref) {
   let {
@@ -171950,257 +172164,6 @@ var _default = exports["default"] = Autocomplete;
 
 /***/ }),
 
-/***/ 27932:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _transition_executor = __webpack_require__(33054);
-var _events_engine = _interopRequireDefault(__webpack_require__(92774));
-var _visibility_change = __webpack_require__(18029);
-var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
-var _dom_adapter = _interopRequireDefault(__webpack_require__(64960));
-var _renderer = _interopRequireDefault(__webpack_require__(64553));
-var _common = __webpack_require__(17781);
-var _deferred = __webpack_require__(87739);
-var _iterator = __webpack_require__(21274);
-var _position = __webpack_require__(41639);
-var _type = __webpack_require__(11528);
-var _window = __webpack_require__(3104);
-var _load_indicator = _interopRequireDefault(__webpack_require__(11979));
-var _widget = _interopRequireDefault(__webpack_require__(89275));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-const window = (0, _window.getWindow)();
-const WIDGET_CLASS = 'dx-widget';
-const DEFER_RENDERING_CLASS = 'dx-deferrendering';
-const PENDING_RENDERING_CLASS = 'dx-pending-rendering';
-const PENDING_RENDERING_MANUAL_CLASS = 'dx-pending-rendering-manual';
-const PENDING_RENDERING_ACTIVE_CLASS = 'dx-pending-rendering-active';
-const VISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-visible-while-pending-rendering';
-const INVISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-invisible-while-pending-rendering';
-const LOADINDICATOR_CONTAINER_CLASS = 'dx-loadindicator-container';
-const DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS = 'dx-deferrendering-loadindicator-container';
-const DEFER_DEFER_RENDERING_LOAD_INDICATOR = 'dx-deferrendering-load-indicator';
-const ANONYMOUS_TEMPLATE_NAME = 'content';
-const ACTIONS = ['onRendered', 'onShown'];
-class DeferRendering extends _widget.default {
-  _getDefaultOptions() {
-    return _extends({}, super._getDefaultOptions(), {
-      showLoadIndicator: false,
-      // @ts-expect-error ts-error
-      onRendered: null,
-      // @ts-expect-error ts-error
-      onShown: null
-    });
-  }
-  _getAnonymousTemplateName() {
-    return ANONYMOUS_TEMPLATE_NAME;
-  }
-  _init() {
-    this.transitionExecutor = new _transition_executor.TransitionExecutor();
-    this._initElement();
-    this._initRender();
-    this._$initialContent = this.$element().clone().contents();
-    this._initActions();
-    super._init();
-  }
-  _initElement() {
-    this.$element().addClass(DEFER_RENDERING_CLASS);
-  }
-  _initRender() {
-    const that = this;
-    const $element = this.$element();
-    const renderWhen = this.option('renderWhen');
-    const doRender = () => that._renderDeferredContent();
-    if ((0, _type.isPromise)(renderWhen)) {
-      (0, _deferred.fromPromise)(renderWhen).done(doRender);
-    } else {
-      $element.data('dx-render-delegate', doRender);
-      if (renderWhen === undefined) {
-        $element.addClass(PENDING_RENDERING_MANUAL_CLASS);
-      }
-    }
-  }
-  _initActions() {
-    this._actions = {};
-    (0, _iterator.each)(ACTIONS, (_, action) => {
-      this._actions[action] = this._createActionByOption(action) || _common.noop;
-    });
-  }
-  _initMarkup() {
-    super._initMarkup();
-    if (!this._initContent) {
-      this._initContent = this._renderContent;
-      this._renderContent = () => {};
-    }
-    this._initContent();
-  }
-  _renderContentImpl() {
-    this.$element().removeClass(WIDGET_CLASS);
-    // @ts-expect-error ts-error
-    this.$element().append(this._$initialContent);
-    this._setLoadingState();
-  }
-  _renderDeferredContent() {
-    const that = this;
-    const $element = this.$element();
-    const result = (0, _deferred.Deferred)();
-    $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
-    $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
-    this._abortRenderTask();
-    this._renderTask = (0, _common.executeAsync)(() => {
-      that._renderImpl().done(() => {
-        const shownArgs = {
-          element: $element
-        };
-        // @ts-expect-error ts-error
-        that._actions.onShown([shownArgs]);
-        result.resolve(shownArgs);
-      }).fail(function () {
-        // @ts-expect-error
-        result.rejectWith(result, arguments);
-      });
-    });
-    return result.promise();
-  }
-  _isElementInViewport(element) {
-    const rect = (0, _position.getBoundingRect)(element);
-    return rect.bottom >= 0 && rect.right >= 0 && rect.top <= (window.innerHeight || _dom_adapter.default.getDocumentElement().clientHeight) && rect.left <= (window.innerWidth || _dom_adapter.default.getDocumentElement().clientWidth);
-  }
-  _animate() {
-    const that = this;
-    const $element = this.$element();
-    const animation = (0, _window.hasWindow)() && this.option('animation');
-    const staggerItemSelector = this.option('staggerItemSelector');
-    let animatePromise;
-    that.transitionExecutor.stop();
-    if (animation) {
-      if (staggerItemSelector) {
-        // @ts-expect-error ts-error
-        $element.find(staggerItemSelector).each(function () {
-          if (that._isElementInViewport(this)) {
-            that.transitionExecutor.enter((0, _renderer.default)(this), animation);
-          }
-        });
-      } else {
-        that.transitionExecutor.enter($element, animation);
-      }
-      animatePromise = that.transitionExecutor.start();
-    } else {
-      animatePromise = (0, _deferred.Deferred)().resolve().promise();
-    }
-    return animatePromise;
-  }
-  _renderImpl() {
-    const $element = this.$element();
-    const renderedArgs = {
-      element: $element
-    };
-    const contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
-    if (contentTemplate) {
-      contentTemplate.render({
-        container: $element.empty(),
-        noModel: true
-      });
-    }
-    this._setRenderedState();
-    // @ts-expect-error ts-error
-    _events_engine.default.trigger($element, 'dxcontentrendered');
-    // @ts-expect-error ts-error
-    this._actions.onRendered([renderedArgs]);
-    this._isRendered = true;
-    return this._animate();
-  }
-  _setLoadingState() {
-    const $element = this.$element();
-    const hasCustomLoadIndicator = !!$element.find(`.${VISIBLE_WHILE_PENDING_RENDERING_CLASS}`).length;
-    $element.addClass(PENDING_RENDERING_CLASS);
-    if (!hasCustomLoadIndicator) {
-      $element.children().addClass(INVISIBLE_WHILE_PENDING_RENDERING_CLASS);
-    }
-    if (this.option('showLoadIndicator')) {
-      this._showLoadIndicator($element);
-    }
-  }
-  _showLoadIndicator($container) {
-    // @ts-expect-error
-    this._$loadIndicator = new _load_indicator.default((0, _renderer.default)('<div>'), {
-      visible: true
-    }).$element().addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
-    (0, _renderer.default)('<div>').addClass(LOADINDICATOR_CONTAINER_CLASS).addClass(DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS).append(this._$loadIndicator).appendTo($container);
-  }
-  _setRenderedState() {
-    const $element = this.$element();
-    if (this._$loadIndicator) {
-      this._$loadIndicator.remove();
-    }
-    $element.removeClass(PENDING_RENDERING_CLASS);
-    $element.removeClass(PENDING_RENDERING_ACTIVE_CLASS);
-    (0, _visibility_change.triggerShownEvent)($element.children());
-  }
-  _optionChanged(args) {
-    const {
-      value
-    } = args;
-    const {
-      previousValue
-    } = args;
-    switch (args.name) {
-      case 'renderWhen':
-        if (previousValue === false && value === true) {
-          this._renderOrAnimate();
-        } else if (previousValue === true && value === false) {
-          this.transitionExecutor.stop();
-          this._setLoadingState();
-        }
-        break;
-      case 'showLoadIndicator':
-      case 'onRendered':
-      case 'onShown':
-        break;
-      default:
-        super._optionChanged(args);
-    }
-  }
-  _renderOrAnimate() {
-    let result;
-    if (this._isRendered) {
-      this._setRenderedState();
-      result = this._animate();
-    } else {
-      result = this._renderDeferredContent();
-    }
-    return result;
-  }
-  renderContent() {
-    return this._renderOrAnimate();
-  }
-  _abortRenderTask() {
-    if (this._renderTask) {
-      // @ts-expect-error ts-error
-      this._renderTask.abort();
-      this._renderTask = undefined;
-    }
-  }
-  _dispose() {
-    this.transitionExecutor.stop(true);
-    this._abortRenderTask();
-    // @ts-expect-error ts-error
-    this._actions = undefined;
-    this._$initialContent = undefined;
-    super._dispose();
-  }
-}
-(0, _component_registrator.default)('dxDeferRendering', DeferRendering);
-var _default = exports["default"] = DeferRendering;
-
-/***/ }),
-
 /***/ 41163:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -184931,7 +184894,7 @@ exports["default"] = SpinButtons;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.splitByIndex = exports.getRealSeparatorIndex = exports.getNthOccurrence = exports.adjustPercentValue = void 0;
+exports.splitByIndex = exports.roundFloatPartPercentValue = exports.getRealSeparatorIndex = exports.getNthOccurrence = exports.adjustPercentValue = void 0;
 var _math = __webpack_require__(50254);
 const getRealSeparatorIndex = function (str) {
   let quoteBalance = 0;
@@ -184971,10 +184934,20 @@ const splitByIndex = function (str, index) {
   return [str.slice(0, index), str.slice(index + 1)];
 };
 exports.splitByIndex = splitByIndex;
-const adjustPercentValue = function (rawValue, precision) {
-  return rawValue && (0, _math.adjust)(rawValue / 100, precision);
+const adjustPercentValue = function (rawValue, interval) {
+  if (!rawValue) {
+    return rawValue;
+  }
+  return (0, _math.adjust)(rawValue / 100, interval / 100);
 };
 exports.adjustPercentValue = adjustPercentValue;
+const roundFloatPartPercentValue = function (rawValue, precision) {
+  if (!rawValue) {
+    return rawValue;
+  }
+  return (0, _math.roundFloatPart)(rawValue / 100, precision);
+};
+exports.roundFloatPartPercentValue = roundFloatPartPercentValue;
 
 /***/ }),
 
@@ -196548,7 +196521,7 @@ var SpeechToTextState;
   SpeechToTextState["LISTENING"] = "listening";
   SpeechToTextState["DISABLED"] = "disabled";
 })(SpeechToTextState || (SpeechToTextState = {}));
-const ACTIONS = ['onStartClick', 'onStopClick', 'onResult', 'onError'];
+const ACTIONS = ['onStartClick', 'onStopClick', 'onResult', 'onError', 'onEnd'];
 class SpeechToText extends _widget.default {
   _getDefaultOptions() {
     return _extends({}, super._getDefaultOptions(), {
@@ -196566,7 +196539,9 @@ class SpeechToText extends _widget.default {
       onStartClick: undefined,
       onStopClick: undefined,
       onResult: undefined,
-      onError: undefined
+      onError: undefined,
+      onEnd: undefined,
+      speechRecognitionConfig: undefined
     });
   }
   _initSpeechRecognitionAdapter() {
@@ -196707,31 +196682,41 @@ class SpeechToText extends _widget.default {
     }
   }
   _handleStartClick(e) {
-    if (!this._isCustomSpeechRecognitionEnabled()) {
-      var _this$_speechRecognit;
+    var _this$_speechRecognit;
+    const isCustomEnabled = this._isCustomSpeechRecognitionEnabled();
+    const isSRAvailable = (_this$_speechRecognit = this._speechRecognitionAdapter) === null || _this$_speechRecognit === void 0 ? void 0 : _this$_speechRecognit.isAvailable();
+    if (!isCustomEnabled && isSRAvailable) {
+      var _this$_speechRecognit2;
       this._setState(SpeechToTextState.LISTENING);
-      (_this$_speechRecognit = this._speechRecognitionAdapter) === null || _this$_speechRecognit === void 0 || _this$_speechRecognit.start();
+      (_this$_speechRecognit2 = this._speechRecognitionAdapter) === null || _this$_speechRecognit2 === void 0 || _this$_speechRecognit2.start();
     }
     this._emitDxEvent('onStartClick', e.event);
   }
   _handleStopClick(e) {
     if (!this._isCustomSpeechRecognitionEnabled()) {
-      var _this$_speechRecognit2;
+      var _this$_speechRecognit3;
       this._setState(SpeechToTextState.INITIAL);
-      (_this$_speechRecognit2 = this._speechRecognitionAdapter) === null || _this$_speechRecognit2 === void 0 || _this$_speechRecognit2.stop();
+      (_this$_speechRecognit3 = this._speechRecognitionAdapter) === null || _this$_speechRecognit3 === void 0 || _this$_speechRecognit3.stop();
     }
     this._emitDxEvent('onStopClick', e.event);
   }
-  _handleSpeechRecognitionEnd() {
+  _handleSpeechRecognitionEnd(event) {
     if (this._state !== SpeechToTextState.DISABLED && !this._isCustomSpeechRecognitionEnabled()) {
       this._setState(SpeechToTextState.INITIAL);
     }
+    this._emitNativeEvent('onEnd', event);
   }
   _handleSpeechRecognitionResult(event) {
     this._emitNativeEvent('onResult', event);
   }
   _handleSpeechRecognitionError(event) {
     this._emitNativeEvent('onError', event);
+  }
+  _stopRecognitionOnDisable(disabled) {
+    if (disabled) {
+      var _this$_speechRecognit4;
+      (_this$_speechRecognit4 = this._speechRecognitionAdapter) === null || _this$_speechRecognit4 === void 0 || _this$_speechRecognit4.stop();
+    }
   }
   _setState(newState) {
     if (this._state === newState) {
@@ -196756,9 +196741,9 @@ class SpeechToText extends _widget.default {
     this.$element().toggleClass(SPEECH_TO_TEXT_LISTENING_CLASS, this._isListening());
   }
   _updateSpeechRecognitionConfig(args) {
-    var _this$_speechRecognit3;
+    var _this$_speechRecognit5;
     const options = _widget.default.getOptionsFromContainer(args);
-    (_this$_speechRecognit3 = this._speechRecognitionAdapter) === null || _this$_speechRecognit3 === void 0 || _this$_speechRecognit3.applyConfig(options);
+    (_this$_speechRecognit5 = this._speechRecognitionAdapter) === null || _this$_speechRecognit5 === void 0 || _this$_speechRecognit5.applyConfig(options);
   }
   _optionChanged(args) {
     var _this$_button2, _this$_button3;
@@ -196769,6 +196754,7 @@ class SpeechToText extends _widget.default {
     switch (name) {
       case 'customSpeechRecognizer':
         this._handleCustomEngineState();
+        this._initSpeechRecognitionAdapter();
         break;
       case 'speechRecognitionConfig':
         this._updateSpeechRecognitionConfig(args);
@@ -196786,6 +196772,7 @@ class SpeechToText extends _widget.default {
       case 'disabled':
         (_this$_button3 = this._button) === null || _this$_button3 === void 0 || _this$_button3.option(name, value);
         this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
+        this._stopRecognitionOnDisable(value);
         break;
       case 'startIcon':
       case 'stopIcon':
@@ -196829,9 +196816,9 @@ class SpeechToText extends _widget.default {
     super._clean();
   }
   _dispose() {
-    var _this$_speechRecognit4;
+    var _this$_speechRecognit6;
     this._actions = {};
-    (_this$_speechRecognit4 = this._speechRecognitionAdapter) === null || _this$_speechRecognit4 === void 0 || _this$_speechRecognit4.dispose();
+    (_this$_speechRecognit6 = this._speechRecognitionAdapter) === null || _this$_speechRecognit6 === void 0 || _this$_speechRecognit6.dispose();
     this._speechRecognitionAdapter = null;
     super._dispose();
   }
@@ -198594,7 +198581,9 @@ class Splitter extends _collection_widget.default {
     this._updateItemsRestrictions();
     const collapsedDelta = this._getCollapseDelta(item, value, this._panesCacheSize, this._collapseDirection);
     this._itemRestrictions.forEach(pane => {
-      pane.maxSize = undefined;
+      if (item.collapsed) {
+        pane.maxSize = undefined;
+      }
       pane.resizable = undefined;
     });
     this._layout = (0, _layout.getNextLayout)(this.getLayout(), collapsedDelta, this._activeResizeHandleIndex, this._itemRestrictions);
@@ -256329,6 +256318,7 @@ var _default = exports["default"] = {
     const translateCategories = translate / interval;
     const visibleCount = (that.visibleCategories || []).length;
     let startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5);
+    // @ts-expect-error
     const categoriesLength = parseInt((0, _math.adjust)(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1;
     let endCategoryIndex;
     if (invert) {
@@ -256578,6 +256568,7 @@ var _default = exports["default"] = {
     if (value < rMin) {
       offset = 0;
     } else if (value > rMax) {
+      // @ts-expect-error
       offset = _date.default.addInterval(rMax, this._options.interval) - rMin;
     }
     const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
@@ -257093,6 +257084,7 @@ _Translator2d.prototype = {
           break;
         case 'semidiscrete':
           script = _interval_translator.default;
+          // @ts-expect-error
           canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (_date.default.addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
           break;
         case 'discrete':
@@ -264741,7 +264733,6 @@ ui.dxChat = __webpack_require__(73571);
 ui.dxDateBox = __webpack_require__(2739);
 ui.dxDateRangeBox = __webpack_require__(45453);
 ui.dxDrawer = __webpack_require__(7968);
-ui.dxDeferRendering = __webpack_require__(41302);
 ui.dxDropDownBox = __webpack_require__(74417);
 ui.dxFileUploader = __webpack_require__(26980);
 ui.dxForm = __webpack_require__(74075);
@@ -286471,20 +286462,6 @@ module.exports["default"] = exports.default;
 
 /***/ }),
 
-/***/ 41302:
-/***/ (function(module, exports, __webpack_require__) {
-
-
-
-exports["default"] = void 0;
-var _m_defer_rendering = _interopRequireDefault(__webpack_require__(27932));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var _default = exports["default"] = _m_defer_rendering.default; // STYLE deferRendering
-module.exports = exports.default;
-module.exports["default"] = exports.default;
-
-/***/ }),
-
 /***/ 87632:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -297297,6 +297274,7 @@ class FileManagerThumbnailListBox extends _uiCollection_widget.default {
     return new _deferred.Deferred().resolve().promise();
   }
   _focusOutHandler() {}
+  _focusInHandler() {}
   _getItems() {
     return this.option('items') || [];
   }
@@ -301859,7 +301837,7 @@ class GanttExportHelper {
     return task && this._getGridDisplayText(colIndex, task);
   }
   _getGridDisplayText(colIndex, data) {
-    const columns = this._treeList.getController('columns').getColumns();
+    const columns = this._treeList.getController('columns').getVisibleColumns();
     const column = columns[colIndex];
     const field = column === null || column === void 0 ? void 0 : column.dataField;
     const format = column === null || column === void 0 ? void 0 : column.format;
