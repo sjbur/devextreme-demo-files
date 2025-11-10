@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.viz.js)
 * Version: 25.2.0
-* Build date: Tue Oct 07 2025
+* Build date: Mon Nov 10 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -3781,9 +3781,9 @@ const textStyles = _extends({}, commonStyles, {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': '\'Segoe UI\',\'Open Sans Condensed\',-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
+  'font-family': '-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
-  'font-wight': '600'
+  'font-weight': '600'
 });
 function createImportantStyles(defaultStyles, customStyles) {
   const styles = customStyles ? _extends({}, defaultStyles, customStyles) : defaultStyles;
@@ -29089,7 +29089,8 @@ class Cache {
 }
 exports.Cache = Cache;
 const globalCache = exports.globalCache = {
-  timezones: new Cache()
+  timezones: new Cache(),
+  DST: new Cache()
 };
 
 /***/ }),
@@ -29120,7 +29121,7 @@ const GMT = 'GMT';
 const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 const createUTCDateWithLocalOffset = date => {
   if (!date) {
-    return null;
+    return date;
   }
   return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
 };
@@ -29154,10 +29155,14 @@ const calculateTimezoneByValue = function (timeZone) {
     _errors.default.log('W0009', timeZone);
     return undefined;
   }
-  if (!_date.dateUtilsTs.isValidDate(date)) {
+  const dateObj = new Date(date);
+  if (!_date.dateUtilsTs.isValidDate(dateObj)) {
     return undefined;
   }
-  return calculateTimezoneByValueCore(timeZone, date);
+  if (isEqualLocalTimeZone(timeZone)) {
+    return -dateObj.getTimezoneOffset() / MINUTES_IN_HOUR;
+  }
+  return calculateTimezoneByValueCore(timeZone, dateObj);
 };
 // 'GMT±XX:YY' or 'GMT' format
 const getStringOffset = function (timeZone) {
@@ -30099,7 +30104,6 @@ class LoadIndicator extends _widget.default {
       }
     }]);
   }
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates() {
     return false;
   }
@@ -30267,7 +30271,9 @@ var _deferred = __webpack_require__(87739);
 var _load_indicator = _interopRequireDefault(__webpack_require__(11979));
 var _themes = __webpack_require__(52071);
 var _overlay = _interopRequireDefault(__webpack_require__(79384));
+const _excluded = ["src"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 // STYLE loadPanel
 const LOADPANEL_CLASS = 'dx-loadpanel';
@@ -30338,6 +30344,16 @@ class LoadPanel extends _overlay.default {
     this.$element().addClass(LOADPANEL_CLASS);
     this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
     this._updateWrapperAria();
+  }
+  _setDeprecatedOptions() {
+    super._setDeprecatedOptions();
+    this._deprecatedOptions = _extends({}, this._deprecatedOptions, {
+      // @ts-expect-error ts-error
+      indicatorSrc: {
+        since: '25.2',
+        alias: 'indicatorOptions.src'
+      }
+    });
   }
   _updateWrapperAria() {
     this.$wrapper().removeAttr('aria-label').removeAttr('role');
@@ -30417,10 +30433,18 @@ class LoadPanel extends _overlay.default {
     if (!this._$indicator) {
       this._$indicator = (0, _renderer.default)('<div>').addClass(LOADPANEL_INDICATOR_CLASS).appendTo(this._$loadPanelContentWrapper);
     }
-    this._createComponent(this._$indicator, _load_indicator.default, {
+    const {
+      indicatorOptions = {},
+      indicatorSrc
+    } = this.option();
+    const {
+        src
+      } = indicatorOptions,
+      restIndicatorOptions = _objectWithoutPropertiesLoose(indicatorOptions, _excluded);
+    this._createComponent(this._$indicator, _load_indicator.default, _extends({
       elementAttr: this._getAriaAttributes(),
-      indicatorSrc: this.option('indicatorSrc')
-    });
+      indicatorSrc: src ?? indicatorSrc
+    }, restIndicatorOptions));
   }
   _cleanPreviousContent() {
     this.$content().find(`.${LOADPANEL_MESSAGE_CLASS}`).remove();
@@ -30445,6 +30469,7 @@ class LoadPanel extends _overlay.default {
         this._togglePaneVisible();
         break;
       case 'indicatorSrc':
+      case 'indicatorOptions':
         this._renderLoadIndicator();
         break;
       default:
@@ -46434,7 +46459,7 @@ const POINT_CLICK = 'pointClick';
 const POINT_DATA = 'chart-data-point';
 const SERIES_DATA = 'chart-data-series';
 const ARG_DATA = 'chart-data-argument';
-const DELAY = 100;
+const DELAY = 10;
 const HOLD_TIMEOUT = 300;
 const NONE_MODE = 'none';
 const ALL_ARGUMENT_POINTS_MODE = 'allargumentpoints';
@@ -72630,7 +72655,7 @@ var _default = exports["default"] = _sankey.default;
 
 /***/ }),
 
-/***/ 56295:
+/***/ 78676:
 /***/ (function(__unused_webpack_module, exports) {
 
 
@@ -73185,7 +73210,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _type = __webpack_require__(11528);
-var _constants = __webpack_require__(56295);
+var _constants = __webpack_require__(78676);
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @stylistic/max-len */
@@ -73485,7 +73510,7 @@ var _common = __webpack_require__(17781);
 var _type = __webpack_require__(11528);
 var _data_source = __webpack_require__(98972);
 var _m_base_widget = _interopRequireDefault(__webpack_require__(34506));
-var _constants = __webpack_require__(56295);
+var _constants = __webpack_require__(78676);
 var _layout = __webpack_require__(48342);
 var _link_item = _interopRequireDefault(__webpack_require__(15768));
 var _node_item = _interopRequireDefault(__webpack_require__(3444));
@@ -92141,10 +92166,10 @@ viz.registerTheme = (__webpack_require__(84560).registerTheme);
 viz.exportFromMarkup = (__webpack_require__(88168).exportFromMarkup);
 viz.getMarkup = (__webpack_require__(88168).getMarkup);
 viz.exportWidgets = (__webpack_require__(88168).exportWidgets);
-viz.currentPalette = (__webpack_require__(9735).currentPalette);
-viz.getPalette = (__webpack_require__(9735).getPalette);
-viz.generateColors = (__webpack_require__(9735).generateColors);
-viz.registerPalette = (__webpack_require__(9735).registerPalette);
+viz.currentPalette = (__webpack_require__(9735)/* .currentPalette */ .pq);
+viz.getPalette = (__webpack_require__(9735)/* .getPalette */ .Sf);
+viz.generateColors = (__webpack_require__(9735)/* .generateColors */ .oC);
+viz.registerPalette = (__webpack_require__(9735)/* .registerPalette */ .hr);
 viz.refreshTheme = (__webpack_require__(84560).refreshTheme);
 
 /* Charts (dx.module-viz-charts.js) */
@@ -103695,6 +103720,9 @@ const defaultMessages = exports.defaultMessages = {
     "dxFileUploader-invalidFileExtension": "File type is not allowed",
     "dxFileUploader-invalidMaxFileSize": "File is too large",
     "dxFileUploader-invalidMinFileSize": "File is too small",
+    "dxFileUploader-fileListLabel": "File list",
+    "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+    "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
     "dxRangeSlider-ariaFrom": "From",
     "dxRangeSlider-ariaTill": "Till",
     "dxSwitch-switchedOnText": "ON",
@@ -103706,6 +103734,11 @@ const defaultMessages = exports.defaultMessages = {
     "dxForm-submitButtonText": "Submit",
     "dxNumberBox-invalidValueMessage": "Value must be a number",
     "dxNumberBox-noDataText": "No data",
+    "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+    "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate column values...",
+    "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+    "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+    "dxDataGrid-aiPromptEditorStopButton": "Stop",
     "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
     "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
     "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
@@ -103861,11 +103894,15 @@ const defaultMessages = exports.defaultMessages = {
     "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
     "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
     "dxScheduler-appointmentListAriaLabel": "Appointment list",
+    "dxScheduler-newPopupTitle": "New Appointment",
+    "dxScheduler-editPopupTitle": "Edit Appointment",
+    "dxScheduler-editPopupSaveButtonText": "Save",
     "dxScheduler-editorLabelTitle": "Subject",
     "dxScheduler-editorLabelStartDate": "Start Date",
     "dxScheduler-editorLabelEndDate": "End Date",
     "dxScheduler-editorLabelDescription": "Description",
     "dxScheduler-editorLabelRecurrence": "Repeat",
+    "dxScheduler-noSubject": "(No subject)",
     "dxScheduler-navigationToday": "Today",
     "dxScheduler-navigationPrevious": "Previous page",
     "dxScheduler-navigationNext": "Next page",
@@ -103977,6 +104014,8 @@ const defaultMessages = exports.defaultMessages = {
     "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
     "dxChat-deletedMessageText": "This message was deleted",
     "dxChat-defaultImageAlt": "Image shared in chat",
+    "dxChat-fileViewLabel": "File list",
+    "dxChat-downloadButtonLabel": "Download file {0}",
     "dxColorView-ariaRed": "Red",
     "dxColorView-ariaGreen": "Green",
     "dxColorView-ariaBlue": "Blue",
@@ -114045,6 +114084,10 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   */
   E1066: 'All AI columns must have names.',
   /**
+  * @name ErrorsUIWidgets.E1067
+  */
+  E1067: '\'aiIntegration\' is not configured in the {0} column.',
+  /**
   * @name ErrorsUIWidgets.W1001
   */
   W1001: 'The "key" option cannot be modified after initialization',
@@ -114389,17 +114432,47 @@ module.exports["default"] = exports.default;
 /***/ }),
 
 /***/ 74754:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
-exports["default"] = void 0;
-var Export = _interopRequireWildcard(__webpack_require__(43452));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-var _default = exports["default"] = Export;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
+Object.defineProperty(exports, "ExportMenu", ({
+  enumerable: true,
+  get: function () {
+    return _export.ExportMenu;
+  }
+}));
+Object.defineProperty(exports, "combineMarkups", ({
+  enumerable: true,
+  get: function () {
+    return _export.combineMarkups;
+  }
+}));
+Object.defineProperty(exports, "exportFromMarkup", ({
+  enumerable: true,
+  get: function () {
+    return _export.exportFromMarkup;
+  }
+}));
+Object.defineProperty(exports, "exportWidgets", ({
+  enumerable: true,
+  get: function () {
+    return _export.exportWidgets;
+  }
+}));
+Object.defineProperty(exports, "getMarkup", ({
+  enumerable: true,
+  get: function () {
+    return _export.getMarkup;
+  }
+}));
+Object.defineProperty(exports, "plugin", ({
+  enumerable: true,
+  get: function () {
+    return _export.plugin;
+  }
+}));
+var _export = __webpack_require__(43452);
 
 /***/ }),
 
@@ -114812,17 +114885,60 @@ module.exports["default"] = exports.default;
 /***/ }),
 
 /***/ 9735:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+var __webpack_unused_export__;
 
 
-
-exports["default"] = void 0;
-var PaletteModule = _interopRequireWildcard(__webpack_require__(79121));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-var _default = exports["default"] = PaletteModule;
-module.exports = exports.default;
-module.exports["default"] = exports.default;
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _palette.createPalette;
+  }
+});
+Object.defineProperty(exports, "pq", ({
+  enumerable: true,
+  get: function () {
+    return _palette.currentPalette;
+  }
+}));
+Object.defineProperty(exports, "oC", ({
+  enumerable: true,
+  get: function () {
+    return _palette.generateColors;
+  }
+}));
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _palette.getAccentColor;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _palette.getDiscretePalette;
+  }
+});
+__webpack_unused_export__ = ({
+  enumerable: true,
+  get: function () {
+    return _palette.getGradientPalette;
+  }
+});
+Object.defineProperty(exports, "Sf", ({
+  enumerable: true,
+  get: function () {
+    return _palette.getPalette;
+  }
+}));
+Object.defineProperty(exports, "hr", ({
+  enumerable: true,
+  get: function () {
+    return _palette.registerPalette;
+  }
+}));
+var _palette = __webpack_require__(79121);
 
 /***/ }),
 

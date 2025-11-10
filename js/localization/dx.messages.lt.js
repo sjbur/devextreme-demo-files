@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.messages.lt.js)
 * Version: 25.2.0
-* Build date: Tue Oct 07 2025
+* Build date: Mon Nov 10 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -100,6 +100,9 @@
             "dxFileUploader-invalidFileExtension": "Bylos tipas yra negalimas",
             "dxFileUploader-invalidMaxFileSize": "Byla yra per didelė",
             "dxFileUploader-invalidMinFileSize": "Byla yra per maža",
+            "dxFileUploader-fileListLabel": "File list",
+            "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+            "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
             "dxRangeSlider-ariaFrom": "Nuo",
             "dxRangeSlider-ariaTill": "Iki",
             "dxSwitch-switchedOnText": "Įj.",
@@ -111,6 +114,11 @@
             "dxForm-submitButtonText": "Submit",
             "dxNumberBox-invalidValueMessage": "Reikšmė turi būti skaičius",
             "dxNumberBox-noDataText": "Nėra duomenų",
+            "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+            "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+            "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+            "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+            "dxDataGrid-aiPromptEditorStopButton": "Stop",
             "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
             "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
             "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
@@ -266,11 +274,15 @@
             "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
             "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
             "dxScheduler-appointmentListAriaLabel": "Appointment list",
+            "dxScheduler-newPopupTitle": "New Appointment",
+            "dxScheduler-editPopupTitle": "Edit Appointment",
+            "dxScheduler-editPopupSaveButtonText": "Save",
             "dxScheduler-editorLabelTitle": "Tema",
             "dxScheduler-editorLabelStartDate": "Pradžios data",
             "dxScheduler-editorLabelEndDate": "Pabaigos data",
             "dxScheduler-editorLabelDescription": "Aprašymas",
             "dxScheduler-editorLabelRecurrence": "Kartojimas",
+            "dxScheduler-noSubject": "(No subject)",
             "dxScheduler-navigationToday": "Today",
             "dxScheduler-navigationPrevious": "Previous page",
             "dxScheduler-navigationNext": "Next page",
@@ -382,6 +394,8 @@
             "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
             "dxChat-deletedMessageText": "This message was deleted",
             "dxChat-defaultImageAlt": "Image shared in chat",
+            "dxChat-fileViewLabel": "File list",
+            "dxChat-downloadButtonLabel": "Download file {0}",
             "dxColorView-ariaRed": "Raudona",
             "dxColorView-ariaGreen": "Žalia",
             "dxColorView-ariaBlue": "Mėlyna",
