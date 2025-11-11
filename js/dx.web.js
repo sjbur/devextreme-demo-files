@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.web.js)
 * Version: 25.2.0
-* Build date: Mon Nov 10 2025
+* Build date: Tue Nov 11 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -106197,16 +106197,24 @@ class Appointment extends _dom_component.default {
     if (!geometry || geometry.empty) {
       return;
     }
-    const {
-      height
-    } = geometry;
-    // Extra short appointments (10 minutes, ~12px in Fluent default)
-    if (height > 0 && height <= 13) {
-      this.$element().addClass(_m_classes.EXTRA_SHORT_APPOINTMENT_CLASS);
+    // Get appointment duration in minutes
+    const startDate = this.dataAccessors.get('startDate', this.rawAppointment);
+    const endDate = this.dataAccessors.get('endDate', this.rawAppointment);
+    if (!startDate || !endDate) {
+      return;
     }
-    // Short appointments (15 minutes, ~19px in Fluent default)
-    else if (height > 13 && height <= 20) {
-      this.$element().addClass(_m_classes.SHORT_APPOINTMENT_CLASS);
+    const durationMs = new Date(endDate).getTime() - new Date(startDate).getTime();
+    const durationMinutes = Math.round(durationMs / (1000 * 60));
+    // Apply classes based on actual appointment duration
+    switch (true) {
+      case durationMinutes <= 10:
+        this.$element().addClass(_m_classes.APPOINTMENT_10MIN_CLASS);
+        break;
+      case durationMinutes <= 15:
+        this.$element().addClass(_m_classes.APPOINTMENT_15MIN_CLASS);
+        break;
+      default:
+        break;
     }
   }
   _renderReducedAppointment() {
@@ -108992,14 +109000,14 @@ exports["default"] = AppointmentDragBehavior;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VIRTUAL_CELL_CLASS = exports.VERTICAL_GROUP_COUNT_CLASSES = exports.TIME_PANEL_CLASS = exports.SHORT_APPOINTMENT_CLASS = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = exports.LAST_GROUP_CELL_CLASS = exports.HEADER_CURRENT_TIME_CELL_CLASS = exports.GROUP_ROW_CLASS = exports.GROUP_HEADER_CONTENT_CLASS = exports.FIXED_CONTAINER_CLASS = exports.FIRST_GROUP_CELL_CLASS = exports.EXTRA_SHORT_APPOINTMENT_CLASS = exports.EMPTY_APPOINTMENT_CLASS = exports.DIRECTION_APPOINTMENT_CLASSES = exports.DATE_TABLE_ROW_CLASS = exports.DATE_TABLE_CLASS = exports.APPOINTMENT_ITEM_CLASS = exports.APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = exports.APPOINTMENT_DRAG_SOURCE_CLASS = exports.APPOINTMENT_CONTENT_CLASSES = exports.ALL_DAY_APPOINTMENT_CLASS = exports.AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = void 0;
+exports.VIRTUAL_CELL_CLASS = exports.VERTICAL_GROUP_COUNT_CLASSES = exports.TIME_PANEL_CLASS = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = exports.LAST_GROUP_CELL_CLASS = exports.HEADER_CURRENT_TIME_CELL_CLASS = exports.GROUP_ROW_CLASS = exports.GROUP_HEADER_CONTENT_CLASS = exports.FIXED_CONTAINER_CLASS = exports.FIRST_GROUP_CELL_CLASS = exports.EMPTY_APPOINTMENT_CLASS = exports.DIRECTION_APPOINTMENT_CLASSES = exports.DATE_TABLE_ROW_CLASS = exports.DATE_TABLE_CLASS = exports.APPOINTMENT_ITEM_CLASS = exports.APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = exports.APPOINTMENT_DRAG_SOURCE_CLASS = exports.APPOINTMENT_CONTENT_CLASSES = exports.APPOINTMENT_15MIN_CLASS = exports.APPOINTMENT_10MIN_CLASS = exports.ALL_DAY_APPOINTMENT_CLASS = exports.AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = void 0;
 const FIXED_CONTAINER_CLASS = exports.FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const REDUCED_APPOINTMENT_CLASS = exports.REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 const REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
 const RECURRENCE_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = 'dx-scheduler-appointment-recurrence';
 const EMPTY_APPOINTMENT_CLASS = exports.EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty';
-const SHORT_APPOINTMENT_CLASS = exports.SHORT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-short';
-const EXTRA_SHORT_APPOINTMENT_CLASS = exports.EXTRA_SHORT_APPOINTMENT_CLASS = 'dx-scheduler-appointment-extra-short';
+const APPOINTMENT_10MIN_CLASS = exports.APPOINTMENT_10MIN_CLASS = 'dx-scheduler-appointment-10min';
+const APPOINTMENT_15MIN_CLASS = exports.APPOINTMENT_15MIN_CLASS = 'dx-scheduler-appointment-15min';
 const ALL_DAY_APPOINTMENT_CLASS = exports.ALL_DAY_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 const REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = {
   head: 'dx-scheduler-appointment-head',
