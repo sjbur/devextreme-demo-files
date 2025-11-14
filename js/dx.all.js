@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.js)
 * Version: 25.2.0
-* Build date: Tue Nov 11 2025
+* Build date: Fri Nov 14 2025
 *
 * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -108132,6 +108132,9 @@ class Appointment extends _dom_component.default {
       case durationMinutes <= 15:
         this.$element().addClass(_m_classes.APPOINTMENT_15MIN_CLASS);
         break;
+      case durationMinutes <= 20:
+        this.$element().addClass(_m_classes.APPOINTMENT_20MIN_CLASS);
+        break;
       default:
         break;
     }
@@ -110935,7 +110938,7 @@ exports["default"] = AppointmentDragBehavior;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VIRTUAL_CELL_CLASS = exports.VERTICAL_GROUP_COUNT_CLASSES = exports.TIME_PANEL_CLASS = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = exports.LAST_GROUP_CELL_CLASS = exports.HEADER_CURRENT_TIME_CELL_CLASS = exports.GROUP_ROW_CLASS = exports.GROUP_HEADER_CONTENT_CLASS = exports.FIXED_CONTAINER_CLASS = exports.FIRST_GROUP_CELL_CLASS = exports.EMPTY_APPOINTMENT_CLASS = exports.DIRECTION_APPOINTMENT_CLASSES = exports.DATE_TABLE_ROW_CLASS = exports.DATE_TABLE_CLASS = exports.APPOINTMENT_ITEM_CLASS = exports.APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = exports.APPOINTMENT_DRAG_SOURCE_CLASS = exports.APPOINTMENT_CONTENT_CLASSES = exports.APPOINTMENT_15MIN_CLASS = exports.APPOINTMENT_10MIN_CLASS = exports.ALL_DAY_APPOINTMENT_CLASS = exports.AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = void 0;
+exports.VIRTUAL_CELL_CLASS = exports.VERTICAL_GROUP_COUNT_CLASSES = exports.TIME_PANEL_CLASS = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = exports.LAST_GROUP_CELL_CLASS = exports.HEADER_CURRENT_TIME_CELL_CLASS = exports.GROUP_ROW_CLASS = exports.GROUP_HEADER_CONTENT_CLASS = exports.FIXED_CONTAINER_CLASS = exports.FIRST_GROUP_CELL_CLASS = exports.EMPTY_APPOINTMENT_CLASS = exports.DIRECTION_APPOINTMENT_CLASSES = exports.DATE_TABLE_ROW_CLASS = exports.DATE_TABLE_CLASS = exports.APPOINTMENT_ITEM_CLASS = exports.APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = exports.APPOINTMENT_DRAG_SOURCE_CLASS = exports.APPOINTMENT_CONTENT_CLASSES = exports.APPOINTMENT_20MIN_CLASS = exports.APPOINTMENT_15MIN_CLASS = exports.APPOINTMENT_10MIN_CLASS = exports.ALL_DAY_APPOINTMENT_CLASS = exports.AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = void 0;
 const FIXED_CONTAINER_CLASS = exports.FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const REDUCED_APPOINTMENT_CLASS = exports.REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 const REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
@@ -110943,6 +110946,7 @@ const RECURRENCE_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = 'dx-
 const EMPTY_APPOINTMENT_CLASS = exports.EMPTY_APPOINTMENT_CLASS = 'dx-scheduler-appointment-empty';
 const APPOINTMENT_10MIN_CLASS = exports.APPOINTMENT_10MIN_CLASS = 'dx-scheduler-appointment-10min';
 const APPOINTMENT_15MIN_CLASS = exports.APPOINTMENT_15MIN_CLASS = 'dx-scheduler-appointment-15min';
+const APPOINTMENT_20MIN_CLASS = exports.APPOINTMENT_20MIN_CLASS = 'dx-scheduler-appointment-20min';
 const ALL_DAY_APPOINTMENT_CLASS = exports.ALL_DAY_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
 const REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = {
   head: 'dx-scheduler-appointment-head',
