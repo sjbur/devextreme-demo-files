@@ -1,9 +1,9 @@
 /*!
 * DevExtreme (dx.all.js)
-* Version: 25.2.2
-* Build date: Thu Dec 04 2025
+* Version: 26.1.0
+* Build date: Tue Jan 27 2026
 *
-* Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
 */
 "use strict";
@@ -729,14 +729,17 @@ class DateBoxMask extends _m_date_box.default {
   }
   _enterHandler() {
     this._fireChangeEvent();
-    this._selectNextPart(FORWARD);
+    if (this._useMaskBehavior() && this._isAllSelected()) {
+      this._selectFirstPart();
+    } else {
+      this._selectNextPart(FORWARD);
+    }
   }
   _focusOutHandler(e) {
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
     if (shouldFireChangeEvent) {
       this._fireChangeEvent();
       super._focusOutHandler(e);
-      this._selectFirstPart();
     } else {
       super._focusOutHandler(e);
     }
@@ -3137,7 +3140,7 @@ var _filtering = _interopRequireDefault(__webpack_require__(56417));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 const _excluded = ["texts", "visible"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const mergeColumnHeaderFilterOptions = (column, rootOptions) => {
   var _column$headerFilter;
   const _ref = rootOptions ?? {},
@@ -4437,7 +4440,7 @@ const rowsViewSelectionExtenderMixin = Base => class RowsViewSelectionExtender e
                   isSelected
                 } = change.items[index];
                 $row.toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected).find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-                that.setAria('selected', isSelected, $row);
+                that.setAria('selected', String(isSelected), $row);
               }
             }
           });
@@ -4482,7 +4485,7 @@ const rowsViewSelectionExtenderMixin = Base => class RowsViewSelectionExtender e
       }
       const selectionMode = this.option(SELECTION_MODE);
       if (selectionMode !== 'none') {
-        this.setAria('selected', isSelected, $row);
+        this.setAria('selected', String(isSelected), $row);
       }
     }
     return $row;
@@ -5703,8 +5706,8 @@ exports.NavigationStrategyMatrix = NavigationStrategyMatrix;
 
 
 exports.version = exports.fullVersion = void 0;
-const version = exports.version = '25.2.2';
-const fullVersion = exports.fullVersion = '25.2.2';
+const version = exports.version = '26.1.0';
+const fullVersion = exports.fullVersion = '26.1.0';
 
 /***/ }),
 
@@ -6523,36 +6526,36 @@ class Content extends _inferno.Component {
             this.focusFirstCardAfterReload = true;
           },
           Space: event => {
-            var _this$props$cardProps9, _this$props$cardProps10;
-            (_this$props$cardProps9 = this.props.cardProps) === null || _this$props$cardProps9 === void 0 || (_this$props$cardProps10 = _this$props$cardProps9.selectCard) === null || _this$props$cardProps10 === void 0 || _this$props$cardProps10.call(_this$props$cardProps9, item, {
+            var _this$props$cardProps9, _this$props$cardProps0;
+            (_this$props$cardProps9 = this.props.cardProps) === null || _this$props$cardProps9 === void 0 || (_this$props$cardProps0 = _this$props$cardProps9.selectCard) === null || _this$props$cardProps0 === void 0 || _this$props$cardProps0.call(_this$props$cardProps9, item, {
               control: (0, _utils.isCommandKeyPressed)(event),
               shift: event.shiftKey,
               needToUpdateCheckboxes: true
             });
           },
           'Space+shift': event => {
-            var _this$props$cardProps11, _this$props$cardProps12;
-            (_this$props$cardProps11 = this.props.cardProps) === null || _this$props$cardProps11 === void 0 || (_this$props$cardProps12 = _this$props$cardProps11.selectCard) === null || _this$props$cardProps12 === void 0 || _this$props$cardProps12.call(_this$props$cardProps11, item, {
+            var _this$props$cardProps1, _this$props$cardProps10;
+            (_this$props$cardProps1 = this.props.cardProps) === null || _this$props$cardProps1 === void 0 || (_this$props$cardProps10 = _this$props$cardProps1.selectCard) === null || _this$props$cardProps10 === void 0 || _this$props$cardProps10.call(_this$props$cardProps1, item, {
               control: (0, _utils.isCommandKeyPressed)(event),
               shift: event.shiftKey,
               needToUpdateCheckboxes: true
             });
           },
           'a+ctrl': () => {
-            var _this$props$cardProps13, _this$props$cardProps14;
-            (_this$props$cardProps13 = this.props.cardProps) === null || _this$props$cardProps13 === void 0 || (_this$props$cardProps14 = _this$props$cardProps13.onSelectAllCards) === null || _this$props$cardProps14 === void 0 || _this$props$cardProps14.call(_this$props$cardProps13);
+            var _this$props$cardProps11, _this$props$cardProps12;
+            (_this$props$cardProps11 = this.props.cardProps) === null || _this$props$cardProps11 === void 0 || (_this$props$cardProps12 = _this$props$cardProps11.onSelectAllCards) === null || _this$props$cardProps12 === void 0 || _this$props$cardProps12.call(_this$props$cardProps11);
           },
           'f+ctrl': () => {
-            var _this$props$cardProps15, _this$props$cardProps16;
-            (_this$props$cardProps15 = this.props.cardProps) === null || _this$props$cardProps15 === void 0 || (_this$props$cardProps16 = _this$props$cardProps15.onSearchFocus) === null || _this$props$cardProps16 === void 0 || _this$props$cardProps16.call(_this$props$cardProps15);
+            var _this$props$cardProps13, _this$props$cardProps14;
+            (_this$props$cardProps13 = this.props.cardProps) === null || _this$props$cardProps13 === void 0 || (_this$props$cardProps14 = _this$props$cardProps13.onSearchFocus) === null || _this$props$cardProps14 === void 0 || _this$props$cardProps14.call(_this$props$cardProps13);
           },
           'Enter+shift': () => {
-            var _this$props$cardProps17, _this$props$cardProps18;
-            (_this$props$cardProps17 = this.props.cardProps) === null || _this$props$cardProps17 === void 0 || (_this$props$cardProps18 = _this$props$cardProps17.onEdit) === null || _this$props$cardProps18 === void 0 || _this$props$cardProps18.call(_this$props$cardProps17, item.key, this.cardElementRefs[idx].current ?? undefined);
+            var _this$props$cardProps15, _this$props$cardProps16;
+            (_this$props$cardProps15 = this.props.cardProps) === null || _this$props$cardProps15 === void 0 || (_this$props$cardProps16 = _this$props$cardProps15.onEdit) === null || _this$props$cardProps16 === void 0 || _this$props$cardProps16.call(_this$props$cardProps15, item.key, this.cardElementRefs[idx].current ?? undefined);
           },
           Delete: () => {
-            var _this$props$cardProps19, _this$props$cardProps20;
-            (_this$props$cardProps19 = this.props.cardProps) === null || _this$props$cardProps19 === void 0 || (_this$props$cardProps20 = _this$props$cardProps19.onDelete) === null || _this$props$cardProps20 === void 0 || _this$props$cardProps20.call(_this$props$cardProps19, item.key, this.cardElementRefs[idx].current ?? undefined);
+            var _this$props$cardProps17, _this$props$cardProps18;
+            (_this$props$cardProps17 = this.props.cardProps) === null || _this$props$cardProps17 === void 0 || (_this$props$cardProps18 = _this$props$cardProps17.onDelete) === null || _this$props$cardProps18 === void 0 || _this$props$cardProps18.call(_this$props$cardProps17, item.key, this.cardElementRefs[idx].current ?? undefined);
           }
         },
         "caughtEventPreventDefault": true,
@@ -6787,7 +6790,7 @@ var _row = __webpack_require__(21541);
 var _table = __webpack_require__(46189);
 var _time_panel_cell = __webpack_require__(88332);
 const _excluded = ["timePanelData", "viewContext", "tableRef", "timeCellTemplate"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const TimePanelTableDefaultProps = exports.TimePanelTableDefaultProps = {
   timePanelData: {
     groupedData: [],
@@ -19611,6 +19614,14 @@ const dxChart = _m_advanced_chart.AdvancedChart.inherit({
   },
   _handleSeriesDataUpdated() {
     const viewport = new _range.Range();
+    this._argumentAxes.forEach(axis => {
+      if (Array.isArray(axis._majorTicks)) {
+        axis._majorTicks.forEach(tick => tick.removeLabel && tick.removeLabel());
+      }
+      if (Array.isArray(axis._minorTicks)) {
+        axis._minorTicks.forEach(tick => tick.removeLabel && tick.removeLabel());
+      }
+    });
     this.series.forEach(s => {
       viewport.addRange(s.getArgumentRange());
     });
@@ -20337,7 +20348,7 @@ var FilterControllerModule = _interopRequireWildcard(__webpack_require__(92743))
 var _items_controller = __webpack_require__(58761);
 var _index8 = __webpack_require__(58529);
 var Lifecycle = _interopRequireWildcard(__webpack_require__(29589));
-var _index10 = __webpack_require__(8927);
+var _index0 = __webpack_require__(8927);
 var _view2 = __webpack_require__(93825);
 var _controller3 = __webpack_require__(28355);
 var _view3 = __webpack_require__(29366);
@@ -20345,8 +20356,7 @@ var SelectionControllerModule = _interopRequireWildcard(__webpack_require__(9977
 var SortingControllerModule = _interopRequireWildcard(__webpack_require__(37386));
 var _controller4 = __webpack_require__(34272);
 var _view4 = __webpack_require__(5061);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function register(diContext) {
   diContext.register(DataControllerModule.DataController);
   diContext.register(DataControllerModule.CompatibilityDataController);
@@ -20378,7 +20388,7 @@ function register(diContext) {
   diContext.register(_view_controller.HeaderFilterViewController);
   diContext.register(_index8.KeyboardNavigationController);
   diContext.register(_controller.AccessibilityController);
-  diContext.register(_index10.OptionsValidationController);
+  diContext.register(_index0.OptionsValidationController);
   diContext.register(Lifecycle.Controller);
 }
 
@@ -22691,8 +22701,7 @@ var _dom = __webpack_require__(3024);
 var _m_keyboard_navigation_core = __webpack_require__(59796);
 var _m_keyboard_navigation_utils = __webpack_require__(93734);
 var _scrollable_a11y = __webpack_require__(47526);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file */
 
@@ -25793,3890 +25802,6 @@ var _default = exports["default"] = [{
     name: 'generic.light.compact'
   }
 }];
-
-/***/ }),
-
-/***/ 4755:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  ALL_WEEKDAYS: () => (/* reexport */ ALL_WEEKDAYS),
-  Frequency: () => (/* reexport */ Frequency),
-  RRule: () => (/* reexport */ RRule),
-  RRuleSet: () => (/* reexport */ RRuleSet),
-  Weekday: () => (/* reexport */ Weekday),
-  datetime: () => (/* reexport */ datetime),
-  rrulestr: () => (/* reexport */ rrulestr)
-});
-
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/weekday.js
-// =============================================================================
-// Weekday
-// =============================================================================
-var ALL_WEEKDAYS = [
-    'MO',
-    'TU',
-    'WE',
-    'TH',
-    'FR',
-    'SA',
-    'SU',
-];
-var Weekday = /** @class */ (function () {
-    function Weekday(weekday, n) {
-        if (n === 0)
-            throw new Error("Can't create weekday with n == 0");
-        this.weekday = weekday;
-        this.n = n;
-    }
-    Weekday.fromStr = function (str) {
-        return new Weekday(ALL_WEEKDAYS.indexOf(str));
-    };
-    // __call__ - Cannot call the object directly, do it through
-    // e.g. RRule.TH.nth(-1) instead,
-    Weekday.prototype.nth = function (n) {
-        return this.n === n ? this : new Weekday(this.weekday, n);
-    };
-    // __eq__
-    Weekday.prototype.equals = function (other) {
-        return this.weekday === other.weekday && this.n === other.n;
-    };
-    // __repr__
-    Weekday.prototype.toString = function () {
-        var s = ALL_WEEKDAYS[this.weekday];
-        if (this.n)
-            s = (this.n > 0 ? '+' : '') + String(this.n) + s;
-        return s;
-    };
-    Weekday.prototype.getJsWeekday = function () {
-        return this.weekday === 6 ? 0 : this.weekday + 1;
-    };
-    return Weekday;
-}());
-
-//# sourceMappingURL=weekday.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/helpers.js
-// =============================================================================
-// Helper functions
-// =============================================================================
-
-var isPresent = function (value) {
-    return value !== null && value !== undefined;
-};
-var isNumber = function (value) {
-    return typeof value === 'number';
-};
-var isWeekdayStr = function (value) {
-    return typeof value === 'string' && ALL_WEEKDAYS.includes(value);
-};
-var isArray = Array.isArray;
-/**
- * Simplified version of python's range()
- */
-var range = function (start, end) {
-    if (end === void 0) { end = start; }
-    if (arguments.length === 1) {
-        end = start;
-        start = 0;
-    }
-    var rang = [];
-    for (var i = start; i < end; i++)
-        rang.push(i);
-    return rang;
-};
-var clone = function (array) {
-    return [].concat(array);
-};
-var repeat = function (value, times) {
-    var i = 0;
-    var array = [];
-    if (isArray(value)) {
-        for (; i < times; i++)
-            array[i] = [].concat(value);
-    }
-    else {
-        for (; i < times; i++)
-            array[i] = value;
-    }
-    return array;
-};
-var toArray = function (item) {
-    if (isArray(item)) {
-        return item;
-    }
-    return [item];
-};
-function padStart(item, targetLength, padString) {
-    if (padString === void 0) { padString = ' '; }
-    var str = String(item);
-    targetLength = targetLength >> 0;
-    if (str.length > targetLength) {
-        return String(str);
-    }
-    targetLength = targetLength - str.length;
-    if (targetLength > padString.length) {
-        padString += repeat(padString, targetLength / padString.length);
-    }
-    return padString.slice(0, targetLength) + String(str);
-}
-/**
- * Python like split
- */
-var split = function (str, sep, num) {
-    var splits = str.split(sep);
-    return num
-        ? splits.slice(0, num).concat([splits.slice(num).join(sep)])
-        : splits;
-};
-/**
- * closure/goog/math/math.js:modulo
- * Copyright 2006 The Closure Library Authors.
- * The % operator in JavaScript returns the remainder of a / b, but differs from
- * some other languages in that the result will have the same sign as the
- * dividend. For example, -1 % 8 == -1, whereas in some other languages
- * (such as Python) the result would be 7. This function emulates the more
- * correct modulo behavior, which is useful for certain applications such as
- * calculating an offset index in a circular list.
- *
- * @param {number} a The dividend.
- * @param {number} b The divisor.
- * @return {number} a % b where the result is between 0 and b (either 0 <= x < b
- * or b < x <= 0, depending on the sign of b).
- */
-var pymod = function (a, b) {
-    var r = a % b;
-    // If r and b differ in sign, add b to wrap the result to the correct sign.
-    return r * b < 0 ? r + b : r;
-};
-/**
- * @see: <http://docs.python.org/library/functions.html#divmod>
- */
-var divmod = function (a, b) {
-    return { div: Math.floor(a / b), mod: pymod(a, b) };
-};
-var empty = function (obj) {
-    return !isPresent(obj) || obj.length === 0;
-};
-/**
- * Python-like boolean
- *
- * @return {Boolean} value of an object/primitive, taking into account
- * the fact that in Python an empty list's/tuple's
- * boolean value is False, whereas in JS it's true
- */
-var notEmpty = function (obj) {
-    return !empty(obj);
-};
-/**
- * Return true if a value is in an array
- */
-var includes = function (arr, val) {
-    return notEmpty(arr) && arr.indexOf(val) !== -1;
-};
-//# sourceMappingURL=helpers.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/dateutil.js
-
-var datetime = function (y, m, d, h, i, s) {
-    if (h === void 0) { h = 0; }
-    if (i === void 0) { i = 0; }
-    if (s === void 0) { s = 0; }
-    return new Date(Date.UTC(y, m - 1, d, h, i, s));
-};
-/**
- * General date-related utilities.
- * Also handles several incompatibilities between JavaScript and Python
- *
- */
-var MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-/**
- * Number of milliseconds of one day
- */
-var ONE_DAY = 1000 * 60 * 60 * 24;
-/**
- * @see: <http://docs.python.org/library/datetime.html#datetime.MAXYEAR>
- */
-var MAXYEAR = 9999;
-/**
- * Python uses 1-Jan-1 as the base for calculating ordinals but we don't
- * want to confuse the JS engine with milliseconds > Number.MAX_NUMBER,
- * therefore we use 1-Jan-1970 instead
- */
-var ORDINAL_BASE = datetime(1970, 1, 1);
-/**
- * Python: MO-SU: 0 - 6
- * JS: SU-SAT 0 - 6
- */
-var PY_WEEKDAYS = [6, 0, 1, 2, 3, 4, 5];
-/**
- * py_date.timetuple()[7]
- */
-var getYearDay = function (date) {
-    var dateNoTime = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-    return (Math.ceil((dateNoTime.valueOf() - new Date(date.getUTCFullYear(), 0, 1).valueOf()) /
-        ONE_DAY) + 1);
-};
-var isLeapYear = function (year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-};
-var isDate = function (value) {
-    return value instanceof Date;
-};
-var isValidDate = function (value) {
-    return isDate(value) && !isNaN(value.getTime());
-};
-/**
- * @return {Number} the date's timezone offset in ms
- */
-var tzOffset = function (date) {
-    return date.getTimezoneOffset() * 60 * 1000;
-};
-/**
- * @see: <http://www.mcfedries.com/JavaScript/DaysBetween.asp>
- */
-var daysBetween = function (date1, date2) {
-    // The number of milliseconds in one day
-    // Convert both dates to milliseconds
-    var date1ms = date1.getTime();
-    var date2ms = date2.getTime();
-    // Calculate the difference in milliseconds
-    var differencems = date1ms - date2ms;
-    // Convert back to days and return
-    return Math.round(differencems / ONE_DAY);
-};
-/**
- * @see: <http://docs.python.org/library/datetime.html#datetime.date.toordinal>
- */
-var toOrdinal = function (date) {
-    return daysBetween(date, ORDINAL_BASE);
-};
-/**
- * @see - <http://docs.python.org/library/datetime.html#datetime.date.fromordinal>
- */
-var fromOrdinal = function (ordinal) {
-    return new Date(ORDINAL_BASE.getTime() + ordinal * ONE_DAY);
-};
-var getMonthDays = function (date) {
-    var month = date.getUTCMonth();
-    return month === 1 && isLeapYear(date.getUTCFullYear())
-        ? 29
-        : MONTH_DAYS[month];
-};
-/**
- * @return {Number} python-like weekday
- */
-var getWeekday = function (date) {
-    return PY_WEEKDAYS[date.getUTCDay()];
-};
-/**
- * @see: <http://docs.python.org/library/calendar.html#calendar.monthrange>
- */
-var monthRange = function (year, month) {
-    var date = datetime(year, month + 1, 1);
-    return [getWeekday(date), getMonthDays(date)];
-};
-/**
- * @see: <http://docs.python.org/library/datetime.html#datetime.datetime.combine>
- */
-var combine = function (date, time) {
-    time = time || date;
-    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds()));
-};
-var dateutil_clone = function (date) {
-    var dolly = new Date(date.getTime());
-    return dolly;
-};
-var cloneDates = function (dates) {
-    var clones = [];
-    for (var i = 0; i < dates.length; i++) {
-        clones.push(dateutil_clone(dates[i]));
-    }
-    return clones;
-};
-/**
- * Sorts an array of Date or Time objects
- */
-var sort = function (dates) {
-    dates.sort(function (a, b) {
-        return a.getTime() - b.getTime();
-    });
-};
-var timeToUntilString = function (time, utc) {
-    if (utc === void 0) { utc = true; }
-    var date = new Date(time);
-    return [
-        padStart(date.getUTCFullYear().toString(), 4, '0'),
-        padStart(date.getUTCMonth() + 1, 2, '0'),
-        padStart(date.getUTCDate(), 2, '0'),
-        'T',
-        padStart(date.getUTCHours(), 2, '0'),
-        padStart(date.getUTCMinutes(), 2, '0'),
-        padStart(date.getUTCSeconds(), 2, '0'),
-        utc ? 'Z' : '',
-    ].join('');
-};
-var untilStringToDate = function (until) {
-    var re = /^(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2})Z?)?$/;
-    var bits = re.exec(until);
-    if (!bits)
-        throw new Error("Invalid UNTIL value: ".concat(until));
-    return new Date(Date.UTC(parseInt(bits[1], 10), parseInt(bits[2], 10) - 1, parseInt(bits[3], 10), parseInt(bits[5], 10) || 0, parseInt(bits[6], 10) || 0, parseInt(bits[7], 10) || 0));
-};
-var dateTZtoISO8601 = function (date, timeZone) {
-    // date format for sv-SE is almost ISO8601
-    var dateStr = date.toLocaleString('sv-SE', { timeZone: timeZone });
-    // '2023-02-07 10:41:36'
-    return dateStr.replace(' ', 'T') + 'Z';
-};
-var dateInTimeZone = function (date, timeZone) {
-    var localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // Date constructor can only reliably parse dates in ISO8601 format
-    var dateInLocalTZ = new Date(dateTZtoISO8601(date, localTimeZone));
-    var dateInTargetTZ = new Date(dateTZtoISO8601(date, timeZone !== null && timeZone !== void 0 ? timeZone : 'UTC'));
-    var tzOffset = dateInTargetTZ.getTime() - dateInLocalTZ.getTime();
-    return new Date(date.getTime() - tzOffset);
-};
-//# sourceMappingURL=dateutil.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterresult.js
-/**
- * This class helps us to emulate python's generators, sorta.
- */
-var IterResult = /** @class */ (function () {
-    function IterResult(method, args) {
-        this.minDate = null;
-        this.maxDate = null;
-        this._result = [];
-        this.total = 0;
-        this.method = method;
-        this.args = args;
-        if (method === 'between') {
-            this.maxDate = args.inc
-                ? args.before
-                : new Date(args.before.getTime() - 1);
-            this.minDate = args.inc ? args.after : new Date(args.after.getTime() + 1);
-        }
-        else if (method === 'before') {
-            this.maxDate = args.inc ? args.dt : new Date(args.dt.getTime() - 1);
-        }
-        else if (method === 'after') {
-            this.minDate = args.inc ? args.dt : new Date(args.dt.getTime() + 1);
-        }
-    }
-    /**
-     * Possibly adds a date into the result.
-     *
-     * @param {Date} date - the date isn't necessarly added to the result
-     * list (if it is too late/too early)
-     * @return {Boolean} true if it makes sense to continue the iteration
-     * false if we're done.
-     */
-    IterResult.prototype.accept = function (date) {
-        ++this.total;
-        var tooEarly = this.minDate && date < this.minDate;
-        var tooLate = this.maxDate && date > this.maxDate;
-        if (this.method === 'between') {
-            if (tooEarly)
-                return true;
-            if (tooLate)
-                return false;
-        }
-        else if (this.method === 'before') {
-            if (tooLate)
-                return false;
-        }
-        else if (this.method === 'after') {
-            if (tooEarly)
-                return true;
-            this.add(date);
-            return false;
-        }
-        return this.add(date);
-    };
-    /**
-     *
-     * @param {Date} date that is part of the result.
-     * @return {Boolean} whether we are interested in more values.
-     */
-    IterResult.prototype.add = function (date) {
-        this._result.push(date);
-        return true;
-    };
-    /**
-     * 'before' and 'after' return only one date, whereas 'all'
-     * and 'between' an array.
-     *
-     * @return {Date,Array?}
-     */
-    IterResult.prototype.getValue = function () {
-        var res = this._result;
-        switch (this.method) {
-            case 'all':
-            case 'between':
-                return res;
-            case 'before':
-            case 'after':
-            default:
-                return (res.length ? res[res.length - 1] : null);
-        }
-    };
-    IterResult.prototype.clone = function () {
-        return new IterResult(this.method, this.args);
-    };
-    return IterResult;
-}());
-/* harmony default export */ const iterresult = (IterResult);
-//# sourceMappingURL=iterresult.js.map
-;// ../../node_modules/.pnpm/tslib@2.6.3/node_modules/tslib/tslib.es6.mjs
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol */
-
-var extendStatics = function(d, b) {
-  extendStatics = Object.setPrototypeOf ||
-      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-      function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-  return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-  if (typeof b !== "function" && b !== null)
-      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-  extendStatics(d, b);
-  function __() { this.constructor = d; }
-  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-var __assign = function() {
-  __assign = Object.assign || function __assign(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-          s = arguments[i];
-          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-      }
-      return t;
-  }
-  return __assign.apply(this, arguments);
-}
-
-function __rest(s, e) {
-  var t = {};
-  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-      t[p] = s[p];
-  if (s != null && typeof Object.getOwnPropertySymbols === "function")
-      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-          if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-              t[p[i]] = s[p[i]];
-      }
-  return t;
-}
-
-function __decorate(decorators, target, key, desc) {
-  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
-}
-
-function __param(paramIndex, decorator) {
-  return function (target, key) { decorator(target, key, paramIndex); }
-}
-
-function __esDecorate(ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
-  function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
-  var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
-  var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
-  var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
-  var _, done = false;
-  for (var i = decorators.length - 1; i >= 0; i--) {
-      var context = {};
-      for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
-      for (var p in contextIn.access) context.access[p] = contextIn.access[p];
-      context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
-      var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
-      if (kind === "accessor") {
-          if (result === void 0) continue;
-          if (result === null || typeof result !== "object") throw new TypeError("Object expected");
-          if (_ = accept(result.get)) descriptor.get = _;
-          if (_ = accept(result.set)) descriptor.set = _;
-          if (_ = accept(result.init)) initializers.unshift(_);
-      }
-      else if (_ = accept(result)) {
-          if (kind === "field") initializers.unshift(_);
-          else descriptor[key] = _;
-      }
-  }
-  if (target) Object.defineProperty(target, contextIn.name, descriptor);
-  done = true;
-};
-
-function __runInitializers(thisArg, initializers, value) {
-  var useValue = arguments.length > 2;
-  for (var i = 0; i < initializers.length; i++) {
-      value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-  }
-  return useValue ? value : void 0;
-};
-
-function __propKey(x) {
-  return typeof x === "symbol" ? x : "".concat(x);
-};
-
-function __setFunctionName(f, name, prefix) {
-  if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
-  return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
-};
-
-function __metadata(metadataKey, metadataValue) {
-  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
-}
-
-function __awaiter(thisArg, _arguments, P, generator) {
-  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-  return new (P || (P = Promise))(function (resolve, reject) {
-      function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-      function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-      function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-}
-
-function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-  function verb(n) { return function (v) { return step([n, v]); }; }
-  function step(op) {
-      if (f) throw new TypeError("Generator is already executing.");
-      while (g && (g = 0, op[0] && (_ = 0)), _) try {
-          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-          if (y = 0, t) op = [op[0] & 2, t.value];
-          switch (op[0]) {
-              case 0: case 1: t = op; break;
-              case 4: _.label++; return { value: op[1], done: false };
-              case 5: _.label++; y = op[1]; op = [0]; continue;
-              case 7: op = _.ops.pop(); _.trys.pop(); continue;
-              default:
-                  if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                  if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                  if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                  if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                  if (t[2]) _.ops.pop();
-                  _.trys.pop(); continue;
-          }
-          op = body.call(thisArg, _);
-      } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-      if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-  }
-}
-
-var __createBinding = Object.create ? (function(o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-  }
-  Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-function __exportStar(m, o) {
-  for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
-}
-
-function __values(o) {
-  var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-  if (m) return m.call(o);
-  if (o && typeof o.length === "number") return {
-      next: function () {
-          if (o && i >= o.length) o = void 0;
-          return { value: o && o[i++], done: !o };
-      }
-  };
-  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-}
-
-function __read(o, n) {
-  var m = typeof Symbol === "function" && o[Symbol.iterator];
-  if (!m) return o;
-  var i = m.call(o), r, ar = [], e;
-  try {
-      while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-  }
-  catch (error) { e = { error: error }; }
-  finally {
-      try {
-          if (r && !r.done && (m = i["return"])) m.call(i);
-      }
-      finally { if (e) throw e.error; }
-  }
-  return ar;
-}
-
-/** @deprecated */
-function __spread() {
-  for (var ar = [], i = 0; i < arguments.length; i++)
-      ar = ar.concat(__read(arguments[i]));
-  return ar;
-}
-
-/** @deprecated */
-function __spreadArrays() {
-  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-  for (var r = Array(s), k = 0, i = 0; i < il; i++)
-      for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-          r[k] = a[j];
-  return r;
-}
-
-function __spreadArray(to, from, pack) {
-  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-      if (ar || !(i in from)) {
-          if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-          ar[i] = from[i];
-      }
-  }
-  return to.concat(ar || Array.prototype.slice.call(from));
-}
-
-function __await(v) {
-  return this instanceof __await ? (this.v = v, this) : new __await(v);
-}
-
-function __asyncGenerator(thisArg, _arguments, generator) {
-  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-  var g = generator.apply(thisArg, _arguments || []), i, q = [];
-  return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
-  function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
-  function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
-  function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-  function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-  function fulfill(value) { resume("next", value); }
-  function reject(value) { resume("throw", value); }
-  function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-}
-
-function __asyncDelegator(o) {
-  var i, p;
-  return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-  function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
-}
-
-function __asyncValues(o) {
-  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-  var m = o[Symbol.asyncIterator], i;
-  return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-  function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-  function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-}
-
-function __makeTemplateObject(cooked, raw) {
-  if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-  return cooked;
-};
-
-var __setModuleDefault = Object.create ? (function(o, v) {
-  Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-  o["default"] = v;
-};
-
-function __importStar(mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-  __setModuleDefault(result, mod);
-  return result;
-}
-
-function __importDefault(mod) {
-  return (mod && mod.__esModule) ? mod : { default: mod };
-}
-
-function __classPrivateFieldGet(receiver, state, kind, f) {
-  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-}
-
-function __classPrivateFieldSet(receiver, state, value, kind, f) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-}
-
-function __classPrivateFieldIn(state, receiver) {
-  if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
-  return typeof state === "function" ? receiver === state : state.has(receiver);
-}
-
-function __addDisposableResource(env, value, async) {
-  if (value !== null && value !== void 0) {
-    if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-    var dispose, inner;
-    if (async) {
-      if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
-      dispose = value[Symbol.asyncDispose];
-    }
-    if (dispose === void 0) {
-      if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
-      dispose = value[Symbol.dispose];
-      if (async) inner = dispose;
-    }
-    if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
-    if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
-    env.stack.push({ value: value, dispose: dispose, async: async });
-  }
-  else if (async) {
-    env.stack.push({ async: true });
-  }
-  return value;
-}
-
-var _SuppressedError = typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-  var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
-
-function __disposeResources(env) {
-  function fail(e) {
-    env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
-    env.hasError = true;
-  }
-  function next() {
-    while (env.stack.length) {
-      var rec = env.stack.pop();
-      try {
-        var result = rec.dispose && rec.dispose.call(rec.value);
-        if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
-      }
-      catch (e) {
-          fail(e);
-      }
-    }
-    if (env.hasError) throw env.error;
-  }
-  return next();
-}
-
-/* harmony default export */ const tslib_es6 = ({
-  __extends,
-  __assign,
-  __rest,
-  __decorate,
-  __param,
-  __metadata,
-  __awaiter,
-  __generator,
-  __createBinding,
-  __exportStar,
-  __values,
-  __read,
-  __spread,
-  __spreadArrays,
-  __spreadArray,
-  __await,
-  __asyncGenerator,
-  __asyncDelegator,
-  __asyncValues,
-  __makeTemplateObject,
-  __importStar,
-  __importDefault,
-  __classPrivateFieldGet,
-  __classPrivateFieldSet,
-  __classPrivateFieldIn,
-  __addDisposableResource,
-  __disposeResources,
-});
-
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/callbackiterresult.js
-
-
-/**
- * IterResult subclass that calls a callback function on each add,
- * and stops iterating when the callback returns false.
- */
-var CallbackIterResult = /** @class */ (function (_super) {
-    __extends(CallbackIterResult, _super);
-    function CallbackIterResult(method, args, iterator) {
-        var _this = _super.call(this, method, args) || this;
-        _this.iterator = iterator;
-        return _this;
-    }
-    CallbackIterResult.prototype.add = function (date) {
-        if (this.iterator(date, this._result.length)) {
-            this._result.push(date);
-            return true;
-        }
-        return false;
-    };
-    return CallbackIterResult;
-}(iterresult));
-/* harmony default export */ const callbackiterresult = (CallbackIterResult);
-//# sourceMappingURL=callbackiterresult.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/i18n.js
-// =============================================================================
-// i18n
-// =============================================================================
-var ENGLISH = {
-    dayNames: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-    ],
-    monthNames: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    ],
-    tokens: {
-        SKIP: /^[ \r\n\t]+|^\.$/,
-        number: /^[1-9][0-9]*/,
-        numberAsText: /^(one|two|three)/i,
-        every: /^every/i,
-        'day(s)': /^days?/i,
-        'weekday(s)': /^weekdays?/i,
-        'week(s)': /^weeks?/i,
-        'hour(s)': /^hours?/i,
-        'minute(s)': /^minutes?/i,
-        'month(s)': /^months?/i,
-        'year(s)': /^years?/i,
-        on: /^(on|in)/i,
-        at: /^(at)/i,
-        the: /^the/i,
-        first: /^first/i,
-        second: /^second/i,
-        third: /^third/i,
-        nth: /^([1-9][0-9]*)(\.|th|nd|rd|st)/i,
-        last: /^last/i,
-        for: /^for/i,
-        'time(s)': /^times?/i,
-        until: /^(un)?til/i,
-        monday: /^mo(n(day)?)?/i,
-        tuesday: /^tu(e(s(day)?)?)?/i,
-        wednesday: /^we(d(n(esday)?)?)?/i,
-        thursday: /^th(u(r(sday)?)?)?/i,
-        friday: /^fr(i(day)?)?/i,
-        saturday: /^sa(t(urday)?)?/i,
-        sunday: /^su(n(day)?)?/i,
-        january: /^jan(uary)?/i,
-        february: /^feb(ruary)?/i,
-        march: /^mar(ch)?/i,
-        april: /^apr(il)?/i,
-        may: /^may/i,
-        june: /^june?/i,
-        july: /^july?/i,
-        august: /^aug(ust)?/i,
-        september: /^sep(t(ember)?)?/i,
-        october: /^oct(ober)?/i,
-        november: /^nov(ember)?/i,
-        december: /^dec(ember)?/i,
-        comma: /^(,\s*|(and|or)\s*)+/i,
-    },
-};
-/* harmony default export */ const i18n = (ENGLISH);
-//# sourceMappingURL=i18n.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/totext.js
-
-
-
-// =============================================================================
-// Helper functions
-// =============================================================================
-/**
- * Return true if a value is in an array
- */
-var contains = function (arr, val) {
-    return arr.indexOf(val) !== -1;
-};
-var defaultGetText = function (id) { return id.toString(); };
-var defaultDateFormatter = function (year, month, day) { return "".concat(month, " ").concat(day, ", ").concat(year); };
-/**
- *
- * @param {RRule} rrule
- * Optional:
- * @param {Function} gettext function
- * @param {Object} language definition
- * @constructor
- */
-var ToText = /** @class */ (function () {
-    function ToText(rrule, gettext, language, dateFormatter) {
-        if (gettext === void 0) { gettext = defaultGetText; }
-        if (language === void 0) { language = i18n; }
-        if (dateFormatter === void 0) { dateFormatter = defaultDateFormatter; }
-        this.text = [];
-        this.language = language || i18n;
-        this.gettext = gettext;
-        this.dateFormatter = dateFormatter;
-        this.rrule = rrule;
-        this.options = rrule.options;
-        this.origOptions = rrule.origOptions;
-        if (this.origOptions.bymonthday) {
-            var bymonthday = [].concat(this.options.bymonthday);
-            var bynmonthday = [].concat(this.options.bynmonthday);
-            bymonthday.sort(function (a, b) { return a - b; });
-            bynmonthday.sort(function (a, b) { return b - a; });
-            // 1, 2, 3, .., -5, -4, -3, ..
-            this.bymonthday = bymonthday.concat(bynmonthday);
-            if (!this.bymonthday.length)
-                this.bymonthday = null;
-        }
-        if (isPresent(this.origOptions.byweekday)) {
-            var byweekday = !isArray(this.origOptions.byweekday)
-                ? [this.origOptions.byweekday]
-                : this.origOptions.byweekday;
-            var days = String(byweekday);
-            this.byweekday = {
-                allWeeks: byweekday.filter(function (weekday) {
-                    return !weekday.n;
-                }),
-                someWeeks: byweekday.filter(function (weekday) {
-                    return Boolean(weekday.n);
-                }),
-                isWeekdays: days.indexOf('MO') !== -1 &&
-                    days.indexOf('TU') !== -1 &&
-                    days.indexOf('WE') !== -1 &&
-                    days.indexOf('TH') !== -1 &&
-                    days.indexOf('FR') !== -1 &&
-                    days.indexOf('SA') === -1 &&
-                    days.indexOf('SU') === -1,
-                isEveryDay: days.indexOf('MO') !== -1 &&
-                    days.indexOf('TU') !== -1 &&
-                    days.indexOf('WE') !== -1 &&
-                    days.indexOf('TH') !== -1 &&
-                    days.indexOf('FR') !== -1 &&
-                    days.indexOf('SA') !== -1 &&
-                    days.indexOf('SU') !== -1,
-            };
-            var sortWeekDays = function (a, b) {
-                return a.weekday - b.weekday;
-            };
-            this.byweekday.allWeeks.sort(sortWeekDays);
-            this.byweekday.someWeeks.sort(sortWeekDays);
-            if (!this.byweekday.allWeeks.length)
-                this.byweekday.allWeeks = null;
-            if (!this.byweekday.someWeeks.length)
-                this.byweekday.someWeeks = null;
-        }
-        else {
-            this.byweekday = null;
-        }
-    }
-    /**
-     * Test whether the rrule can be fully converted to text.
-     *
-     * @param {RRule} rrule
-     * @return {Boolean}
-     */
-    ToText.isFullyConvertible = function (rrule) {
-        var canConvert = true;
-        if (!(rrule.options.freq in ToText.IMPLEMENTED))
-            return false;
-        if (rrule.origOptions.until && rrule.origOptions.count)
-            return false;
-        for (var key in rrule.origOptions) {
-            if (contains(['dtstart', 'tzid', 'wkst', 'freq'], key))
-                return true;
-            if (!contains(ToText.IMPLEMENTED[rrule.options.freq], key))
-                return false;
-        }
-        return canConvert;
-    };
-    ToText.prototype.isFullyConvertible = function () {
-        return ToText.isFullyConvertible(this.rrule);
-    };
-    /**
-     * Perform the conversion. Only some of the frequencies are supported.
-     * If some of the rrule's options aren't supported, they'll
-     * be omitted from the output an "(~ approximate)" will be appended.
-     *
-     * @return {*}
-     */
-    ToText.prototype.toString = function () {
-        var gettext = this.gettext;
-        if (!(this.options.freq in ToText.IMPLEMENTED)) {
-            return gettext('RRule error: Unable to fully convert this rrule to text');
-        }
-        this.text = [gettext('every')];
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        this[RRule.FREQUENCIES[this.options.freq]]();
-        if (this.options.until) {
-            this.add(gettext('until'));
-            var until = this.options.until;
-            this.add(this.dateFormatter(until.getUTCFullYear(), this.language.monthNames[until.getUTCMonth()], until.getUTCDate()));
-        }
-        else if (this.options.count) {
-            this.add(gettext('for'))
-                .add(this.options.count.toString())
-                .add(this.plural(this.options.count) ? gettext('times') : gettext('time'));
-        }
-        if (!this.isFullyConvertible())
-            this.add(gettext('(~ approximate)'));
-        return this.text.join('');
-    };
-    ToText.prototype.HOURLY = function () {
-        var gettext = this.gettext;
-        if (this.options.interval !== 1)
-            this.add(this.options.interval.toString());
-        this.add(this.plural(this.options.interval) ? gettext('hours') : gettext('hour'));
-    };
-    ToText.prototype.MINUTELY = function () {
-        var gettext = this.gettext;
-        if (this.options.interval !== 1)
-            this.add(this.options.interval.toString());
-        this.add(this.plural(this.options.interval)
-            ? gettext('minutes')
-            : gettext('minute'));
-    };
-    ToText.prototype.DAILY = function () {
-        var gettext = this.gettext;
-        if (this.options.interval !== 1)
-            this.add(this.options.interval.toString());
-        if (this.byweekday && this.byweekday.isWeekdays) {
-            this.add(this.plural(this.options.interval)
-                ? gettext('weekdays')
-                : gettext('weekday'));
-        }
-        else {
-            this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
-        }
-        if (this.origOptions.bymonth) {
-            this.add(gettext('in'));
-            this._bymonth();
-        }
-        if (this.bymonthday) {
-            this._bymonthday();
-        }
-        else if (this.byweekday) {
-            this._byweekday();
-        }
-        else if (this.origOptions.byhour) {
-            this._byhour();
-        }
-    };
-    ToText.prototype.WEEKLY = function () {
-        var gettext = this.gettext;
-        if (this.options.interval !== 1) {
-            this.add(this.options.interval.toString()).add(this.plural(this.options.interval) ? gettext('weeks') : gettext('week'));
-        }
-        if (this.byweekday && this.byweekday.isWeekdays) {
-            if (this.options.interval === 1) {
-                this.add(this.plural(this.options.interval)
-                    ? gettext('weekdays')
-                    : gettext('weekday'));
-            }
-            else {
-                this.add(gettext('on')).add(gettext('weekdays'));
-            }
-        }
-        else if (this.byweekday && this.byweekday.isEveryDay) {
-            this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
-        }
-        else {
-            if (this.options.interval === 1)
-                this.add(gettext('week'));
-            if (this.origOptions.bymonth) {
-                this.add(gettext('in'));
-                this._bymonth();
-            }
-            if (this.bymonthday) {
-                this._bymonthday();
-            }
-            else if (this.byweekday) {
-                this._byweekday();
-            }
-            if (this.origOptions.byhour) {
-                this._byhour();
-            }
-        }
-    };
-    ToText.prototype.MONTHLY = function () {
-        var gettext = this.gettext;
-        if (this.origOptions.bymonth) {
-            if (this.options.interval !== 1) {
-                this.add(this.options.interval.toString()).add(gettext('months'));
-                if (this.plural(this.options.interval))
-                    this.add(gettext('in'));
-            }
-            else {
-                // this.add(gettext('MONTH'))
-            }
-            this._bymonth();
-        }
-        else {
-            if (this.options.interval !== 1) {
-                this.add(this.options.interval.toString());
-            }
-            this.add(this.plural(this.options.interval)
-                ? gettext('months')
-                : gettext('month'));
-        }
-        if (this.bymonthday) {
-            this._bymonthday();
-        }
-        else if (this.byweekday && this.byweekday.isWeekdays) {
-            this.add(gettext('on')).add(gettext('weekdays'));
-        }
-        else if (this.byweekday) {
-            this._byweekday();
-        }
-    };
-    ToText.prototype.YEARLY = function () {
-        var gettext = this.gettext;
-        if (this.origOptions.bymonth) {
-            if (this.options.interval !== 1) {
-                this.add(this.options.interval.toString());
-                this.add(gettext('years'));
-            }
-            else {
-                // this.add(gettext('YEAR'))
-            }
-            this._bymonth();
-        }
-        else {
-            if (this.options.interval !== 1) {
-                this.add(this.options.interval.toString());
-            }
-            this.add(this.plural(this.options.interval) ? gettext('years') : gettext('year'));
-        }
-        if (this.bymonthday) {
-            this._bymonthday();
-        }
-        else if (this.byweekday) {
-            this._byweekday();
-        }
-        if (this.options.byyearday) {
-            this.add(gettext('on the'))
-                .add(this.list(this.options.byyearday, this.nth, gettext('and')))
-                .add(gettext('day'));
-        }
-        if (this.options.byweekno) {
-            this.add(gettext('in'))
-                .add(this.plural(this.options.byweekno.length)
-                ? gettext('weeks')
-                : gettext('week'))
-                .add(this.list(this.options.byweekno, undefined, gettext('and')));
-        }
-    };
-    ToText.prototype._bymonthday = function () {
-        var gettext = this.gettext;
-        if (this.byweekday && this.byweekday.allWeeks) {
-            this.add(gettext('on'))
-                .add(this.list(this.byweekday.allWeeks, this.weekdaytext, gettext('or')))
-                .add(gettext('the'))
-                .add(this.list(this.bymonthday, this.nth, gettext('or')));
-        }
-        else {
-            this.add(gettext('on the')).add(this.list(this.bymonthday, this.nth, gettext('and')));
-        }
-        // this.add(gettext('DAY'))
-    };
-    ToText.prototype._byweekday = function () {
-        var gettext = this.gettext;
-        if (this.byweekday.allWeeks && !this.byweekday.isWeekdays) {
-            this.add(gettext('on')).add(this.list(this.byweekday.allWeeks, this.weekdaytext));
-        }
-        if (this.byweekday.someWeeks) {
-            if (this.byweekday.allWeeks)
-                this.add(gettext('and'));
-            this.add(gettext('on the')).add(this.list(this.byweekday.someWeeks, this.weekdaytext, gettext('and')));
-        }
-    };
-    ToText.prototype._byhour = function () {
-        var gettext = this.gettext;
-        this.add(gettext('at')).add(this.list(this.origOptions.byhour, undefined, gettext('and')));
-    };
-    ToText.prototype._bymonth = function () {
-        this.add(this.list(this.options.bymonth, this.monthtext, this.gettext('and')));
-    };
-    ToText.prototype.nth = function (n) {
-        n = parseInt(n.toString(), 10);
-        var nth;
-        var gettext = this.gettext;
-        if (n === -1)
-            return gettext('last');
-        var npos = Math.abs(n);
-        switch (npos) {
-            case 1:
-            case 21:
-            case 31:
-                nth = npos + gettext('st');
-                break;
-            case 2:
-            case 22:
-                nth = npos + gettext('nd');
-                break;
-            case 3:
-            case 23:
-                nth = npos + gettext('rd');
-                break;
-            default:
-                nth = npos + gettext('th');
-        }
-        return n < 0 ? nth + ' ' + gettext('last') : nth;
-    };
-    ToText.prototype.monthtext = function (m) {
-        return this.language.monthNames[m - 1];
-    };
-    ToText.prototype.weekdaytext = function (wday) {
-        var weekday = isNumber(wday) ? (wday + 1) % 7 : wday.getJsWeekday();
-        return ((wday.n ? this.nth(wday.n) + ' ' : '') +
-            this.language.dayNames[weekday]);
-    };
-    ToText.prototype.plural = function (n) {
-        return n % 100 !== 1;
-    };
-    ToText.prototype.add = function (s) {
-        this.text.push(' ');
-        this.text.push(s);
-        return this;
-    };
-    ToText.prototype.list = function (arr, callback, finalDelim, delim) {
-        var _this = this;
-        if (delim === void 0) { delim = ','; }
-        if (!isArray(arr)) {
-            arr = [arr];
-        }
-        var delimJoin = function (array, delimiter, finalDelimiter) {
-            var list = '';
-            for (var i = 0; i < array.length; i++) {
-                if (i !== 0) {
-                    if (i === array.length - 1) {
-                        list += ' ' + finalDelimiter + ' ';
-                    }
-                    else {
-                        list += delimiter + ' ';
-                    }
-                }
-                list += array[i];
-            }
-            return list;
-        };
-        callback =
-            callback ||
-                function (o) {
-                    return o.toString();
-                };
-        var realCallback = function (arg) {
-            return callback && callback.call(_this, arg);
-        };
-        if (finalDelim) {
-            return delimJoin(arr.map(realCallback), delim, finalDelim);
-        }
-        else {
-            return arr.map(realCallback).join(delim + ' ');
-        }
-    };
-    return ToText;
-}());
-/* harmony default export */ const totext = (ToText);
-//# sourceMappingURL=totext.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/parsetext.js
-
-
-// =============================================================================
-// Parser
-// =============================================================================
-var Parser = /** @class */ (function () {
-    function Parser(rules) {
-        this.done = true;
-        this.rules = rules;
-    }
-    Parser.prototype.start = function (text) {
-        this.text = text;
-        this.done = false;
-        return this.nextSymbol();
-    };
-    Parser.prototype.isDone = function () {
-        return this.done && this.symbol === null;
-    };
-    Parser.prototype.nextSymbol = function () {
-        var best;
-        var bestSymbol;
-        this.symbol = null;
-        this.value = null;
-        do {
-            if (this.done)
-                return false;
-            var rule = void 0;
-            best = null;
-            for (var name_1 in this.rules) {
-                rule = this.rules[name_1];
-                var match = rule.exec(this.text);
-                if (match) {
-                    if (best === null || match[0].length > best[0].length) {
-                        best = match;
-                        bestSymbol = name_1;
-                    }
-                }
-            }
-            if (best != null) {
-                this.text = this.text.substr(best[0].length);
-                if (this.text === '')
-                    this.done = true;
-            }
-            if (best == null) {
-                this.done = true;
-                this.symbol = null;
-                this.value = null;
-                return;
-            }
-        } while (bestSymbol === 'SKIP');
-        this.symbol = bestSymbol;
-        this.value = best;
-        return true;
-    };
-    Parser.prototype.accept = function (name) {
-        if (this.symbol === name) {
-            if (this.value) {
-                var v = this.value;
-                this.nextSymbol();
-                return v;
-            }
-            this.nextSymbol();
-            return true;
-        }
-        return false;
-    };
-    Parser.prototype.acceptNumber = function () {
-        return this.accept('number');
-    };
-    Parser.prototype.expect = function (name) {
-        if (this.accept(name))
-            return true;
-        throw new Error('expected ' + name + ' but found ' + this.symbol);
-    };
-    return Parser;
-}());
-function parseText(text, language) {
-    if (language === void 0) { language = i18n; }
-    var options = {};
-    var ttr = new Parser(language.tokens);
-    if (!ttr.start(text))
-        return null;
-    S();
-    return options;
-    function S() {
-        // every [n]
-        ttr.expect('every');
-        var n = ttr.acceptNumber();
-        if (n)
-            options.interval = parseInt(n[0], 10);
-        if (ttr.isDone())
-            throw new Error('Unexpected end');
-        switch (ttr.symbol) {
-            case 'day(s)':
-                options.freq = RRule.DAILY;
-                if (ttr.nextSymbol()) {
-                    AT();
-                    F();
-                }
-                break;
-            // FIXME Note: every 2 weekdays != every two weeks on weekdays.
-            // DAILY on weekdays is not a valid rule
-            case 'weekday(s)':
-                options.freq = RRule.WEEKLY;
-                options.byweekday = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR];
-                ttr.nextSymbol();
-                AT();
-                F();
-                break;
-            case 'week(s)':
-                options.freq = RRule.WEEKLY;
-                if (ttr.nextSymbol()) {
-                    ON();
-                    AT();
-                    F();
-                }
-                break;
-            case 'hour(s)':
-                options.freq = RRule.HOURLY;
-                if (ttr.nextSymbol()) {
-                    ON();
-                    F();
-                }
-                break;
-            case 'minute(s)':
-                options.freq = RRule.MINUTELY;
-                if (ttr.nextSymbol()) {
-                    ON();
-                    F();
-                }
-                break;
-            case 'month(s)':
-                options.freq = RRule.MONTHLY;
-                if (ttr.nextSymbol()) {
-                    ON();
-                    F();
-                }
-                break;
-            case 'year(s)':
-                options.freq = RRule.YEARLY;
-                if (ttr.nextSymbol()) {
-                    ON();
-                    F();
-                }
-                break;
-            case 'monday':
-            case 'tuesday':
-            case 'wednesday':
-            case 'thursday':
-            case 'friday':
-            case 'saturday':
-            case 'sunday':
-                options.freq = RRule.WEEKLY;
-                var key = ttr.symbol
-                    .substr(0, 2)
-                    .toUpperCase();
-                options.byweekday = [RRule[key]];
-                if (!ttr.nextSymbol())
-                    return;
-                // TODO check for duplicates
-                while (ttr.accept('comma')) {
-                    if (ttr.isDone())
-                        throw new Error('Unexpected end');
-                    var wkd = decodeWKD();
-                    if (!wkd) {
-                        throw new Error('Unexpected symbol ' + ttr.symbol + ', expected weekday');
-                    }
-                    options.byweekday.push(RRule[wkd]);
-                    ttr.nextSymbol();
-                }
-                AT();
-                MDAYs();
-                F();
-                break;
-            case 'january':
-            case 'february':
-            case 'march':
-            case 'april':
-            case 'may':
-            case 'june':
-            case 'july':
-            case 'august':
-            case 'september':
-            case 'october':
-            case 'november':
-            case 'december':
-                options.freq = RRule.YEARLY;
-                options.bymonth = [decodeM()];
-                if (!ttr.nextSymbol())
-                    return;
-                // TODO check for duplicates
-                while (ttr.accept('comma')) {
-                    if (ttr.isDone())
-                        throw new Error('Unexpected end');
-                    var m = decodeM();
-                    if (!m) {
-                        throw new Error('Unexpected symbol ' + ttr.symbol + ', expected month');
-                    }
-                    options.bymonth.push(m);
-                    ttr.nextSymbol();
-                }
-                ON();
-                F();
-                break;
-            default:
-                throw new Error('Unknown symbol');
-        }
-    }
-    function ON() {
-        var on = ttr.accept('on');
-        var the = ttr.accept('the');
-        if (!(on || the))
-            return;
-        do {
-            var nth = decodeNTH();
-            var wkd = decodeWKD();
-            var m = decodeM();
-            // nth <weekday> | <weekday>
-            if (nth) {
-                // ttr.nextSymbol()
-                if (wkd) {
-                    ttr.nextSymbol();
-                    if (!options.byweekday)
-                        options.byweekday = [];
-                    options.byweekday.push(RRule[wkd].nth(nth));
-                }
-                else {
-                    if (!options.bymonthday)
-                        options.bymonthday = [];
-                    options.bymonthday.push(nth);
-                    ttr.accept('day(s)');
-                }
-                // <weekday>
-            }
-            else if (wkd) {
-                ttr.nextSymbol();
-                if (!options.byweekday)
-                    options.byweekday = [];
-                options.byweekday.push(RRule[wkd]);
-            }
-            else if (ttr.symbol === 'weekday(s)') {
-                ttr.nextSymbol();
-                if (!options.byweekday) {
-                    options.byweekday = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR];
-                }
-            }
-            else if (ttr.symbol === 'week(s)') {
-                ttr.nextSymbol();
-                var n = ttr.acceptNumber();
-                if (!n) {
-                    throw new Error('Unexpected symbol ' + ttr.symbol + ', expected week number');
-                }
-                options.byweekno = [parseInt(n[0], 10)];
-                while (ttr.accept('comma')) {
-                    n = ttr.acceptNumber();
-                    if (!n) {
-                        throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
-                    }
-                    options.byweekno.push(parseInt(n[0], 10));
-                }
-            }
-            else if (m) {
-                ttr.nextSymbol();
-                if (!options.bymonth)
-                    options.bymonth = [];
-                options.bymonth.push(m);
-            }
-            else {
-                return;
-            }
-        } while (ttr.accept('comma') || ttr.accept('the') || ttr.accept('on'));
-    }
-    function AT() {
-        var at = ttr.accept('at');
-        if (!at)
-            return;
-        do {
-            var n = ttr.acceptNumber();
-            if (!n) {
-                throw new Error('Unexpected symbol ' + ttr.symbol + ', expected hour');
-            }
-            options.byhour = [parseInt(n[0], 10)];
-            while (ttr.accept('comma')) {
-                n = ttr.acceptNumber();
-                if (!n) {
-                    throw new Error('Unexpected symbol ' + ttr.symbol + '; expected hour');
-                }
-                options.byhour.push(parseInt(n[0], 10));
-            }
-        } while (ttr.accept('comma') || ttr.accept('at'));
-    }
-    function decodeM() {
-        switch (ttr.symbol) {
-            case 'january':
-                return 1;
-            case 'february':
-                return 2;
-            case 'march':
-                return 3;
-            case 'april':
-                return 4;
-            case 'may':
-                return 5;
-            case 'june':
-                return 6;
-            case 'july':
-                return 7;
-            case 'august':
-                return 8;
-            case 'september':
-                return 9;
-            case 'october':
-                return 10;
-            case 'november':
-                return 11;
-            case 'december':
-                return 12;
-            default:
-                return false;
-        }
-    }
-    function decodeWKD() {
-        switch (ttr.symbol) {
-            case 'monday':
-            case 'tuesday':
-            case 'wednesday':
-            case 'thursday':
-            case 'friday':
-            case 'saturday':
-            case 'sunday':
-                return ttr.symbol.substr(0, 2).toUpperCase();
-            default:
-                return false;
-        }
-    }
-    function decodeNTH() {
-        switch (ttr.symbol) {
-            case 'last':
-                ttr.nextSymbol();
-                return -1;
-            case 'first':
-                ttr.nextSymbol();
-                return 1;
-            case 'second':
-                ttr.nextSymbol();
-                return ttr.accept('last') ? -2 : 2;
-            case 'third':
-                ttr.nextSymbol();
-                return ttr.accept('last') ? -3 : 3;
-            case 'nth':
-                var v = parseInt(ttr.value[1], 10);
-                if (v < -366 || v > 366)
-                    throw new Error('Nth out of range: ' + v);
-                ttr.nextSymbol();
-                return ttr.accept('last') ? -v : v;
-            default:
-                return false;
-        }
-    }
-    function MDAYs() {
-        ttr.accept('on');
-        ttr.accept('the');
-        var nth = decodeNTH();
-        if (!nth)
-            return;
-        options.bymonthday = [nth];
-        ttr.nextSymbol();
-        while (ttr.accept('comma')) {
-            nth = decodeNTH();
-            if (!nth) {
-                throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
-            }
-            options.bymonthday.push(nth);
-            ttr.nextSymbol();
-        }
-    }
-    function F() {
-        if (ttr.symbol === 'until') {
-            var date = Date.parse(ttr.text);
-            if (!date)
-                throw new Error('Cannot parse until date:' + ttr.text);
-            options.until = new Date(date);
-        }
-        else if (ttr.accept('for')) {
-            options.count = parseInt(ttr.value[0], 10);
-            ttr.expect('number');
-            // ttr.expect('times')
-        }
-    }
-}
-//# sourceMappingURL=parsetext.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/types.js
-var Frequency;
-(function (Frequency) {
-    Frequency[Frequency["YEARLY"] = 0] = "YEARLY";
-    Frequency[Frequency["MONTHLY"] = 1] = "MONTHLY";
-    Frequency[Frequency["WEEKLY"] = 2] = "WEEKLY";
-    Frequency[Frequency["DAILY"] = 3] = "DAILY";
-    Frequency[Frequency["HOURLY"] = 4] = "HOURLY";
-    Frequency[Frequency["MINUTELY"] = 5] = "MINUTELY";
-    Frequency[Frequency["SECONDLY"] = 6] = "SECONDLY";
-})(Frequency || (Frequency = {}));
-function freqIsDailyOrGreater(freq) {
-    return freq < Frequency.HOURLY;
-}
-//# sourceMappingURL=types.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/index.js
-
-
-
-
-
-/* !
- * rrule.js - Library for working with recurrence rules for calendar dates.
- * https://github.com/jakubroztocil/rrule
- *
- * Copyright 2010, Jakub Roztocil and Lars Schoning
- * Licenced under the BSD licence.
- * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
- *
- */
-/**
- *
- * Implementation of RRule.fromText() and RRule::toText().
- *
- *
- * On the client side, this file needs to be included
- * when those functions are used.
- *
- */
-// =============================================================================
-// fromText
-// =============================================================================
-/**
- * Will be able to convert some of the below described rules from
- * text format to a rule object.
- *
- *
- * RULES
- *
- * Every ([n])
- * day(s)
- * | [weekday], ..., (and) [weekday]
- * | weekday(s)
- * | week(s)
- * | month(s)
- * | [month], ..., (and) [month]
- * | year(s)
- *
- *
- * Plus 0, 1, or multiple of these:
- *
- * on [weekday], ..., (or) [weekday] the [monthday], [monthday], ... (or) [monthday]
- *
- * on [weekday], ..., (and) [weekday]
- *
- * on the [monthday], [monthday], ... (and) [monthday] (day of the month)
- *
- * on the [nth-weekday], ..., (and) [nth-weekday] (of the month/year)
- *
- *
- * Plus 0 or 1 of these:
- *
- * for [n] time(s)
- *
- * until [date]
- *
- * Plus (.)
- *
- *
- * Definitely no supported for parsing:
- *
- * (for year):
- * in week(s) [n], ..., (and) [n]
- *
- * on the [yearday], ..., (and) [n] day of the year
- * on day [yearday], ..., (and) [n]
- *
- *
- * NON-TERMINALS
- *
- * [n]: 1, 2 ..., one, two, three ..
- * [month]: January, February, March, April, May, ... December
- * [weekday]: Monday, ... Sunday
- * [nth-weekday]: first [weekday], 2nd [weekday], ... last [weekday], ...
- * [monthday]: first, 1., 2., 1st, 2nd, second, ... 31st, last day, 2nd last day, ..
- * [date]:
- * - [month] (0-31(,) ([year])),
- * - (the) 0-31.(1-12.([year])),
- * - (the) 0-31/(1-12/([year])),
- * - [weekday]
- *
- * [year]: 0000, 0001, ... 01, 02, ..
- *
- * Definitely not supported for parsing:
- *
- * [yearday]: first, 1., 2., 1st, 2nd, second, ... 366th, last day, 2nd last day, ..
- *
- * @param {String} text
- * @return {Object, Boolean} the rule, or null.
- */
-var fromText = function (text, language) {
-    if (language === void 0) { language = i18n; }
-    return new RRule(parseText(text, language) || undefined);
-};
-var common = [
-    'count',
-    'until',
-    'interval',
-    'byweekday',
-    'bymonthday',
-    'bymonth',
-];
-totext.IMPLEMENTED = [];
-totext.IMPLEMENTED[Frequency.HOURLY] = common;
-totext.IMPLEMENTED[Frequency.MINUTELY] = common;
-totext.IMPLEMENTED[Frequency.DAILY] = ['byhour'].concat(common);
-totext.IMPLEMENTED[Frequency.WEEKLY] = common;
-totext.IMPLEMENTED[Frequency.MONTHLY] = common;
-totext.IMPLEMENTED[Frequency.YEARLY] = ['byweekno', 'byyearday'].concat(common);
-// =============================================================================
-// Export
-// =============================================================================
-var toText = function (rrule, gettext, language, dateFormatter) {
-    return new totext(rrule, gettext, language, dateFormatter).toString();
-};
-var isFullyConvertible = totext.isFullyConvertible;
-
-//# sourceMappingURL=index.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/datetime.js
-
-
-
-
-var Time = /** @class */ (function () {
-    function Time(hour, minute, second, millisecond) {
-        this.hour = hour;
-        this.minute = minute;
-        this.second = second;
-        this.millisecond = millisecond || 0;
-    }
-    Time.prototype.getHours = function () {
-        return this.hour;
-    };
-    Time.prototype.getMinutes = function () {
-        return this.minute;
-    };
-    Time.prototype.getSeconds = function () {
-        return this.second;
-    };
-    Time.prototype.getMilliseconds = function () {
-        return this.millisecond;
-    };
-    Time.prototype.getTime = function () {
-        return ((this.hour * 60 * 60 + this.minute * 60 + this.second) * 1000 +
-            this.millisecond);
-    };
-    return Time;
-}());
-
-var DateTime = /** @class */ (function (_super) {
-    __extends(DateTime, _super);
-    function DateTime(year, month, day, hour, minute, second, millisecond) {
-        var _this = _super.call(this, hour, minute, second, millisecond) || this;
-        _this.year = year;
-        _this.month = month;
-        _this.day = day;
-        return _this;
-    }
-    DateTime.fromDate = function (date) {
-        return new this(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.valueOf() % 1000);
-    };
-    DateTime.prototype.getWeekday = function () {
-        return getWeekday(new Date(this.getTime()));
-    };
-    DateTime.prototype.getTime = function () {
-        return new Date(Date.UTC(this.year, this.month - 1, this.day, this.hour, this.minute, this.second, this.millisecond)).getTime();
-    };
-    DateTime.prototype.getDay = function () {
-        return this.day;
-    };
-    DateTime.prototype.getMonth = function () {
-        return this.month;
-    };
-    DateTime.prototype.getYear = function () {
-        return this.year;
-    };
-    DateTime.prototype.addYears = function (years) {
-        this.year += years;
-    };
-    DateTime.prototype.addMonths = function (months) {
-        this.month += months;
-        if (this.month > 12) {
-            var yearDiv = Math.floor(this.month / 12);
-            var monthMod = pymod(this.month, 12);
-            this.month = monthMod;
-            this.year += yearDiv;
-            if (this.month === 0) {
-                this.month = 12;
-                --this.year;
-            }
-        }
-    };
-    DateTime.prototype.addWeekly = function (days, wkst) {
-        if (wkst > this.getWeekday()) {
-            this.day += -(this.getWeekday() + 1 + (6 - wkst)) + days * 7;
-        }
-        else {
-            this.day += -(this.getWeekday() - wkst) + days * 7;
-        }
-        this.fixDay();
-    };
-    DateTime.prototype.addDaily = function (days) {
-        this.day += days;
-        this.fixDay();
-    };
-    DateTime.prototype.addHours = function (hours, filtered, byhour) {
-        if (filtered) {
-            // Jump to one iteration before next day
-            this.hour += Math.floor((23 - this.hour) / hours) * hours;
-        }
-        for (;;) {
-            this.hour += hours;
-            var _a = divmod(this.hour, 24), dayDiv = _a.div, hourMod = _a.mod;
-            if (dayDiv) {
-                this.hour = hourMod;
-                this.addDaily(dayDiv);
-            }
-            if (empty(byhour) || includes(byhour, this.hour))
-                break;
-        }
-    };
-    DateTime.prototype.addMinutes = function (minutes, filtered, byhour, byminute) {
-        if (filtered) {
-            // Jump to one iteration before next day
-            this.minute +=
-                Math.floor((1439 - (this.hour * 60 + this.minute)) / minutes) * minutes;
-        }
-        for (;;) {
-            this.minute += minutes;
-            var _a = divmod(this.minute, 60), hourDiv = _a.div, minuteMod = _a.mod;
-            if (hourDiv) {
-                this.minute = minuteMod;
-                this.addHours(hourDiv, false, byhour);
-            }
-            if ((empty(byhour) || includes(byhour, this.hour)) &&
-                (empty(byminute) || includes(byminute, this.minute))) {
-                break;
-            }
-        }
-    };
-    DateTime.prototype.addSeconds = function (seconds, filtered, byhour, byminute, bysecond) {
-        if (filtered) {
-            // Jump to one iteration before next day
-            this.second +=
-                Math.floor((86399 - (this.hour * 3600 + this.minute * 60 + this.second)) /
-                    seconds) * seconds;
-        }
-        for (;;) {
-            this.second += seconds;
-            var _a = divmod(this.second, 60), minuteDiv = _a.div, secondMod = _a.mod;
-            if (minuteDiv) {
-                this.second = secondMod;
-                this.addMinutes(minuteDiv, false, byhour, byminute);
-            }
-            if ((empty(byhour) || includes(byhour, this.hour)) &&
-                (empty(byminute) || includes(byminute, this.minute)) &&
-                (empty(bysecond) || includes(bysecond, this.second))) {
-                break;
-            }
-        }
-    };
-    DateTime.prototype.fixDay = function () {
-        if (this.day <= 28) {
-            return;
-        }
-        var daysinmonth = monthRange(this.year, this.month - 1)[1];
-        if (this.day <= daysinmonth) {
-            return;
-        }
-        while (this.day > daysinmonth) {
-            this.day -= daysinmonth;
-            ++this.month;
-            if (this.month === 13) {
-                this.month = 1;
-                ++this.year;
-                if (this.year > MAXYEAR) {
-                    return;
-                }
-            }
-            daysinmonth = monthRange(this.year, this.month - 1)[1];
-        }
-    };
-    DateTime.prototype.add = function (options, filtered) {
-        var freq = options.freq, interval = options.interval, wkst = options.wkst, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
-        switch (freq) {
-            case Frequency.YEARLY:
-                return this.addYears(interval);
-            case Frequency.MONTHLY:
-                return this.addMonths(interval);
-            case Frequency.WEEKLY:
-                return this.addWeekly(interval, wkst);
-            case Frequency.DAILY:
-                return this.addDaily(interval);
-            case Frequency.HOURLY:
-                return this.addHours(interval, filtered, byhour);
-            case Frequency.MINUTELY:
-                return this.addMinutes(interval, filtered, byhour, byminute);
-            case Frequency.SECONDLY:
-                return this.addSeconds(interval, filtered, byhour, byminute, bysecond);
-        }
-    };
-    return DateTime;
-}(Time));
-
-//# sourceMappingURL=datetime.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/parseoptions.js
-
-
-
-
-
-
-
-function initializeOptions(options) {
-    var invalid = [];
-    var keys = Object.keys(options);
-    // Shallow copy for options and origOptions and check for invalid
-    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
-        var key = keys_1[_i];
-        if (!includes(defaultKeys, key))
-            invalid.push(key);
-        if (isDate(options[key]) && !isValidDate(options[key])) {
-            invalid.push(key);
-        }
-    }
-    if (invalid.length) {
-        throw new Error('Invalid options: ' + invalid.join(', '));
-    }
-    return __assign({}, options);
-}
-function parseOptions(options) {
-    var opts = __assign(__assign({}, DEFAULT_OPTIONS), initializeOptions(options));
-    if (isPresent(opts.byeaster))
-        opts.freq = RRule.YEARLY;
-    if (!(isPresent(opts.freq) && RRule.FREQUENCIES[opts.freq])) {
-        throw new Error("Invalid frequency: ".concat(opts.freq, " ").concat(options.freq));
-    }
-    if (!opts.dtstart)
-        opts.dtstart = new Date(new Date().setMilliseconds(0));
-    if (!isPresent(opts.wkst)) {
-        opts.wkst = RRule.MO.weekday;
-    }
-    else if (isNumber(opts.wkst)) {
-        // cool, just keep it like that
-    }
-    else {
-        opts.wkst = opts.wkst.weekday;
-    }
-    if (isPresent(opts.bysetpos)) {
-        if (isNumber(opts.bysetpos))
-            opts.bysetpos = [opts.bysetpos];
-        for (var i = 0; i < opts.bysetpos.length; i++) {
-            var v = opts.bysetpos[i];
-            if (v === 0 || !(v >= -366 && v <= 366)) {
-                throw new Error('bysetpos must be between 1 and 366,' + ' or between -366 and -1');
-            }
-        }
-    }
-    if (!(Boolean(opts.byweekno) ||
-        notEmpty(opts.byweekno) ||
-        notEmpty(opts.byyearday) ||
-        Boolean(opts.bymonthday) ||
-        notEmpty(opts.bymonthday) ||
-        isPresent(opts.byweekday) ||
-        isPresent(opts.byeaster))) {
-        switch (opts.freq) {
-            case RRule.YEARLY:
-                if (!opts.bymonth)
-                    opts.bymonth = opts.dtstart.getUTCMonth() + 1;
-                opts.bymonthday = opts.dtstart.getUTCDate();
-                break;
-            case RRule.MONTHLY:
-                opts.bymonthday = opts.dtstart.getUTCDate();
-                break;
-            case RRule.WEEKLY:
-                opts.byweekday = [getWeekday(opts.dtstart)];
-                break;
-        }
-    }
-    // bymonth
-    if (isPresent(opts.bymonth) && !isArray(opts.bymonth)) {
-        opts.bymonth = [opts.bymonth];
-    }
-    // byyearday
-    if (isPresent(opts.byyearday) &&
-        !isArray(opts.byyearday) &&
-        isNumber(opts.byyearday)) {
-        opts.byyearday = [opts.byyearday];
-    }
-    // bymonthday
-    if (!isPresent(opts.bymonthday)) {
-        opts.bymonthday = [];
-        opts.bynmonthday = [];
-    }
-    else if (isArray(opts.bymonthday)) {
-        var bymonthday = [];
-        var bynmonthday = [];
-        for (var i = 0; i < opts.bymonthday.length; i++) {
-            var v = opts.bymonthday[i];
-            if (v > 0) {
-                bymonthday.push(v);
-            }
-            else if (v < 0) {
-                bynmonthday.push(v);
-            }
-        }
-        opts.bymonthday = bymonthday;
-        opts.bynmonthday = bynmonthday;
-    }
-    else if (opts.bymonthday < 0) {
-        opts.bynmonthday = [opts.bymonthday];
-        opts.bymonthday = [];
-    }
-    else {
-        opts.bynmonthday = [];
-        opts.bymonthday = [opts.bymonthday];
-    }
-    // byweekno
-    if (isPresent(opts.byweekno) && !isArray(opts.byweekno)) {
-        opts.byweekno = [opts.byweekno];
-    }
-    // byweekday / bynweekday
-    if (!isPresent(opts.byweekday)) {
-        opts.bynweekday = null;
-    }
-    else if (isNumber(opts.byweekday)) {
-        opts.byweekday = [opts.byweekday];
-        opts.bynweekday = null;
-    }
-    else if (isWeekdayStr(opts.byweekday)) {
-        opts.byweekday = [Weekday.fromStr(opts.byweekday).weekday];
-        opts.bynweekday = null;
-    }
-    else if (opts.byweekday instanceof Weekday) {
-        if (!opts.byweekday.n || opts.freq > RRule.MONTHLY) {
-            opts.byweekday = [opts.byweekday.weekday];
-            opts.bynweekday = null;
-        }
-        else {
-            opts.bynweekday = [[opts.byweekday.weekday, opts.byweekday.n]];
-            opts.byweekday = null;
-        }
-    }
-    else {
-        var byweekday = [];
-        var bynweekday = [];
-        for (var i = 0; i < opts.byweekday.length; i++) {
-            var wday = opts.byweekday[i];
-            if (isNumber(wday)) {
-                byweekday.push(wday);
-                continue;
-            }
-            else if (isWeekdayStr(wday)) {
-                byweekday.push(Weekday.fromStr(wday).weekday);
-                continue;
-            }
-            if (!wday.n || opts.freq > RRule.MONTHLY) {
-                byweekday.push(wday.weekday);
-            }
-            else {
-                bynweekday.push([wday.weekday, wday.n]);
-            }
-        }
-        opts.byweekday = notEmpty(byweekday) ? byweekday : null;
-        opts.bynweekday = notEmpty(bynweekday) ? bynweekday : null;
-    }
-    // byhour
-    if (!isPresent(opts.byhour)) {
-        opts.byhour = opts.freq < RRule.HOURLY ? [opts.dtstart.getUTCHours()] : null;
-    }
-    else if (isNumber(opts.byhour)) {
-        opts.byhour = [opts.byhour];
-    }
-    // byminute
-    if (!isPresent(opts.byminute)) {
-        opts.byminute =
-            opts.freq < RRule.MINUTELY ? [opts.dtstart.getUTCMinutes()] : null;
-    }
-    else if (isNumber(opts.byminute)) {
-        opts.byminute = [opts.byminute];
-    }
-    // bysecond
-    if (!isPresent(opts.bysecond)) {
-        opts.bysecond =
-            opts.freq < RRule.SECONDLY ? [opts.dtstart.getUTCSeconds()] : null;
-    }
-    else if (isNumber(opts.bysecond)) {
-        opts.bysecond = [opts.bysecond];
-    }
-    return { parsedOptions: opts };
-}
-function buildTimeset(opts) {
-    var millisecondModulo = opts.dtstart.getTime() % 1000;
-    if (!freqIsDailyOrGreater(opts.freq)) {
-        return [];
-    }
-    var timeset = [];
-    opts.byhour.forEach(function (hour) {
-        opts.byminute.forEach(function (minute) {
-            opts.bysecond.forEach(function (second) {
-                timeset.push(new Time(hour, minute, second, millisecondModulo));
-            });
-        });
-    });
-    return timeset;
-}
-//# sourceMappingURL=parseoptions.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/parsestring.js
-
-
-
-
-
-function parseString(rfcString) {
-    var options = rfcString
-        .split('\n')
-        .map(parseLine)
-        .filter(function (x) { return x !== null; });
-    return __assign(__assign({}, options[0]), options[1]);
-}
-function parseDtstart(line) {
-    var options = {};
-    var dtstartWithZone = /DTSTART(?:;TZID=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line);
-    if (!dtstartWithZone) {
-        return options;
-    }
-    var tzid = dtstartWithZone[1], dtstart = dtstartWithZone[2];
-    if (tzid) {
-        options.tzid = tzid;
-    }
-    options.dtstart = untilStringToDate(dtstart);
-    return options;
-}
-function parseLine(rfcString) {
-    rfcString = rfcString.replace(/^\s+|\s+$/, '');
-    if (!rfcString.length)
-        return null;
-    var header = /^([A-Z]+?)[:;]/.exec(rfcString.toUpperCase());
-    if (!header) {
-        return parseRrule(rfcString);
-    }
-    var key = header[1];
-    switch (key.toUpperCase()) {
-        case 'RRULE':
-        case 'EXRULE':
-            return parseRrule(rfcString);
-        case 'DTSTART':
-            return parseDtstart(rfcString);
-        default:
-            throw new Error("Unsupported RFC prop ".concat(key, " in ").concat(rfcString));
-    }
-}
-function parseRrule(line) {
-    var strippedLine = line.replace(/^RRULE:/i, '');
-    var options = parseDtstart(strippedLine);
-    var attrs = line.replace(/^(?:RRULE|EXRULE):/i, '').split(';');
-    attrs.forEach(function (attr) {
-        var _a = attr.split('='), key = _a[0], value = _a[1];
-        switch (key.toUpperCase()) {
-            case 'FREQ':
-                options.freq = Frequency[value.toUpperCase()];
-                break;
-            case 'WKST':
-                options.wkst = Days[value.toUpperCase()];
-                break;
-            case 'COUNT':
-            case 'INTERVAL':
-            case 'BYSETPOS':
-            case 'BYMONTH':
-            case 'BYMONTHDAY':
-            case 'BYYEARDAY':
-            case 'BYWEEKNO':
-            case 'BYHOUR':
-            case 'BYMINUTE':
-            case 'BYSECOND':
-                var num = parseNumber(value);
-                var optionKey = key.toLowerCase();
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                options[optionKey] = num;
-                break;
-            case 'BYWEEKDAY':
-            case 'BYDAY':
-                options.byweekday = parseWeekday(value);
-                break;
-            case 'DTSTART':
-            case 'TZID':
-                // for backwards compatibility
-                var dtstart = parseDtstart(line);
-                options.tzid = dtstart.tzid;
-                options.dtstart = dtstart.dtstart;
-                break;
-            case 'UNTIL':
-                options.until = untilStringToDate(value);
-                break;
-            case 'BYEASTER':
-                options.byeaster = Number(value);
-                break;
-            default:
-                throw new Error("Unknown RRULE property '" + key + "'");
-        }
-    });
-    return options;
-}
-function parseNumber(value) {
-    if (value.indexOf(',') !== -1) {
-        var values = value.split(',');
-        return values.map(parseIndividualNumber);
-    }
-    return parseIndividualNumber(value);
-}
-function parseIndividualNumber(value) {
-    if (/^[+-]?\d+$/.test(value)) {
-        return Number(value);
-    }
-    return value;
-}
-function parseWeekday(value) {
-    var days = value.split(',');
-    return days.map(function (day) {
-        if (day.length === 2) {
-            // MO, TU, ...
-            return Days[day]; // wday instanceof Weekday
-        }
-        // -1MO, +3FR, 1SO, 13TU ...
-        var parts = day.match(/^([+-]?\d{1,2})([A-Z]{2})$/);
-        if (!parts || parts.length < 3) {
-            throw new SyntaxError("Invalid weekday string: ".concat(day));
-        }
-        var n = Number(parts[1]);
-        var wdaypart = parts[2];
-        var wday = Days[wdaypart].weekday;
-        return new Weekday(wday, n);
-    });
-}
-//# sourceMappingURL=parsestring.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/datewithzone.js
-
-var DateWithZone = /** @class */ (function () {
-    function DateWithZone(date, tzid) {
-        if (isNaN(date.getTime())) {
-            throw new RangeError('Invalid date passed to DateWithZone');
-        }
-        this.date = date;
-        this.tzid = tzid;
-    }
-    Object.defineProperty(DateWithZone.prototype, "isUTC", {
-        get: function () {
-            return !this.tzid || this.tzid.toUpperCase() === 'UTC';
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DateWithZone.prototype.toString = function () {
-        var datestr = timeToUntilString(this.date.getTime(), this.isUTC);
-        if (!this.isUTC) {
-            return ";TZID=".concat(this.tzid, ":").concat(datestr);
-        }
-        return ":".concat(datestr);
-    };
-    DateWithZone.prototype.getTime = function () {
-        return this.date.getTime();
-    };
-    DateWithZone.prototype.rezonedDate = function () {
-        if (this.isUTC) {
-            return this.date;
-        }
-        return dateInTimeZone(this.date, this.tzid);
-    };
-    return DateWithZone;
-}());
-
-//# sourceMappingURL=datewithzone.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/optionstostring.js
-
-
-
-
-
-function optionsToString(options) {
-    var rrule = [];
-    var dtstart = '';
-    var keys = Object.keys(options);
-    var defaultKeys = Object.keys(DEFAULT_OPTIONS);
-    for (var i = 0; i < keys.length; i++) {
-        if (keys[i] === 'tzid')
-            continue;
-        if (!includes(defaultKeys, keys[i]))
-            continue;
-        var key = keys[i].toUpperCase();
-        var value = options[keys[i]];
-        var outValue = '';
-        if (!isPresent(value) || (isArray(value) && !value.length))
-            continue;
-        switch (key) {
-            case 'FREQ':
-                outValue = RRule.FREQUENCIES[options.freq];
-                break;
-            case 'WKST':
-                if (isNumber(value)) {
-                    outValue = new Weekday(value).toString();
-                }
-                else {
-                    outValue = value.toString();
-                }
-                break;
-            case 'BYWEEKDAY':
-                /*
-                  NOTE: BYWEEKDAY is a special case.
-                  RRule() deconstructs the rule.options.byweekday array
-                  into an array of Weekday arguments.
-                  On the other hand, rule.origOptions is an array of Weekdays.
-                  We need to handle both cases here.
-                  It might be worth change RRule to keep the Weekdays.
-        
-                  Also, BYWEEKDAY (used by RRule) vs. BYDAY (RFC)
-        
-                  */
-                key = 'BYDAY';
-                outValue = toArray(value)
-                    .map(function (wday) {
-                    if (wday instanceof Weekday) {
-                        return wday;
-                    }
-                    if (isArray(wday)) {
-                        return new Weekday(wday[0], wday[1]);
-                    }
-                    return new Weekday(wday);
-                })
-                    .toString();
-                break;
-            case 'DTSTART':
-                dtstart = buildDtstart(value, options.tzid);
-                break;
-            case 'UNTIL':
-                outValue = timeToUntilString(value, !options.tzid);
-                break;
-            default:
-                if (isArray(value)) {
-                    var strValues = [];
-                    for (var j = 0; j < value.length; j++) {
-                        strValues[j] = String(value[j]);
-                    }
-                    outValue = strValues.toString();
-                }
-                else {
-                    outValue = String(value);
-                }
-        }
-        if (outValue) {
-            rrule.push([key, outValue]);
-        }
-    }
-    var rules = rrule
-        .map(function (_a) {
-        var key = _a[0], value = _a[1];
-        return "".concat(key, "=").concat(value.toString());
-    })
-        .join(';');
-    var ruleString = '';
-    if (rules !== '') {
-        ruleString = "RRULE:".concat(rules);
-    }
-    return [dtstart, ruleString].filter(function (x) { return !!x; }).join('\n');
-}
-function buildDtstart(dtstart, tzid) {
-    if (!dtstart) {
-        return '';
-    }
-    return 'DTSTART' + new DateWithZone(new Date(dtstart), tzid).toString();
-}
-//# sourceMappingURL=optionstostring.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/cache.js
-
-
-
-function argsMatch(left, right) {
-    if (Array.isArray(left)) {
-        if (!Array.isArray(right))
-            return false;
-        if (left.length !== right.length)
-            return false;
-        return left.every(function (date, i) { return date.getTime() === right[i].getTime(); });
-    }
-    if (left instanceof Date) {
-        return right instanceof Date && left.getTime() === right.getTime();
-    }
-    return left === right;
-}
-var Cache = /** @class */ (function () {
-    function Cache() {
-        this.all = false;
-        this.before = [];
-        this.after = [];
-        this.between = [];
-    }
-    /**
-     * @param {String} what - all/before/after/between
-     * @param {Array,Date} value - an array of dates, one date, or null
-     * @param {Object?} args - _iter arguments
-     */
-    Cache.prototype._cacheAdd = function (what, value, args) {
-        if (value) {
-            value = value instanceof Date ? dateutil_clone(value) : cloneDates(value);
-        }
-        if (what === 'all') {
-            this.all = value;
-        }
-        else {
-            args._value = value;
-            this[what].push(args);
-        }
-    };
-    /**
-     * @return false - not in the cache
-     * @return null  - cached, but zero occurrences (before/after)
-     * @return Date  - cached (before/after)
-     * @return []    - cached, but zero occurrences (all/between)
-     * @return [Date1, DateN] - cached (all/between)
-     */
-    Cache.prototype._cacheGet = function (what, args) {
-        var cached = false;
-        var argsKeys = args ? Object.keys(args) : [];
-        var findCacheDiff = function (item) {
-            for (var i = 0; i < argsKeys.length; i++) {
-                var key = argsKeys[i];
-                if (!argsMatch(args[key], item[key])) {
-                    return true;
-                }
-            }
-            return false;
-        };
-        var cachedObject = this[what];
-        if (what === 'all') {
-            cached = this.all;
-        }
-        else if (isArray(cachedObject)) {
-            // Let's see whether we've already called the
-            // 'what' method with the same 'args'
-            for (var i = 0; i < cachedObject.length; i++) {
-                var item = cachedObject[i];
-                if (argsKeys.length && findCacheDiff(item))
-                    continue;
-                cached = item._value;
-                break;
-            }
-        }
-        if (!cached && this.all) {
-            // Not in the cache, but we already know all the occurrences,
-            // so we can find the correct dates from the cached ones.
-            var iterResult = new iterresult(what, args);
-            for (var i = 0; i < this.all.length; i++) {
-                if (!iterResult.accept(this.all[i]))
-                    break;
-            }
-            cached = iterResult.getValue();
-            this._cacheAdd(what, cached, args);
-        }
-        return isArray(cached)
-            ? cloneDates(cached)
-            : cached instanceof Date
-                ? dateutil_clone(cached)
-                : cached;
-    };
-    return Cache;
-}());
-
-//# sourceMappingURL=cache.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/masks.js
-
-
-// =============================================================================
-// Date masks
-// =============================================================================
-// Every mask is 7 days longer to handle cross-year weekly periods.
-var M365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], repeat(1, 31), true), repeat(2, 28), true), repeat(3, 31), true), repeat(4, 30), true), repeat(5, 31), true), repeat(6, 30), true), repeat(7, 31), true), repeat(8, 31), true), repeat(9, 30), true), repeat(10, 31), true), repeat(11, 30), true), repeat(12, 31), true), repeat(1, 7), true);
-var M366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], repeat(1, 31), true), repeat(2, 29), true), repeat(3, 31), true), repeat(4, 30), true), repeat(5, 31), true), repeat(6, 30), true), repeat(7, 31), true), repeat(8, 31), true), repeat(9, 30), true), repeat(10, 31), true), repeat(11, 30), true), repeat(12, 31), true), repeat(1, 7), true);
-var M28 = range(1, 29);
-var M29 = range(1, 30);
-var M30 = range(1, 31);
-var M31 = range(1, 32);
-var MDAY366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], M31, true), M29, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31.slice(0, 7), true);
-var MDAY365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], M31, true), M28, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31.slice(0, 7), true);
-var NM28 = range(-28, 0);
-var NM29 = range(-29, 0);
-var NM30 = range(-30, 0);
-var NM31 = range(-31, 0);
-var NMDAY366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], NM31, true), NM29, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31.slice(0, 7), true);
-var NMDAY365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], NM31, true), NM28, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31.slice(0, 7), true);
-var M366RANGE = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
-var M365RANGE = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
-var WDAYMASK = (function () {
-    var wdaymask = [];
-    for (var i = 0; i < 55; i++)
-        wdaymask = wdaymask.concat(range(7));
-    return wdaymask;
-})();
-
-//# sourceMappingURL=masks.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/yearinfo.js
-
-
-
-
-function rebuildYear(year, options) {
-    var firstyday = datetime(year, 1, 1);
-    var yearlen = isLeapYear(year) ? 366 : 365;
-    var nextyearlen = isLeapYear(year + 1) ? 366 : 365;
-    var yearordinal = toOrdinal(firstyday);
-    var yearweekday = getWeekday(firstyday);
-    var result = __assign(__assign({ yearlen: yearlen, nextyearlen: nextyearlen, yearordinal: yearordinal, yearweekday: yearweekday }, baseYearMasks(year)), { wnomask: null });
-    if (empty(options.byweekno)) {
-        return result;
-    }
-    result.wnomask = repeat(0, yearlen + 7);
-    var firstwkst;
-    var wyearlen;
-    var no1wkst = (firstwkst = pymod(7 - yearweekday + options.wkst, 7));
-    if (no1wkst >= 4) {
-        no1wkst = 0;
-        // Number of days in the year, plus the days we got
-        // from last year.
-        wyearlen = result.yearlen + pymod(yearweekday - options.wkst, 7);
-    }
-    else {
-        // Number of days in the year, minus the days we
-        // left in last year.
-        wyearlen = yearlen - no1wkst;
-    }
-    var div = Math.floor(wyearlen / 7);
-    var mod = pymod(wyearlen, 7);
-    var numweeks = Math.floor(div + mod / 4);
-    for (var j = 0; j < options.byweekno.length; j++) {
-        var n = options.byweekno[j];
-        if (n < 0) {
-            n += numweeks + 1;
-        }
-        if (!(n > 0 && n <= numweeks)) {
-            continue;
-        }
-        var i = void 0;
-        if (n > 1) {
-            i = no1wkst + (n - 1) * 7;
-            if (no1wkst !== firstwkst) {
-                i -= 7 - firstwkst;
-            }
-        }
-        else {
-            i = no1wkst;
-        }
-        for (var k = 0; k < 7; k++) {
-            result.wnomask[i] = 1;
-            i++;
-            if (result.wdaymask[i] === options.wkst)
-                break;
-        }
-    }
-    if (includes(options.byweekno, 1)) {
-        // Check week number 1 of next year as well
-        // orig-TODO : Check -numweeks for next year.
-        var i = no1wkst + numweeks * 7;
-        if (no1wkst !== firstwkst)
-            i -= 7 - firstwkst;
-        if (i < yearlen) {
-            // If week starts in next year, we
-            // don't care about it.
-            for (var j = 0; j < 7; j++) {
-                result.wnomask[i] = 1;
-                i += 1;
-                if (result.wdaymask[i] === options.wkst)
-                    break;
-            }
-        }
-    }
-    if (no1wkst) {
-        // Check last week number of last year as
-        // well. If no1wkst is 0, either the year
-        // started on week start, or week number 1
-        // got days from last year, so there are no
-        // days from last year's last week number in
-        // this year.
-        var lnumweeks = void 0;
-        if (!includes(options.byweekno, -1)) {
-            var lyearweekday = getWeekday(datetime(year - 1, 1, 1));
-            var lno1wkst = pymod(7 - lyearweekday.valueOf() + options.wkst, 7);
-            var lyearlen = isLeapYear(year - 1) ? 366 : 365;
-            var weekst = void 0;
-            if (lno1wkst >= 4) {
-                lno1wkst = 0;
-                weekst = lyearlen + pymod(lyearweekday - options.wkst, 7);
-            }
-            else {
-                weekst = yearlen - no1wkst;
-            }
-            lnumweeks = Math.floor(52 + pymod(weekst, 7) / 4);
-        }
-        else {
-            lnumweeks = -1;
-        }
-        if (includes(options.byweekno, lnumweeks)) {
-            for (var i = 0; i < no1wkst; i++)
-                result.wnomask[i] = 1;
-        }
-    }
-    return result;
-}
-function baseYearMasks(year) {
-    var yearlen = isLeapYear(year) ? 366 : 365;
-    var firstyday = datetime(year, 1, 1);
-    var wday = getWeekday(firstyday);
-    if (yearlen === 365) {
-        return {
-            mmask: M365MASK,
-            mdaymask: MDAY365MASK,
-            nmdaymask: NMDAY365MASK,
-            wdaymask: WDAYMASK.slice(wday),
-            mrange: M365RANGE,
-        };
-    }
-    return {
-        mmask: M366MASK,
-        mdaymask: MDAY366MASK,
-        nmdaymask: NMDAY366MASK,
-        wdaymask: WDAYMASK.slice(wday),
-        mrange: M366RANGE,
-    };
-}
-//# sourceMappingURL=yearinfo.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/monthinfo.js
-
-
-function rebuildMonth(year, month, yearlen, mrange, wdaymask, options) {
-    var result = {
-        lastyear: year,
-        lastmonth: month,
-        nwdaymask: [],
-    };
-    var ranges = [];
-    if (options.freq === RRule.YEARLY) {
-        if (empty(options.bymonth)) {
-            ranges = [[0, yearlen]];
-        }
-        else {
-            for (var j = 0; j < options.bymonth.length; j++) {
-                month = options.bymonth[j];
-                ranges.push(mrange.slice(month - 1, month + 1));
-            }
-        }
-    }
-    else if (options.freq === RRule.MONTHLY) {
-        ranges = [mrange.slice(month - 1, month + 1)];
-    }
-    if (empty(ranges)) {
-        return result;
-    }
-    // Weekly frequency won't get here, so we may not
-    // care about cross-year weekly periods.
-    result.nwdaymask = repeat(0, yearlen);
-    for (var j = 0; j < ranges.length; j++) {
-        var rang = ranges[j];
-        var first = rang[0];
-        var last = rang[1] - 1;
-        for (var k = 0; k < options.bynweekday.length; k++) {
-            var i = void 0;
-            var _a = options.bynweekday[k], wday = _a[0], n = _a[1];
-            if (n < 0) {
-                i = last + (n + 1) * 7;
-                i -= pymod(wdaymask[i] - wday, 7);
-            }
-            else {
-                i = first + (n - 1) * 7;
-                i += pymod(7 - wdaymask[i] + wday, 7);
-            }
-            if (first <= i && i <= last)
-                result.nwdaymask[i] = 1;
-        }
-    }
-    return result;
-}
-//# sourceMappingURL=monthinfo.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/easter.js
-function easter(y, offset) {
-    if (offset === void 0) { offset = 0; }
-    var a = y % 19;
-    var b = Math.floor(y / 100);
-    var c = y % 100;
-    var d = Math.floor(b / 4);
-    var e = b % 4;
-    var f = Math.floor((b + 8) / 25);
-    var g = Math.floor((b - f + 1) / 3);
-    var h = Math.floor(19 * a + b - d - g + 15) % 30;
-    var i = Math.floor(c / 4);
-    var k = c % 4;
-    var l = Math.floor(32 + 2 * e + 2 * i - h - k) % 7;
-    var m = Math.floor((a + 11 * h + 22 * l) / 451);
-    var month = Math.floor((h + l - 7 * m + 114) / 31);
-    var day = ((h + l - 7 * m + 114) % 31) + 1;
-    var date = Date.UTC(y, month - 1, day + offset);
-    var yearStart = Date.UTC(y, 0, 1);
-    return [Math.ceil((date - yearStart) / (1000 * 60 * 60 * 24))];
-}
-//# sourceMappingURL=easter.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/index.js
-
-
-
-
-
-
-
-// =============================================================================
-// Iterinfo
-// =============================================================================
-var Iterinfo = /** @class */ (function () {
-    // eslint-disable-next-line no-empty-function
-    function Iterinfo(options) {
-        this.options = options;
-    }
-    Iterinfo.prototype.rebuild = function (year, month) {
-        var options = this.options;
-        if (year !== this.lastyear) {
-            this.yearinfo = rebuildYear(year, options);
-        }
-        if (notEmpty(options.bynweekday) &&
-            (month !== this.lastmonth || year !== this.lastyear)) {
-            var _a = this.yearinfo, yearlen = _a.yearlen, mrange = _a.mrange, wdaymask = _a.wdaymask;
-            this.monthinfo = rebuildMonth(year, month, yearlen, mrange, wdaymask, options);
-        }
-        if (isPresent(options.byeaster)) {
-            this.eastermask = easter(year, options.byeaster);
-        }
-    };
-    Object.defineProperty(Iterinfo.prototype, "lastyear", {
-        get: function () {
-            return this.monthinfo ? this.monthinfo.lastyear : null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "lastmonth", {
-        get: function () {
-            return this.monthinfo ? this.monthinfo.lastmonth : null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "yearlen", {
-        get: function () {
-            return this.yearinfo.yearlen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "yearordinal", {
-        get: function () {
-            return this.yearinfo.yearordinal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "mrange", {
-        get: function () {
-            return this.yearinfo.mrange;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "wdaymask", {
-        get: function () {
-            return this.yearinfo.wdaymask;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "mmask", {
-        get: function () {
-            return this.yearinfo.mmask;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "wnomask", {
-        get: function () {
-            return this.yearinfo.wnomask;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "nwdaymask", {
-        get: function () {
-            return this.monthinfo ? this.monthinfo.nwdaymask : [];
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "nextyearlen", {
-        get: function () {
-            return this.yearinfo.nextyearlen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "mdaymask", {
-        get: function () {
-            return this.yearinfo.mdaymask;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Iterinfo.prototype, "nmdaymask", {
-        get: function () {
-            return this.yearinfo.nmdaymask;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Iterinfo.prototype.ydayset = function () {
-        return [range(this.yearlen), 0, this.yearlen];
-    };
-    Iterinfo.prototype.mdayset = function (_, month) {
-        var start = this.mrange[month - 1];
-        var end = this.mrange[month];
-        var set = repeat(null, this.yearlen);
-        for (var i = start; i < end; i++)
-            set[i] = i;
-        return [set, start, end];
-    };
-    Iterinfo.prototype.wdayset = function (year, month, day) {
-        // We need to handle cross-year weeks here.
-        var set = repeat(null, this.yearlen + 7);
-        var i = toOrdinal(datetime(year, month, day)) - this.yearordinal;
-        var start = i;
-        for (var j = 0; j < 7; j++) {
-            set[i] = i;
-            ++i;
-            if (this.wdaymask[i] === this.options.wkst)
-                break;
-        }
-        return [set, start, i];
-    };
-    Iterinfo.prototype.ddayset = function (year, month, day) {
-        var set = repeat(null, this.yearlen);
-        var i = toOrdinal(datetime(year, month, day)) - this.yearordinal;
-        set[i] = i;
-        return [set, i, i + 1];
-    };
-    Iterinfo.prototype.htimeset = function (hour, _, second, millisecond) {
-        var _this = this;
-        var set = [];
-        this.options.byminute.forEach(function (minute) {
-            set = set.concat(_this.mtimeset(hour, minute, second, millisecond));
-        });
-        sort(set);
-        return set;
-    };
-    Iterinfo.prototype.mtimeset = function (hour, minute, _, millisecond) {
-        var set = this.options.bysecond.map(function (second) { return new Time(hour, minute, second, millisecond); });
-        sort(set);
-        return set;
-    };
-    Iterinfo.prototype.stimeset = function (hour, minute, second, millisecond) {
-        return [new Time(hour, minute, second, millisecond)];
-    };
-    Iterinfo.prototype.getdayset = function (freq) {
-        switch (freq) {
-            case Frequency.YEARLY:
-                return this.ydayset.bind(this);
-            case Frequency.MONTHLY:
-                return this.mdayset.bind(this);
-            case Frequency.WEEKLY:
-                return this.wdayset.bind(this);
-            case Frequency.DAILY:
-                return this.ddayset.bind(this);
-            default:
-                return this.ddayset.bind(this);
-        }
-    };
-    Iterinfo.prototype.gettimeset = function (freq) {
-        switch (freq) {
-            case Frequency.HOURLY:
-                return this.htimeset.bind(this);
-            case Frequency.MINUTELY:
-                return this.mtimeset.bind(this);
-            case Frequency.SECONDLY:
-                return this.stimeset.bind(this);
-        }
-    };
-    return Iterinfo;
-}());
-/* harmony default export */ const iterinfo = (Iterinfo);
-//# sourceMappingURL=index.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iter/poslist.js
-
-
-function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
-    var poslist = [];
-    for (var j = 0; j < bysetpos.length; j++) {
-        var daypos = void 0;
-        var timepos = void 0;
-        var pos = bysetpos[j];
-        if (pos < 0) {
-            daypos = Math.floor(pos / timeset.length);
-            timepos = pymod(pos, timeset.length);
-        }
-        else {
-            daypos = Math.floor((pos - 1) / timeset.length);
-            timepos = pymod(pos - 1, timeset.length);
-        }
-        var tmp = [];
-        for (var k = start; k < end; k++) {
-            var val = dayset[k];
-            if (!isPresent(val))
-                continue;
-            tmp.push(val);
-        }
-        var i = void 0;
-        if (daypos < 0) {
-            i = tmp.slice(daypos)[0];
-        }
-        else {
-            i = tmp[daypos];
-        }
-        var time = timeset[timepos];
-        var date = fromOrdinal(ii.yearordinal + i);
-        var res = combine(date, time);
-        // XXX: can this ever be in the array?
-        // - compare the actual date instead?
-        if (!includes(poslist, res))
-            poslist.push(res);
-    }
-    sort(poslist);
-    return poslist;
-}
-//# sourceMappingURL=poslist.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iter/index.js
-
-
-
-
-
-
-
-
-
-function iter(iterResult, options) {
-    var dtstart = options.dtstart, freq = options.freq, interval = options.interval, until = options.until, bysetpos = options.bysetpos;
-    var count = options.count;
-    if (count === 0 || interval === 0) {
-        return emitResult(iterResult);
-    }
-    var counterDate = DateTime.fromDate(dtstart);
-    var ii = new iterinfo(options);
-    ii.rebuild(counterDate.year, counterDate.month);
-    var timeset = makeTimeset(ii, counterDate, options);
-    for (;;) {
-        var _a = ii.getdayset(freq)(counterDate.year, counterDate.month, counterDate.day), dayset = _a[0], start = _a[1], end = _a[2];
-        var filtered = removeFilteredDays(dayset, start, end, ii, options);
-        if (notEmpty(bysetpos)) {
-            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset);
-            for (var j = 0; j < poslist.length; j++) {
-                var res = poslist[j];
-                if (until && res > until) {
-                    return emitResult(iterResult);
-                }
-                if (res >= dtstart) {
-                    var rezonedDate = rezoneIfNeeded(res, options);
-                    if (!iterResult.accept(rezonedDate)) {
-                        return emitResult(iterResult);
-                    }
-                    if (count) {
-                        --count;
-                        if (!count) {
-                            return emitResult(iterResult);
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            for (var j = start; j < end; j++) {
-                var currentDay = dayset[j];
-                if (!isPresent(currentDay)) {
-                    continue;
-                }
-                var date = fromOrdinal(ii.yearordinal + currentDay);
-                for (var k = 0; k < timeset.length; k++) {
-                    var time = timeset[k];
-                    var res = combine(date, time);
-                    if (until && res > until) {
-                        return emitResult(iterResult);
-                    }
-                    if (res >= dtstart) {
-                        var rezonedDate = rezoneIfNeeded(res, options);
-                        if (!iterResult.accept(rezonedDate)) {
-                            return emitResult(iterResult);
-                        }
-                        if (count) {
-                            --count;
-                            if (!count) {
-                                return emitResult(iterResult);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (options.interval === 0) {
-            return emitResult(iterResult);
-        }
-        // Handle frequency and interval
-        counterDate.add(options, filtered);
-        if (counterDate.year > MAXYEAR) {
-            return emitResult(iterResult);
-        }
-        if (!freqIsDailyOrGreater(freq)) {
-            timeset = ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, 0);
-        }
-        ii.rebuild(counterDate.year, counterDate.month);
-    }
-}
-function isFiltered(ii, currentDay, options) {
-    var bymonth = options.bymonth, byweekno = options.byweekno, byweekday = options.byweekday, byeaster = options.byeaster, bymonthday = options.bymonthday, bynmonthday = options.bynmonthday, byyearday = options.byyearday;
-    return ((notEmpty(bymonth) && !includes(bymonth, ii.mmask[currentDay])) ||
-        (notEmpty(byweekno) && !ii.wnomask[currentDay]) ||
-        (notEmpty(byweekday) && !includes(byweekday, ii.wdaymask[currentDay])) ||
-        (notEmpty(ii.nwdaymask) && !ii.nwdaymask[currentDay]) ||
-        (byeaster !== null && !includes(ii.eastermask, currentDay)) ||
-        ((notEmpty(bymonthday) || notEmpty(bynmonthday)) &&
-            !includes(bymonthday, ii.mdaymask[currentDay]) &&
-            !includes(bynmonthday, ii.nmdaymask[currentDay])) ||
-        (notEmpty(byyearday) &&
-            ((currentDay < ii.yearlen &&
-                !includes(byyearday, currentDay + 1) &&
-                !includes(byyearday, -ii.yearlen + currentDay)) ||
-                (currentDay >= ii.yearlen &&
-                    !includes(byyearday, currentDay + 1 - ii.yearlen) &&
-                    !includes(byyearday, -ii.nextyearlen + currentDay - ii.yearlen)))));
-}
-function rezoneIfNeeded(date, options) {
-    return new DateWithZone(date, options.tzid).rezonedDate();
-}
-function emitResult(iterResult) {
-    return iterResult.getValue();
-}
-function removeFilteredDays(dayset, start, end, ii, options) {
-    var filtered = false;
-    for (var dayCounter = start; dayCounter < end; dayCounter++) {
-        var currentDay = dayset[dayCounter];
-        filtered = isFiltered(ii, currentDay, options);
-        if (filtered)
-            dayset[currentDay] = null;
-    }
-    return filtered;
-}
-function makeTimeset(ii, counterDate, options) {
-    var freq = options.freq, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
-    if (freqIsDailyOrGreater(freq)) {
-        return buildTimeset(options);
-    }
-    if ((freq >= RRule.HOURLY &&
-        notEmpty(byhour) &&
-        !includes(byhour, counterDate.hour)) ||
-        (freq >= RRule.MINUTELY &&
-            notEmpty(byminute) &&
-            !includes(byminute, counterDate.minute)) ||
-        (freq >= RRule.SECONDLY &&
-            notEmpty(bysecond) &&
-            !includes(bysecond, counterDate.second))) {
-        return [];
-    }
-    return ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, counterDate.millisecond);
-}
-//# sourceMappingURL=index.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rrule.js
-
-
-
-
-
-
-
-
-
-
-
-// =============================================================================
-// RRule
-// =============================================================================
-var Days = {
-    MO: new Weekday(0),
-    TU: new Weekday(1),
-    WE: new Weekday(2),
-    TH: new Weekday(3),
-    FR: new Weekday(4),
-    SA: new Weekday(5),
-    SU: new Weekday(6),
-};
-var DEFAULT_OPTIONS = {
-    freq: Frequency.YEARLY,
-    dtstart: null,
-    interval: 1,
-    wkst: Days.MO,
-    count: null,
-    until: null,
-    tzid: null,
-    bysetpos: null,
-    bymonth: null,
-    bymonthday: null,
-    bynmonthday: null,
-    byyearday: null,
-    byweekno: null,
-    byweekday: null,
-    bynweekday: null,
-    byhour: null,
-    byminute: null,
-    bysecond: null,
-    byeaster: null,
-};
-var defaultKeys = Object.keys(DEFAULT_OPTIONS);
-/**
- *
- * @param {Options?} options - see <http://labix.org/python-dateutil/#head-cf004ee9a75592797e076752b2a889c10f445418>
- * - The only required option is `freq`, one of RRule.YEARLY, RRule.MONTHLY, ...
- * @constructor
- */
-var RRule = /** @class */ (function () {
-    function RRule(options, noCache) {
-        if (options === void 0) { options = {}; }
-        if (noCache === void 0) { noCache = false; }
-        // RFC string
-        this._cache = noCache ? null : new Cache();
-        // used by toString()
-        this.origOptions = initializeOptions(options);
-        var parsedOptions = parseOptions(options).parsedOptions;
-        this.options = parsedOptions;
-    }
-    RRule.parseText = function (text, language) {
-        return parseText(text, language);
-    };
-    RRule.fromText = function (text, language) {
-        return fromText(text, language);
-    };
-    RRule.fromString = function (str) {
-        return new RRule(RRule.parseString(str) || undefined);
-    };
-    RRule.prototype._iter = function (iterResult) {
-        return iter(iterResult, this.options);
-    };
-    RRule.prototype._cacheGet = function (what, args) {
-        if (!this._cache)
-            return false;
-        return this._cache._cacheGet(what, args);
-    };
-    RRule.prototype._cacheAdd = function (what, value, args) {
-        if (!this._cache)
-            return;
-        return this._cache._cacheAdd(what, value, args);
-    };
-    /**
-     * @param {Function} iterator - optional function that will be called
-     * on each date that is added. It can return false
-     * to stop the iteration.
-     * @return Array containing all recurrences.
-     */
-    RRule.prototype.all = function (iterator) {
-        if (iterator) {
-            return this._iter(new callbackiterresult('all', {}, iterator));
-        }
-        var result = this._cacheGet('all');
-        if (result === false) {
-            result = this._iter(new iterresult('all', {}));
-            this._cacheAdd('all', result);
-        }
-        return result;
-    };
-    /**
-     * Returns all the occurrences of the rrule between after and before.
-     * The inc keyword defines what happens if after and/or before are
-     * themselves occurrences. With inc == True, they will be included in the
-     * list, if they are found in the recurrence set.
-     *
-     * @return Array
-     */
-    RRule.prototype.between = function (after, before, inc, iterator) {
-        if (inc === void 0) { inc = false; }
-        if (!isValidDate(after) || !isValidDate(before)) {
-            throw new Error('Invalid date passed in to RRule.between');
-        }
-        var args = {
-            before: before,
-            after: after,
-            inc: inc,
-        };
-        if (iterator) {
-            return this._iter(new callbackiterresult('between', args, iterator));
-        }
-        var result = this._cacheGet('between', args);
-        if (result === false) {
-            result = this._iter(new iterresult('between', args));
-            this._cacheAdd('between', result, args);
-        }
-        return result;
-    };
-    /**
-     * Returns the last recurrence before the given datetime instance.
-     * The inc keyword defines what happens if dt is an occurrence.
-     * With inc == True, if dt itself is an occurrence, it will be returned.
-     *
-     * @return Date or null
-     */
-    RRule.prototype.before = function (dt, inc) {
-        if (inc === void 0) { inc = false; }
-        if (!isValidDate(dt)) {
-            throw new Error('Invalid date passed in to RRule.before');
-        }
-        var args = { dt: dt, inc: inc };
-        var result = this._cacheGet('before', args);
-        if (result === false) {
-            result = this._iter(new iterresult('before', args));
-            this._cacheAdd('before', result, args);
-        }
-        return result;
-    };
-    /**
-     * Returns the first recurrence after the given datetime instance.
-     * The inc keyword defines what happens if dt is an occurrence.
-     * With inc == True, if dt itself is an occurrence, it will be returned.
-     *
-     * @return Date or null
-     */
-    RRule.prototype.after = function (dt, inc) {
-        if (inc === void 0) { inc = false; }
-        if (!isValidDate(dt)) {
-            throw new Error('Invalid date passed in to RRule.after');
-        }
-        var args = { dt: dt, inc: inc };
-        var result = this._cacheGet('after', args);
-        if (result === false) {
-            result = this._iter(new iterresult('after', args));
-            this._cacheAdd('after', result, args);
-        }
-        return result;
-    };
-    /**
-     * Returns the number of recurrences in this set. It will have go trough
-     * the whole recurrence, if this hasn't been done before.
-     */
-    RRule.prototype.count = function () {
-        return this.all().length;
-    };
-    /**
-     * Converts the rrule into its string representation
-     *
-     * @see <http://www.ietf.org/rfc/rfc2445.txt>
-     * @return String
-     */
-    RRule.prototype.toString = function () {
-        return optionsToString(this.origOptions);
-    };
-    /**
-     * Will convert all rules described in nlp:ToText
-     * to text.
-     */
-    RRule.prototype.toText = function (gettext, language, dateFormatter) {
-        return toText(this, gettext, language, dateFormatter);
-    };
-    RRule.prototype.isFullyConvertibleToText = function () {
-        return isFullyConvertible(this);
-    };
-    /**
-     * @return a RRule instance with the same freq and options
-     * as this one (cache is not cloned)
-     */
-    RRule.prototype.clone = function () {
-        return new RRule(this.origOptions);
-    };
-    // RRule class 'constants'
-    RRule.FREQUENCIES = [
-        'YEARLY',
-        'MONTHLY',
-        'WEEKLY',
-        'DAILY',
-        'HOURLY',
-        'MINUTELY',
-        'SECONDLY',
-    ];
-    RRule.YEARLY = Frequency.YEARLY;
-    RRule.MONTHLY = Frequency.MONTHLY;
-    RRule.WEEKLY = Frequency.WEEKLY;
-    RRule.DAILY = Frequency.DAILY;
-    RRule.HOURLY = Frequency.HOURLY;
-    RRule.MINUTELY = Frequency.MINUTELY;
-    RRule.SECONDLY = Frequency.SECONDLY;
-    RRule.MO = Days.MO;
-    RRule.TU = Days.TU;
-    RRule.WE = Days.WE;
-    RRule.TH = Days.TH;
-    RRule.FR = Days.FR;
-    RRule.SA = Days.SA;
-    RRule.SU = Days.SU;
-    RRule.parseString = parseString;
-    RRule.optionsToString = optionsToString;
-    return RRule;
-}());
-
-//# sourceMappingURL=rrule.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterset.js
-
-
-
-function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
-    var _exdateHash = {};
-    var _accept = iterResult.accept;
-    function evalExdate(after, before) {
-        _exrule.forEach(function (rrule) {
-            rrule.between(after, before, true).forEach(function (date) {
-                _exdateHash[Number(date)] = true;
-            });
-        });
-    }
-    _exdate.forEach(function (date) {
-        var zonedDate = new DateWithZone(date, tzid).rezonedDate();
-        _exdateHash[Number(zonedDate)] = true;
-    });
-    iterResult.accept = function (date) {
-        var dt = Number(date);
-        if (isNaN(dt))
-            return _accept.call(this, date);
-        if (!_exdateHash[dt]) {
-            evalExdate(new Date(dt - 1), new Date(dt + 1));
-            if (!_exdateHash[dt]) {
-                _exdateHash[dt] = true;
-                return _accept.call(this, date);
-            }
-        }
-        return true;
-    };
-    if (iterResult.method === 'between') {
-        evalExdate(iterResult.args.after, iterResult.args.before);
-        iterResult.accept = function (date) {
-            var dt = Number(date);
-            if (!_exdateHash[dt]) {
-                _exdateHash[dt] = true;
-                return _accept.call(this, date);
-            }
-            return true;
-        };
-    }
-    for (var i = 0; i < _rdate.length; i++) {
-        var zonedDate = new DateWithZone(_rdate[i], tzid).rezonedDate();
-        if (!iterResult.accept(new Date(zonedDate.getTime())))
-            break;
-    }
-    _rrule.forEach(function (rrule) {
-        iter(iterResult, rrule.options);
-    });
-    var res = iterResult._result;
-    sort(res);
-    switch (iterResult.method) {
-        case 'all':
-        case 'between':
-            return res;
-        case 'before':
-            return ((res.length && res[res.length - 1]) || null);
-        case 'after':
-        default:
-            return ((res.length && res[0]) || null);
-    }
-}
-//# sourceMappingURL=iterset.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rrulestr.js
-
-
-
-
-
-
-/**
- * RRuleStr
- * To parse a set of rrule strings
- */
-var rrulestr_DEFAULT_OPTIONS = {
-    dtstart: null,
-    cache: false,
-    unfold: false,
-    forceset: false,
-    compatible: false,
-    tzid: null,
-};
-function parseInput(s, options) {
-    var rrulevals = [];
-    var rdatevals = [];
-    var exrulevals = [];
-    var exdatevals = [];
-    var parsedDtstart = parseDtstart(s);
-    var dtstart = parsedDtstart.dtstart;
-    var tzid = parsedDtstart.tzid;
-    var lines = splitIntoLines(s, options.unfold);
-    lines.forEach(function (line) {
-        var _a;
-        if (!line)
-            return;
-        var _b = breakDownLine(line), name = _b.name, parms = _b.parms, value = _b.value;
-        switch (name.toUpperCase()) {
-            case 'RRULE':
-                if (parms.length) {
-                    throw new Error("unsupported RRULE parm: ".concat(parms.join(',')));
-                }
-                rrulevals.push(parseString(line));
-                break;
-            case 'RDATE':
-                var _c = (_a = /RDATE(?:;TZID=([^:=]+))?/i.exec(line)) !== null && _a !== void 0 ? _a : [], rdateTzid = _c[1];
-                if (rdateTzid && !tzid) {
-                    tzid = rdateTzid;
-                }
-                rdatevals = rdatevals.concat(parseRDate(value, parms));
-                break;
-            case 'EXRULE':
-                if (parms.length) {
-                    throw new Error("unsupported EXRULE parm: ".concat(parms.join(',')));
-                }
-                exrulevals.push(parseString(value));
-                break;
-            case 'EXDATE':
-                exdatevals = exdatevals.concat(parseRDate(value, parms));
-                break;
-            case 'DTSTART':
-                break;
-            default:
-                throw new Error('unsupported property: ' + name);
-        }
-    });
-    return {
-        dtstart: dtstart,
-        tzid: tzid,
-        rrulevals: rrulevals,
-        rdatevals: rdatevals,
-        exrulevals: exrulevals,
-        exdatevals: exdatevals,
-    };
-}
-function buildRule(s, options) {
-    var _a = parseInput(s, options), rrulevals = _a.rrulevals, rdatevals = _a.rdatevals, exrulevals = _a.exrulevals, exdatevals = _a.exdatevals, dtstart = _a.dtstart, tzid = _a.tzid;
-    var noCache = options.cache === false;
-    if (options.compatible) {
-        options.forceset = true;
-        options.unfold = true;
-    }
-    if (options.forceset ||
-        rrulevals.length > 1 ||
-        rdatevals.length ||
-        exrulevals.length ||
-        exdatevals.length) {
-        var rset_1 = new RRuleSet(noCache);
-        rset_1.dtstart(dtstart);
-        rset_1.tzid(tzid || undefined);
-        rrulevals.forEach(function (val) {
-            rset_1.rrule(new RRule(groomRruleOptions(val, dtstart, tzid), noCache));
-        });
-        rdatevals.forEach(function (date) {
-            rset_1.rdate(date);
-        });
-        exrulevals.forEach(function (val) {
-            rset_1.exrule(new RRule(groomRruleOptions(val, dtstart, tzid), noCache));
-        });
-        exdatevals.forEach(function (date) {
-            rset_1.exdate(date);
-        });
-        if (options.compatible && options.dtstart)
-            rset_1.rdate(dtstart);
-        return rset_1;
-    }
-    var val = rrulevals[0] || {};
-    return new RRule(groomRruleOptions(val, val.dtstart || options.dtstart || dtstart, val.tzid || options.tzid || tzid), noCache);
-}
-function rrulestr(s, options) {
-    if (options === void 0) { options = {}; }
-    return buildRule(s, rrulestr_initializeOptions(options));
-}
-function groomRruleOptions(val, dtstart, tzid) {
-    return __assign(__assign({}, val), { dtstart: dtstart, tzid: tzid });
-}
-function rrulestr_initializeOptions(options) {
-    var invalid = [];
-    var keys = Object.keys(options);
-    var defaultKeys = Object.keys(rrulestr_DEFAULT_OPTIONS);
-    keys.forEach(function (key) {
-        if (!includes(defaultKeys, key))
-            invalid.push(key);
-    });
-    if (invalid.length) {
-        throw new Error('Invalid options: ' + invalid.join(', '));
-    }
-    return __assign(__assign({}, rrulestr_DEFAULT_OPTIONS), options);
-}
-function extractName(line) {
-    if (line.indexOf(':') === -1) {
-        return {
-            name: 'RRULE',
-            value: line,
-        };
-    }
-    var _a = split(line, ':', 1), name = _a[0], value = _a[1];
-    return {
-        name: name,
-        value: value,
-    };
-}
-function breakDownLine(line) {
-    var _a = extractName(line), name = _a.name, value = _a.value;
-    var parms = name.split(';');
-    if (!parms)
-        throw new Error('empty property name');
-    return {
-        name: parms[0].toUpperCase(),
-        parms: parms.slice(1),
-        value: value,
-    };
-}
-function splitIntoLines(s, unfold) {
-    if (unfold === void 0) { unfold = false; }
-    s = s && s.trim();
-    if (!s)
-        throw new Error('Invalid empty string');
-    // More info about 'unfold' option
-    // Go head to http://www.ietf.org/rfc/rfc2445.txt
-    if (!unfold) {
-        return s.split(/\s/);
-    }
-    var lines = s.split('\n');
-    var i = 0;
-    while (i < lines.length) {
-        // TODO
-        var line = (lines[i] = lines[i].replace(/\s+$/g, ''));
-        if (!line) {
-            lines.splice(i, 1);
-        }
-        else if (i > 0 && line[0] === ' ') {
-            lines[i - 1] += line.slice(1);
-            lines.splice(i, 1);
-        }
-        else {
-            i += 1;
-        }
-    }
-    return lines;
-}
-function validateDateParm(parms) {
-    parms.forEach(function (parm) {
-        if (!/(VALUE=DATE(-TIME)?)|(TZID=)/.test(parm)) {
-            throw new Error('unsupported RDATE/EXDATE parm: ' + parm);
-        }
-    });
-}
-function parseRDate(rdateval, parms) {
-    validateDateParm(parms);
-    return rdateval.split(',').map(function (datestr) { return untilStringToDate(datestr); });
-}
-//# sourceMappingURL=rrulestr.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rruleset.js
-
-
-
-
-
-
-
-function createGetterSetter(fieldName) {
-    var _this = this;
-    return function (field) {
-        if (field !== undefined) {
-            _this["_".concat(fieldName)] = field;
-        }
-        if (_this["_".concat(fieldName)] !== undefined) {
-            return _this["_".concat(fieldName)];
-        }
-        for (var i = 0; i < _this._rrule.length; i++) {
-            var field_1 = _this._rrule[i].origOptions[fieldName];
-            if (field_1) {
-                return field_1;
-            }
-        }
-    };
-}
-var RRuleSet = /** @class */ (function (_super) {
-    __extends(RRuleSet, _super);
-    /**
-     *
-     * @param {Boolean?} noCache
-     * The same stratagy as RRule on cache, default to false
-     * @constructor
-     */
-    function RRuleSet(noCache) {
-        if (noCache === void 0) { noCache = false; }
-        var _this = _super.call(this, {}, noCache) || this;
-        _this.dtstart = createGetterSetter.apply(_this, ['dtstart']);
-        _this.tzid = createGetterSetter.apply(_this, ['tzid']);
-        _this._rrule = [];
-        _this._rdate = [];
-        _this._exrule = [];
-        _this._exdate = [];
-        return _this;
-    }
-    RRuleSet.prototype._iter = function (iterResult) {
-        return iterSet(iterResult, this._rrule, this._exrule, this._rdate, this._exdate, this.tzid());
-    };
-    /**
-     * Adds an RRule to the set
-     *
-     * @param {RRule}
-     */
-    RRuleSet.prototype.rrule = function (rrule) {
-        _addRule(rrule, this._rrule);
-    };
-    /**
-     * Adds an EXRULE to the set
-     *
-     * @param {RRule}
-     */
-    RRuleSet.prototype.exrule = function (rrule) {
-        _addRule(rrule, this._exrule);
-    };
-    /**
-     * Adds an RDate to the set
-     *
-     * @param {Date}
-     */
-    RRuleSet.prototype.rdate = function (date) {
-        _addDate(date, this._rdate);
-    };
-    /**
-     * Adds an EXDATE to the set
-     *
-     * @param {Date}
-     */
-    RRuleSet.prototype.exdate = function (date) {
-        _addDate(date, this._exdate);
-    };
-    /**
-     * Get list of included rrules in this recurrence set.
-     *
-     * @return List of rrules
-     */
-    RRuleSet.prototype.rrules = function () {
-        return this._rrule.map(function (e) { return rrulestr(e.toString()); });
-    };
-    /**
-     * Get list of excluded rrules in this recurrence set.
-     *
-     * @return List of exrules
-     */
-    RRuleSet.prototype.exrules = function () {
-        return this._exrule.map(function (e) { return rrulestr(e.toString()); });
-    };
-    /**
-     * Get list of included datetimes in this recurrence set.
-     *
-     * @return List of rdates
-     */
-    RRuleSet.prototype.rdates = function () {
-        return this._rdate.map(function (e) { return new Date(e.getTime()); });
-    };
-    /**
-     * Get list of included datetimes in this recurrence set.
-     *
-     * @return List of exdates
-     */
-    RRuleSet.prototype.exdates = function () {
-        return this._exdate.map(function (e) { return new Date(e.getTime()); });
-    };
-    RRuleSet.prototype.valueOf = function () {
-        var result = [];
-        if (!this._rrule.length && this._dtstart) {
-            result = result.concat(optionsToString({ dtstart: this._dtstart }));
-        }
-        this._rrule.forEach(function (rrule) {
-            result = result.concat(rrule.toString().split('\n'));
-        });
-        this._exrule.forEach(function (exrule) {
-            result = result.concat(exrule
-                .toString()
-                .split('\n')
-                .map(function (line) { return line.replace(/^RRULE:/, 'EXRULE:'); })
-                .filter(function (line) { return !/^DTSTART/.test(line); }));
-        });
-        if (this._rdate.length) {
-            result.push(rdatesToString('RDATE', this._rdate, this.tzid()));
-        }
-        if (this._exdate.length) {
-            result.push(rdatesToString('EXDATE', this._exdate, this.tzid()));
-        }
-        return result;
-    };
-    /**
-     * to generate recurrence field such as:
-     * DTSTART:19970902T010000Z
-     * RRULE:FREQ=YEARLY;COUNT=2;BYDAY=TU
-     * RRULE:FREQ=YEARLY;COUNT=1;BYDAY=TH
-     */
-    RRuleSet.prototype.toString = function () {
-        return this.valueOf().join('\n');
-    };
-    /**
-     * Create a new RRuleSet Object completely base on current instance
-     */
-    RRuleSet.prototype.clone = function () {
-        var rrs = new RRuleSet(!!this._cache);
-        this._rrule.forEach(function (rule) { return rrs.rrule(rule.clone()); });
-        this._exrule.forEach(function (rule) { return rrs.exrule(rule.clone()); });
-        this._rdate.forEach(function (date) { return rrs.rdate(new Date(date.getTime())); });
-        this._exdate.forEach(function (date) { return rrs.exdate(new Date(date.getTime())); });
-        return rrs;
-    };
-    return RRuleSet;
-}(RRule));
-
-function _addRule(rrule, collection) {
-    if (!(rrule instanceof RRule)) {
-        throw new TypeError(String(rrule) + ' is not RRule instance');
-    }
-    if (!includes(collection.map(String), String(rrule))) {
-        collection.push(rrule);
-    }
-}
-function _addDate(date, collection) {
-    if (!(date instanceof Date)) {
-        throw new TypeError(String(date) + ' is not Date instance');
-    }
-    if (!includes(collection.map(Number), Number(date))) {
-        collection.push(date);
-        sort(collection);
-    }
-}
-function rdatesToString(param, rdates, tzid) {
-    var isUTC = !tzid || tzid.toUpperCase() === 'UTC';
-    var header = isUTC ? "".concat(param, ":") : "".concat(param, ";TZID=").concat(tzid, ":");
-    var dateString = rdates
-        .map(function (rdate) { return timeToUntilString(rdate.valueOf(), isUTC); })
-        .join(',');
-    return "".concat(header).concat(dateString);
-}
-//# sourceMappingURL=rruleset.js.map
-;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/index.js
-/* !
- * rrule.js - Library for working with recurrence rules for calendar dates.
- * https://github.com/jakubroztocil/rrule
- *
- * Copyright 2010, Jakub Roztocil and Lars Schoning
- * Licenced under the BSD licence.
- * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
- *
- * Based on:
- * python-dateutil - Extensions to the standard Python datetime module.
- * Copyright (c) 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
- * Copyright (c) 2012 - Tomi Pieviläinen <tomi.pievilainen@iki.fi>
- * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
- *
- */
-
-
-
-
-
-
-//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -33506,7 +29631,8 @@ class HeaderPanel extends _m_columns_view.ColumnsView {
       const $headerPanel = this.element();
       $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
       const label = _message.default.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
-      const $toolbar = (0, _renderer.default)('<div>').attr('aria-label', label).appendTo($headerPanel);
+      const $toolbar = (0, _renderer.default)('<div>').appendTo($headerPanel);
+      this.setAria('label', label, $toolbar);
       this._toolbar = this._createComponent($toolbar, _toolbar.default, this._toolbarOptions);
     } else {
       this._toolbar.option(this._toolbarOptions);
@@ -34926,6 +31052,9 @@ function readThemeMarker() {
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let result;
   try {
+    if (!(window !== null && window !== void 0 && window.getComputedStyle)) {
+      return null;
+    }
     result = window.getComputedStyle(element.get(0)).fontFamily;
     if (!result) {
       return null;
@@ -35361,7 +31490,7 @@ var _m_time_panel_data_generator = __webpack_require__(16794);
 var _view_provider_utils = __webpack_require__(686);
 const _excluded = ["getResourceManager", "groupOrientation", "groupByDate", "isAllDayPanelVisible", "viewOffset"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 // TODO: Vinogradov types refactoring.
 class ViewDataProvider {
   constructor(viewType) {
@@ -35537,35 +31666,52 @@ class ViewDataProvider {
   findGlobalCellPosition(date) {
     let groupIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
     let allDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    let findClosest = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     const {
       completeViewDataMap
     } = this;
     const showAllDayPanel = this._options.isAllDayPanelVisible;
+    let resultDiff = Number.MAX_VALUE;
+    let resultCellData;
+    let resultCellColumnIndex = -1;
+    let resultCellRowIndex = -1;
+    const getCellPosition = (columnIndex, rowIndex) => ({
+      columnIndex,
+      rowIndex: showAllDayPanel && !this._options.isVerticalGrouping ? rowIndex - 1 : rowIndex
+    });
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
       for (let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
         const cellData = currentRow[columnIndex];
         const {
-          startDate: currentStartDate,
-          endDate: currentEndDate,
-          groupIndex: currentGroupIndex,
-          allDay: currentAllDay
+          startDate: cellStartDate,
+          endDate: cellEndDate,
+          groupIndex: cellGroupIndex,
+          allDay: cellAllDay
         } = cellData;
-        if (groupIndex === currentGroupIndex && allDay === Boolean(currentAllDay) && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
+        if (groupIndex !== cellGroupIndex || allDay !== Boolean(cellAllDay)) {
+          continue;
+        }
+        const isDateInCell = allDay ? _date.default.sameDate(date, cellStartDate) : date >= cellStartDate && date < cellEndDate;
+        if (isDateInCell) {
           return {
-            position: {
-              columnIndex,
-              rowIndex: showAllDayPanel && !this._options.isVerticalGrouping ? rowIndex - 1 : rowIndex
-            },
+            position: getCellPosition(columnIndex, rowIndex),
             cellData
           };
         }
+        const diff = Math.abs(date.getTime() - cellStartDate.getTime());
+        if (findClosest && diff < resultDiff) {
+          resultDiff = diff;
+          resultCellData = cellData;
+          resultCellColumnIndex = columnIndex;
+          resultCellRowIndex = rowIndex;
+        }
       }
     }
-    return undefined;
-  }
-  _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {
-    return allDay ? _date.default.sameDate(date, cellStartDate) : date >= cellStartDate && date < cellEndDate;
+    return resultCellData ? {
+      position: getCellPosition(resultCellColumnIndex, resultCellRowIndex),
+      cellData: resultCellData
+    } : undefined;
   }
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
     const {
@@ -36502,26 +32648,25 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
   _isVerticalShader() {
     return true;
   }
-  getIndicationWidth(groupIndex) {
-    const maxWidth = this.getCellWidth() * this._getCellCount();
-    let difference = this._getIndicatorDuration();
-    if (difference > this._getCellCount()) {
-      difference = this._getCellCount();
-    }
-    const width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
-    return maxWidth < width ? maxWidth : width;
+  getIndicationWidth() {
+    const cellCount = this._getCellCount();
+    const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
+    const width = cellSpan * this.getCellWidth();
+    const maxWidth = this.getCellWidth() * cellCount;
+    return Math.min(width, maxWidth);
   }
-  getIndicatorOffset(groupIndex) {
-    const difference = this._getIndicatorDuration() - 1;
-    const offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+  getIndicatorOffset() {
+    const cellSpan = this._getIndicatorDaysSpan() - 1;
+    const offset = cellSpan * this.getCellWidth();
     return offset;
   }
-  _getIndicatorDuration() {
+  _getIndicatorDaysSpan() {
     const today = this._getToday();
-    const firstViewDate = new Date(this.getStartViewDate());
-    let timeDiff = today.getTime() - firstViewDate.getTime();
+    const viewStartTime = this.getStartViewDate().getTime();
+    let timeDiff = today.getTime() - viewStartTime;
     if (this.option('type') === 'workWeek') {
-      timeDiff -= this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      timeDiff -= weekendDays;
     }
     return Math.ceil((timeDiff + 1) / toMs('day'));
   }
@@ -37322,8 +33467,7 @@ var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var Base = _interopRequireWildcard(__webpack_require__(19718));
 var _items_controller = __webpack_require__(58761);
 var cardModule = _interopRequireWildcard(__webpack_require__(46715));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function PublicMethods(GridCore) {
   return class CardViewWithContentView extends Base.PublicMethods(GridCore) {
@@ -37475,8 +33619,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _toast = _interopRequireWildcard(__webpack_require__(80932));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function hideToasts(container) {
   const toasts = (0, _renderer.default)(`.${_toast.TOAST_CLASS}`).toArray();
@@ -39284,11 +35427,12 @@ var _m_recurrence_form = __webpack_require__(58452);
 var _utils = __webpack_require__(63512);
 const _excluded = ["items", "onContentReady", "onInitialized"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const CLASSES = {
   form: 'dx-scheduler-form',
   icon: 'dx-icon',
   hidden: 'dx-hidden',
+  fieldItemContent: 'dx-field-item-content',
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
   formIcon: 'dx-scheduler-form-icon',
   defaultResourceIcon: 'dx-scheduler-default-resources-icon',
@@ -39491,6 +35635,9 @@ class AppointmentForm {
         if (isDateRangeChanged) {
           this.updateDateEditorsValues();
         }
+        if (isRecurrenceRuleChanged || startDateExpr === dataField) {
+          this._recurrenceForm.updateRecurrenceFormValues(this.recurrenceRuleRaw, this.startDate);
+        }
         if (isRecurrenceRuleChanged) {
           this.updateRepeatEditorValue();
         }
@@ -39631,7 +35778,12 @@ class AppointmentForm {
       cssClass: CLASSES.startDateEditor
     }, {
       name: START_TIME_EDITOR_NAME,
-      cssClass: CLASSES.startTimeEditor
+      cssClass: CLASSES.startTimeEditor,
+      editorOptions: {
+        inputAttr: {
+          'aria-label': _message.default.format('dxScheduler-editorAriaLabelStartTime')
+        }
+      }
     }, {
       name: START_DATE_TIMEZONE_EDITOR_NAME,
       dataField: startDateTimeZoneExpr,
@@ -39660,7 +35812,12 @@ class AppointmentForm {
       cssClass: CLASSES.endDateEditor
     }, {
       name: END_TIME_EDITOR_NAME,
-      cssClass: CLASSES.endTimeEditor
+      cssClass: CLASSES.endTimeEditor,
+      editorOptions: {
+        inputAttr: {
+          'aria-label': _message.default.format('dxScheduler-editorAriaLabelEndTime')
+        }
+      }
     }, {
       name: END_DATE_TIMEZONE_EDITOR_NAME,
       dataField: endDateTimeZoneExpr,
@@ -39806,7 +35963,13 @@ class AppointmentForm {
           onValueChanged: e => {
             if (e.value === repeatNeverValue) {
               this.dxForm.updateData(recurrenceRuleExpr, '');
-            } else if (e.event) {
+            } else {
+              const currentRecurrenceRule = this._recurrenceForm.recurrenceRule.toString() ?? '';
+              const recurrenceRule = new _utils.RecurrenceRule(currentRecurrenceRule, this.startDate);
+              recurrenceRule.frequency = e.value;
+              this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
+            }
+            if (e.value !== repeatNeverValue && e.event) {
               this.showRecurrenceGroup();
             }
             e.component.option('buttons', this.getRepeatEditorButtons());
@@ -39954,41 +36117,43 @@ class AppointmentForm {
       });
     }
   }
-  showRecurrenceGroup() {
-    var _this$_$mainGroup, _this$_$mainGroup2, _this$_$recurrenceGro, _this$_$recurrenceGro2, _this$dxForm$getEdito;
-    const currentHeight = this.dxPopup.option('height');
-    if (currentHeight === 'auto' || currentHeight === undefined) {
-      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
-      this.dxPopup.option('height', overlayHeight);
-    }
-    (_this$_$mainGroup = this._$mainGroup) === null || _this$_$mainGroup === void 0 || _this$_$mainGroup.addClass(CLASSES.mainHidden);
-    (_this$_$mainGroup2 = this._$mainGroup) === null || _this$_$mainGroup2 === void 0 || _this$_$mainGroup2.attr('tabindex', '-1');
-    (_this$_$recurrenceGro = this._$recurrenceGroup) === null || _this$_$recurrenceGro === void 0 || _this$_$recurrenceGro.removeClass(CLASSES.recurrenceHidden);
-    (_this$_$recurrenceGro2 = this._$recurrenceGroup) === null || _this$_$recurrenceGro2 === void 0 || _this$_$recurrenceGro2.removeAttr('tabindex');
-    const repeatEditorValue = (_this$dxForm$getEdito = this.dxForm.getEditor(REPEAT_EDITOR_NAME)) === null || _this$dxForm$getEdito === void 0 ? void 0 : _this$dxForm$getEdito.option('value');
-    this._recurrenceForm.updateRecurrenceFormValues(repeatEditorValue, this.recurrenceRuleRaw, this.startDate);
-    this._popup.updateToolbarForRecurrenceGroup();
-  }
   showMainGroup() {
-    var _editingConfig$popup, _this$_$mainGroup3, _this$_$mainGroup4, _this$_$recurrenceGro3, _this$_$recurrenceGro4;
+    var _editingConfig$popup;
+    this._popup.updateToolbarForMainGroup();
     const currentHeight = this.dxPopup.option('height');
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = (editingConfig === null || editingConfig === void 0 || (_editingConfig$popup = editingConfig.popup) === null || _editingConfig$popup === void 0 ? void 0 : _editingConfig$popup.height) ?? 'auto';
     if (typeof currentHeight === 'number') {
       this.dxPopup.option('height', configuredHeight);
     }
-    (_this$_$mainGroup3 = this._$mainGroup) === null || _this$_$mainGroup3 === void 0 || _this$_$mainGroup3.removeClass(CLASSES.mainHidden);
-    (_this$_$mainGroup4 = this._$mainGroup) === null || _this$_$mainGroup4 === void 0 || _this$_$mainGroup4.removeAttr('tabindex');
-    (_this$_$recurrenceGro3 = this._$recurrenceGroup) === null || _this$_$recurrenceGro3 === void 0 || _this$_$recurrenceGro3.addClass(CLASSES.recurrenceHidden);
-    (_this$_$recurrenceGro4 = this._$recurrenceGroup) === null || _this$_$recurrenceGro4 === void 0 || _this$_$recurrenceGro4.attr('tabindex', '-1');
-    this._popup.updateToolbarForMainGroup();
+    if (this._$mainGroup) {
+      this._$mainGroup.removeClass(CLASSES.mainHidden);
+      this._$mainGroup.removeAttr('inert');
+      this.focusFirstFocusableInGroup(this._$mainGroup);
+    }
+    if (this._$recurrenceGroup) {
+      this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.attr('inert', true);
+    }
+  }
+  showRecurrenceGroup() {
+    this._popup.updateToolbarForRecurrenceGroup();
+    const currentHeight = this.dxPopup.option('height');
+    if (currentHeight === 'auto' || currentHeight === undefined) {
+      const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
+      this.dxPopup.option('height', overlayHeight);
+    }
+    if (this._$mainGroup) {
+      this._$mainGroup.addClass(CLASSES.mainHidden);
+      this._$mainGroup.attr('inert', true);
+    }
+    if (this._$recurrenceGroup) {
+      this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.removeAttr('inert');
+      this.focusFirstFocusableInGroup(this._$recurrenceGroup);
+    }
   }
   saveRecurrenceValue() {
-    var _this$_$recurrenceGro5;
-    const isRecurrenceFormOpened = !((_this$_$recurrenceGro5 = this._$recurrenceGroup) !== null && _this$_$recurrenceGro5 !== void 0 && _this$_$recurrenceGro5.hasClass(CLASSES.recurrenceHidden));
-    if (!isRecurrenceFormOpened) {
-      return;
-    }
     const {
       recurrenceRule
     } = this._recurrenceForm;
@@ -39998,8 +36163,8 @@ class AppointmentForm {
     const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
     this.dxForm.updateData(recurrenceRuleExpr, recurrenceRuleSerialized);
     if (recurrenceRuleSerialized) {
-      var _this$dxForm$getEdito2;
-      (_this$dxForm$getEdito2 = this.dxForm.getEditor(START_DATE_EDITOR_NAME)) === null || _this$dxForm$getEdito2 === void 0 || _this$dxForm$getEdito2.option('value', recurrenceRule.startDate);
+      var _this$dxForm$getEdito;
+      (_this$dxForm$getEdito = this.dxForm.getEditor(START_DATE_EDITOR_NAME)) === null || _this$dxForm$getEdito === void 0 || _this$dxForm$getEdito.option('value', recurrenceRule.startDate);
     }
   }
   async updateSubjectIconColor() {
@@ -40082,6 +36247,12 @@ class AppointmentForm {
     this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
+  }
+  focusFirstFocusableInGroup($group) {
+    const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get(0);
+    focusTarget === null || focusTarget === void 0 || focusTarget.focus({
+      preventScroll: true
+    });
   }
 }
 exports.AppointmentForm = AppointmentForm;
@@ -40958,12 +37129,12 @@ class FileManager extends _widget.default {
         break;
       case 'upload':
         {
-          var _this$_controller10;
+          var _this$_controller0;
           const {
             upload
           } = this.option();
           // @ts-expect-error ts-error
-          (_this$_controller10 = this._controller) === null || _this$_controller10 === void 0 || _this$_controller10.setUploadOptions(upload);
+          (_this$_controller0 = this._controller) === null || _this$_controller0 === void 0 || _this$_controller0.setUploadOptions(upload);
           this._invalidate();
           break;
         }
@@ -41098,14 +37269,14 @@ class FileManager extends _widget.default {
     return (_this$_commandManager5 = this._commandManager) === null || _this$_commandManager5 === void 0 ? void 0 : _this$_commandManager5.executeCommand(commandName);
   }
   _setCurrentDirectory(directoryInfo, checkActuality) {
-    var _this$_controller11;
-    (_this$_controller11 = this._controller) === null || _this$_controller11 === void 0 || _this$_controller11.setCurrentDirectory(directoryInfo, checkActuality);
+    var _this$_controller1;
+    (_this$_controller1 = this._controller) === null || _this$_controller1 === void 0 || _this$_controller1.setCurrentDirectory(directoryInfo, checkActuality);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getCurrentDirectory() {
-    var _this$_controller12;
+    var _this$_controller10;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_controller12 = this._controller) === null || _this$_controller12 === void 0 ? void 0 : _this$_controller12.getCurrentDirectory();
+    return (_this$_controller10 = this._controller) === null || _this$_controller10 === void 0 ? void 0 : _this$_controller10.getCurrentDirectory();
   }
   _onControllerInitialized(_ref8) {
     let {
@@ -41153,12 +37324,12 @@ class FileManager extends _widget.default {
     this._checkPathActuality();
   }
   _checkPathActuality() {
-    var _this$_controller13, _this$_controller14;
+    var _this$_controller11, _this$_controller12;
     if (this._lockCurrentPathProcessing) {
       return;
     }
-    const currentPath = (_this$_controller13 = this._controller) === null || _this$_controller13 === void 0 ? void 0 : _this$_controller13.getCurrentPath();
-    const currentPathKeys = (_this$_controller14 = this._controller) === null || _this$_controller14 === void 0 ? void 0 : _this$_controller14.getCurrentPathKeys();
+    const currentPath = (_this$_controller11 = this._controller) === null || _this$_controller11 === void 0 ? void 0 : _this$_controller11.getCurrentPath();
+    const currentPathKeys = (_this$_controller12 = this._controller) === null || _this$_controller12 === void 0 ? void 0 : _this$_controller12.getCurrentPathKeys();
     const options = {};
     const {
       currentPath: currentPathOption,
@@ -41176,8 +37347,8 @@ class FileManager extends _widget.default {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getDirectories(parentDirectoryInfo, skipNavigationOnError) {
-    var _this$_controller15;
-    return (_this$_controller15 = this._controller) === null || _this$_controller15 === void 0 ? void 0 : _this$_controller15.getDirectories(parentDirectoryInfo, skipNavigationOnError);
+    var _this$_controller13;
+    return (_this$_controller13 = this._controller) === null || _this$_controller13 === void 0 ? void 0 : _this$_controller13.getDirectories(parentDirectoryInfo, skipNavigationOnError);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getSelectedItemInfos() {
@@ -41200,10 +37371,10 @@ class FileManager extends _widget.default {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (_this$_getSelectedIte = this._getSelectedItemInfos()) === null || _this$_getSelectedIte === void 0 ? void 0 : _this$_getSelectedIte.map(itemInfo => itemInfo.fileItem);
   }
-  _onSelectedItemOpened(_ref10) {
+  _onSelectedItemOpened(_ref0) {
     let {
       fileItemInfo
-    } = _ref10;
+    } = _ref0;
     const {
       fileItem
     } = fileItemInfo;
@@ -41364,6 +37535,7 @@ var _size = __webpack_require__(57653);
 var _type = __webpack_require__(11528);
 var _form = _interopRequireDefault(__webpack_require__(74075));
 var _themes = __webpack_require__(52071);
+var _const = __webpack_require__(92806);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 var _utils = __webpack_require__(90608);
@@ -41462,6 +37634,9 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
   publicMethods() {
     return ['isAdaptiveDetailRowExpanded', 'expandAdaptiveDetailRow', 'collapseAdaptiveDetailRow'];
   }
+  _getValueFromCellOptions(columnIndex, cellOptions) {
+    return cellOptions.row.values[columnIndex];
+  }
   _isRowEditMode() {
     const editMode = this._getEditMode();
     return editMode === EDIT_MODE_ROW;
@@ -41484,7 +37659,8 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
       }
     });
     const rowData = cellOptions.row.data;
-    const value = column.calculateCellValue(rowData);
+    const columnIndex = that._columnsController.getVisibleIndex(column.index);
+    const value = column.type === _const.AI_COLUMN_NAME ? this._getValueFromCellOptions(columnIndex, cellOptions) : column.calculateCellValue(rowData);
     const displayValue = _m_utils.default.getDisplayValue(column, value, rowData, cellOptions.rowType);
     const text = _m_utils.default.formatValue(displayValue, column);
     const isCellOrBatchEditMode = this._editingController.isCellOrBatchEditMode();
@@ -41538,7 +37714,7 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
       const templateOptions = (0, _extend.extend)({}, cellOptions);
       const renderFormTemplate = function () {
         const isItemEdited = that._isItemEdited(item);
-        templateOptions.value = cellOptions.row.values[columnIndex];
+        templateOptions.value = that._getValueFromCellOptions(columnIndex, cellOptions);
         if (isItemEdited || column.showEditorAlways) {
           editingController.renderFormEditorTemplate(templateOptions, item, options, $container, !isItemEdited);
         } else {
@@ -41551,7 +37727,7 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
       if (templateOptions.watch) {
         const dispose = templateOptions.watch(() => ({
           isItemEdited: that._isItemEdited(item),
-          value: cellOptions.row.values[columnIndex]
+          value: that._getValueFromCellOptions(columnIndex, cellOptions)
         }), () => {
           $container.contents().remove();
           $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
@@ -42067,7 +38243,9 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
   }
   setCommandAdaptiveAriaLabel($row, labelName) {
     const $adaptiveCommand = $row.find('.dx-command-adaptive');
-    $adaptiveCommand.attr('aria-label', _message.default.format(labelName));
+    if ($adaptiveCommand.length) {
+      this.setAria('label', _message.default.format(labelName), $adaptiveCommand);
+    }
   }
 }
 exports.AdaptiveColumnsController = AdaptiveColumnsController;
@@ -42617,6 +38795,7 @@ if (_devextremeQuill.default) {
             const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
             this._updateToolbar(isSelectionChanged);
           }
+          this._updateHeaderFormatWidget();
         });
       }
     }
@@ -42801,17 +38980,16 @@ if (_devextremeQuill.default) {
       }, item);
     }
     _createCommandMenuItem(command, text, commandOptions) {
-      var _getDefaultOptionsByC;
-      const options = (commandOptions === null || commandOptions === void 0 ? void 0 : commandOptions.map(_capitalize.capitalize)) ?? ((_getDefaultOptionsByC = (0, _ai.getDefaultOptionsByCommand)(command)) === null || _getDefaultOptionsByC === void 0 ? void 0 : _getDefaultOptionsByC.map(_capitalize.capitalize));
+      const options = (commandOptions === null || commandOptions === void 0 ? void 0 : commandOptions.map(_capitalize.capitalize)) ?? (0, _ai.getDefaultOptionsByCommand)(command);
       const item = {
         id: command,
         name: command,
-        text: text ?? _ai.defaultCommandNames[command],
+        text: text ?? (0, _ai.getDefaultCommandName)(command),
         items: options === null || options === void 0 ? void 0 : options.map(option => ({
           id: option,
           text: option,
           parentCommand: command,
-          options: options === null || options === void 0 ? void 0 : options.map(_capitalize.capitalize)
+          options
         }))
       };
       return item;
@@ -42870,7 +39048,7 @@ if (_devextremeQuill.default) {
       var _dataSource$0$items;
       const {
         name = TOOLBAR_AI_ITEM_NAME,
-        commands = Object.keys(_ai.defaultCommandNames)
+        commands = Object.keys(_ai.commandMessageKeys)
       } = item;
       const commandsMap = (0, _ai.buildCommandsMap)(commands);
       const menuItems = this._buildMenuItems(commands);
@@ -43073,6 +39251,16 @@ if (_devextremeQuill.default) {
       }
       this._toggleClearFormatting(hasFormats || selection.length > 1);
     }
+    _updateHeaderFormatWidget() {
+      const selection = this.quill.getSelection();
+      const formatName = 'header';
+      const formatWidget = this._toolbarWidgets.getByName(formatName);
+      const formats = this.quill.getFormat(selection);
+      if (!selection || !formatWidget) {
+        return;
+      }
+      this._markActiveFormatWidget(formatName, formatWidget, formats);
+    }
     _markActiveFormatWidget(name, widget, formats) {
       if (this._isColorFormat(name)) {
         this._updateColorWidget(name, formats[name]);
@@ -43179,7 +39367,7 @@ var _inferno = __webpack_require__(76231);
 var _index = __webpack_require__(6257);
 var _m_ink_ripple = __webpack_require__(43469);
 const _excluded = ["config"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const defaultInkRippleProps = exports.defaultInkRippleProps = {
   config: {}
 };
@@ -43716,6 +39904,7 @@ class Slider extends _m_track_bar.default {
     } else {
       this.option('value', value);
       this._saveValueChangeEvent(undefined);
+      this._actualValue = undefined;
     }
   }
   _getActualValue() {
@@ -44298,7 +40487,7 @@ const DATAGRID_FOOTER_ROW_CLASS = 'dx-footer-row';
 const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
-const renderSummaryCell = function (cell, options) {
+const renderSummaryCell = function (cell, options, setAria) {
   const $cell = (0, _renderer.default)(cell);
   const {
     column
@@ -44308,10 +40497,11 @@ const renderSummaryCell = function (cell, options) {
   } = options;
   const $summaryItems = [];
   if (!column.command && summaryItems) {
-    for (let i = 0; i < summaryItems.length; i++) {
-      const summaryItem = summaryItems[i];
+    for (const summaryItem of summaryItems) {
       const text = _m_core.default.getSummaryText(summaryItem, options.summaryTexts);
-      $summaryItems.push((0, _renderer.default)('<div>').css('textAlign', summaryItem.alignment || column.alignment).addClass(DATAGRID_SUMMARY_ITEM_CLASS).addClass(DATAGRID_TEXT_CONTENT_CLASS).addClass(summaryItem.cssClass).toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group').text(text).attr('aria-label', `${column.caption} ${text}`));
+      const $summaryItemElement = (0, _renderer.default)('<div>').css('textAlign', summaryItem.alignment || column.alignment).addClass(DATAGRID_SUMMARY_ITEM_CLASS).addClass(DATAGRID_TEXT_CONTENT_CLASS).addClass(summaryItem.cssClass).toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group').text(text);
+      setAria('label', `${column.caption ?? ''} ${text ?? ''}`, $summaryItemElement);
+      $summaryItems.push($summaryItemElement);
     }
     $cell.append($summaryItems);
   }
@@ -44439,7 +40629,7 @@ class FooterView extends _m_columns_view.ColumnsView {
     return (0, _extend.extend)(super._getCellOptions(options), getSummaryCellOptions(this, options));
   }
   _renderCellContent($cell, options) {
-    renderSummaryCell($cell, options);
+    renderSummaryCell($cell, options, this.setAria.bind(this));
     // @ts-expect-error
     super._renderCellContent.apply(this, arguments);
   }
@@ -45038,7 +41228,7 @@ const rowsView = Base => class SummaryRowsViewExtender extends Base {
   }
   _getCellTemplate(options) {
     if (!options.column.command && !(0, _type.isDefined)(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
-      return renderSummaryCell;
+      return (cell, options) => renderSummaryCell(cell, options, this.setAria.bind(this));
     }
     return super._getCellTemplate(options);
   }
@@ -46131,7 +42321,7 @@ class RequestDispatcher {
     // @ts-expect-error
     this._withCredentials = options.withCredentials;
     // @ts-expect-error
-    this._deserializeDates = options.deserializeDates;
+    this._processDatesAsUtc = options.processDatesAsUtc ?? options.deserializeDates ?? false;
     // @ts-expect-error
     this._filterToLower = options.filterToLower;
   }
@@ -46149,7 +42339,7 @@ class RequestDispatcher {
       // @ts-expect-error
       withCredentials: this._withCredentials,
       // @ts-expect-error
-      deserializeDates: this._deserializeDates
+      processDatesAsUtc: this._processDatesAsUtc
     });
   }
   get version() {
@@ -49726,8 +45916,7 @@ var _scrollable = _interopRequireDefault(__webpack_require__(85326));
 var _tab_panel = _interopRequireDefault(__webpack_require__(98444));
 var _m_text_editor = __webpack_require__(34705);
 var _constants2 = __webpack_require__(50634);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // @ts-expect-error ts-error
 
@@ -51812,7 +48001,7 @@ var _extend = __webpack_require__(52576);
 var _config_context = __webpack_require__(12274);
 const _excluded = ["componentProps", "componentType", "templateNames"];
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const normalizeProps = props => Object.keys(props).reduce((accumulator, key) => {
   if (props[key] !== undefined) {
     accumulator[key] = props[key];
@@ -52426,7 +48615,7 @@ const rowsView = Base => class RowsViewMasterDetailExtender extends Base {
     $detailCell.addClass(_const.CLASSES.cellFocusDisabledClass).addClass(_const.CLASSES.detailCell).attr('colSpan', visibleColumns.length);
     const isEditForm = row.isEditing;
     if (!isEditForm) {
-      $detailCell.attr('aria-roledescription', _message.default.format('dxDataGrid-masterDetail'));
+      this.setAria('roledescription', _message.default.format('dxDataGrid-masterDetail'), $detailCell);
     }
     return $detailCell;
   }
@@ -53228,7 +49417,7 @@ var _style = __webpack_require__(58515);
 var _index = __webpack_require__(6257);
 const _excluded = ["size"];
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const defaultCheckBoxIconProps = exports.defaultCheckBoxIconProps = {};
 class CheckBoxIcon extends _index.BaseInfernoComponent {
   constructor(props) {
@@ -57237,7 +53426,7 @@ var _index = __webpack_require__(92940);
 const _excluded = ["elementRef", "navigationStrategy", "children"],
   _excluded2 = ["navigationStrategy", "elementRef", "children"],
   _excluded3 = ["enabled", "ref"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
     r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -58381,11 +54570,11 @@ class FileManagerAdaptivityControl extends _widget.default {
     return this._isInAdaptiveState;
   }
   toggleDrawer(showing, skipAnimation) {
-    var _this$_drawer9, _this$_drawer10, _this$_splitter4;
+    var _this$_drawer9, _this$_drawer0, _this$_splitter4;
     this._updateDrawerMaxSize();
     (_this$_drawer9 = this._drawer) === null || _this$_drawer9 === void 0 || _this$_drawer9.option('animationEnabled', !skipAnimation);
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (_this$_drawer10 = this._drawer) === null || _this$_drawer10 === void 0 || _this$_drawer10.toggle(showing);
+    (_this$_drawer0 = this._drawer) === null || _this$_drawer0 === void 0 || _this$_drawer0.toggle(showing);
     const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
     (_this$_splitter4 = this._splitter) === null || _this$_splitter4 === void 0 || _this$_splitter4.toggleDisabled(!isSplitterActive);
   }
@@ -59564,12 +55753,12 @@ function prepareInsertTableHandler(module) {
     });
   };
 }
-function getTablePropertiesFormConfig(module, _ref10) {
+function getTablePropertiesFormConfig(module, _ref0) {
   let {
     $element: $table,
     formats,
     tableBlot
-  } = _ref10;
+  } = _ref0;
   let alignmentEditorInstance;
   let borderColorEditorInstance;
   let backgroundColorEditorInstance;
@@ -59746,14 +55935,14 @@ function getTablePropertiesFormConfig(module, _ref10) {
     applyHandler
   };
 }
-function getCellPropertiesFormConfig(module, _ref11) {
+function getCellPropertiesFormConfig(module, _ref1) {
   var _formats$cellPadding, _formats$cellPadding2;
   let {
     $element: $cell,
     formats,
     tableBlot,
     rowBlot
-  } = _ref11;
+  } = _ref1;
   let alignmentEditorInstance;
   let verticalAlignmentEditorInstance;
   let borderColorEditorInstance;
@@ -59988,13 +56177,13 @@ function getCellPropertiesFormConfig(module, _ref11) {
 function getFormConfigConstructor(type) {
   return type === 'cell' ? getCellPropertiesFormConfig : getTablePropertiesFormConfig;
 }
-function applyTableDimensionChanges(module, _ref12) {
+function applyTableDimensionChanges(module, _ref10) {
   let {
     $table,
     newHeight,
     newWidth,
     tableBlot
-  } = _ref12;
+  } = _ref10;
   if ((0, _type.isDefined)(newWidth)) {
     const autoWidthColumns = (0, _m_table_helper.getAutoSizedElements)($table);
     if (autoWidthColumns.length > 0) {
@@ -60036,14 +56225,14 @@ function applyTableDimensionChanges(module, _ref12) {
     });
   }
 }
-function applyCellDimensionChanges(module, _ref13) {
+function applyCellDimensionChanges(module, _ref11) {
   let {
     $cell,
     newHeight,
     newWidth,
     tableBlot,
     rowBlot
-  } = _ref13;
+  } = _ref11;
   const $table = (0, _renderer.default)($cell.closest('table'));
   if ((0, _type.isDefined)(newWidth)) {
     const index = (0, _renderer.default)($cell).index();
@@ -60795,6 +56984,339 @@ exports.getDateForHeaderText = getDateForHeaderText;
 
 /***/ }),
 
+/***/ 13533:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _date = _interopRequireDefault(__webpack_require__(38662));
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _box = _interopRequireDefault(__webpack_require__(6554));
+var _editor = _interopRequireDefault(__webpack_require__(24768));
+var _m_select_box = _interopRequireDefault(__webpack_require__(30149));
+var _m_number_box = _interopRequireDefault(__webpack_require__(42284));
+var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const TIMEVIEW_CLASS = 'dx-timeview';
+const TIMEVIEW_CLOCK_CLASS = 'dx-timeview-clock';
+const TIMEVIEW_FIELD_CLASS = 'dx-timeview-field';
+const TIMEVIEW_HOURARROW_CLASS = 'dx-timeview-hourarrow';
+const TIMEVIEW_TIME_SEPARATOR_CLASS = 'dx-timeview-time-separator';
+const TIMEVIEW_FORMAT12_CLASS = 'dx-timeview-format12';
+const TIMEVIEW_FORMAT12_AM = -1;
+const TIMEVIEW_FORMAT12_PM = 1;
+const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
+const cssRotate = function ($arrow, angle) {
+  let offset = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  $arrow.css('transform', `rotate(${angle}deg) translate(0,${offset}px)`);
+};
+const rotateArrow = ($arrow, angle, offset) => {
+  if (!$arrow) {
+    return;
+  }
+  cssRotate($arrow, angle, offset);
+};
+class TimeView extends _editor.default {
+  _getDefaultOptions() {
+    return Object.assign({}, super._getDefaultOptions(), {
+      value: new Date(Date.now()),
+      use24HourFormat: true,
+      _showClock: true,
+      _arrowOffset: 5
+    });
+  }
+  _getValue() {
+    const {
+      value
+    } = this.option();
+    return value || new Date();
+  }
+  _init() {
+    super._init();
+    this.$element().addClass(TIMEVIEW_CLASS);
+  }
+  _render() {
+    super._render();
+    this._renderBox();
+    this._updateTime();
+  }
+  _renderBox() {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _showClock
+    } = this.option();
+    const $box = (0, _renderer.default)('<div>').appendTo(this.$element());
+    const items = [];
+    if (_showClock) {
+      items.push({
+        ratio: 1,
+        shrink: 0,
+        baseSize: 'auto',
+        template: this._renderClock.bind(this)
+      });
+    }
+    items.push({
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      template: this._renderField.bind(this)
+    });
+    this._createComponent($box, _box.default, {
+      height: '100%',
+      width: '100%',
+      direction: 'col',
+      items
+    });
+  }
+  _renderClock(_, __, container) {
+    this._$hourArrow = (0, _renderer.default)('<div>').addClass(TIMEVIEW_HOURARROW_CLASS);
+    this._$minuteArrow = (0, _renderer.default)('<div>').addClass(TIMEVIEW_MINUTEARROW_CLASS);
+    const $container = (0, _renderer.default)(container);
+    $container.addClass(TIMEVIEW_CLOCK_CLASS).append(this._$hourArrow).append(this._$minuteArrow);
+    this.setAria('role', 'presentation', $container);
+  }
+  _updateClock() {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _arrowOffset
+    } = this.option();
+    const time = this._getValue();
+    const hourArrowAngle = time.getHours() / 12 * 360 + time.getMinutes() / 60 * 30;
+    const minuteArrowAngle = time.getMinutes() / 60 * 360;
+    rotateArrow(this._$hourArrow, hourArrowAngle, _arrowOffset);
+    rotateArrow(this._$minuteArrow, minuteArrowAngle, _arrowOffset);
+  }
+  _getBoxItems(is12HourFormat) {
+    const items = [{
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      template: () => this._hourBox.$element()
+    }, {
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      // @ts-expect-error core/DateLocalization type should be fixed
+      template: () => (0, _renderer.default)('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(_date.default.getTimeSeparator())
+    }, {
+      ratio: 0,
+      shrink: 0,
+      baseSize: 'auto',
+      template: () => this._minuteBox.$element()
+    }];
+    if (is12HourFormat) {
+      items.push({
+        ratio: 0,
+        shrink: 0,
+        baseSize: 'auto',
+        template: () => {
+          var _this$_format;
+          return (_this$_format = this._format12) === null || _this$_format === void 0 ? void 0 : _this$_format.$element();
+        }
+      });
+    }
+    return items;
+  }
+  _renderField() {
+    const {
+      use24HourFormat
+    } = this.option();
+    const is12HourFormat = !use24HourFormat;
+    this._createHourBox(is12HourFormat);
+    this._createMinuteBox();
+    if (is12HourFormat) {
+      this._createFormat12Box();
+    }
+    return this._createComponent((0, _renderer.default)('<div>').addClass(TIMEVIEW_FIELD_CLASS), _box.default, {
+      direction: 'row',
+      align: 'center',
+      crossAlign: 'center',
+      items: this._getBoxItems(is12HourFormat)
+    }).$element();
+  }
+  _createHourBox(is12HourFormat) {
+    this._hourBox = this._createComponent((0, _renderer.default)('<div>'), _m_number_box.default, Object.assign({
+      min: -1,
+      max: is12HourFormat ? 13 : 24,
+      value: this._getValue().getHours(),
+      onValueChanged: this._onHourBoxValueChanged.bind(this),
+      onKeyboardHandled: opts => this._keyboardHandler(opts)
+    }, this._getNumberBoxConfig()));
+    this._hourBox.setAria('label', 'hours');
+  }
+  _isPM() {
+    var _this$_format2;
+    const {
+      use24HourFormat
+    } = this.option();
+    const format12Value = (_this$_format2 = this._format12) === null || _this$_format2 === void 0 ? void 0 : _this$_format2.option().value;
+    return !use24HourFormat && format12Value === TIMEVIEW_FORMAT12_PM;
+  }
+  _onHourBoxValueChanged(_ref) {
+    let {
+      value,
+      component
+    } = _ref;
+    const currentValue = this._getValue();
+    const newValue = new Date(currentValue);
+    let newHours = this._convertMaxHourToMin(value);
+    component.option('value', newHours);
+    if (this._isPM()) {
+      newHours += 12;
+    }
+    newValue.setHours(newHours);
+    _m_date_utils.default.normalizeTime(newValue);
+    this.option('value', newValue);
+  }
+  _convertMaxHourToMin(hours) {
+    const {
+      use24HourFormat
+    } = this.option();
+    const maxHoursValue = use24HourFormat ? 24 : 12;
+    return (maxHoursValue + hours) % maxHoursValue;
+  }
+  _createMinuteBox() {
+    this._minuteBox = this._createComponent((0, _renderer.default)('<div>'), _m_number_box.default, Object.assign({
+      min: -1,
+      max: 60,
+      value: this._getValue().getMinutes(),
+      onKeyboardHandled: opts => this._keyboardHandler(opts),
+      onValueChanged: _ref2 => {
+        let {
+          value,
+          component
+        } = _ref2;
+        const newMinutes = (60 + value) % 60;
+        component.option('value', newMinutes);
+        const time = new Date(this._getValue());
+        time.setMinutes(newMinutes);
+        _m_date_utils.default.normalizeTime(time);
+        this.option('value', time);
+      }
+    }, this._getNumberBoxConfig()));
+    this._minuteBox.setAria('label', 'minutes');
+  }
+  _createFormat12Box() {
+    // @ts-expect-error core/DateLocalization type should be fixed
+    const periodNames = _date.default.getPeriodNames();
+    const {
+      stylingMode
+    } = this.option();
+    this._format12 = this._createComponent((0, _renderer.default)('<div>').addClass(TIMEVIEW_FORMAT12_CLASS), _m_select_box.default, {
+      items: [{
+        value: TIMEVIEW_FORMAT12_AM,
+        text: periodNames[0]
+      }, {
+        value: TIMEVIEW_FORMAT12_PM,
+        text: periodNames[1]
+      }],
+      valueExpr: 'value',
+      displayExpr: 'text',
+      onKeyboardHandled: opts => this._keyboardHandler(opts),
+      onValueChanged: _ref3 => {
+        let {
+          value
+        } = _ref3;
+        const hours = this._getValue().getHours();
+        const time = new Date(this._getValue());
+        const newHours = (hours + value * 12) % 24;
+        time.setHours(newHours);
+        this.option('value', time);
+      },
+      dropDownOptions: {
+        container: this.$element()
+      },
+      value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
+      stylingMode
+    });
+    this._format12.setAria('label', 'type');
+  }
+  _refreshFormat12() {
+    const {
+      use24HourFormat
+    } = this.option();
+    if (use24HourFormat) return;
+    const value = this._getValue();
+    const hours = value.getHours();
+    const isPM = hours >= 12;
+    const newValue = isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM;
+    this._silentEditorValueUpdate(this._format12, newValue);
+  }
+  _silentEditorValueUpdate(editor, value) {
+    if (!editor) {
+      return;
+    }
+    editor._suppressValueChangeAction();
+    editor.option('value', value);
+    editor._resumeValueChangeAction();
+  }
+  _getNumberBoxConfig() {
+    const {
+      stylingMode
+    } = this.option();
+    return {
+      showSpinButtons: true,
+      displayValueFormatter(value) {
+        return (value < 10 ? '0' : '') + value;
+      },
+      stylingMode
+    };
+  }
+  _normalizeHours(hours) {
+    const {
+      use24HourFormat
+    } = this.option();
+    return use24HourFormat ? hours : hours % 12 || 12;
+  }
+  _updateField() {
+    const hours = this._normalizeHours(this._getValue().getHours());
+    this._silentEditorValueUpdate(this._hourBox, hours);
+    this._silentEditorValueUpdate(this._minuteBox, this._getValue().getMinutes());
+    this._refreshFormat12();
+  }
+  _updateTime() {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _showClock
+    } = this.option();
+    if (_showClock) {
+      this._updateClock();
+    }
+    this._updateField();
+  }
+  _visibilityChanged(visible) {
+    if (visible) {
+      this._updateTime();
+    }
+  }
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'value':
+        this._updateTime();
+        super._optionChanged(args);
+        break;
+      case '_arrowOffset':
+        break;
+      case 'use24HourFormat':
+      case '_showClock':
+      case 'stylingMode':
+        this._invalidate();
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+}
+(0, _component_registrator.default)('dxTimeView', TimeView);
+var _default = exports["default"] = TimeView;
+
+/***/ }),
+
 /***/ 13612:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -61512,7 +58034,7 @@ exports.GroupingHelper = GroupingHelper;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getDateNavigator = exports.ITEMS_NAME = exports.DEFAULT_ITEMS = exports.CLASS = void 0;
+exports.getTodayButtonOptions = exports.getDateNavigator = exports.ITEMS_NAME = exports.DEFAULT_ITEMS = exports.CLASS = void 0;
 var _message = _interopRequireDefault(__webpack_require__(4671));
 var _date = _interopRequireDefault(__webpack_require__(41380));
 var _themes = __webpack_require__(52071);
@@ -61536,7 +58058,7 @@ const {
   trimTime
 } = _date.default;
 const isPreviousButtonDisabled = header => {
-  const minOption = header.option('min');
+  const minOption = header.option().min;
   if (!_date2.dateUtilsTs.isValidDate(minOption)) return false;
   let min = new Date(minOption);
   const caption = header._getCaption();
@@ -61545,7 +58067,7 @@ const isPreviousButtonDisabled = header => {
   return previousDate < min;
 };
 const isNextButtonDisabled = header => {
-  const maxOption = header.option('max');
+  const maxOption = header.option().max;
   if (!_date2.dateUtilsTs.isValidDate(maxOption)) return false;
   const max = new Date(maxOption);
   const caption = header._getCaption();
@@ -61629,9 +58151,27 @@ const getNextButtonOptions = header => {
     }
   };
 };
+const getTodayButtonOptions = (header, item) => (0, _m_extend.extend)(true, {}, {
+  location: 'before',
+  locateInMenu: 'auto',
+  widget: 'dxButton',
+  cssClass: 'dx-scheduler-today',
+  options: {
+    text: _message.default.format('dxScheduler-navigationToday'),
+    icon: 'today',
+    stylingMode: 'outlined',
+    type: 'normal',
+    onClick() {
+      const {
+        indicatorTime
+      } = header.option();
+      header._updateCurrentDate(indicatorTime ?? new Date());
+    }
+  }
+}, item);
+exports.getTodayButtonOptions = getTodayButtonOptions;
 const getDateNavigator = (header, item) => {
-  // @ts-expect-error current theme used
-  const stylingMode = (0, _themes.isMaterialBased)() ? 'text' : 'contained';
+  const stylingMode = (0, _themes.isMaterialBased)((0, _themes.current)()) ? 'text' : 'contained';
   const config = (0, _m_extend.extend)(true, {}, {
     location: 'before',
     name: 'dateNavigator',
@@ -61646,7 +58186,8 @@ const getDateNavigator = (header, item) => {
   const {
     onItemClick
   } = options;
-  options.items = (options.items ?? DEFAULT_ITEMS).map(groupItem => {
+  const items = options.items ?? DEFAULT_ITEMS;
+  options.items = items.map(groupItem => {
     switch (groupItem) {
       case ITEMS_NAME.previousButton:
         return getPreviousButtonOptions(header);
@@ -61703,8 +58244,7 @@ var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 var _const = __webpack_require__(69699);
 var _m_editing_utils = __webpack_require__(1414);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-unused-vars, max-classes-per-file */
@@ -62761,10 +59301,13 @@ class EditingControllerImpl extends _m_modules.default.ViewController {
     if (index >= 0) {
       const changes = [...this.getChanges()];
       const {
-        key
+        key,
+        type
       } = changes[index];
       this._removeInternalData(key);
-      this._updateInsertAfterOrBeforeKeys(changes, index);
+      if (type !== _const.DATA_EDIT_DATA_REMOVE_TYPE) {
+        this._updateInsertAfterOrBeforeKeys(changes, index);
+      }
       changes.splice(index, 1);
       this._silentOption(_const.EDITING_CHANGES_OPTION_NAME, changes);
       if ((0, _common.equalByValue)(this.option(_const.EDITING_EDITROWKEY_OPTION_NAME), key)) {
@@ -63628,7 +60171,9 @@ class EditingControllerImpl extends _m_modules.default.ViewController {
         $button.addClass(_const.LINK_ICON_CLASS);
         $container.addClass(_const.COMMAND_EDIT_WITH_ICONS_CLASS);
         const localizationName = this.getButtonLocalizationNames()[button.name];
-        localizationName && $button.attr('aria-label', _message.default.format(localizationName));
+        if (localizationName) {
+          this.setAria('label', _message.default.format(localizationName), $button);
+        }
       } else {
         $button.text(button.text);
       }
@@ -65053,17 +61598,17 @@ function exportDataGrid(options) {
           const isTextHeightGreaterThanRect = jsPDFDocument.getTextDimensions(sourceRect.sourceCellInfo.text).h > topRect.h;
           const isTextTopAlignment = ((_sourceRect$sourceCel9 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel9 === void 0 ? void 0 : _sourceRect$sourceCel9.verticalAlign) === 'top';
           if (isTextHeightGreaterThanRect || !isTextTopAlignment) {
-            var _sourceRect$sourceCel10, _sourceRect$sourceCel11, _sourceRect$sourceCel12;
+            var _sourceRect$sourceCel0, _sourceRect$sourceCel1, _sourceRect$sourceCel10;
             let topTextTopOffset;
             let bottomTextTopOffset;
-            if (((_sourceRect$sourceCel10 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel10 === void 0 ? void 0 : _sourceRect$sourceCel10.verticalAlign) === 'top') {
+            if (((_sourceRect$sourceCel0 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel0 === void 0 ? void 0 : _sourceRect$sourceCel0.verticalAlign) === 'top') {
               topTextTopOffset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
               bottomTextTopOffset = topTextTopOffset - topRect.h;
-            } else if (((_sourceRect$sourceCel11 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel11 === void 0 ? void 0 : _sourceRect$sourceCel11.verticalAlign) === 'middle') {
+            } else if (((_sourceRect$sourceCel1 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel1 === void 0 ? void 0 : _sourceRect$sourceCel1.verticalAlign) === 'middle') {
               const offset = sourceRect.sourceCellInfo._textTopOffset ?? 0;
               topTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (topRect.y + topRect.h / 2);
               bottomTextTopOffset = offset + (sourceRect.y + sourceRect.h / 2) - (bottomRect.y + bottomRect.h / 2);
-            } else if (((_sourceRect$sourceCel12 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel12 === void 0 ? void 0 : _sourceRect$sourceCel12.verticalAlign) === 'bottom') {
+            } else if (((_sourceRect$sourceCel10 = sourceRect.sourceCellInfo) === null || _sourceRect$sourceCel10 === void 0 ? void 0 : _sourceRect$sourceCel10.verticalAlign) === 'bottom') {
               topTextTopOffset = sourceRect.y + sourceRect.h - (topRect.y + topRect.h);
               bottomTextTopOffset = sourceRect.y + sourceRect.h - (bottomRect.y + bottomRect.h);
             }
@@ -65416,7 +61961,7 @@ const ajaxOptionsForRequest = function (protocolVersion, request) {
 };
 const sendRequest = (protocolVersion, request, options) => {
   const {
-    deserializeDates,
+    processDatesAsUtc,
     fieldTypes,
     countOnly,
     isPaged
@@ -65426,7 +61971,7 @@ const sendRequest = (protocolVersion, request, options) => {
   const ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
   _ajax.default.sendRequest(ajaxOptions).always((obj, textStatus) => {
     const transformOptions = {
-      deserializeDates,
+      processDatesAsUtc,
       fieldTypes
     };
     const tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions);
@@ -65590,13 +62135,13 @@ const transformTypes = function (obj) {
       // @ts-expect-error
       const {
         fieldTypes,
-        deserializeDates
+        processDatesAsUtc
       } = options;
       const canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
       if (canBeGuid && GUID_REGEX.test(value)) {
         obj[key] = new _guid.default(value);
       }
-      if (deserializeDates !== false) {
+      if (processDatesAsUtc !== false) {
         if (VERBOSE_DATE_REGEX.exec(value)) {
           // @ts-expect-error
           const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
@@ -65612,7 +62157,7 @@ const serializeDate = date => `datetime'${formatISO8601(date, true, true)}'`;
 const serializeString = value => `'${value.replace(/'/g, '\'\'')}'`;
 const serializePropName = propName => propName instanceof EdmLiteral ? propName.valueOf() : propName.replace(/\./g, '/');
 exports.serializePropName = serializePropName;
-const serializeValueV4 = value => {
+const serializeValueV4 = (value, fieldType) => {
   if (value instanceof Date) {
     return formatISO8601(value, false, false);
   }
@@ -65620,11 +62165,11 @@ const serializeValueV4 = value => {
     return value.valueOf();
   }
   if (Array.isArray(value)) {
-    return `[${value.map(item => serializeValueV4(item)).join(',')}]`;
+    return `[${value.map(item => serializeValueV4(item, fieldType)).join(',')}]`;
   }
-  return serializeValueV2(value);
+  return serializeValueV2(value, fieldType);
 };
-const serializeValueV2 = value => {
+const serializeValueV2 = (value, fieldType) => {
   if (value instanceof Date) {
     return serializeDate(value);
   }
@@ -65634,18 +62179,21 @@ const serializeValueV2 = value => {
   if (value instanceof EdmLiteral) {
     return value.valueOf();
   }
+  if (fieldType && ['Date', 'DateTimeOffset'].includes(fieldType)) {
+    return value;
+  }
   if (typeof value === 'string') {
     return serializeString(value);
   }
   return String(value);
 };
-const serializeValue = (value, protocolVersion) => {
+const serializeValue = (value, protocolVersion, fieldType) => {
   switch (protocolVersion) {
     case 2:
     case 3:
-      return serializeValueV2(value);
+      return serializeValueV2(value, fieldType);
     case 4:
-      return serializeValueV4(value);
+      return serializeValueV4(value, fieldType);
     default:
       throw _errors.errors.Error('E4002');
   }
@@ -65668,7 +62216,9 @@ const keyConverters = exports.keyConverters = {
   Guid: value => value instanceof _guid.default ? value : new _guid.default(value),
   Boolean: value => !!value,
   Single: value => value instanceof EdmLiteral ? value : new EdmLiteral(`${value}f`),
-  Decimal: value => value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`)
+  Decimal: value => value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`),
+  DateTimeOffset: value => value,
+  Date: value => value
 };
 const convertPrimitiveValue = (type, value) => {
   if (value === null) return null;
@@ -65790,303 +62340,6 @@ const escapeServiceOperationParams = (params, version) => {
   return result;
 };
 exports.escapeServiceOperationParams = escapeServiceOperationParams;
-
-/***/ }),
-
-/***/ 14705:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _date = _interopRequireDefault(__webpack_require__(38662));
-var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
-var _renderer = _interopRequireDefault(__webpack_require__(64553));
-var _box = _interopRequireDefault(__webpack_require__(6554));
-var _editor = _interopRequireDefault(__webpack_require__(24768));
-var _m_select_box = _interopRequireDefault(__webpack_require__(30149));
-var _m_number_box = _interopRequireDefault(__webpack_require__(42284));
-var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const TIMEVIEW_CLASS = 'dx-timeview';
-const TIMEVIEW_CLOCK_CLASS = 'dx-timeview-clock';
-const TIMEVIEW_FIELD_CLASS = 'dx-timeview-field';
-const TIMEVIEW_HOURARROW_CLASS = 'dx-timeview-hourarrow';
-const TIMEVIEW_TIME_SEPARATOR_CLASS = 'dx-timeview-time-separator';
-const TIMEVIEW_FORMAT12_CLASS = 'dx-timeview-format12';
-const TIMEVIEW_FORMAT12_AM = -1;
-const TIMEVIEW_FORMAT12_PM = 1;
-const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
-const rotateArrow = function ($arrow, angle, offset) {
-  cssRotate($arrow, angle, offset);
-};
-const cssRotate = function ($arrow, angle, offset) {
-  // eslint-disable-next-line no-useless-concat
-  $arrow.css('transform', `rotate(${angle}deg)` + ` translate(0,${offset}px)`);
-};
-class TimeView extends _editor.default {
-  _getDefaultOptions() {
-    return Object.assign({}, super._getDefaultOptions(), {
-      value: new Date(Date.now()),
-      use24HourFormat: true,
-      _showClock: true,
-      _arrowOffset: 5
-    });
-  }
-  _getValue() {
-    const {
-      value
-    } = this.option();
-    return value || new Date();
-  }
-  _init() {
-    super._init();
-    this.$element().addClass(TIMEVIEW_CLASS);
-  }
-  _render() {
-    super._render();
-    this._renderBox();
-    this._updateTime();
-  }
-  _renderBox() {
-    const $box = (0, _renderer.default)('<div>').appendTo(this.$element());
-    const items = [];
-    if (this.option('_showClock')) {
-      // @ts-expect-error
-      items.push({
-        ratio: 1,
-        shrink: 0,
-        baseSize: 'auto',
-        template: this._renderClock.bind(this)
-      });
-    }
-    // @ts-expect-error
-    items.push({
-      ratio: 0,
-      shrink: 0,
-      baseSize: 'auto',
-      template: this._renderField.bind(this)
-    });
-    this._createComponent($box, _box.default, {
-      height: '100%',
-      width: '100%',
-      direction: 'col',
-      items
-    });
-  }
-  _renderClock(_, __, container) {
-    this._$hourArrow = (0, _renderer.default)('<div>').addClass(TIMEVIEW_HOURARROW_CLASS);
-    this._$minuteArrow = (0, _renderer.default)('<div>').addClass(TIMEVIEW_MINUTEARROW_CLASS);
-    const $container = (0, _renderer.default)(container);
-    $container.addClass(TIMEVIEW_CLOCK_CLASS).append(this._$hourArrow).append(this._$minuteArrow);
-    this.setAria('role', 'presentation', $container);
-  }
-  _updateClock() {
-    const time = this._getValue();
-    const hourArrowAngle = time.getHours() / 12 * 360 + time.getMinutes() / 60 * 30;
-    const minuteArrowAngle = time.getMinutes() / 60 * 360;
-    rotateArrow(this._$hourArrow, hourArrowAngle, this.option('_arrowOffset'));
-    rotateArrow(this._$minuteArrow, minuteArrowAngle, this.option('_arrowOffset'));
-  }
-  _getBoxItems(is12HourFormat) {
-    const items = [{
-      ratio: 0,
-      shrink: 0,
-      baseSize: 'auto',
-      template: () => this._hourBox.$element()
-    }, {
-      ratio: 0,
-      shrink: 0,
-      baseSize: 'auto',
-      // @ts-expect-error ts-error
-      template: (0, _renderer.default)('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(_date.default.getTimeSeparator())
-    }, {
-      ratio: 0,
-      shrink: 0,
-      baseSize: 'auto',
-      template: () => this._minuteBox.$element()
-    }];
-    if (is12HourFormat) {
-      items.push({
-        ratio: 0,
-        shrink: 0,
-        baseSize: 'auto',
-        template: () => this._format12.$element()
-      });
-    }
-    return items;
-  }
-  _renderField() {
-    const is12HourFormat = !this.option('use24HourFormat');
-    this._createHourBox(is12HourFormat);
-    this._createMinuteBox();
-    if (is12HourFormat) {
-      this._createFormat12Box();
-    }
-    return this._createComponent((0, _renderer.default)('<div>').addClass(TIMEVIEW_FIELD_CLASS), _box.default, {
-      direction: 'row',
-      align: 'center',
-      crossAlign: 'center',
-      items: this._getBoxItems(is12HourFormat)
-    }).$element();
-  }
-  _createHourBox(is12HourFormat) {
-    this._hourBox = this._createComponent((0, _renderer.default)('<div>'), _m_number_box.default, Object.assign({
-      min: -1,
-      max: is12HourFormat ? 13 : 24,
-      value: this._getValue().getHours(),
-      onValueChanged: this._onHourBoxValueChanged.bind(this),
-      onKeyboardHandled: opts => this._keyboardHandler(opts)
-    }, this._getNumberBoxConfig()));
-    this._hourBox.setAria('label', 'hours');
-  }
-  _isPM() {
-    // @ts-expect-error ts-error
-    return !this.option('use24HourFormat') && this._format12.option('value') === 1;
-  }
-  _onHourBoxValueChanged(_ref) {
-    let {
-      value,
-      component
-    } = _ref;
-    const currentValue = this._getValue();
-    const newValue = new Date(currentValue);
-    let newHours = this._convertMaxHourToMin(value);
-    component.option('value', newHours);
-    if (this._isPM()) {
-      newHours += 12;
-    }
-    newValue.setHours(newHours);
-    _m_date_utils.default.normalizeTime(newValue);
-    this.option('value', newValue);
-  }
-  _convertMaxHourToMin(hours) {
-    const maxHoursValue = this.option('use24HourFormat') ? 24 : 12;
-    return (maxHoursValue + hours) % maxHoursValue;
-  }
-  _createMinuteBox() {
-    this._minuteBox = this._createComponent((0, _renderer.default)('<div>'), _m_number_box.default, Object.assign({
-      min: -1,
-      max: 60,
-      value: this._getValue().getMinutes(),
-      onKeyboardHandled: opts => this._keyboardHandler(opts),
-      onValueChanged: _ref2 => {
-        let {
-          value,
-          component
-        } = _ref2;
-        const newMinutes = (60 + value) % 60;
-        component.option('value', newMinutes);
-        const time = new Date(this._getValue());
-        time.setMinutes(newMinutes);
-        _m_date_utils.default.normalizeTime(time);
-        this.option('value', time);
-      }
-    }, this._getNumberBoxConfig()));
-    this._minuteBox.setAria('label', 'minutes');
-  }
-  _createFormat12Box() {
-    // @ts-expect-error ts-error
-    const periodNames = _date.default.getPeriodNames();
-    this._format12 = this._createComponent((0, _renderer.default)('<div>').addClass(TIMEVIEW_FORMAT12_CLASS), _m_select_box.default, {
-      items: [{
-        value: TIMEVIEW_FORMAT12_AM,
-        text: periodNames[0]
-      }, {
-        value: TIMEVIEW_FORMAT12_PM,
-        text: periodNames[1]
-      }],
-      valueExpr: 'value',
-      displayExpr: 'text',
-      onKeyboardHandled: opts => this._keyboardHandler(opts),
-      onValueChanged: _ref3 => {
-        let {
-          value
-        } = _ref3;
-        const hours = this._getValue().getHours();
-        const time = new Date(this._getValue());
-        const newHours = (hours + value * 12) % 24;
-        time.setHours(newHours);
-        this.option('value', time);
-      },
-      dropDownOptions: {
-        container: this.$element()
-      },
-      value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
-      stylingMode: this.option('stylingMode')
-    });
-    this._format12.setAria('label', 'type');
-  }
-  _refreshFormat12() {
-    if (this.option('use24HourFormat')) return;
-    const value = this._getValue();
-    const hours = value.getHours();
-    const isPM = hours >= 12;
-    const newValue = isPM ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM;
-    this._silentEditorValueUpdate(this._format12, newValue);
-  }
-  _silentEditorValueUpdate(editor, value) {
-    if (editor) {
-      editor._suppressValueChangeAction();
-      editor.option('value', value);
-      editor._resumeValueChangeAction();
-    }
-  }
-  _getNumberBoxConfig() {
-    const {
-      stylingMode
-    } = this.option();
-    return {
-      showSpinButtons: true,
-      displayValueFormatter(value) {
-        return (value < 10 ? '0' : '') + value;
-      },
-      stylingMode
-    };
-  }
-  _normalizeHours(hours) {
-    return this.option('use24HourFormat') ? hours : hours % 12 || 12;
-  }
-  _updateField() {
-    const hours = this._normalizeHours(this._getValue().getHours());
-    this._silentEditorValueUpdate(this._hourBox, hours);
-    this._silentEditorValueUpdate(this._minuteBox, this._getValue().getMinutes());
-    this._refreshFormat12();
-  }
-  _updateTime() {
-    if (this.option('_showClock')) {
-      this._updateClock();
-    }
-    this._updateField();
-  }
-  _visibilityChanged(visible) {
-    if (visible) {
-      this._updateTime();
-    }
-  }
-  _optionChanged(args) {
-    switch (args.name) {
-      case 'value':
-        this._updateTime();
-        super._optionChanged(args);
-        break;
-      case '_arrowOffset':
-        break;
-      case 'use24HourFormat':
-      case '_showClock':
-      case 'stylingMode':
-        this._invalidate();
-        break;
-      default:
-        super._optionChanged(args);
-    }
-  }
-}
-(0, _component_registrator.default)('dxTimeView', TimeView);
-var _default = exports["default"] = TimeView;
 
 /***/ }),
 
@@ -70533,7 +66786,7 @@ class VerticalGroupedStrategy {
     return height;
   }
   getShaderWidth() {
-    return this._workSpace.getIndicationWidth(0);
+    return this._workSpace.getIndicationWidth();
   }
   getScrollableScrollTop() {
     return this._workSpace.getScrollable().scrollTop();
@@ -70644,7 +66897,7 @@ exports.RootElementUpdater = void 0;
 exports.normalizeEventName = normalizeEventName;
 var _inferno = __webpack_require__(76231);
 const _excluded = ["rootElementRef", "ref", "className", "children"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 function normalizeEventName(name) {
   return name.substring(2).toLowerCase();
 }
@@ -72661,7 +68914,7 @@ const _excluded = ["x", "y", "canvas", "offsetX", "offsetY", "offset"];
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-else-return */
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const math = Math;
 const round = math.round;
 const max = math.max;
@@ -73416,7 +69669,7 @@ var _math = __webpack_require__(12220);
 var _index = __webpack_require__(34396);
 const _excluded = ["allDay", "startDate", "endDate", "groups", "groupIndex", "isFirstGroupCell", "isLastGroupCell", "index"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const toMs = _date.default.dateToMilliseconds;
 class TimePanelDataGenerator {
   constructor(_viewDataGenerator) {
@@ -73789,7 +70042,7 @@ exports.PaginationWrapper = void 0;
 var _component_wrapper = __webpack_require__(34993);
 var _validation_utils = __webpack_require__(28462);
 const _excluded = ["pageSize", "pageIndex", "itemCount"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class PaginationWrapper extends _component_wrapper.ComponentWrapper {
   _optionChanged(args) {
     switch (args.name) {
@@ -74364,19 +70617,19 @@ class FileManagerEditingControl extends _widget.default {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getFileUploaderController() {
-    var _this$_controller10;
+    var _this$_controller0;
     const uploadDirectory = this.uploadDirectoryInfo.fileItem;
     return {
-      chunkSize: (_this$_controller10 = this._controller) === null || _this$_controller10 === void 0 ? void 0 : _this$_controller10.getFileUploadChunkSize(),
+      chunkSize: (_this$_controller0 = this._controller) === null || _this$_controller0 === void 0 ? void 0 : _this$_controller0.getFileUploadChunkSize(),
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       uploadFileChunk: (fileData, chunksInfo) => {
-        var _this$_controller11;
-        return (_this$_controller11 = this._controller) === null || _this$_controller11 === void 0 ? void 0 : _this$_controller11.uploadFileChunk(fileData, chunksInfo, uploadDirectory);
+        var _this$_controller1;
+        return (_this$_controller1 = this._controller) === null || _this$_controller1 === void 0 ? void 0 : _this$_controller1.uploadFileChunk(fileData, chunksInfo, uploadDirectory);
       },
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       abortFileUpload: (fileData, chunksInfo) => {
-        var _this$_controller12;
-        return (_this$_controller12 = this._controller) === null || _this$_controller12 === void 0 ? void 0 : _this$_controller12.abortFileUpload(fileData, chunksInfo, uploadDirectory);
+        var _this$_controller10;
+        return (_this$_controller10 = this._controller) === null || _this$_controller10 === void 0 ? void 0 : _this$_controller10.abortFileUpload(fileData, chunksInfo, uploadDirectory);
       }
     };
   }
@@ -74521,11 +70774,11 @@ class FileManagerEditingControl extends _widget.default {
     this._scheduleUploadSessionDisposal(sessionId, 'uploader');
   }
   _onUploadSessionStarted(_ref5) {
-    var _this$_controller13;
+    var _this$_controller11;
     let {
       sessionInfo
     } = _ref5;
-    (_this$_controller13 = this._controller) === null || _this$_controller13 === void 0 || _this$_controller13.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
+    (_this$_controller11 = this._controller) === null || _this$_controller11 === void 0 || _this$_controller11.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
   }
   _onEditActionStarting(actionInfo) {
     var _this$_metadataMap2, _this$_notificationCo3;
@@ -74617,11 +70870,11 @@ class FileManagerEditingControl extends _widget.default {
     const parentDirectoryInfo = (parentDirectories === null || parentDirectories === void 0 ? void 0 : parentDirectories[0]) || this._getCurrentDirectory();
     const newDirName = _message.default.format('dxFileManager-newDirectoryName');
     return (_this$_showDialog = this._showDialog((_this$_dialogManager = this._dialogManager) === null || _this$_dialogManager === void 0 ? void 0 : _this$_dialogManager.getCreateItemDialog(), newDirName)) === null || _this$_showDialog === void 0 ? void 0 : _this$_showDialog.then(_ref6 => {
-      var _this$_controller14;
+      var _this$_controller12;
       let {
         name
       } = _ref6;
-      return (_this$_controller14 = this._controller) === null || _this$_controller14 === void 0 ? void 0 : _this$_controller14.createDirectory(parentDirectoryInfo, name);
+      return (_this$_controller12 = this._controller) === null || _this$_controller12 === void 0 ? void 0 : _this$_controller12.createDirectory(parentDirectoryInfo, name);
     });
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -74634,11 +70887,11 @@ class FileManagerEditingControl extends _widget.default {
       return new _deferred.Deferred().reject().promise();
     }
     return (_this$_showDialog2 = this._showDialog((_this$_dialogManager2 = this._dialogManager) === null || _this$_dialogManager2 === void 0 ? void 0 : _this$_dialogManager2.getRenameItemDialog(), itemInfo.fileItem.name)) === null || _this$_showDialog2 === void 0 ? void 0 : _this$_showDialog2.then(_ref7 => {
-      var _this$_controller15;
+      var _this$_controller13;
       let {
         name
       } = _ref7;
-      return (_this$_controller15 = this._controller) === null || _this$_controller15 === void 0 ? void 0 : _this$_controller15.renameItem(itemInfo, name);
+      return (_this$_controller13 = this._controller) === null || _this$_controller13 === void 0 ? void 0 : _this$_controller13.renameItem(itemInfo, name);
     });
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -74657,8 +70910,8 @@ class FileManagerEditingControl extends _widget.default {
       itemName,
       itemCount
     })) === null || _this$_showDialog3 === void 0 ? void 0 : _this$_showDialog3.then(() => {
-      var _this$_controller16;
-      return (_this$_controller16 = this._controller) === null || _this$_controller16 === void 0 ? void 0 : _this$_controller16.deleteItems(itemInfos);
+      var _this$_controller14;
+      return (_this$_controller14 = this._controller) === null || _this$_controller14 === void 0 ? void 0 : _this$_controller14.deleteItems(itemInfos);
     });
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -74672,11 +70925,11 @@ class FileManagerEditingControl extends _widget.default {
       return new _deferred.Deferred().reject().promise();
     }
     return (_this$_showDialog4 = this._showDialog((_this$_dialogManager4 = this._dialogManager) === null || _this$_dialogManager4 === void 0 ? void 0 : _this$_dialogManager4.getMoveDialog(itemInfos))) === null || _this$_showDialog4 === void 0 ? void 0 : _this$_showDialog4.then(_ref8 => {
-      var _this$_controller17;
+      var _this$_controller15;
       let {
         folder
       } = _ref8;
-      return (_this$_controller17 = this._controller) === null || _this$_controller17 === void 0 ? void 0 : _this$_controller17.moveItems(itemInfos, folder);
+      return (_this$_controller15 = this._controller) === null || _this$_controller15 === void 0 ? void 0 : _this$_controller15.moveItems(itemInfos, folder);
     });
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -74690,11 +70943,11 @@ class FileManagerEditingControl extends _widget.default {
       return new _deferred.Deferred().reject().promise();
     }
     return (_this$_showDialog5 = this._showDialog((_this$_dialogManager5 = this._dialogManager) === null || _this$_dialogManager5 === void 0 ? void 0 : _this$_dialogManager5.getCopyDialog(itemInfos))) === null || _this$_showDialog5 === void 0 ? void 0 : _this$_showDialog5.then(_ref9 => {
-      var _this$_controller18;
+      var _this$_controller16;
       let {
         folder
       } = _ref9;
-      return (_this$_controller18 = this._controller) === null || _this$_controller18 === void 0 ? void 0 : _this$_controller18.copyItems(itemInfos, folder);
+      return (_this$_controller16 = this._controller) === null || _this$_controller16 === void 0 ? void 0 : _this$_controller16.copyItems(itemInfos, folder);
     });
   }
   _tryUpload(destinationFolder) {
@@ -74704,7 +70957,7 @@ class FileManagerEditingControl extends _widget.default {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _download(itemInfos) {
-    var _this$_model5, _this$_model5$getMult, _this$_controller19;
+    var _this$_model5, _this$_model5$getMult, _this$_controller17;
     // eslint-disable-next-line no-param-reassign
     itemInfos = itemInfos || ((_this$_model5 = this._model) === null || _this$_model5 === void 0 || (_this$_model5$getMult = _this$_model5.getMultipleSelectedItems) === null || _this$_model5$getMult === void 0 ? void 0 : _this$_model5$getMult.call(_this$_model5));
     if (itemInfos.length === 0) {
@@ -74712,14 +70965,14 @@ class FileManagerEditingControl extends _widget.default {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return new _deferred.Deferred().reject().promise();
     }
-    return (_this$_controller19 = this._controller) === null || _this$_controller19 === void 0 ? void 0 : _this$_controller19.downloadItems(itemInfos);
+    return (_this$_controller17 = this._controller) === null || _this$_controller17 === void 0 ? void 0 : _this$_controller17.downloadItems(itemInfos);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getItemContent(itemInfos) {
-    var _this$_model6, _this$_model6$getMult, _this$_controller20;
+    var _this$_model6, _this$_model6$getMult, _this$_controller18;
     // eslint-disable-next-line no-param-reassign
     itemInfos = itemInfos || ((_this$_model6 = this._model) === null || _this$_model6 === void 0 || (_this$_model6$getMult = _this$_model6.getMultipleSelectedItems) === null || _this$_model6$getMult === void 0 ? void 0 : _this$_model6$getMult.call(_this$_model6));
-    return (_this$_controller20 = this._controller) === null || _this$_controller20 === void 0 ? void 0 : _this$_controller20.getItemContent(itemInfos);
+    return (_this$_controller18 = this._controller) === null || _this$_controller18 === void 0 ? void 0 : _this$_controller18.getItemContent(itemInfos);
   }
   _completeAction(operationInfo, context) {
     var _this$_notificationCo6;
@@ -74871,9 +71124,9 @@ class FileManagerEditingControl extends _widget.default {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _getCurrentDirectory() {
-    var _this$_controller21;
+    var _this$_controller19;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_controller21 = this._controller) === null || _this$_controller21 === void 0 ? void 0 : _this$_controller21.getCurrentDirectory();
+    return (_this$_controller19 = this._controller) === null || _this$_controller19 === void 0 ? void 0 : _this$_controller19.getCurrentDirectory();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   get uploadDirectoryInfo() {
@@ -76013,13 +72266,13 @@ class GanttTreeList {
     return mappedData;
   }
   setOption(optionName, value) {
-    var _this$_treeList10;
-    (_this$_treeList10 = this._treeList) === null || _this$_treeList10 === void 0 || _this$_treeList10.option(optionName, value);
+    var _this$_treeList0;
+    (_this$_treeList0 = this._treeList) === null || _this$_treeList0 === void 0 || _this$_treeList0.option(optionName, value);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getOption(optionName) {
-    var _this$_treeList11;
-    return (_this$_treeList11 = this._treeList) === null || _this$_treeList11 === void 0 ? void 0 : _this$_treeList11.option(optionName);
+    var _this$_treeList1;
+    return (_this$_treeList1 = this._treeList) === null || _this$_treeList1 === void 0 ? void 0 : _this$_treeList1.option(optionName);
   }
   onTaskInserted(insertedId, parentId) {
     if ((0, _type.isDefined)(parentId)) {
@@ -76036,8 +72289,8 @@ class GanttTreeList {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getDataSource() {
-    var _this$_treeList12;
-    return (_this$_treeList12 = this._treeList) === null || _this$_treeList12 === void 0 ? void 0 : _this$_treeList12.getDataSource();
+    var _this$_treeList10;
+    return (_this$_treeList10 = this._treeList) === null || _this$_treeList10 === void 0 ? void 0 : _this$_treeList10.getDataSource();
   }
 }
 exports.GanttTreeList = GanttTreeList;
@@ -76732,7 +72985,7 @@ const ODataStore = _abstract_store.default.inherit({
       withCredentials: this._requestDispatcher._withCredentials,
       expand: loadOptions === null || loadOptions === void 0 ? void 0 : loadOptions.expand,
       requireTotalCount: loadOptions === null || loadOptions === void 0 ? void 0 : loadOptions.requireTotalCount,
-      deserializeDates: this._requestDispatcher._deserializeDates,
+      processDatesAsUtc: this._requestDispatcher._processDatesAsUtc,
       fieldTypes: this._fieldTypes
     };
     // NOTE: For AppBuilder, do not remove
@@ -79374,7 +75627,7 @@ var _shift_intervals = __webpack_require__(31597);
 var _trim_interval = __webpack_require__(28032);
 var _get_one_day_cell_intervals = __webpack_require__(99119);
 const _excluded = ["startDayHour", "endDayHour", "skippedDays"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const MONTH_INTERVAL_DAYS_COUNT = 7;
 const splitBy7Days = intervals => {
   const result = [];
@@ -84566,13 +80819,14 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
   /**
    * @extended: column_fixing
    */
-  _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  _getTargetPoint(pointsByColumns, currentPoint, deltaX) {
     if (pointsByColumns) {
-      for (let i = 0; i < pointsByColumns.length; i++) {
+      for (let i = 0; i < pointsByColumns.length; i += 1) {
         if (pointsByColumns[i].x === pointsByColumns[0].x && pointsByColumns[i + 1] && pointsByColumns[i].x === pointsByColumns[i + 1].x) {
+          // eslint-disable-next-line no-continue
           continue;
         }
-        if (pointsByColumns[i].x - deltaX <= currentX && currentX <= pointsByColumns[i].x + deltaX) {
+        if (currentPoint.y >= pointsByColumns[i].y && pointsByColumns[i].x - deltaX <= currentPoint.x && currentPoint.x <= pointsByColumns[i].x + deltaX) {
           return pointsByColumns[i];
         }
       }
@@ -84619,7 +80873,7 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
             that.pointsByColumns(null);
           }
         }
-        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, columnsSeparatorWidth);
+        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData, columnsSeparatorWidth);
         that._previousParentOffset = parentOffset;
         that._isReadyResizing = false;
         if (that._targetPoint) {
@@ -84663,18 +80917,20 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
     return currentColumnIndex + 1;
   }
   _setupResizingInfo(posX) {
-    const currentColumnIndex = this._targetPoint.columnIndex;
-    const nextColumnIndex = this._getNextColumnIndex(currentColumnIndex);
-    const $currentHeader = this._columnHeadersView.getHeaderElement(currentColumnIndex);
-    const $nextHeader = this._columnHeadersView.getHeaderElement(nextColumnIndex);
-    this._resizingInfo = {
-      startPosX: posX,
-      currentColumnIndex,
-      currentColumnWidth: $currentHeader !== null && $currentHeader !== void 0 && $currentHeader.length ? (0, _position.getBoundingRect)($currentHeader[0]).width : 0,
-      nextColumnIndex,
-      nextColumnWidth: $nextHeader !== null && $nextHeader !== void 0 && $nextHeader.length ? (0, _position.getBoundingRect)($nextHeader[0]).width : 0,
-      needToInvertResizing: this._needToInvertResizing($currentHeader)
-    };
+    if (this._targetPoint) {
+      const currentColumnIndex = this._targetPoint.columnIndex;
+      const nextColumnIndex = this._getNextColumnIndex(currentColumnIndex);
+      const $currentHeader = this._columnHeadersView.getHeaderElement(currentColumnIndex);
+      const $nextHeader = this._columnHeadersView.getHeaderElement(nextColumnIndex);
+      this._resizingInfo = {
+        startPosX: posX,
+        currentColumnIndex,
+        currentColumnWidth: $currentHeader !== null && $currentHeader !== void 0 && $currentHeader.length ? (0, _position.getBoundingRect)($currentHeader[0]).width : 0,
+        nextColumnIndex,
+        nextColumnWidth: $nextHeader !== null && $nextHeader !== void 0 && $nextHeader.length ? (0, _position.getBoundingRect)($nextHeader[0]).width : 0,
+        needToInvertResizing: this._needToInvertResizing($currentHeader)
+      };
+    }
   }
   /**
    * @extended: filter_row
@@ -84685,7 +80941,7 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
     const eventData = (0, _index.eventData)(e);
     if ((0, _index.isTouchEvent)(e)) {
       if (that._isHeadersRowArea(eventData.y)) {
-        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH);
+        that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData, COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH);
         if (that._targetPoint) {
           that._columnsSeparatorView.moveByX(that._targetPoint.x - that._columnsSeparatorView.width() / 2);
           that._isReadyResizing = true;
@@ -84975,12 +81231,10 @@ class ColumnsResizerViewController extends _m_modules.default.ViewController {
   pointsByColumns(value) {
     if (value !== undefined) {
       this._pointsByColumns = value;
-    } else {
-      if (!this._pointsByColumns) {
-        this._generatePointsByColumns();
-      }
-      return this._pointsByColumns;
+    } else if (!this._pointsByColumns) {
+      this._generatePointsByColumns();
     }
+    return this._pointsByColumns;
   }
 }
 exports.ColumnsResizerViewController = ColumnsResizerViewController;
@@ -85207,7 +81461,7 @@ class DraggingHeaderViewController extends _m_modules.default.ViewController {
     type !== 'block' && columnsSeparator && columnsSeparator.hide();
   }
   allowDrop(parameters) {
-    return this._columnsController.allowMoveColumn(this.addColumnIndexOffset(parameters.sourceColumnIndex), this.addColumnIndexOffset(parameters.targetColumnIndex), parameters.sourceLocation, parameters.targetLocation);
+    return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
   }
   drag(parameters) {
     const {
@@ -85265,15 +81519,6 @@ class DraggingHeaderViewController extends _m_modules.default.ViewController {
       }
     }
   }
-  addColumnIndexOffset(columnIndex) {
-    const offset = this._columnsController.getColumnIndexOffset();
-    if ((0, _type.isObject)(columnIndex)) {
-      return Object.assign({}, columnIndex, {
-        columnIndex: columnIndex.columnIndex + offset
-      });
-    }
-    return columnIndex + offset;
-  }
   drop(parameters) {
     const {
       sourceColumnElement
@@ -85289,7 +81534,7 @@ class DraggingHeaderViewController extends _m_modules.default.ViewController {
       if (separator) {
         separator.hide();
       }
-      this._columnsController.moveColumn(this.addColumnIndexOffset(parameters.sourceColumnIndex), this.addColumnIndexOffset(parameters.targetColumnIndex), parameters.sourceLocation, parameters.targetLocation);
+      this._columnsController.moveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
     }
   }
 }
@@ -87254,7 +83499,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.updateViewsBorders = void 0;
 var _type = __webpack_require__(11528);
 const _excluded = ["rowsView"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const CLASSES = {
   borderedTop: 'dx-bordered-top-view',
   borderedBottom: 'dx-bordered-bottom-view'
@@ -88754,8 +84999,8 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   _recalculateWorkspace() {
     // @ts-expect-error
     this._workSpaceRecalculation = new _deferred.Deferred();
+    (0, _visibility_change.triggerResizeEvent)(this._workSpace.$element());
     this._waitAsyncTemplate(() => {
-      (0, _visibility_change.triggerResizeEvent)(this._workSpace.$element());
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
@@ -88768,7 +85013,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
       getFilteredItems: () => this._layoutManager.filteredItems,
-      noDataText: this.option('noDataText'),
+      noDataText: this.option('noDataText') || _message.default.format('dxCollectionWidget-noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
@@ -89270,8 +85515,25 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     var _this$_appointmentToo2;
     (_this$_appointmentToo2 = this._appointmentTooltip) === null || _this$_appointmentToo2 === void 0 || _this$_appointmentToo2.hide();
   }
-  scrollTo(date, groupValues, allDay) {
-    this._workSpace.scrollTo(date, groupValues, allDay);
+  scrollTo(date, groupValuesOrOptions, allDay) {
+    let groupValues;
+    let allDayValue;
+    let align = 'center';
+    if (this._isScrollOptionsObject(groupValuesOrOptions)) {
+      groupValues = groupValuesOrOptions.group;
+      allDayValue = groupValuesOrOptions.allDay;
+      align = groupValuesOrOptions.alignInView ?? 'center';
+    } else {
+      if ((0, _type.isDefined)(groupValuesOrOptions) || (0, _type.isDefined)(allDay)) {
+        _ui.default.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      }
+      groupValues = groupValuesOrOptions;
+      allDayValue = allDay;
+    }
+    this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
+  }
+  _isScrollOptionsObject(options) {
+    return Boolean(options) && typeof options === 'object' && ('align' in options || 'allDay' in options || 'group' in options);
   }
   _isHorizontalVirtualScrolling() {
     const scrolling = this.option('scrolling');
@@ -93064,8 +89326,7 @@ var _license_validation = _interopRequireWildcard(__webpack_require__(93391));
 var _m_template_manager = _interopRequireDefault(__webpack_require__(66298));
 var _m_common = __webpack_require__(39315);
 var _component = __webpack_require__(65020);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class DOMComponent extends _component.Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94351,7 +90612,7 @@ var _index3 = __webpack_require__(84363);
 var _utils2 = __webpack_require__(99277);
 const _excluded = ["skip", "take"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const FILTER_OBJ_COMPARE_DEPTH = 6;
 class DataController {
   constructor(columnsController, options, sortingController, filterController, errorController, lifecycle) {
@@ -95904,7 +92165,7 @@ exports.withKbnNavigationItem = void 0;
 var _inferno = __webpack_require__(76231);
 var _index = __webpack_require__(92940);
 const _excluded = ["elementRef", "tabIndex", "onKeyDown", "children"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
     r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -96234,7 +92495,7 @@ var _type = __webpack_require__(11528);
 var _abstract_store = _interopRequireDefault(__webpack_require__(77735));
 const _excluded = ["items"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const CANCELED_TOKEN = exports.CANCELED_TOKEN = 'canceled';
 const isPending = deferred => deferred.state() === 'pending';
 exports.isPending = isPending;
@@ -96453,14 +92714,14 @@ class HorizontalGroupedStrategy {
   }
   _calculateOffset(groupIndex) {
     const indicatorStartPosition = this._workSpace.getIndicatorOffset(groupIndex);
-    const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * groupIndex;
     return indicatorStartPosition + offset;
   }
   _calculateGroupByDateOffset(groupIndex) {
-    return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+    return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getCellWidth() * groupIndex;
   }
   getShaderOffset(i, width) {
-    const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * i;
     return this._workSpace.option('rtlEnabled') ? (0, _position.getBoundingRect)(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
   }
   getShaderTopOffset(i) {
@@ -96473,8 +92734,8 @@ class HorizontalGroupedStrategy {
   getShaderMaxHeight() {
     return (0, _position.getBoundingRect)(this._workSpace._dateTableScrollable.$content().get(0)).height;
   }
-  getShaderWidth(i) {
-    return this._workSpace.getIndicationWidth(i);
+  getShaderWidth() {
+    return this._workSpace.getIndicationWidth();
   }
   getScrollableScrollTop(allDay) {
     return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
@@ -100112,7 +96373,7 @@ exports.createA11yStatusContainer = void 0;
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CLASSES = {
-  container: 'dx-scheduler-a11y-status-container'
+  container: 'dx-screen-reader-only'
 };
 const createA11yStatusContainer = function () {
   let statusText = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -100595,7 +96856,7 @@ const getDateAfterWorkWeek = workWeekStart => {
   let workDaysCount = 0;
   while (workDaysCount < DAYS_IN_WORK_WEEK) {
     if (!isWeekend(date)) {
-      workDaysCount++;
+      workDaysCount += 1;
     }
     date = nextDay(date);
   }
@@ -100610,66 +96871,28 @@ const getIntervalStartDate = options => {
     step,
     firstDayOfWeek
   } = options;
-  // eslint-disable-next-line default-case
   switch (step) {
     case 'day':
     case 'week':
     case 'month':
       return getPeriodStart(date, step, false, firstDayOfWeek);
     case 'workWeek':
-      // eslint-disable-next-line no-case-declarations
-      const firstWeekDay = getWeekStart(date, firstDayOfWeek);
-      return getWorkWeekStart(firstWeekDay);
+      return getWorkWeekStart(getWeekStart(date, firstDayOfWeek));
     case 'agenda':
+      return new Date(date);
+    default:
       return new Date(date);
   }
 };
-const getIntervalEndDate = (startDate, options) => {
-  const {
-    intervalCount,
-    step,
-    agendaDuration
-  } = options;
-  let periodStartDate;
-  let periodEndDate;
-  let nextPeriodStartDate = new Date(startDate);
-  for (let i = 0; i < intervalCount; i++) {
-    periodStartDate = nextPeriodStartDate;
-    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration);
-    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
-  }
-  return periodEndDate;
-};
-const getCaptionInterval = options => {
-  const startDate = getIntervalStartDate(options);
-  const endDate = getIntervalEndDate(startDate, options);
-  return {
-    startDate,
-    endDate
-  };
-};
-exports.getCaptionInterval = getCaptionInterval;
 const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
-  let date;
-  // eslint-disable-next-line default-case
-  switch (step) {
-    case 'day':
-      date = nextDay(currentPeriodStartDate);
-      break;
-    case 'week':
-      date = nextWeek(currentPeriodStartDate);
-      break;
-    case 'month':
-      date = nextMonth(currentPeriodStartDate);
-      break;
-    case 'workWeek':
-      date = getDateAfterWorkWeek(currentPeriodStartDate);
-      break;
-    case 'agenda':
-      date = nextAgendaStart(currentPeriodStartDate, agendaDuration);
-      break;
-  }
-  return subMS(date);
+  const calculators = {
+    day: () => nextDay(currentPeriodStartDate),
+    week: () => nextWeek(currentPeriodStartDate),
+    month: () => nextMonth(currentPeriodStartDate),
+    workWeek: () => getDateAfterWorkWeek(currentPeriodStartDate),
+    agenda: () => nextAgendaStart(currentPeriodStartDate, agendaDuration)
+  };
+  return subMS(calculators[step]());
 };
 const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
   let date = addMS(currentPeriodEndDate);
@@ -100680,34 +96903,22 @@ const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
   }
   return date;
 };
-const getNextIntervalDate = (options, direction) => {
+const getIntervalEndDate = (startDate, options) => {
   const {
-    date,
-    step,
     intervalCount,
+    step,
     agendaDuration
   } = options;
-  let dayDuration;
-  // eslint-disable-next-line default-case
-  switch (step) {
-    case 'day':
-      dayDuration = Number(intervalCount);
-      break;
-    case 'week':
-    case 'workWeek':
-      dayDuration = 7 * intervalCount;
-      break;
-    case 'agenda':
-      dayDuration = agendaDuration;
-      break;
-    case 'month':
-      return getNextMonthDate(date, intervalCount, direction);
+  let periodStartDate = new Date(startDate);
+  let periodEndDate = new Date(startDate);
+  let nextPeriodStartDate = new Date(startDate);
+  for (let i = 0; i < intervalCount; i += 1) {
+    periodStartDate = nextPeriodStartDate;
+    periodEndDate = getPeriodEndDate(periodStartDate, step, agendaDuration ?? 0);
+    nextPeriodStartDate = getNextPeriodStartDate(periodEndDate, step);
   }
-  return addDateInterval(date, {
-    days: dayDuration
-  }, direction);
+  return periodEndDate;
 };
-exports.getNextIntervalDate = getNextIntervalDate;
 const getNextMonthDate = (date, intervalCount, direction) => {
   const currentDate = date.getDate();
   const currentMonthFirstDate = new Date(new Date(date.getTime()).setDate(1));
@@ -100718,6 +96929,34 @@ const getNextMonthDate = (date, intervalCount, direction) => {
   const thatMonthMinDate = new Date(currentMonthMinDate.setMonth(currentMonthMinDate.getMonth() + intervalCount * direction));
   return thatMonthMinDate;
 };
+const getNextIntervalDate = (options, direction) => {
+  const {
+    date,
+    step,
+    intervalCount,
+    agendaDuration
+  } = options;
+  let dayDuration = 0;
+  // eslint-disable-next-line default-case
+  switch (step) {
+    case 'day':
+      dayDuration = Number(intervalCount);
+      break;
+    case 'week':
+    case 'workWeek':
+      dayDuration = 7 * intervalCount;
+      break;
+    case 'agenda':
+      dayDuration = agendaDuration ?? 0;
+      break;
+    case 'month':
+      return getNextMonthDate(date, intervalCount, direction);
+  }
+  return addDateInterval(date, {
+    days: dayDuration
+  }, direction);
+};
+exports.getNextIntervalDate = getNextIntervalDate;
 const getDateMonthFormatter = isShort => {
   const monthType = isShort ? 'abbreviated' : 'wide';
   const months = _date.default.getMonthNames(monthType);
@@ -100744,6 +96983,15 @@ const getDifferentYearCaption = (startDate, endDate) => {
   const lastDateDateText = formatDate(endDate, getDateMonthYearFormatter(true));
   return `${firstDateText}-${lastDateDateText}`;
 };
+const getCaptionInterval = options => {
+  const startDate = getIntervalStartDate(options);
+  const endDate = getIntervalEndDate(startDate, options);
+  return {
+    startDate,
+    endDate
+  };
+};
+exports.getCaptionInterval = getCaptionInterval;
 const getSameYearCaption = (startDate, endDate, isShort) => {
   const isDifferentMonthDates = startDate.getMonth() !== endDate.getMonth();
   const useShortFormat = isDifferentMonthDates || isShort;
@@ -100904,9 +97152,9 @@ var _message = _interopRequireDefault(__webpack_require__(4671));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _support = __webpack_require__(4785);
 var _window = __webpack_require__(3104);
+var _date_view = _interopRequireDefault(__webpack_require__(84738));
 var _m_date_box = _interopRequireDefault(__webpack_require__(19127));
 var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
-var _m_date_view = _interopRequireDefault(__webpack_require__(76982));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const window = (0, _window.getWindow)();
 class DateViewStrategy extends _m_date_box.default {
@@ -101000,7 +97248,7 @@ class DateViewStrategy extends _m_date_box.default {
     this._widget.$element().appendTo(this._getWidgetContainer());
   }
   _getWidgetName() {
-    return _m_date_view.default;
+    return _date_view.default;
   }
   renderOpenedState() {
     super.renderOpenedState();
@@ -105593,37 +101841,6 @@ module.exports["default"] = exports.default;
 
 /***/ }),
 
-/***/ 27311:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.getTodayButtonOptions = void 0;
-var _message = _interopRequireDefault(__webpack_require__(4671));
-var _m_extend = __webpack_require__(96298);
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const getTodayButtonOptions = (header, item) => (0, _m_extend.extend)(true, {}, {
-  location: 'before',
-  locateInMenu: 'auto',
-  widget: 'dxButton',
-  cssClass: 'dx-scheduler-today',
-  options: {
-    text: _message.default.format('dxScheduler-navigationToday'),
-    icon: 'today',
-    stylingMode: 'outlined',
-    type: 'normal',
-    onClick() {
-      header._updateCurrentDate(header.option('indicatorTime') ?? new Date());
-    }
-  }
-}, item);
-exports.getTodayButtonOptions = getTodayButtonOptions;
-
-/***/ }),
-
 /***/ 27383:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -106241,8 +102458,8 @@ class AppointmentPopup {
     const rawAppointment = this.state.appointment.data;
     const appointmentAdapter = this._createAppointmentAdapter(rawAppointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment');
     const formData = this._createFormData(appointmentAdapter);
-    this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    this.form.formData = formData;
     this.form.showMainGroup();
   }
   _createFormData(appointmentAdapter) {
@@ -106402,6 +102619,42 @@ class AppointmentPopup {
     }
     return false;
   }
+  updateToolbarForMainGroup() {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
+    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
+    const toolbarItems = [{
+      toolbar: 'top',
+      location: 'before',
+      text: _message.default.format(formTitleKey),
+      cssClass: 'dx-toolbar-label'
+    }];
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push({
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: e => this._saveButtonClickHandler(e),
+          stylingMode: 'contained',
+          type: 'default',
+          text: _message.default.format('dxScheduler-editPopupSaveButtonText')
+        },
+        shortcut: 'done'
+      });
+    }
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined'
+      }
+    });
+    this.popup.option('toolbarItems', toolbarItems);
+  }
   updateToolbarForRecurrenceGroup() {
     if (this.tryApplyCustomToolbarItems()) {
       return;
@@ -106413,6 +102666,9 @@ class AppointmentPopup {
       options: {
         icon: 'arrowleft',
         stylingMode: 'text',
+        elementAttr: {
+          'aria-label': _message.default.format('Back')
+        },
         onClick: () => {
           this.form.saveRecurrenceValue();
           this.form.showMainGroup();
@@ -106422,43 +102678,6 @@ class AppointmentPopup {
       toolbar: 'top',
       location: 'before',
       text: _message.default.format('dxScheduler-editorLabelRecurrence'),
-      cssClass: 'dx-toolbar-label'
-    }, {
-      toolbar: 'top',
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        text: _message.default.format('dxScheduler-editPopupSaveButtonText'),
-        stylingMode: 'contained',
-        type: 'default',
-        onClick: e => {
-          this._saveButtonClickHandler(e);
-        }
-      }
-    }, {
-      toolbar: 'top',
-      location: 'after',
-      widget: 'dxButton',
-      options: {
-        text: _message.default.format('Cancel'),
-        stylingMode: 'outlined',
-        onClick: () => {
-          this.hide();
-        }
-      }
-    }];
-    this.popup.option('toolbarItems', toolbarItems);
-  }
-  updateToolbarForMainGroup() {
-    if (this.tryApplyCustomToolbarItems()) {
-      return;
-    }
-    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
-    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
-    const toolbarItems = [{
-      toolbar: 'top',
-      location: 'before',
-      text: _message.default.format(formTitleKey),
       cssClass: 'dx-toolbar-label'
     }];
     const canSave = !this.form.readOnly;
@@ -106552,6 +102771,3918 @@ const addEmptiness = (entities, options) => entities.map(entity => {
   });
 });
 exports.addEmptiness = addEmptiness;
+
+/***/ }),
+
+/***/ 27692:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  ALL_WEEKDAYS: () => (/* reexport */ ALL_WEEKDAYS),
+  Frequency: () => (/* reexport */ Frequency),
+  RRule: () => (/* reexport */ RRule),
+  RRuleSet: () => (/* reexport */ RRuleSet),
+  Weekday: () => (/* reexport */ Weekday),
+  datetime: () => (/* reexport */ datetime),
+  rrulestr: () => (/* reexport */ rrulestr)
+});
+
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/weekday.js
+// =============================================================================
+// Weekday
+// =============================================================================
+var ALL_WEEKDAYS = [
+    'MO',
+    'TU',
+    'WE',
+    'TH',
+    'FR',
+    'SA',
+    'SU',
+];
+var Weekday = /** @class */ (function () {
+    function Weekday(weekday, n) {
+        if (n === 0)
+            throw new Error("Can't create weekday with n == 0");
+        this.weekday = weekday;
+        this.n = n;
+    }
+    Weekday.fromStr = function (str) {
+        return new Weekday(ALL_WEEKDAYS.indexOf(str));
+    };
+    // __call__ - Cannot call the object directly, do it through
+    // e.g. RRule.TH.nth(-1) instead,
+    Weekday.prototype.nth = function (n) {
+        return this.n === n ? this : new Weekday(this.weekday, n);
+    };
+    // __eq__
+    Weekday.prototype.equals = function (other) {
+        return this.weekday === other.weekday && this.n === other.n;
+    };
+    // __repr__
+    Weekday.prototype.toString = function () {
+        var s = ALL_WEEKDAYS[this.weekday];
+        if (this.n)
+            s = (this.n > 0 ? '+' : '') + String(this.n) + s;
+        return s;
+    };
+    Weekday.prototype.getJsWeekday = function () {
+        return this.weekday === 6 ? 0 : this.weekday + 1;
+    };
+    return Weekday;
+}());
+
+//# sourceMappingURL=weekday.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/helpers.js
+// =============================================================================
+// Helper functions
+// =============================================================================
+
+var isPresent = function (value) {
+    return value !== null && value !== undefined;
+};
+var isNumber = function (value) {
+    return typeof value === 'number';
+};
+var isWeekdayStr = function (value) {
+    return typeof value === 'string' && ALL_WEEKDAYS.includes(value);
+};
+var isArray = Array.isArray;
+/**
+ * Simplified version of python's range()
+ */
+var range = function (start, end) {
+    if (end === void 0) { end = start; }
+    if (arguments.length === 1) {
+        end = start;
+        start = 0;
+    }
+    var rang = [];
+    for (var i = start; i < end; i++)
+        rang.push(i);
+    return rang;
+};
+var clone = function (array) {
+    return [].concat(array);
+};
+var repeat = function (value, times) {
+    var i = 0;
+    var array = [];
+    if (isArray(value)) {
+        for (; i < times; i++)
+            array[i] = [].concat(value);
+    }
+    else {
+        for (; i < times; i++)
+            array[i] = value;
+    }
+    return array;
+};
+var toArray = function (item) {
+    if (isArray(item)) {
+        return item;
+    }
+    return [item];
+};
+function padStart(item, targetLength, padString) {
+    if (padString === void 0) { padString = ' '; }
+    var str = String(item);
+    targetLength = targetLength >> 0;
+    if (str.length > targetLength) {
+        return String(str);
+    }
+    targetLength = targetLength - str.length;
+    if (targetLength > padString.length) {
+        padString += repeat(padString, targetLength / padString.length);
+    }
+    return padString.slice(0, targetLength) + String(str);
+}
+/**
+ * Python like split
+ */
+var split = function (str, sep, num) {
+    var splits = str.split(sep);
+    return num
+        ? splits.slice(0, num).concat([splits.slice(num).join(sep)])
+        : splits;
+};
+/**
+ * closure/goog/math/math.js:modulo
+ * Copyright 2006 The Closure Library Authors.
+ * The % operator in JavaScript returns the remainder of a / b, but differs from
+ * some other languages in that the result will have the same sign as the
+ * dividend. For example, -1 % 8 == -1, whereas in some other languages
+ * (such as Python) the result would be 7. This function emulates the more
+ * correct modulo behavior, which is useful for certain applications such as
+ * calculating an offset index in a circular list.
+ *
+ * @param {number} a The dividend.
+ * @param {number} b The divisor.
+ * @return {number} a % b where the result is between 0 and b (either 0 <= x < b
+ * or b < x <= 0, depending on the sign of b).
+ */
+var pymod = function (a, b) {
+    var r = a % b;
+    // If r and b differ in sign, add b to wrap the result to the correct sign.
+    return r * b < 0 ? r + b : r;
+};
+/**
+ * @see: <http://docs.python.org/library/functions.html#divmod>
+ */
+var divmod = function (a, b) {
+    return { div: Math.floor(a / b), mod: pymod(a, b) };
+};
+var empty = function (obj) {
+    return !isPresent(obj) || obj.length === 0;
+};
+/**
+ * Python-like boolean
+ *
+ * @return {Boolean} value of an object/primitive, taking into account
+ * the fact that in Python an empty list's/tuple's
+ * boolean value is False, whereas in JS it's true
+ */
+var notEmpty = function (obj) {
+    return !empty(obj);
+};
+/**
+ * Return true if a value is in an array
+ */
+var includes = function (arr, val) {
+    return notEmpty(arr) && arr.indexOf(val) !== -1;
+};
+//# sourceMappingURL=helpers.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/dateutil.js
+
+var datetime = function (y, m, d, h, i, s) {
+    if (h === void 0) { h = 0; }
+    if (i === void 0) { i = 0; }
+    if (s === void 0) { s = 0; }
+    return new Date(Date.UTC(y, m - 1, d, h, i, s));
+};
+/**
+ * General date-related utilities.
+ * Also handles several incompatibilities between JavaScript and Python
+ *
+ */
+var MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+/**
+ * Number of milliseconds of one day
+ */
+var ONE_DAY = 1000 * 60 * 60 * 24;
+/**
+ * @see: <http://docs.python.org/library/datetime.html#datetime.MAXYEAR>
+ */
+var MAXYEAR = 9999;
+/**
+ * Python uses 1-Jan-1 as the base for calculating ordinals but we don't
+ * want to confuse the JS engine with milliseconds > Number.MAX_NUMBER,
+ * therefore we use 1-Jan-1970 instead
+ */
+var ORDINAL_BASE = datetime(1970, 1, 1);
+/**
+ * Python: MO-SU: 0 - 6
+ * JS: SU-SAT 0 - 6
+ */
+var PY_WEEKDAYS = [6, 0, 1, 2, 3, 4, 5];
+/**
+ * py_date.timetuple()[7]
+ */
+var getYearDay = function (date) {
+    var dateNoTime = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    return (Math.ceil((dateNoTime.valueOf() - new Date(date.getUTCFullYear(), 0, 1).valueOf()) /
+        ONE_DAY) + 1);
+};
+var isLeapYear = function (year) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+};
+var isDate = function (value) {
+    return value instanceof Date;
+};
+var isValidDate = function (value) {
+    return isDate(value) && !isNaN(value.getTime());
+};
+/**
+ * @return {Number} the date's timezone offset in ms
+ */
+var tzOffset = function (date) {
+    return date.getTimezoneOffset() * 60 * 1000;
+};
+/**
+ * @see: <http://www.mcfedries.com/JavaScript/DaysBetween.asp>
+ */
+var daysBetween = function (date1, date2) {
+    // The number of milliseconds in one day
+    // Convert both dates to milliseconds
+    var date1ms = date1.getTime();
+    var date2ms = date2.getTime();
+    // Calculate the difference in milliseconds
+    var differencems = date1ms - date2ms;
+    // Convert back to days and return
+    return Math.round(differencems / ONE_DAY);
+};
+/**
+ * @see: <http://docs.python.org/library/datetime.html#datetime.date.toordinal>
+ */
+var toOrdinal = function (date) {
+    return daysBetween(date, ORDINAL_BASE);
+};
+/**
+ * @see - <http://docs.python.org/library/datetime.html#datetime.date.fromordinal>
+ */
+var fromOrdinal = function (ordinal) {
+    return new Date(ORDINAL_BASE.getTime() + ordinal * ONE_DAY);
+};
+var getMonthDays = function (date) {
+    var month = date.getUTCMonth();
+    return month === 1 && isLeapYear(date.getUTCFullYear())
+        ? 29
+        : MONTH_DAYS[month];
+};
+/**
+ * @return {Number} python-like weekday
+ */
+var getWeekday = function (date) {
+    return PY_WEEKDAYS[date.getUTCDay()];
+};
+/**
+ * @see: <http://docs.python.org/library/calendar.html#calendar.monthrange>
+ */
+var monthRange = function (year, month) {
+    var date = datetime(year, month + 1, 1);
+    return [getWeekday(date), getMonthDays(date)];
+};
+/**
+ * @see: <http://docs.python.org/library/datetime.html#datetime.datetime.combine>
+ */
+var combine = function (date, time) {
+    time = time || date;
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds()));
+};
+var dateutil_clone = function (date) {
+    var dolly = new Date(date.getTime());
+    return dolly;
+};
+var cloneDates = function (dates) {
+    var clones = [];
+    for (var i = 0; i < dates.length; i++) {
+        clones.push(dateutil_clone(dates[i]));
+    }
+    return clones;
+};
+/**
+ * Sorts an array of Date or Time objects
+ */
+var sort = function (dates) {
+    dates.sort(function (a, b) {
+        return a.getTime() - b.getTime();
+    });
+};
+var timeToUntilString = function (time, utc) {
+    if (utc === void 0) { utc = true; }
+    var date = new Date(time);
+    return [
+        padStart(date.getUTCFullYear().toString(), 4, '0'),
+        padStart(date.getUTCMonth() + 1, 2, '0'),
+        padStart(date.getUTCDate(), 2, '0'),
+        'T',
+        padStart(date.getUTCHours(), 2, '0'),
+        padStart(date.getUTCMinutes(), 2, '0'),
+        padStart(date.getUTCSeconds(), 2, '0'),
+        utc ? 'Z' : '',
+    ].join('');
+};
+var untilStringToDate = function (until) {
+    var re = /^(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2})Z?)?$/;
+    var bits = re.exec(until);
+    if (!bits)
+        throw new Error("Invalid UNTIL value: ".concat(until));
+    return new Date(Date.UTC(parseInt(bits[1], 10), parseInt(bits[2], 10) - 1, parseInt(bits[3], 10), parseInt(bits[5], 10) || 0, parseInt(bits[6], 10) || 0, parseInt(bits[7], 10) || 0));
+};
+var dateTZtoISO8601 = function (date, timeZone) {
+    // date format for sv-SE is almost ISO8601
+    var dateStr = date.toLocaleString('sv-SE', { timeZone: timeZone });
+    // '2023-02-07 10:41:36'
+    return dateStr.replace(' ', 'T') + 'Z';
+};
+var dateInTimeZone = function (date, timeZone) {
+    var localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // Date constructor can only reliably parse dates in ISO8601 format
+    var dateInLocalTZ = new Date(dateTZtoISO8601(date, localTimeZone));
+    var dateInTargetTZ = new Date(dateTZtoISO8601(date, timeZone !== null && timeZone !== void 0 ? timeZone : 'UTC'));
+    var tzOffset = dateInTargetTZ.getTime() - dateInLocalTZ.getTime();
+    return new Date(date.getTime() - tzOffset);
+};
+//# sourceMappingURL=dateutil.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterresult.js
+/**
+ * This class helps us to emulate python's generators, sorta.
+ */
+var IterResult = /** @class */ (function () {
+    function IterResult(method, args) {
+        this.minDate = null;
+        this.maxDate = null;
+        this._result = [];
+        this.total = 0;
+        this.method = method;
+        this.args = args;
+        if (method === 'between') {
+            this.maxDate = args.inc
+                ? args.before
+                : new Date(args.before.getTime() - 1);
+            this.minDate = args.inc ? args.after : new Date(args.after.getTime() + 1);
+        }
+        else if (method === 'before') {
+            this.maxDate = args.inc ? args.dt : new Date(args.dt.getTime() - 1);
+        }
+        else if (method === 'after') {
+            this.minDate = args.inc ? args.dt : new Date(args.dt.getTime() + 1);
+        }
+    }
+    /**
+     * Possibly adds a date into the result.
+     *
+     * @param {Date} date - the date isn't necessarly added to the result
+     * list (if it is too late/too early)
+     * @return {Boolean} true if it makes sense to continue the iteration
+     * false if we're done.
+     */
+    IterResult.prototype.accept = function (date) {
+        ++this.total;
+        var tooEarly = this.minDate && date < this.minDate;
+        var tooLate = this.maxDate && date > this.maxDate;
+        if (this.method === 'between') {
+            if (tooEarly)
+                return true;
+            if (tooLate)
+                return false;
+        }
+        else if (this.method === 'before') {
+            if (tooLate)
+                return false;
+        }
+        else if (this.method === 'after') {
+            if (tooEarly)
+                return true;
+            this.add(date);
+            return false;
+        }
+        return this.add(date);
+    };
+    /**
+     *
+     * @param {Date} date that is part of the result.
+     * @return {Boolean} whether we are interested in more values.
+     */
+    IterResult.prototype.add = function (date) {
+        this._result.push(date);
+        return true;
+    };
+    /**
+     * 'before' and 'after' return only one date, whereas 'all'
+     * and 'between' an array.
+     *
+     * @return {Date,Array?}
+     */
+    IterResult.prototype.getValue = function () {
+        var res = this._result;
+        switch (this.method) {
+            case 'all':
+            case 'between':
+                return res;
+            case 'before':
+            case 'after':
+            default:
+                return (res.length ? res[res.length - 1] : null);
+        }
+    };
+    IterResult.prototype.clone = function () {
+        return new IterResult(this.method, this.args);
+    };
+    return IterResult;
+}());
+/* harmony default export */ const iterresult = (IterResult);
+//# sourceMappingURL=iterresult.js.map
+;// ../../node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
+var extendStatics = function(d, b) {
+  extendStatics = Object.setPrototypeOf ||
+      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+      function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+  return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+  if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+  extendStatics(d, b);
+  function __() { this.constructor = d; }
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+  __assign = Object.assign || function __assign(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+      return t;
+  }
+  return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+      t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+          if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+              t[p[i]] = s[p[i]];
+      }
+  return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+  return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __esDecorate(ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+  function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+  var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+  var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+  var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+  var _, done = false;
+  for (var i = decorators.length - 1; i >= 0; i--) {
+      var context = {};
+      for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+      for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+      context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+      var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+      if (kind === "accessor") {
+          if (result === void 0) continue;
+          if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+          if (_ = accept(result.get)) descriptor.get = _;
+          if (_ = accept(result.set)) descriptor.set = _;
+          if (_ = accept(result.init)) initializers.unshift(_);
+      }
+      else if (_ = accept(result)) {
+          if (kind === "field") initializers.unshift(_);
+          else descriptor[key] = _;
+      }
+  }
+  if (target) Object.defineProperty(target, contextIn.name, descriptor);
+  done = true;
+};
+
+function __runInitializers(thisArg, initializers, value) {
+  var useValue = arguments.length > 2;
+  for (var i = 0; i < initializers.length; i++) {
+      value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+  }
+  return useValue ? value : void 0;
+};
+
+function __propKey(x) {
+  return typeof x === "symbol" ? x : "".concat(x);
+};
+
+function __setFunctionName(f, name, prefix) {
+  if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+  return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+
+function __metadata(metadataKey, metadataValue) {
+  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+      function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+      function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+      function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+}
+
+function __generator(thisArg, body) {
+  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+  return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+  function verb(n) { return function (v) { return step([n, v]); }; }
+  function step(op) {
+      if (f) throw new TypeError("Generator is already executing.");
+      while (g && (g = 0, op[0] && (_ = 0)), _) try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          if (y = 0, t) op = [op[0] & 2, t.value];
+          switch (op[0]) {
+              case 0: case 1: t = op; break;
+              case 4: _.label++; return { value: op[1], done: false };
+              case 5: _.label++; y = op[1]; op = [0]; continue;
+              case 7: op = _.ops.pop(); _.trys.pop(); continue;
+              default:
+                  if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                  if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                  if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                  if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                  if (t[2]) _.ops.pop();
+                  _.trys.pop(); continue;
+          }
+          op = body.call(thisArg, _);
+      } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+      if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+  }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+  }
+  Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+  for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function __values(o) {
+  var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+      next: function () {
+          if (o && i >= o.length) o = void 0;
+          return { value: o && o[i++], done: !o };
+      }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+      while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+  }
+  catch (error) { e = { error: error }; }
+  finally {
+      try {
+          if (r && !r.done && (m = i["return"])) m.call(i);
+      }
+      finally { if (e) throw e.error; }
+  }
+  return ar;
+}
+
+/** @deprecated */
+function __spread() {
+  for (var ar = [], i = 0; i < arguments.length; i++)
+      ar = ar.concat(__read(arguments[i]));
+  return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+  for (var r = Array(s), k = 0, i = 0; i < il; i++)
+      for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+          r[k] = a[j];
+  return r;
+}
+
+function __spreadArray(to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+      if (ar || !(i in from)) {
+          if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+          ar[i] = from[i];
+      }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+  return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var g = generator.apply(thisArg, _arguments || []), i, q = [];
+  return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+  function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+  function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+  function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+  function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+  function fulfill(value) { resume("next", value); }
+  function reject(value) { resume("throw", value); }
+  function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+  var i, p;
+  return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+  function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var m = o[Symbol.asyncIterator], i;
+  return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+  function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+  function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+  if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+  return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+  Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+  o["default"] = v;
+};
+
+var ownKeys = function(o) {
+  ownKeys = Object.getOwnPropertyNames || function (o) {
+    var ar = [];
+    for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+    return ar;
+  };
+  return ownKeys(o);
+};
+
+function __importStar(mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+  __setModuleDefault(result, mod);
+  return result;
+}
+
+function __importDefault(mod) {
+  return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+  if (kind === "m") throw new TypeError("Private method is not writable");
+  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+function __classPrivateFieldIn(state, receiver) {
+  if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+  return typeof state === "function" ? receiver === state : state.has(receiver);
+}
+
+function __addDisposableResource(env, value, async) {
+  if (value !== null && value !== void 0) {
+    if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
+    var dispose, inner;
+    if (async) {
+      if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+      dispose = value[Symbol.asyncDispose];
+    }
+    if (dispose === void 0) {
+      if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+      dispose = value[Symbol.dispose];
+      if (async) inner = dispose;
+    }
+    if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+    if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
+    env.stack.push({ value: value, dispose: dispose, async: async });
+  }
+  else if (async) {
+    env.stack.push({ async: true });
+  }
+  return value;
+}
+
+var _SuppressedError = typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
+function __disposeResources(env) {
+  function fail(e) {
+    env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+    env.hasError = true;
+  }
+  var r, s = 0;
+  function next() {
+    while (r = env.stack.pop()) {
+      try {
+        if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+        if (r.dispose) {
+          var result = r.dispose.call(r.value);
+          if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+        }
+        else s |= 1;
+      }
+      catch (e) {
+        fail(e);
+      }
+    }
+    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
+    if (env.hasError) throw env.error;
+  }
+  return next();
+}
+
+function __rewriteRelativeImportExtension(path, preserveJsx) {
+  if (typeof path === "string" && /^\.\.?\//.test(path)) {
+      return path.replace(/\.(tsx)$|((?:\.d)?)((?:\.[^./]+?)?)\.([cm]?)ts$/i, function (m, tsx, d, ext, cm) {
+          return tsx ? preserveJsx ? ".jsx" : ".js" : d && (!ext || !cm) ? m : (d + ext + "." + cm.toLowerCase() + "js");
+      });
+  }
+  return path;
+}
+
+/* harmony default export */ const tslib_es6 = ({
+  __extends,
+  __assign,
+  __rest,
+  __decorate,
+  __param,
+  __esDecorate,
+  __runInitializers,
+  __propKey,
+  __setFunctionName,
+  __metadata,
+  __awaiter,
+  __generator,
+  __createBinding,
+  __exportStar,
+  __values,
+  __read,
+  __spread,
+  __spreadArrays,
+  __spreadArray,
+  __await,
+  __asyncGenerator,
+  __asyncDelegator,
+  __asyncValues,
+  __makeTemplateObject,
+  __importStar,
+  __importDefault,
+  __classPrivateFieldGet,
+  __classPrivateFieldSet,
+  __classPrivateFieldIn,
+  __addDisposableResource,
+  __disposeResources,
+  __rewriteRelativeImportExtension,
+});
+
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/callbackiterresult.js
+
+
+/**
+ * IterResult subclass that calls a callback function on each add,
+ * and stops iterating when the callback returns false.
+ */
+var CallbackIterResult = /** @class */ (function (_super) {
+    __extends(CallbackIterResult, _super);
+    function CallbackIterResult(method, args, iterator) {
+        var _this = _super.call(this, method, args) || this;
+        _this.iterator = iterator;
+        return _this;
+    }
+    CallbackIterResult.prototype.add = function (date) {
+        if (this.iterator(date, this._result.length)) {
+            this._result.push(date);
+            return true;
+        }
+        return false;
+    };
+    return CallbackIterResult;
+}(iterresult));
+/* harmony default export */ const callbackiterresult = (CallbackIterResult);
+//# sourceMappingURL=callbackiterresult.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/i18n.js
+// =============================================================================
+// i18n
+// =============================================================================
+var ENGLISH = {
+    dayNames: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+    ],
+    monthNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ],
+    tokens: {
+        SKIP: /^[ \r\n\t]+|^\.$/,
+        number: /^[1-9][0-9]*/,
+        numberAsText: /^(one|two|three)/i,
+        every: /^every/i,
+        'day(s)': /^days?/i,
+        'weekday(s)': /^weekdays?/i,
+        'week(s)': /^weeks?/i,
+        'hour(s)': /^hours?/i,
+        'minute(s)': /^minutes?/i,
+        'month(s)': /^months?/i,
+        'year(s)': /^years?/i,
+        on: /^(on|in)/i,
+        at: /^(at)/i,
+        the: /^the/i,
+        first: /^first/i,
+        second: /^second/i,
+        third: /^third/i,
+        nth: /^([1-9][0-9]*)(\.|th|nd|rd|st)/i,
+        last: /^last/i,
+        for: /^for/i,
+        'time(s)': /^times?/i,
+        until: /^(un)?til/i,
+        monday: /^mo(n(day)?)?/i,
+        tuesday: /^tu(e(s(day)?)?)?/i,
+        wednesday: /^we(d(n(esday)?)?)?/i,
+        thursday: /^th(u(r(sday)?)?)?/i,
+        friday: /^fr(i(day)?)?/i,
+        saturday: /^sa(t(urday)?)?/i,
+        sunday: /^su(n(day)?)?/i,
+        january: /^jan(uary)?/i,
+        february: /^feb(ruary)?/i,
+        march: /^mar(ch)?/i,
+        april: /^apr(il)?/i,
+        may: /^may/i,
+        june: /^june?/i,
+        july: /^july?/i,
+        august: /^aug(ust)?/i,
+        september: /^sep(t(ember)?)?/i,
+        october: /^oct(ober)?/i,
+        november: /^nov(ember)?/i,
+        december: /^dec(ember)?/i,
+        comma: /^(,\s*|(and|or)\s*)+/i,
+    },
+};
+/* harmony default export */ const i18n = (ENGLISH);
+//# sourceMappingURL=i18n.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/totext.js
+
+
+
+// =============================================================================
+// Helper functions
+// =============================================================================
+/**
+ * Return true if a value is in an array
+ */
+var contains = function (arr, val) {
+    return arr.indexOf(val) !== -1;
+};
+var defaultGetText = function (id) { return id.toString(); };
+var defaultDateFormatter = function (year, month, day) { return "".concat(month, " ").concat(day, ", ").concat(year); };
+/**
+ *
+ * @param {RRule} rrule
+ * Optional:
+ * @param {Function} gettext function
+ * @param {Object} language definition
+ * @constructor
+ */
+var ToText = /** @class */ (function () {
+    function ToText(rrule, gettext, language, dateFormatter) {
+        if (gettext === void 0) { gettext = defaultGetText; }
+        if (language === void 0) { language = i18n; }
+        if (dateFormatter === void 0) { dateFormatter = defaultDateFormatter; }
+        this.text = [];
+        this.language = language || i18n;
+        this.gettext = gettext;
+        this.dateFormatter = dateFormatter;
+        this.rrule = rrule;
+        this.options = rrule.options;
+        this.origOptions = rrule.origOptions;
+        if (this.origOptions.bymonthday) {
+            var bymonthday = [].concat(this.options.bymonthday);
+            var bynmonthday = [].concat(this.options.bynmonthday);
+            bymonthday.sort(function (a, b) { return a - b; });
+            bynmonthday.sort(function (a, b) { return b - a; });
+            // 1, 2, 3, .., -5, -4, -3, ..
+            this.bymonthday = bymonthday.concat(bynmonthday);
+            if (!this.bymonthday.length)
+                this.bymonthday = null;
+        }
+        if (isPresent(this.origOptions.byweekday)) {
+            var byweekday = !isArray(this.origOptions.byweekday)
+                ? [this.origOptions.byweekday]
+                : this.origOptions.byweekday;
+            var days = String(byweekday);
+            this.byweekday = {
+                allWeeks: byweekday.filter(function (weekday) {
+                    return !weekday.n;
+                }),
+                someWeeks: byweekday.filter(function (weekday) {
+                    return Boolean(weekday.n);
+                }),
+                isWeekdays: days.indexOf('MO') !== -1 &&
+                    days.indexOf('TU') !== -1 &&
+                    days.indexOf('WE') !== -1 &&
+                    days.indexOf('TH') !== -1 &&
+                    days.indexOf('FR') !== -1 &&
+                    days.indexOf('SA') === -1 &&
+                    days.indexOf('SU') === -1,
+                isEveryDay: days.indexOf('MO') !== -1 &&
+                    days.indexOf('TU') !== -1 &&
+                    days.indexOf('WE') !== -1 &&
+                    days.indexOf('TH') !== -1 &&
+                    days.indexOf('FR') !== -1 &&
+                    days.indexOf('SA') !== -1 &&
+                    days.indexOf('SU') !== -1,
+            };
+            var sortWeekDays = function (a, b) {
+                return a.weekday - b.weekday;
+            };
+            this.byweekday.allWeeks.sort(sortWeekDays);
+            this.byweekday.someWeeks.sort(sortWeekDays);
+            if (!this.byweekday.allWeeks.length)
+                this.byweekday.allWeeks = null;
+            if (!this.byweekday.someWeeks.length)
+                this.byweekday.someWeeks = null;
+        }
+        else {
+            this.byweekday = null;
+        }
+    }
+    /**
+     * Test whether the rrule can be fully converted to text.
+     *
+     * @param {RRule} rrule
+     * @return {Boolean}
+     */
+    ToText.isFullyConvertible = function (rrule) {
+        var canConvert = true;
+        if (!(rrule.options.freq in ToText.IMPLEMENTED))
+            return false;
+        if (rrule.origOptions.until && rrule.origOptions.count)
+            return false;
+        for (var key in rrule.origOptions) {
+            if (contains(['dtstart', 'tzid', 'wkst', 'freq'], key))
+                return true;
+            if (!contains(ToText.IMPLEMENTED[rrule.options.freq], key))
+                return false;
+        }
+        return canConvert;
+    };
+    ToText.prototype.isFullyConvertible = function () {
+        return ToText.isFullyConvertible(this.rrule);
+    };
+    /**
+     * Perform the conversion. Only some of the frequencies are supported.
+     * If some of the rrule's options aren't supported, they'll
+     * be omitted from the output an "(~ approximate)" will be appended.
+     *
+     * @return {*}
+     */
+    ToText.prototype.toString = function () {
+        var gettext = this.gettext;
+        if (!(this.options.freq in ToText.IMPLEMENTED)) {
+            return gettext('RRule error: Unable to fully convert this rrule to text');
+        }
+        this.text = [gettext('every')];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this[RRule.FREQUENCIES[this.options.freq]]();
+        if (this.options.until) {
+            this.add(gettext('until'));
+            var until = this.options.until;
+            this.add(this.dateFormatter(until.getUTCFullYear(), this.language.monthNames[until.getUTCMonth()], until.getUTCDate()));
+        }
+        else if (this.options.count) {
+            this.add(gettext('for'))
+                .add(this.options.count.toString())
+                .add(this.plural(this.options.count) ? gettext('times') : gettext('time'));
+        }
+        if (!this.isFullyConvertible())
+            this.add(gettext('(~ approximate)'));
+        return this.text.join('');
+    };
+    ToText.prototype.HOURLY = function () {
+        var gettext = this.gettext;
+        if (this.options.interval !== 1)
+            this.add(this.options.interval.toString());
+        this.add(this.plural(this.options.interval) ? gettext('hours') : gettext('hour'));
+    };
+    ToText.prototype.MINUTELY = function () {
+        var gettext = this.gettext;
+        if (this.options.interval !== 1)
+            this.add(this.options.interval.toString());
+        this.add(this.plural(this.options.interval)
+            ? gettext('minutes')
+            : gettext('minute'));
+    };
+    ToText.prototype.DAILY = function () {
+        var gettext = this.gettext;
+        if (this.options.interval !== 1)
+            this.add(this.options.interval.toString());
+        if (this.byweekday && this.byweekday.isWeekdays) {
+            this.add(this.plural(this.options.interval)
+                ? gettext('weekdays')
+                : gettext('weekday'));
+        }
+        else {
+            this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
+        }
+        if (this.origOptions.bymonth) {
+            this.add(gettext('in'));
+            this._bymonth();
+        }
+        if (this.bymonthday) {
+            this._bymonthday();
+        }
+        else if (this.byweekday) {
+            this._byweekday();
+        }
+        else if (this.origOptions.byhour) {
+            this._byhour();
+        }
+    };
+    ToText.prototype.WEEKLY = function () {
+        var gettext = this.gettext;
+        if (this.options.interval !== 1) {
+            this.add(this.options.interval.toString()).add(this.plural(this.options.interval) ? gettext('weeks') : gettext('week'));
+        }
+        if (this.byweekday && this.byweekday.isWeekdays) {
+            if (this.options.interval === 1) {
+                this.add(this.plural(this.options.interval)
+                    ? gettext('weekdays')
+                    : gettext('weekday'));
+            }
+            else {
+                this.add(gettext('on')).add(gettext('weekdays'));
+            }
+        }
+        else if (this.byweekday && this.byweekday.isEveryDay) {
+            this.add(this.plural(this.options.interval) ? gettext('days') : gettext('day'));
+        }
+        else {
+            if (this.options.interval === 1)
+                this.add(gettext('week'));
+            if (this.origOptions.bymonth) {
+                this.add(gettext('in'));
+                this._bymonth();
+            }
+            if (this.bymonthday) {
+                this._bymonthday();
+            }
+            else if (this.byweekday) {
+                this._byweekday();
+            }
+            if (this.origOptions.byhour) {
+                this._byhour();
+            }
+        }
+    };
+    ToText.prototype.MONTHLY = function () {
+        var gettext = this.gettext;
+        if (this.origOptions.bymonth) {
+            if (this.options.interval !== 1) {
+                this.add(this.options.interval.toString()).add(gettext('months'));
+                if (this.plural(this.options.interval))
+                    this.add(gettext('in'));
+            }
+            else {
+                // this.add(gettext('MONTH'))
+            }
+            this._bymonth();
+        }
+        else {
+            if (this.options.interval !== 1) {
+                this.add(this.options.interval.toString());
+            }
+            this.add(this.plural(this.options.interval)
+                ? gettext('months')
+                : gettext('month'));
+        }
+        if (this.bymonthday) {
+            this._bymonthday();
+        }
+        else if (this.byweekday && this.byweekday.isWeekdays) {
+            this.add(gettext('on')).add(gettext('weekdays'));
+        }
+        else if (this.byweekday) {
+            this._byweekday();
+        }
+    };
+    ToText.prototype.YEARLY = function () {
+        var gettext = this.gettext;
+        if (this.origOptions.bymonth) {
+            if (this.options.interval !== 1) {
+                this.add(this.options.interval.toString());
+                this.add(gettext('years'));
+            }
+            else {
+                // this.add(gettext('YEAR'))
+            }
+            this._bymonth();
+        }
+        else {
+            if (this.options.interval !== 1) {
+                this.add(this.options.interval.toString());
+            }
+            this.add(this.plural(this.options.interval) ? gettext('years') : gettext('year'));
+        }
+        if (this.bymonthday) {
+            this._bymonthday();
+        }
+        else if (this.byweekday) {
+            this._byweekday();
+        }
+        if (this.options.byyearday) {
+            this.add(gettext('on the'))
+                .add(this.list(this.options.byyearday, this.nth, gettext('and')))
+                .add(gettext('day'));
+        }
+        if (this.options.byweekno) {
+            this.add(gettext('in'))
+                .add(this.plural(this.options.byweekno.length)
+                ? gettext('weeks')
+                : gettext('week'))
+                .add(this.list(this.options.byweekno, undefined, gettext('and')));
+        }
+    };
+    ToText.prototype._bymonthday = function () {
+        var gettext = this.gettext;
+        if (this.byweekday && this.byweekday.allWeeks) {
+            this.add(gettext('on'))
+                .add(this.list(this.byweekday.allWeeks, this.weekdaytext, gettext('or')))
+                .add(gettext('the'))
+                .add(this.list(this.bymonthday, this.nth, gettext('or')));
+        }
+        else {
+            this.add(gettext('on the')).add(this.list(this.bymonthday, this.nth, gettext('and')));
+        }
+        // this.add(gettext('DAY'))
+    };
+    ToText.prototype._byweekday = function () {
+        var gettext = this.gettext;
+        if (this.byweekday.allWeeks && !this.byweekday.isWeekdays) {
+            this.add(gettext('on')).add(this.list(this.byweekday.allWeeks, this.weekdaytext));
+        }
+        if (this.byweekday.someWeeks) {
+            if (this.byweekday.allWeeks)
+                this.add(gettext('and'));
+            this.add(gettext('on the')).add(this.list(this.byweekday.someWeeks, this.weekdaytext, gettext('and')));
+        }
+    };
+    ToText.prototype._byhour = function () {
+        var gettext = this.gettext;
+        this.add(gettext('at')).add(this.list(this.origOptions.byhour, undefined, gettext('and')));
+    };
+    ToText.prototype._bymonth = function () {
+        this.add(this.list(this.options.bymonth, this.monthtext, this.gettext('and')));
+    };
+    ToText.prototype.nth = function (n) {
+        n = parseInt(n.toString(), 10);
+        var nth;
+        var gettext = this.gettext;
+        if (n === -1)
+            return gettext('last');
+        var npos = Math.abs(n);
+        switch (npos) {
+            case 1:
+            case 21:
+            case 31:
+                nth = npos + gettext('st');
+                break;
+            case 2:
+            case 22:
+                nth = npos + gettext('nd');
+                break;
+            case 3:
+            case 23:
+                nth = npos + gettext('rd');
+                break;
+            default:
+                nth = npos + gettext('th');
+        }
+        return n < 0 ? nth + ' ' + gettext('last') : nth;
+    };
+    ToText.prototype.monthtext = function (m) {
+        return this.language.monthNames[m - 1];
+    };
+    ToText.prototype.weekdaytext = function (wday) {
+        var weekday = isNumber(wday) ? (wday + 1) % 7 : wday.getJsWeekday();
+        return ((wday.n ? this.nth(wday.n) + ' ' : '') +
+            this.language.dayNames[weekday]);
+    };
+    ToText.prototype.plural = function (n) {
+        return n % 100 !== 1;
+    };
+    ToText.prototype.add = function (s) {
+        this.text.push(' ');
+        this.text.push(s);
+        return this;
+    };
+    ToText.prototype.list = function (arr, callback, finalDelim, delim) {
+        var _this = this;
+        if (delim === void 0) { delim = ','; }
+        if (!isArray(arr)) {
+            arr = [arr];
+        }
+        var delimJoin = function (array, delimiter, finalDelimiter) {
+            var list = '';
+            for (var i = 0; i < array.length; i++) {
+                if (i !== 0) {
+                    if (i === array.length - 1) {
+                        list += ' ' + finalDelimiter + ' ';
+                    }
+                    else {
+                        list += delimiter + ' ';
+                    }
+                }
+                list += array[i];
+            }
+            return list;
+        };
+        callback =
+            callback ||
+                function (o) {
+                    return o.toString();
+                };
+        var realCallback = function (arg) {
+            return callback && callback.call(_this, arg);
+        };
+        if (finalDelim) {
+            return delimJoin(arr.map(realCallback), delim, finalDelim);
+        }
+        else {
+            return arr.map(realCallback).join(delim + ' ');
+        }
+    };
+    return ToText;
+}());
+/* harmony default export */ const totext = (ToText);
+//# sourceMappingURL=totext.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/parsetext.js
+
+
+// =============================================================================
+// Parser
+// =============================================================================
+var Parser = /** @class */ (function () {
+    function Parser(rules) {
+        this.done = true;
+        this.rules = rules;
+    }
+    Parser.prototype.start = function (text) {
+        this.text = text;
+        this.done = false;
+        return this.nextSymbol();
+    };
+    Parser.prototype.isDone = function () {
+        return this.done && this.symbol === null;
+    };
+    Parser.prototype.nextSymbol = function () {
+        var best;
+        var bestSymbol;
+        this.symbol = null;
+        this.value = null;
+        do {
+            if (this.done)
+                return false;
+            var rule = void 0;
+            best = null;
+            for (var name_1 in this.rules) {
+                rule = this.rules[name_1];
+                var match = rule.exec(this.text);
+                if (match) {
+                    if (best === null || match[0].length > best[0].length) {
+                        best = match;
+                        bestSymbol = name_1;
+                    }
+                }
+            }
+            if (best != null) {
+                this.text = this.text.substr(best[0].length);
+                if (this.text === '')
+                    this.done = true;
+            }
+            if (best == null) {
+                this.done = true;
+                this.symbol = null;
+                this.value = null;
+                return;
+            }
+        } while (bestSymbol === 'SKIP');
+        this.symbol = bestSymbol;
+        this.value = best;
+        return true;
+    };
+    Parser.prototype.accept = function (name) {
+        if (this.symbol === name) {
+            if (this.value) {
+                var v = this.value;
+                this.nextSymbol();
+                return v;
+            }
+            this.nextSymbol();
+            return true;
+        }
+        return false;
+    };
+    Parser.prototype.acceptNumber = function () {
+        return this.accept('number');
+    };
+    Parser.prototype.expect = function (name) {
+        if (this.accept(name))
+            return true;
+        throw new Error('expected ' + name + ' but found ' + this.symbol);
+    };
+    return Parser;
+}());
+function parseText(text, language) {
+    if (language === void 0) { language = i18n; }
+    var options = {};
+    var ttr = new Parser(language.tokens);
+    if (!ttr.start(text))
+        return null;
+    S();
+    return options;
+    function S() {
+        // every [n]
+        ttr.expect('every');
+        var n = ttr.acceptNumber();
+        if (n)
+            options.interval = parseInt(n[0], 10);
+        if (ttr.isDone())
+            throw new Error('Unexpected end');
+        switch (ttr.symbol) {
+            case 'day(s)':
+                options.freq = RRule.DAILY;
+                if (ttr.nextSymbol()) {
+                    AT();
+                    F();
+                }
+                break;
+            // FIXME Note: every 2 weekdays != every two weeks on weekdays.
+            // DAILY on weekdays is not a valid rule
+            case 'weekday(s)':
+                options.freq = RRule.WEEKLY;
+                options.byweekday = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR];
+                ttr.nextSymbol();
+                AT();
+                F();
+                break;
+            case 'week(s)':
+                options.freq = RRule.WEEKLY;
+                if (ttr.nextSymbol()) {
+                    ON();
+                    AT();
+                    F();
+                }
+                break;
+            case 'hour(s)':
+                options.freq = RRule.HOURLY;
+                if (ttr.nextSymbol()) {
+                    ON();
+                    F();
+                }
+                break;
+            case 'minute(s)':
+                options.freq = RRule.MINUTELY;
+                if (ttr.nextSymbol()) {
+                    ON();
+                    F();
+                }
+                break;
+            case 'month(s)':
+                options.freq = RRule.MONTHLY;
+                if (ttr.nextSymbol()) {
+                    ON();
+                    F();
+                }
+                break;
+            case 'year(s)':
+                options.freq = RRule.YEARLY;
+                if (ttr.nextSymbol()) {
+                    ON();
+                    F();
+                }
+                break;
+            case 'monday':
+            case 'tuesday':
+            case 'wednesday':
+            case 'thursday':
+            case 'friday':
+            case 'saturday':
+            case 'sunday':
+                options.freq = RRule.WEEKLY;
+                var key = ttr.symbol
+                    .substr(0, 2)
+                    .toUpperCase();
+                options.byweekday = [RRule[key]];
+                if (!ttr.nextSymbol())
+                    return;
+                // TODO check for duplicates
+                while (ttr.accept('comma')) {
+                    if (ttr.isDone())
+                        throw new Error('Unexpected end');
+                    var wkd = decodeWKD();
+                    if (!wkd) {
+                        throw new Error('Unexpected symbol ' + ttr.symbol + ', expected weekday');
+                    }
+                    options.byweekday.push(RRule[wkd]);
+                    ttr.nextSymbol();
+                }
+                AT();
+                MDAYs();
+                F();
+                break;
+            case 'january':
+            case 'february':
+            case 'march':
+            case 'april':
+            case 'may':
+            case 'june':
+            case 'july':
+            case 'august':
+            case 'september':
+            case 'october':
+            case 'november':
+            case 'december':
+                options.freq = RRule.YEARLY;
+                options.bymonth = [decodeM()];
+                if (!ttr.nextSymbol())
+                    return;
+                // TODO check for duplicates
+                while (ttr.accept('comma')) {
+                    if (ttr.isDone())
+                        throw new Error('Unexpected end');
+                    var m = decodeM();
+                    if (!m) {
+                        throw new Error('Unexpected symbol ' + ttr.symbol + ', expected month');
+                    }
+                    options.bymonth.push(m);
+                    ttr.nextSymbol();
+                }
+                ON();
+                F();
+                break;
+            default:
+                throw new Error('Unknown symbol');
+        }
+    }
+    function ON() {
+        var on = ttr.accept('on');
+        var the = ttr.accept('the');
+        if (!(on || the))
+            return;
+        do {
+            var nth = decodeNTH();
+            var wkd = decodeWKD();
+            var m = decodeM();
+            // nth <weekday> | <weekday>
+            if (nth) {
+                // ttr.nextSymbol()
+                if (wkd) {
+                    ttr.nextSymbol();
+                    if (!options.byweekday)
+                        options.byweekday = [];
+                    options.byweekday.push(RRule[wkd].nth(nth));
+                }
+                else {
+                    if (!options.bymonthday)
+                        options.bymonthday = [];
+                    options.bymonthday.push(nth);
+                    ttr.accept('day(s)');
+                }
+                // <weekday>
+            }
+            else if (wkd) {
+                ttr.nextSymbol();
+                if (!options.byweekday)
+                    options.byweekday = [];
+                options.byweekday.push(RRule[wkd]);
+            }
+            else if (ttr.symbol === 'weekday(s)') {
+                ttr.nextSymbol();
+                if (!options.byweekday) {
+                    options.byweekday = [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR];
+                }
+            }
+            else if (ttr.symbol === 'week(s)') {
+                ttr.nextSymbol();
+                var n = ttr.acceptNumber();
+                if (!n) {
+                    throw new Error('Unexpected symbol ' + ttr.symbol + ', expected week number');
+                }
+                options.byweekno = [parseInt(n[0], 10)];
+                while (ttr.accept('comma')) {
+                    n = ttr.acceptNumber();
+                    if (!n) {
+                        throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
+                    }
+                    options.byweekno.push(parseInt(n[0], 10));
+                }
+            }
+            else if (m) {
+                ttr.nextSymbol();
+                if (!options.bymonth)
+                    options.bymonth = [];
+                options.bymonth.push(m);
+            }
+            else {
+                return;
+            }
+        } while (ttr.accept('comma') || ttr.accept('the') || ttr.accept('on'));
+    }
+    function AT() {
+        var at = ttr.accept('at');
+        if (!at)
+            return;
+        do {
+            var n = ttr.acceptNumber();
+            if (!n) {
+                throw new Error('Unexpected symbol ' + ttr.symbol + ', expected hour');
+            }
+            options.byhour = [parseInt(n[0], 10)];
+            while (ttr.accept('comma')) {
+                n = ttr.acceptNumber();
+                if (!n) {
+                    throw new Error('Unexpected symbol ' + ttr.symbol + '; expected hour');
+                }
+                options.byhour.push(parseInt(n[0], 10));
+            }
+        } while (ttr.accept('comma') || ttr.accept('at'));
+    }
+    function decodeM() {
+        switch (ttr.symbol) {
+            case 'january':
+                return 1;
+            case 'february':
+                return 2;
+            case 'march':
+                return 3;
+            case 'april':
+                return 4;
+            case 'may':
+                return 5;
+            case 'june':
+                return 6;
+            case 'july':
+                return 7;
+            case 'august':
+                return 8;
+            case 'september':
+                return 9;
+            case 'october':
+                return 10;
+            case 'november':
+                return 11;
+            case 'december':
+                return 12;
+            default:
+                return false;
+        }
+    }
+    function decodeWKD() {
+        switch (ttr.symbol) {
+            case 'monday':
+            case 'tuesday':
+            case 'wednesday':
+            case 'thursday':
+            case 'friday':
+            case 'saturday':
+            case 'sunday':
+                return ttr.symbol.substr(0, 2).toUpperCase();
+            default:
+                return false;
+        }
+    }
+    function decodeNTH() {
+        switch (ttr.symbol) {
+            case 'last':
+                ttr.nextSymbol();
+                return -1;
+            case 'first':
+                ttr.nextSymbol();
+                return 1;
+            case 'second':
+                ttr.nextSymbol();
+                return ttr.accept('last') ? -2 : 2;
+            case 'third':
+                ttr.nextSymbol();
+                return ttr.accept('last') ? -3 : 3;
+            case 'nth':
+                var v = parseInt(ttr.value[1], 10);
+                if (v < -366 || v > 366)
+                    throw new Error('Nth out of range: ' + v);
+                ttr.nextSymbol();
+                return ttr.accept('last') ? -v : v;
+            default:
+                return false;
+        }
+    }
+    function MDAYs() {
+        ttr.accept('on');
+        ttr.accept('the');
+        var nth = decodeNTH();
+        if (!nth)
+            return;
+        options.bymonthday = [nth];
+        ttr.nextSymbol();
+        while (ttr.accept('comma')) {
+            nth = decodeNTH();
+            if (!nth) {
+                throw new Error('Unexpected symbol ' + ttr.symbol + '; expected monthday');
+            }
+            options.bymonthday.push(nth);
+            ttr.nextSymbol();
+        }
+    }
+    function F() {
+        if (ttr.symbol === 'until') {
+            var date = Date.parse(ttr.text);
+            if (!date)
+                throw new Error('Cannot parse until date:' + ttr.text);
+            options.until = new Date(date);
+        }
+        else if (ttr.accept('for')) {
+            options.count = parseInt(ttr.value[0], 10);
+            ttr.expect('number');
+            // ttr.expect('times')
+        }
+    }
+}
+//# sourceMappingURL=parsetext.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/types.js
+var Frequency;
+(function (Frequency) {
+    Frequency[Frequency["YEARLY"] = 0] = "YEARLY";
+    Frequency[Frequency["MONTHLY"] = 1] = "MONTHLY";
+    Frequency[Frequency["WEEKLY"] = 2] = "WEEKLY";
+    Frequency[Frequency["DAILY"] = 3] = "DAILY";
+    Frequency[Frequency["HOURLY"] = 4] = "HOURLY";
+    Frequency[Frequency["MINUTELY"] = 5] = "MINUTELY";
+    Frequency[Frequency["SECONDLY"] = 6] = "SECONDLY";
+})(Frequency || (Frequency = {}));
+function freqIsDailyOrGreater(freq) {
+    return freq < Frequency.HOURLY;
+}
+//# sourceMappingURL=types.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/nlp/index.js
+
+
+
+
+
+/* !
+ * rrule.js - Library for working with recurrence rules for calendar dates.
+ * https://github.com/jakubroztocil/rrule
+ *
+ * Copyright 2010, Jakub Roztocil and Lars Schoning
+ * Licenced under the BSD licence.
+ * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
+ *
+ */
+/**
+ *
+ * Implementation of RRule.fromText() and RRule::toText().
+ *
+ *
+ * On the client side, this file needs to be included
+ * when those functions are used.
+ *
+ */
+// =============================================================================
+// fromText
+// =============================================================================
+/**
+ * Will be able to convert some of the below described rules from
+ * text format to a rule object.
+ *
+ *
+ * RULES
+ *
+ * Every ([n])
+ * day(s)
+ * | [weekday], ..., (and) [weekday]
+ * | weekday(s)
+ * | week(s)
+ * | month(s)
+ * | [month], ..., (and) [month]
+ * | year(s)
+ *
+ *
+ * Plus 0, 1, or multiple of these:
+ *
+ * on [weekday], ..., (or) [weekday] the [monthday], [monthday], ... (or) [monthday]
+ *
+ * on [weekday], ..., (and) [weekday]
+ *
+ * on the [monthday], [monthday], ... (and) [monthday] (day of the month)
+ *
+ * on the [nth-weekday], ..., (and) [nth-weekday] (of the month/year)
+ *
+ *
+ * Plus 0 or 1 of these:
+ *
+ * for [n] time(s)
+ *
+ * until [date]
+ *
+ * Plus (.)
+ *
+ *
+ * Definitely no supported for parsing:
+ *
+ * (for year):
+ * in week(s) [n], ..., (and) [n]
+ *
+ * on the [yearday], ..., (and) [n] day of the year
+ * on day [yearday], ..., (and) [n]
+ *
+ *
+ * NON-TERMINALS
+ *
+ * [n]: 1, 2 ..., one, two, three ..
+ * [month]: January, February, March, April, May, ... December
+ * [weekday]: Monday, ... Sunday
+ * [nth-weekday]: first [weekday], 2nd [weekday], ... last [weekday], ...
+ * [monthday]: first, 1., 2., 1st, 2nd, second, ... 31st, last day, 2nd last day, ..
+ * [date]:
+ * - [month] (0-31(,) ([year])),
+ * - (the) 0-31.(1-12.([year])),
+ * - (the) 0-31/(1-12/([year])),
+ * - [weekday]
+ *
+ * [year]: 0000, 0001, ... 01, 02, ..
+ *
+ * Definitely not supported for parsing:
+ *
+ * [yearday]: first, 1., 2., 1st, 2nd, second, ... 366th, last day, 2nd last day, ..
+ *
+ * @param {String} text
+ * @return {Object, Boolean} the rule, or null.
+ */
+var fromText = function (text, language) {
+    if (language === void 0) { language = i18n; }
+    return new RRule(parseText(text, language) || undefined);
+};
+var common = [
+    'count',
+    'until',
+    'interval',
+    'byweekday',
+    'bymonthday',
+    'bymonth',
+];
+totext.IMPLEMENTED = [];
+totext.IMPLEMENTED[Frequency.HOURLY] = common;
+totext.IMPLEMENTED[Frequency.MINUTELY] = common;
+totext.IMPLEMENTED[Frequency.DAILY] = ['byhour'].concat(common);
+totext.IMPLEMENTED[Frequency.WEEKLY] = common;
+totext.IMPLEMENTED[Frequency.MONTHLY] = common;
+totext.IMPLEMENTED[Frequency.YEARLY] = ['byweekno', 'byyearday'].concat(common);
+// =============================================================================
+// Export
+// =============================================================================
+var toText = function (rrule, gettext, language, dateFormatter) {
+    return new totext(rrule, gettext, language, dateFormatter).toString();
+};
+var isFullyConvertible = totext.isFullyConvertible;
+
+//# sourceMappingURL=index.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/datetime.js
+
+
+
+
+var Time = /** @class */ (function () {
+    function Time(hour, minute, second, millisecond) {
+        this.hour = hour;
+        this.minute = minute;
+        this.second = second;
+        this.millisecond = millisecond || 0;
+    }
+    Time.prototype.getHours = function () {
+        return this.hour;
+    };
+    Time.prototype.getMinutes = function () {
+        return this.minute;
+    };
+    Time.prototype.getSeconds = function () {
+        return this.second;
+    };
+    Time.prototype.getMilliseconds = function () {
+        return this.millisecond;
+    };
+    Time.prototype.getTime = function () {
+        return ((this.hour * 60 * 60 + this.minute * 60 + this.second) * 1000 +
+            this.millisecond);
+    };
+    return Time;
+}());
+
+var DateTime = /** @class */ (function (_super) {
+    __extends(DateTime, _super);
+    function DateTime(year, month, day, hour, minute, second, millisecond) {
+        var _this = _super.call(this, hour, minute, second, millisecond) || this;
+        _this.year = year;
+        _this.month = month;
+        _this.day = day;
+        return _this;
+    }
+    DateTime.fromDate = function (date) {
+        return new this(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.valueOf() % 1000);
+    };
+    DateTime.prototype.getWeekday = function () {
+        return getWeekday(new Date(this.getTime()));
+    };
+    DateTime.prototype.getTime = function () {
+        return new Date(Date.UTC(this.year, this.month - 1, this.day, this.hour, this.minute, this.second, this.millisecond)).getTime();
+    };
+    DateTime.prototype.getDay = function () {
+        return this.day;
+    };
+    DateTime.prototype.getMonth = function () {
+        return this.month;
+    };
+    DateTime.prototype.getYear = function () {
+        return this.year;
+    };
+    DateTime.prototype.addYears = function (years) {
+        this.year += years;
+    };
+    DateTime.prototype.addMonths = function (months) {
+        this.month += months;
+        if (this.month > 12) {
+            var yearDiv = Math.floor(this.month / 12);
+            var monthMod = pymod(this.month, 12);
+            this.month = monthMod;
+            this.year += yearDiv;
+            if (this.month === 0) {
+                this.month = 12;
+                --this.year;
+            }
+        }
+    };
+    DateTime.prototype.addWeekly = function (days, wkst) {
+        if (wkst > this.getWeekday()) {
+            this.day += -(this.getWeekday() + 1 + (6 - wkst)) + days * 7;
+        }
+        else {
+            this.day += -(this.getWeekday() - wkst) + days * 7;
+        }
+        this.fixDay();
+    };
+    DateTime.prototype.addDaily = function (days) {
+        this.day += days;
+        this.fixDay();
+    };
+    DateTime.prototype.addHours = function (hours, filtered, byhour) {
+        if (filtered) {
+            // Jump to one iteration before next day
+            this.hour += Math.floor((23 - this.hour) / hours) * hours;
+        }
+        for (;;) {
+            this.hour += hours;
+            var _a = divmod(this.hour, 24), dayDiv = _a.div, hourMod = _a.mod;
+            if (dayDiv) {
+                this.hour = hourMod;
+                this.addDaily(dayDiv);
+            }
+            if (empty(byhour) || includes(byhour, this.hour))
+                break;
+        }
+    };
+    DateTime.prototype.addMinutes = function (minutes, filtered, byhour, byminute) {
+        if (filtered) {
+            // Jump to one iteration before next day
+            this.minute +=
+                Math.floor((1439 - (this.hour * 60 + this.minute)) / minutes) * minutes;
+        }
+        for (;;) {
+            this.minute += minutes;
+            var _a = divmod(this.minute, 60), hourDiv = _a.div, minuteMod = _a.mod;
+            if (hourDiv) {
+                this.minute = minuteMod;
+                this.addHours(hourDiv, false, byhour);
+            }
+            if ((empty(byhour) || includes(byhour, this.hour)) &&
+                (empty(byminute) || includes(byminute, this.minute))) {
+                break;
+            }
+        }
+    };
+    DateTime.prototype.addSeconds = function (seconds, filtered, byhour, byminute, bysecond) {
+        if (filtered) {
+            // Jump to one iteration before next day
+            this.second +=
+                Math.floor((86399 - (this.hour * 3600 + this.minute * 60 + this.second)) /
+                    seconds) * seconds;
+        }
+        for (;;) {
+            this.second += seconds;
+            var _a = divmod(this.second, 60), minuteDiv = _a.div, secondMod = _a.mod;
+            if (minuteDiv) {
+                this.second = secondMod;
+                this.addMinutes(minuteDiv, false, byhour, byminute);
+            }
+            if ((empty(byhour) || includes(byhour, this.hour)) &&
+                (empty(byminute) || includes(byminute, this.minute)) &&
+                (empty(bysecond) || includes(bysecond, this.second))) {
+                break;
+            }
+        }
+    };
+    DateTime.prototype.fixDay = function () {
+        if (this.day <= 28) {
+            return;
+        }
+        var daysinmonth = monthRange(this.year, this.month - 1)[1];
+        if (this.day <= daysinmonth) {
+            return;
+        }
+        while (this.day > daysinmonth) {
+            this.day -= daysinmonth;
+            ++this.month;
+            if (this.month === 13) {
+                this.month = 1;
+                ++this.year;
+                if (this.year > MAXYEAR) {
+                    return;
+                }
+            }
+            daysinmonth = monthRange(this.year, this.month - 1)[1];
+        }
+    };
+    DateTime.prototype.add = function (options, filtered) {
+        var freq = options.freq, interval = options.interval, wkst = options.wkst, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
+        switch (freq) {
+            case Frequency.YEARLY:
+                return this.addYears(interval);
+            case Frequency.MONTHLY:
+                return this.addMonths(interval);
+            case Frequency.WEEKLY:
+                return this.addWeekly(interval, wkst);
+            case Frequency.DAILY:
+                return this.addDaily(interval);
+            case Frequency.HOURLY:
+                return this.addHours(interval, filtered, byhour);
+            case Frequency.MINUTELY:
+                return this.addMinutes(interval, filtered, byhour, byminute);
+            case Frequency.SECONDLY:
+                return this.addSeconds(interval, filtered, byhour, byminute, bysecond);
+        }
+    };
+    return DateTime;
+}(Time));
+
+//# sourceMappingURL=datetime.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/parseoptions.js
+
+
+
+
+
+
+
+function initializeOptions(options) {
+    var invalid = [];
+    var keys = Object.keys(options);
+    // Shallow copy for options and origOptions and check for invalid
+    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+        var key = keys_1[_i];
+        if (!includes(defaultKeys, key))
+            invalid.push(key);
+        if (isDate(options[key]) && !isValidDate(options[key])) {
+            invalid.push(key);
+        }
+    }
+    if (invalid.length) {
+        throw new Error('Invalid options: ' + invalid.join(', '));
+    }
+    return __assign({}, options);
+}
+function parseOptions(options) {
+    var opts = __assign(__assign({}, DEFAULT_OPTIONS), initializeOptions(options));
+    if (isPresent(opts.byeaster))
+        opts.freq = RRule.YEARLY;
+    if (!(isPresent(opts.freq) && RRule.FREQUENCIES[opts.freq])) {
+        throw new Error("Invalid frequency: ".concat(opts.freq, " ").concat(options.freq));
+    }
+    if (!opts.dtstart)
+        opts.dtstart = new Date(new Date().setMilliseconds(0));
+    if (!isPresent(opts.wkst)) {
+        opts.wkst = RRule.MO.weekday;
+    }
+    else if (isNumber(opts.wkst)) {
+        // cool, just keep it like that
+    }
+    else {
+        opts.wkst = opts.wkst.weekday;
+    }
+    if (isPresent(opts.bysetpos)) {
+        if (isNumber(opts.bysetpos))
+            opts.bysetpos = [opts.bysetpos];
+        for (var i = 0; i < opts.bysetpos.length; i++) {
+            var v = opts.bysetpos[i];
+            if (v === 0 || !(v >= -366 && v <= 366)) {
+                throw new Error('bysetpos must be between 1 and 366,' + ' or between -366 and -1');
+            }
+        }
+    }
+    if (!(Boolean(opts.byweekno) ||
+        notEmpty(opts.byweekno) ||
+        notEmpty(opts.byyearday) ||
+        Boolean(opts.bymonthday) ||
+        notEmpty(opts.bymonthday) ||
+        isPresent(opts.byweekday) ||
+        isPresent(opts.byeaster))) {
+        switch (opts.freq) {
+            case RRule.YEARLY:
+                if (!opts.bymonth)
+                    opts.bymonth = opts.dtstart.getUTCMonth() + 1;
+                opts.bymonthday = opts.dtstart.getUTCDate();
+                break;
+            case RRule.MONTHLY:
+                opts.bymonthday = opts.dtstart.getUTCDate();
+                break;
+            case RRule.WEEKLY:
+                opts.byweekday = [getWeekday(opts.dtstart)];
+                break;
+        }
+    }
+    // bymonth
+    if (isPresent(opts.bymonth) && !isArray(opts.bymonth)) {
+        opts.bymonth = [opts.bymonth];
+    }
+    // byyearday
+    if (isPresent(opts.byyearday) &&
+        !isArray(opts.byyearday) &&
+        isNumber(opts.byyearday)) {
+        opts.byyearday = [opts.byyearday];
+    }
+    // bymonthday
+    if (!isPresent(opts.bymonthday)) {
+        opts.bymonthday = [];
+        opts.bynmonthday = [];
+    }
+    else if (isArray(opts.bymonthday)) {
+        var bymonthday = [];
+        var bynmonthday = [];
+        for (var i = 0; i < opts.bymonthday.length; i++) {
+            var v = opts.bymonthday[i];
+            if (v > 0) {
+                bymonthday.push(v);
+            }
+            else if (v < 0) {
+                bynmonthday.push(v);
+            }
+        }
+        opts.bymonthday = bymonthday;
+        opts.bynmonthday = bynmonthday;
+    }
+    else if (opts.bymonthday < 0) {
+        opts.bynmonthday = [opts.bymonthday];
+        opts.bymonthday = [];
+    }
+    else {
+        opts.bynmonthday = [];
+        opts.bymonthday = [opts.bymonthday];
+    }
+    // byweekno
+    if (isPresent(opts.byweekno) && !isArray(opts.byweekno)) {
+        opts.byweekno = [opts.byweekno];
+    }
+    // byweekday / bynweekday
+    if (!isPresent(opts.byweekday)) {
+        opts.bynweekday = null;
+    }
+    else if (isNumber(opts.byweekday)) {
+        opts.byweekday = [opts.byweekday];
+        opts.bynweekday = null;
+    }
+    else if (isWeekdayStr(opts.byweekday)) {
+        opts.byweekday = [Weekday.fromStr(opts.byweekday).weekday];
+        opts.bynweekday = null;
+    }
+    else if (opts.byweekday instanceof Weekday) {
+        if (!opts.byweekday.n || opts.freq > RRule.MONTHLY) {
+            opts.byweekday = [opts.byweekday.weekday];
+            opts.bynweekday = null;
+        }
+        else {
+            opts.bynweekday = [[opts.byweekday.weekday, opts.byweekday.n]];
+            opts.byweekday = null;
+        }
+    }
+    else {
+        var byweekday = [];
+        var bynweekday = [];
+        for (var i = 0; i < opts.byweekday.length; i++) {
+            var wday = opts.byweekday[i];
+            if (isNumber(wday)) {
+                byweekday.push(wday);
+                continue;
+            }
+            else if (isWeekdayStr(wday)) {
+                byweekday.push(Weekday.fromStr(wday).weekday);
+                continue;
+            }
+            if (!wday.n || opts.freq > RRule.MONTHLY) {
+                byweekday.push(wday.weekday);
+            }
+            else {
+                bynweekday.push([wday.weekday, wday.n]);
+            }
+        }
+        opts.byweekday = notEmpty(byweekday) ? byweekday : null;
+        opts.bynweekday = notEmpty(bynweekday) ? bynweekday : null;
+    }
+    // byhour
+    if (!isPresent(opts.byhour)) {
+        opts.byhour = opts.freq < RRule.HOURLY ? [opts.dtstart.getUTCHours()] : null;
+    }
+    else if (isNumber(opts.byhour)) {
+        opts.byhour = [opts.byhour];
+    }
+    // byminute
+    if (!isPresent(opts.byminute)) {
+        opts.byminute =
+            opts.freq < RRule.MINUTELY ? [opts.dtstart.getUTCMinutes()] : null;
+    }
+    else if (isNumber(opts.byminute)) {
+        opts.byminute = [opts.byminute];
+    }
+    // bysecond
+    if (!isPresent(opts.bysecond)) {
+        opts.bysecond =
+            opts.freq < RRule.SECONDLY ? [opts.dtstart.getUTCSeconds()] : null;
+    }
+    else if (isNumber(opts.bysecond)) {
+        opts.bysecond = [opts.bysecond];
+    }
+    return { parsedOptions: opts };
+}
+function buildTimeset(opts) {
+    var millisecondModulo = opts.dtstart.getTime() % 1000;
+    if (!freqIsDailyOrGreater(opts.freq)) {
+        return [];
+    }
+    var timeset = [];
+    opts.byhour.forEach(function (hour) {
+        opts.byminute.forEach(function (minute) {
+            opts.bysecond.forEach(function (second) {
+                timeset.push(new Time(hour, minute, second, millisecondModulo));
+            });
+        });
+    });
+    return timeset;
+}
+//# sourceMappingURL=parseoptions.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/parsestring.js
+
+
+
+
+
+function parseString(rfcString) {
+    var options = rfcString
+        .split('\n')
+        .map(parseLine)
+        .filter(function (x) { return x !== null; });
+    return __assign(__assign({}, options[0]), options[1]);
+}
+function parseDtstart(line) {
+    var options = {};
+    var dtstartWithZone = /DTSTART(?:;TZID=([^:=]+?))?(?::|=)([^;\s]+)/i.exec(line);
+    if (!dtstartWithZone) {
+        return options;
+    }
+    var tzid = dtstartWithZone[1], dtstart = dtstartWithZone[2];
+    if (tzid) {
+        options.tzid = tzid;
+    }
+    options.dtstart = untilStringToDate(dtstart);
+    return options;
+}
+function parseLine(rfcString) {
+    rfcString = rfcString.replace(/^\s+|\s+$/, '');
+    if (!rfcString.length)
+        return null;
+    var header = /^([A-Z]+?)[:;]/.exec(rfcString.toUpperCase());
+    if (!header) {
+        return parseRrule(rfcString);
+    }
+    var key = header[1];
+    switch (key.toUpperCase()) {
+        case 'RRULE':
+        case 'EXRULE':
+            return parseRrule(rfcString);
+        case 'DTSTART':
+            return parseDtstart(rfcString);
+        default:
+            throw new Error("Unsupported RFC prop ".concat(key, " in ").concat(rfcString));
+    }
+}
+function parseRrule(line) {
+    var strippedLine = line.replace(/^RRULE:/i, '');
+    var options = parseDtstart(strippedLine);
+    var attrs = line.replace(/^(?:RRULE|EXRULE):/i, '').split(';');
+    attrs.forEach(function (attr) {
+        var _a = attr.split('='), key = _a[0], value = _a[1];
+        switch (key.toUpperCase()) {
+            case 'FREQ':
+                options.freq = Frequency[value.toUpperCase()];
+                break;
+            case 'WKST':
+                options.wkst = Days[value.toUpperCase()];
+                break;
+            case 'COUNT':
+            case 'INTERVAL':
+            case 'BYSETPOS':
+            case 'BYMONTH':
+            case 'BYMONTHDAY':
+            case 'BYYEARDAY':
+            case 'BYWEEKNO':
+            case 'BYHOUR':
+            case 'BYMINUTE':
+            case 'BYSECOND':
+                var num = parseNumber(value);
+                var optionKey = key.toLowerCase();
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                options[optionKey] = num;
+                break;
+            case 'BYWEEKDAY':
+            case 'BYDAY':
+                options.byweekday = parseWeekday(value);
+                break;
+            case 'DTSTART':
+            case 'TZID':
+                // for backwards compatibility
+                var dtstart = parseDtstart(line);
+                options.tzid = dtstart.tzid;
+                options.dtstart = dtstart.dtstart;
+                break;
+            case 'UNTIL':
+                options.until = untilStringToDate(value);
+                break;
+            case 'BYEASTER':
+                options.byeaster = Number(value);
+                break;
+            default:
+                throw new Error("Unknown RRULE property '" + key + "'");
+        }
+    });
+    return options;
+}
+function parseNumber(value) {
+    if (value.indexOf(',') !== -1) {
+        var values = value.split(',');
+        return values.map(parseIndividualNumber);
+    }
+    return parseIndividualNumber(value);
+}
+function parseIndividualNumber(value) {
+    if (/^[+-]?\d+$/.test(value)) {
+        return Number(value);
+    }
+    return value;
+}
+function parseWeekday(value) {
+    var days = value.split(',');
+    return days.map(function (day) {
+        if (day.length === 2) {
+            // MO, TU, ...
+            return Days[day]; // wday instanceof Weekday
+        }
+        // -1MO, +3FR, 1SO, 13TU ...
+        var parts = day.match(/^([+-]?\d{1,2})([A-Z]{2})$/);
+        if (!parts || parts.length < 3) {
+            throw new SyntaxError("Invalid weekday string: ".concat(day));
+        }
+        var n = Number(parts[1]);
+        var wdaypart = parts[2];
+        var wday = Days[wdaypart].weekday;
+        return new Weekday(wday, n);
+    });
+}
+//# sourceMappingURL=parsestring.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/datewithzone.js
+
+var DateWithZone = /** @class */ (function () {
+    function DateWithZone(date, tzid) {
+        if (isNaN(date.getTime())) {
+            throw new RangeError('Invalid date passed to DateWithZone');
+        }
+        this.date = date;
+        this.tzid = tzid;
+    }
+    Object.defineProperty(DateWithZone.prototype, "isUTC", {
+        get: function () {
+            return !this.tzid || this.tzid.toUpperCase() === 'UTC';
+        },
+        enumerable: false,
+        configurable: true
+    });
+    DateWithZone.prototype.toString = function () {
+        var datestr = timeToUntilString(this.date.getTime(), this.isUTC);
+        if (!this.isUTC) {
+            return ";TZID=".concat(this.tzid, ":").concat(datestr);
+        }
+        return ":".concat(datestr);
+    };
+    DateWithZone.prototype.getTime = function () {
+        return this.date.getTime();
+    };
+    DateWithZone.prototype.rezonedDate = function () {
+        if (this.isUTC) {
+            return this.date;
+        }
+        return dateInTimeZone(this.date, this.tzid);
+    };
+    return DateWithZone;
+}());
+
+//# sourceMappingURL=datewithzone.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/optionstostring.js
+
+
+
+
+
+function optionsToString(options) {
+    var rrule = [];
+    var dtstart = '';
+    var keys = Object.keys(options);
+    var defaultKeys = Object.keys(DEFAULT_OPTIONS);
+    for (var i = 0; i < keys.length; i++) {
+        if (keys[i] === 'tzid')
+            continue;
+        if (!includes(defaultKeys, keys[i]))
+            continue;
+        var key = keys[i].toUpperCase();
+        var value = options[keys[i]];
+        var outValue = '';
+        if (!isPresent(value) || (isArray(value) && !value.length))
+            continue;
+        switch (key) {
+            case 'FREQ':
+                outValue = RRule.FREQUENCIES[options.freq];
+                break;
+            case 'WKST':
+                if (isNumber(value)) {
+                    outValue = new Weekday(value).toString();
+                }
+                else {
+                    outValue = value.toString();
+                }
+                break;
+            case 'BYWEEKDAY':
+                /*
+                  NOTE: BYWEEKDAY is a special case.
+                  RRule() deconstructs the rule.options.byweekday array
+                  into an array of Weekday arguments.
+                  On the other hand, rule.origOptions is an array of Weekdays.
+                  We need to handle both cases here.
+                  It might be worth change RRule to keep the Weekdays.
+        
+                  Also, BYWEEKDAY (used by RRule) vs. BYDAY (RFC)
+        
+                  */
+                key = 'BYDAY';
+                outValue = toArray(value)
+                    .map(function (wday) {
+                    if (wday instanceof Weekday) {
+                        return wday;
+                    }
+                    if (isArray(wday)) {
+                        return new Weekday(wday[0], wday[1]);
+                    }
+                    return new Weekday(wday);
+                })
+                    .toString();
+                break;
+            case 'DTSTART':
+                dtstart = buildDtstart(value, options.tzid);
+                break;
+            case 'UNTIL':
+                outValue = timeToUntilString(value, !options.tzid);
+                break;
+            default:
+                if (isArray(value)) {
+                    var strValues = [];
+                    for (var j = 0; j < value.length; j++) {
+                        strValues[j] = String(value[j]);
+                    }
+                    outValue = strValues.toString();
+                }
+                else {
+                    outValue = String(value);
+                }
+        }
+        if (outValue) {
+            rrule.push([key, outValue]);
+        }
+    }
+    var rules = rrule
+        .map(function (_a) {
+        var key = _a[0], value = _a[1];
+        return "".concat(key, "=").concat(value.toString());
+    })
+        .join(';');
+    var ruleString = '';
+    if (rules !== '') {
+        ruleString = "RRULE:".concat(rules);
+    }
+    return [dtstart, ruleString].filter(function (x) { return !!x; }).join('\n');
+}
+function buildDtstart(dtstart, tzid) {
+    if (!dtstart) {
+        return '';
+    }
+    return 'DTSTART' + new DateWithZone(new Date(dtstart), tzid).toString();
+}
+//# sourceMappingURL=optionstostring.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/cache.js
+
+
+
+function argsMatch(left, right) {
+    if (Array.isArray(left)) {
+        if (!Array.isArray(right))
+            return false;
+        if (left.length !== right.length)
+            return false;
+        return left.every(function (date, i) { return date.getTime() === right[i].getTime(); });
+    }
+    if (left instanceof Date) {
+        return right instanceof Date && left.getTime() === right.getTime();
+    }
+    return left === right;
+}
+var Cache = /** @class */ (function () {
+    function Cache() {
+        this.all = false;
+        this.before = [];
+        this.after = [];
+        this.between = [];
+    }
+    /**
+     * @param {String} what - all/before/after/between
+     * @param {Array,Date} value - an array of dates, one date, or null
+     * @param {Object?} args - _iter arguments
+     */
+    Cache.prototype._cacheAdd = function (what, value, args) {
+        if (value) {
+            value = value instanceof Date ? dateutil_clone(value) : cloneDates(value);
+        }
+        if (what === 'all') {
+            this.all = value;
+        }
+        else {
+            args._value = value;
+            this[what].push(args);
+        }
+    };
+    /**
+     * @return false - not in the cache
+     * @return null  - cached, but zero occurrences (before/after)
+     * @return Date  - cached (before/after)
+     * @return []    - cached, but zero occurrences (all/between)
+     * @return [Date1, DateN] - cached (all/between)
+     */
+    Cache.prototype._cacheGet = function (what, args) {
+        var cached = false;
+        var argsKeys = args ? Object.keys(args) : [];
+        var findCacheDiff = function (item) {
+            for (var i = 0; i < argsKeys.length; i++) {
+                var key = argsKeys[i];
+                if (!argsMatch(args[key], item[key])) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var cachedObject = this[what];
+        if (what === 'all') {
+            cached = this.all;
+        }
+        else if (isArray(cachedObject)) {
+            // Let's see whether we've already called the
+            // 'what' method with the same 'args'
+            for (var i = 0; i < cachedObject.length; i++) {
+                var item = cachedObject[i];
+                if (argsKeys.length && findCacheDiff(item))
+                    continue;
+                cached = item._value;
+                break;
+            }
+        }
+        if (!cached && this.all) {
+            // Not in the cache, but we already know all the occurrences,
+            // so we can find the correct dates from the cached ones.
+            var iterResult = new iterresult(what, args);
+            for (var i = 0; i < this.all.length; i++) {
+                if (!iterResult.accept(this.all[i]))
+                    break;
+            }
+            cached = iterResult.getValue();
+            this._cacheAdd(what, cached, args);
+        }
+        return isArray(cached)
+            ? cloneDates(cached)
+            : cached instanceof Date
+                ? dateutil_clone(cached)
+                : cached;
+    };
+    return Cache;
+}());
+
+//# sourceMappingURL=cache.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/masks.js
+
+
+// =============================================================================
+// Date masks
+// =============================================================================
+// Every mask is 7 days longer to handle cross-year weekly periods.
+var M365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], repeat(1, 31), true), repeat(2, 28), true), repeat(3, 31), true), repeat(4, 30), true), repeat(5, 31), true), repeat(6, 30), true), repeat(7, 31), true), repeat(8, 31), true), repeat(9, 30), true), repeat(10, 31), true), repeat(11, 30), true), repeat(12, 31), true), repeat(1, 7), true);
+var M366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], repeat(1, 31), true), repeat(2, 29), true), repeat(3, 31), true), repeat(4, 30), true), repeat(5, 31), true), repeat(6, 30), true), repeat(7, 31), true), repeat(8, 31), true), repeat(9, 30), true), repeat(10, 31), true), repeat(11, 30), true), repeat(12, 31), true), repeat(1, 7), true);
+var M28 = range(1, 29);
+var M29 = range(1, 30);
+var M30 = range(1, 31);
+var M31 = range(1, 32);
+var MDAY366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], M31, true), M29, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31.slice(0, 7), true);
+var MDAY365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], M31, true), M28, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31, true), M30, true), M31, true), M30, true), M31, true), M31.slice(0, 7), true);
+var NM28 = range(-28, 0);
+var NM29 = range(-29, 0);
+var NM30 = range(-30, 0);
+var NM31 = range(-31, 0);
+var NMDAY366MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], NM31, true), NM29, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31.slice(0, 7), true);
+var NMDAY365MASK = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], NM31, true), NM28, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31, true), NM30, true), NM31, true), NM30, true), NM31, true), NM31.slice(0, 7), true);
+var M366RANGE = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366];
+var M365RANGE = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+var WDAYMASK = (function () {
+    var wdaymask = [];
+    for (var i = 0; i < 55; i++)
+        wdaymask = wdaymask.concat(range(7));
+    return wdaymask;
+})();
+
+//# sourceMappingURL=masks.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/yearinfo.js
+
+
+
+
+function rebuildYear(year, options) {
+    var firstyday = datetime(year, 1, 1);
+    var yearlen = isLeapYear(year) ? 366 : 365;
+    var nextyearlen = isLeapYear(year + 1) ? 366 : 365;
+    var yearordinal = toOrdinal(firstyday);
+    var yearweekday = getWeekday(firstyday);
+    var result = __assign(__assign({ yearlen: yearlen, nextyearlen: nextyearlen, yearordinal: yearordinal, yearweekday: yearweekday }, baseYearMasks(year)), { wnomask: null });
+    if (empty(options.byweekno)) {
+        return result;
+    }
+    result.wnomask = repeat(0, yearlen + 7);
+    var firstwkst;
+    var wyearlen;
+    var no1wkst = (firstwkst = pymod(7 - yearweekday + options.wkst, 7));
+    if (no1wkst >= 4) {
+        no1wkst = 0;
+        // Number of days in the year, plus the days we got
+        // from last year.
+        wyearlen = result.yearlen + pymod(yearweekday - options.wkst, 7);
+    }
+    else {
+        // Number of days in the year, minus the days we
+        // left in last year.
+        wyearlen = yearlen - no1wkst;
+    }
+    var div = Math.floor(wyearlen / 7);
+    var mod = pymod(wyearlen, 7);
+    var numweeks = Math.floor(div + mod / 4);
+    for (var j = 0; j < options.byweekno.length; j++) {
+        var n = options.byweekno[j];
+        if (n < 0) {
+            n += numweeks + 1;
+        }
+        if (!(n > 0 && n <= numweeks)) {
+            continue;
+        }
+        var i = void 0;
+        if (n > 1) {
+            i = no1wkst + (n - 1) * 7;
+            if (no1wkst !== firstwkst) {
+                i -= 7 - firstwkst;
+            }
+        }
+        else {
+            i = no1wkst;
+        }
+        for (var k = 0; k < 7; k++) {
+            result.wnomask[i] = 1;
+            i++;
+            if (result.wdaymask[i] === options.wkst)
+                break;
+        }
+    }
+    if (includes(options.byweekno, 1)) {
+        // Check week number 1 of next year as well
+        // orig-TODO : Check -numweeks for next year.
+        var i = no1wkst + numweeks * 7;
+        if (no1wkst !== firstwkst)
+            i -= 7 - firstwkst;
+        if (i < yearlen) {
+            // If week starts in next year, we
+            // don't care about it.
+            for (var j = 0; j < 7; j++) {
+                result.wnomask[i] = 1;
+                i += 1;
+                if (result.wdaymask[i] === options.wkst)
+                    break;
+            }
+        }
+    }
+    if (no1wkst) {
+        // Check last week number of last year as
+        // well. If no1wkst is 0, either the year
+        // started on week start, or week number 1
+        // got days from last year, so there are no
+        // days from last year's last week number in
+        // this year.
+        var lnumweeks = void 0;
+        if (!includes(options.byweekno, -1)) {
+            var lyearweekday = getWeekday(datetime(year - 1, 1, 1));
+            var lno1wkst = pymod(7 - lyearweekday.valueOf() + options.wkst, 7);
+            var lyearlen = isLeapYear(year - 1) ? 366 : 365;
+            var weekst = void 0;
+            if (lno1wkst >= 4) {
+                lno1wkst = 0;
+                weekst = lyearlen + pymod(lyearweekday - options.wkst, 7);
+            }
+            else {
+                weekst = yearlen - no1wkst;
+            }
+            lnumweeks = Math.floor(52 + pymod(weekst, 7) / 4);
+        }
+        else {
+            lnumweeks = -1;
+        }
+        if (includes(options.byweekno, lnumweeks)) {
+            for (var i = 0; i < no1wkst; i++)
+                result.wnomask[i] = 1;
+        }
+    }
+    return result;
+}
+function baseYearMasks(year) {
+    var yearlen = isLeapYear(year) ? 366 : 365;
+    var firstyday = datetime(year, 1, 1);
+    var wday = getWeekday(firstyday);
+    if (yearlen === 365) {
+        return {
+            mmask: M365MASK,
+            mdaymask: MDAY365MASK,
+            nmdaymask: NMDAY365MASK,
+            wdaymask: WDAYMASK.slice(wday),
+            mrange: M365RANGE,
+        };
+    }
+    return {
+        mmask: M366MASK,
+        mdaymask: MDAY366MASK,
+        nmdaymask: NMDAY366MASK,
+        wdaymask: WDAYMASK.slice(wday),
+        mrange: M366RANGE,
+    };
+}
+//# sourceMappingURL=yearinfo.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/monthinfo.js
+
+
+function rebuildMonth(year, month, yearlen, mrange, wdaymask, options) {
+    var result = {
+        lastyear: year,
+        lastmonth: month,
+        nwdaymask: [],
+    };
+    var ranges = [];
+    if (options.freq === RRule.YEARLY) {
+        if (empty(options.bymonth)) {
+            ranges = [[0, yearlen]];
+        }
+        else {
+            for (var j = 0; j < options.bymonth.length; j++) {
+                month = options.bymonth[j];
+                ranges.push(mrange.slice(month - 1, month + 1));
+            }
+        }
+    }
+    else if (options.freq === RRule.MONTHLY) {
+        ranges = [mrange.slice(month - 1, month + 1)];
+    }
+    if (empty(ranges)) {
+        return result;
+    }
+    // Weekly frequency won't get here, so we may not
+    // care about cross-year weekly periods.
+    result.nwdaymask = repeat(0, yearlen);
+    for (var j = 0; j < ranges.length; j++) {
+        var rang = ranges[j];
+        var first = rang[0];
+        var last = rang[1] - 1;
+        for (var k = 0; k < options.bynweekday.length; k++) {
+            var i = void 0;
+            var _a = options.bynweekday[k], wday = _a[0], n = _a[1];
+            if (n < 0) {
+                i = last + (n + 1) * 7;
+                i -= pymod(wdaymask[i] - wday, 7);
+            }
+            else {
+                i = first + (n - 1) * 7;
+                i += pymod(7 - wdaymask[i] + wday, 7);
+            }
+            if (first <= i && i <= last)
+                result.nwdaymask[i] = 1;
+        }
+    }
+    return result;
+}
+//# sourceMappingURL=monthinfo.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/easter.js
+function easter(y, offset) {
+    if (offset === void 0) { offset = 0; }
+    var a = y % 19;
+    var b = Math.floor(y / 100);
+    var c = y % 100;
+    var d = Math.floor(b / 4);
+    var e = b % 4;
+    var f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3);
+    var h = Math.floor(19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4);
+    var k = c % 4;
+    var l = Math.floor(32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var month = Math.floor((h + l - 7 * m + 114) / 31);
+    var day = ((h + l - 7 * m + 114) % 31) + 1;
+    var date = Date.UTC(y, month - 1, day + offset);
+    var yearStart = Date.UTC(y, 0, 1);
+    return [Math.ceil((date - yearStart) / (1000 * 60 * 60 * 24))];
+}
+//# sourceMappingURL=easter.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterinfo/index.js
+
+
+
+
+
+
+
+// =============================================================================
+// Iterinfo
+// =============================================================================
+var Iterinfo = /** @class */ (function () {
+    // eslint-disable-next-line no-empty-function
+    function Iterinfo(options) {
+        this.options = options;
+    }
+    Iterinfo.prototype.rebuild = function (year, month) {
+        var options = this.options;
+        if (year !== this.lastyear) {
+            this.yearinfo = rebuildYear(year, options);
+        }
+        if (notEmpty(options.bynweekday) &&
+            (month !== this.lastmonth || year !== this.lastyear)) {
+            var _a = this.yearinfo, yearlen = _a.yearlen, mrange = _a.mrange, wdaymask = _a.wdaymask;
+            this.monthinfo = rebuildMonth(year, month, yearlen, mrange, wdaymask, options);
+        }
+        if (isPresent(options.byeaster)) {
+            this.eastermask = easter(year, options.byeaster);
+        }
+    };
+    Object.defineProperty(Iterinfo.prototype, "lastyear", {
+        get: function () {
+            return this.monthinfo ? this.monthinfo.lastyear : null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "lastmonth", {
+        get: function () {
+            return this.monthinfo ? this.monthinfo.lastmonth : null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "yearlen", {
+        get: function () {
+            return this.yearinfo.yearlen;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "yearordinal", {
+        get: function () {
+            return this.yearinfo.yearordinal;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "mrange", {
+        get: function () {
+            return this.yearinfo.mrange;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "wdaymask", {
+        get: function () {
+            return this.yearinfo.wdaymask;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "mmask", {
+        get: function () {
+            return this.yearinfo.mmask;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "wnomask", {
+        get: function () {
+            return this.yearinfo.wnomask;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "nwdaymask", {
+        get: function () {
+            return this.monthinfo ? this.monthinfo.nwdaymask : [];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "nextyearlen", {
+        get: function () {
+            return this.yearinfo.nextyearlen;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "mdaymask", {
+        get: function () {
+            return this.yearinfo.mdaymask;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Iterinfo.prototype, "nmdaymask", {
+        get: function () {
+            return this.yearinfo.nmdaymask;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Iterinfo.prototype.ydayset = function () {
+        return [range(this.yearlen), 0, this.yearlen];
+    };
+    Iterinfo.prototype.mdayset = function (_, month) {
+        var start = this.mrange[month - 1];
+        var end = this.mrange[month];
+        var set = repeat(null, this.yearlen);
+        for (var i = start; i < end; i++)
+            set[i] = i;
+        return [set, start, end];
+    };
+    Iterinfo.prototype.wdayset = function (year, month, day) {
+        // We need to handle cross-year weeks here.
+        var set = repeat(null, this.yearlen + 7);
+        var i = toOrdinal(datetime(year, month, day)) - this.yearordinal;
+        var start = i;
+        for (var j = 0; j < 7; j++) {
+            set[i] = i;
+            ++i;
+            if (this.wdaymask[i] === this.options.wkst)
+                break;
+        }
+        return [set, start, i];
+    };
+    Iterinfo.prototype.ddayset = function (year, month, day) {
+        var set = repeat(null, this.yearlen);
+        var i = toOrdinal(datetime(year, month, day)) - this.yearordinal;
+        set[i] = i;
+        return [set, i, i + 1];
+    };
+    Iterinfo.prototype.htimeset = function (hour, _, second, millisecond) {
+        var _this = this;
+        var set = [];
+        this.options.byminute.forEach(function (minute) {
+            set = set.concat(_this.mtimeset(hour, minute, second, millisecond));
+        });
+        sort(set);
+        return set;
+    };
+    Iterinfo.prototype.mtimeset = function (hour, minute, _, millisecond) {
+        var set = this.options.bysecond.map(function (second) { return new Time(hour, minute, second, millisecond); });
+        sort(set);
+        return set;
+    };
+    Iterinfo.prototype.stimeset = function (hour, minute, second, millisecond) {
+        return [new Time(hour, minute, second, millisecond)];
+    };
+    Iterinfo.prototype.getdayset = function (freq) {
+        switch (freq) {
+            case Frequency.YEARLY:
+                return this.ydayset.bind(this);
+            case Frequency.MONTHLY:
+                return this.mdayset.bind(this);
+            case Frequency.WEEKLY:
+                return this.wdayset.bind(this);
+            case Frequency.DAILY:
+                return this.ddayset.bind(this);
+            default:
+                return this.ddayset.bind(this);
+        }
+    };
+    Iterinfo.prototype.gettimeset = function (freq) {
+        switch (freq) {
+            case Frequency.HOURLY:
+                return this.htimeset.bind(this);
+            case Frequency.MINUTELY:
+                return this.mtimeset.bind(this);
+            case Frequency.SECONDLY:
+                return this.stimeset.bind(this);
+        }
+    };
+    return Iterinfo;
+}());
+/* harmony default export */ const iterinfo = (Iterinfo);
+//# sourceMappingURL=index.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iter/poslist.js
+
+
+function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
+    var poslist = [];
+    for (var j = 0; j < bysetpos.length; j++) {
+        var daypos = void 0;
+        var timepos = void 0;
+        var pos = bysetpos[j];
+        if (pos < 0) {
+            daypos = Math.floor(pos / timeset.length);
+            timepos = pymod(pos, timeset.length);
+        }
+        else {
+            daypos = Math.floor((pos - 1) / timeset.length);
+            timepos = pymod(pos - 1, timeset.length);
+        }
+        var tmp = [];
+        for (var k = start; k < end; k++) {
+            var val = dayset[k];
+            if (!isPresent(val))
+                continue;
+            tmp.push(val);
+        }
+        var i = void 0;
+        if (daypos < 0) {
+            i = tmp.slice(daypos)[0];
+        }
+        else {
+            i = tmp[daypos];
+        }
+        var time = timeset[timepos];
+        var date = fromOrdinal(ii.yearordinal + i);
+        var res = combine(date, time);
+        // XXX: can this ever be in the array?
+        // - compare the actual date instead?
+        if (!includes(poslist, res))
+            poslist.push(res);
+    }
+    sort(poslist);
+    return poslist;
+}
+//# sourceMappingURL=poslist.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iter/index.js
+
+
+
+
+
+
+
+
+
+function iter(iterResult, options) {
+    var dtstart = options.dtstart, freq = options.freq, interval = options.interval, until = options.until, bysetpos = options.bysetpos;
+    var count = options.count;
+    if (count === 0 || interval === 0) {
+        return emitResult(iterResult);
+    }
+    var counterDate = DateTime.fromDate(dtstart);
+    var ii = new iterinfo(options);
+    ii.rebuild(counterDate.year, counterDate.month);
+    var timeset = makeTimeset(ii, counterDate, options);
+    for (;;) {
+        var _a = ii.getdayset(freq)(counterDate.year, counterDate.month, counterDate.day), dayset = _a[0], start = _a[1], end = _a[2];
+        var filtered = removeFilteredDays(dayset, start, end, ii, options);
+        if (notEmpty(bysetpos)) {
+            var poslist = buildPoslist(bysetpos, timeset, start, end, ii, dayset);
+            for (var j = 0; j < poslist.length; j++) {
+                var res = poslist[j];
+                if (until && res > until) {
+                    return emitResult(iterResult);
+                }
+                if (res >= dtstart) {
+                    var rezonedDate = rezoneIfNeeded(res, options);
+                    if (!iterResult.accept(rezonedDate)) {
+                        return emitResult(iterResult);
+                    }
+                    if (count) {
+                        --count;
+                        if (!count) {
+                            return emitResult(iterResult);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for (var j = start; j < end; j++) {
+                var currentDay = dayset[j];
+                if (!isPresent(currentDay)) {
+                    continue;
+                }
+                var date = fromOrdinal(ii.yearordinal + currentDay);
+                for (var k = 0; k < timeset.length; k++) {
+                    var time = timeset[k];
+                    var res = combine(date, time);
+                    if (until && res > until) {
+                        return emitResult(iterResult);
+                    }
+                    if (res >= dtstart) {
+                        var rezonedDate = rezoneIfNeeded(res, options);
+                        if (!iterResult.accept(rezonedDate)) {
+                            return emitResult(iterResult);
+                        }
+                        if (count) {
+                            --count;
+                            if (!count) {
+                                return emitResult(iterResult);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (options.interval === 0) {
+            return emitResult(iterResult);
+        }
+        // Handle frequency and interval
+        counterDate.add(options, filtered);
+        if (counterDate.year > MAXYEAR) {
+            return emitResult(iterResult);
+        }
+        if (!freqIsDailyOrGreater(freq)) {
+            timeset = ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, 0);
+        }
+        ii.rebuild(counterDate.year, counterDate.month);
+    }
+}
+function isFiltered(ii, currentDay, options) {
+    var bymonth = options.bymonth, byweekno = options.byweekno, byweekday = options.byweekday, byeaster = options.byeaster, bymonthday = options.bymonthday, bynmonthday = options.bynmonthday, byyearday = options.byyearday;
+    return ((notEmpty(bymonth) && !includes(bymonth, ii.mmask[currentDay])) ||
+        (notEmpty(byweekno) && !ii.wnomask[currentDay]) ||
+        (notEmpty(byweekday) && !includes(byweekday, ii.wdaymask[currentDay])) ||
+        (notEmpty(ii.nwdaymask) && !ii.nwdaymask[currentDay]) ||
+        (byeaster !== null && !includes(ii.eastermask, currentDay)) ||
+        ((notEmpty(bymonthday) || notEmpty(bynmonthday)) &&
+            !includes(bymonthday, ii.mdaymask[currentDay]) &&
+            !includes(bynmonthday, ii.nmdaymask[currentDay])) ||
+        (notEmpty(byyearday) &&
+            ((currentDay < ii.yearlen &&
+                !includes(byyearday, currentDay + 1) &&
+                !includes(byyearday, -ii.yearlen + currentDay)) ||
+                (currentDay >= ii.yearlen &&
+                    !includes(byyearday, currentDay + 1 - ii.yearlen) &&
+                    !includes(byyearday, -ii.nextyearlen + currentDay - ii.yearlen)))));
+}
+function rezoneIfNeeded(date, options) {
+    return new DateWithZone(date, options.tzid).rezonedDate();
+}
+function emitResult(iterResult) {
+    return iterResult.getValue();
+}
+function removeFilteredDays(dayset, start, end, ii, options) {
+    var filtered = false;
+    for (var dayCounter = start; dayCounter < end; dayCounter++) {
+        var currentDay = dayset[dayCounter];
+        filtered = isFiltered(ii, currentDay, options);
+        if (filtered)
+            dayset[currentDay] = null;
+    }
+    return filtered;
+}
+function makeTimeset(ii, counterDate, options) {
+    var freq = options.freq, byhour = options.byhour, byminute = options.byminute, bysecond = options.bysecond;
+    if (freqIsDailyOrGreater(freq)) {
+        return buildTimeset(options);
+    }
+    if ((freq >= RRule.HOURLY &&
+        notEmpty(byhour) &&
+        !includes(byhour, counterDate.hour)) ||
+        (freq >= RRule.MINUTELY &&
+            notEmpty(byminute) &&
+            !includes(byminute, counterDate.minute)) ||
+        (freq >= RRule.SECONDLY &&
+            notEmpty(bysecond) &&
+            !includes(bysecond, counterDate.second))) {
+        return [];
+    }
+    return ii.gettimeset(freq)(counterDate.hour, counterDate.minute, counterDate.second, counterDate.millisecond);
+}
+//# sourceMappingURL=index.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rrule.js
+
+
+
+
+
+
+
+
+
+
+
+// =============================================================================
+// RRule
+// =============================================================================
+var Days = {
+    MO: new Weekday(0),
+    TU: new Weekday(1),
+    WE: new Weekday(2),
+    TH: new Weekday(3),
+    FR: new Weekday(4),
+    SA: new Weekday(5),
+    SU: new Weekday(6),
+};
+var DEFAULT_OPTIONS = {
+    freq: Frequency.YEARLY,
+    dtstart: null,
+    interval: 1,
+    wkst: Days.MO,
+    count: null,
+    until: null,
+    tzid: null,
+    bysetpos: null,
+    bymonth: null,
+    bymonthday: null,
+    bynmonthday: null,
+    byyearday: null,
+    byweekno: null,
+    byweekday: null,
+    bynweekday: null,
+    byhour: null,
+    byminute: null,
+    bysecond: null,
+    byeaster: null,
+};
+var defaultKeys = Object.keys(DEFAULT_OPTIONS);
+/**
+ *
+ * @param {Options?} options - see <http://labix.org/python-dateutil/#head-cf004ee9a75592797e076752b2a889c10f445418>
+ * - The only required option is `freq`, one of RRule.YEARLY, RRule.MONTHLY, ...
+ * @constructor
+ */
+var RRule = /** @class */ (function () {
+    function RRule(options, noCache) {
+        if (options === void 0) { options = {}; }
+        if (noCache === void 0) { noCache = false; }
+        // RFC string
+        this._cache = noCache ? null : new Cache();
+        // used by toString()
+        this.origOptions = initializeOptions(options);
+        var parsedOptions = parseOptions(options).parsedOptions;
+        this.options = parsedOptions;
+    }
+    RRule.parseText = function (text, language) {
+        return parseText(text, language);
+    };
+    RRule.fromText = function (text, language) {
+        return fromText(text, language);
+    };
+    RRule.fromString = function (str) {
+        return new RRule(RRule.parseString(str) || undefined);
+    };
+    RRule.prototype._iter = function (iterResult) {
+        return iter(iterResult, this.options);
+    };
+    RRule.prototype._cacheGet = function (what, args) {
+        if (!this._cache)
+            return false;
+        return this._cache._cacheGet(what, args);
+    };
+    RRule.prototype._cacheAdd = function (what, value, args) {
+        if (!this._cache)
+            return;
+        return this._cache._cacheAdd(what, value, args);
+    };
+    /**
+     * @param {Function} iterator - optional function that will be called
+     * on each date that is added. It can return false
+     * to stop the iteration.
+     * @return Array containing all recurrences.
+     */
+    RRule.prototype.all = function (iterator) {
+        if (iterator) {
+            return this._iter(new callbackiterresult('all', {}, iterator));
+        }
+        var result = this._cacheGet('all');
+        if (result === false) {
+            result = this._iter(new iterresult('all', {}));
+            this._cacheAdd('all', result);
+        }
+        return result;
+    };
+    /**
+     * Returns all the occurrences of the rrule between after and before.
+     * The inc keyword defines what happens if after and/or before are
+     * themselves occurrences. With inc == True, they will be included in the
+     * list, if they are found in the recurrence set.
+     *
+     * @return Array
+     */
+    RRule.prototype.between = function (after, before, inc, iterator) {
+        if (inc === void 0) { inc = false; }
+        if (!isValidDate(after) || !isValidDate(before)) {
+            throw new Error('Invalid date passed in to RRule.between');
+        }
+        var args = {
+            before: before,
+            after: after,
+            inc: inc,
+        };
+        if (iterator) {
+            return this._iter(new callbackiterresult('between', args, iterator));
+        }
+        var result = this._cacheGet('between', args);
+        if (result === false) {
+            result = this._iter(new iterresult('between', args));
+            this._cacheAdd('between', result, args);
+        }
+        return result;
+    };
+    /**
+     * Returns the last recurrence before the given datetime instance.
+     * The inc keyword defines what happens if dt is an occurrence.
+     * With inc == True, if dt itself is an occurrence, it will be returned.
+     *
+     * @return Date or null
+     */
+    RRule.prototype.before = function (dt, inc) {
+        if (inc === void 0) { inc = false; }
+        if (!isValidDate(dt)) {
+            throw new Error('Invalid date passed in to RRule.before');
+        }
+        var args = { dt: dt, inc: inc };
+        var result = this._cacheGet('before', args);
+        if (result === false) {
+            result = this._iter(new iterresult('before', args));
+            this._cacheAdd('before', result, args);
+        }
+        return result;
+    };
+    /**
+     * Returns the first recurrence after the given datetime instance.
+     * The inc keyword defines what happens if dt is an occurrence.
+     * With inc == True, if dt itself is an occurrence, it will be returned.
+     *
+     * @return Date or null
+     */
+    RRule.prototype.after = function (dt, inc) {
+        if (inc === void 0) { inc = false; }
+        if (!isValidDate(dt)) {
+            throw new Error('Invalid date passed in to RRule.after');
+        }
+        var args = { dt: dt, inc: inc };
+        var result = this._cacheGet('after', args);
+        if (result === false) {
+            result = this._iter(new iterresult('after', args));
+            this._cacheAdd('after', result, args);
+        }
+        return result;
+    };
+    /**
+     * Returns the number of recurrences in this set. It will have go trough
+     * the whole recurrence, if this hasn't been done before.
+     */
+    RRule.prototype.count = function () {
+        return this.all().length;
+    };
+    /**
+     * Converts the rrule into its string representation
+     *
+     * @see <http://www.ietf.org/rfc/rfc2445.txt>
+     * @return String
+     */
+    RRule.prototype.toString = function () {
+        return optionsToString(this.origOptions);
+    };
+    /**
+     * Will convert all rules described in nlp:ToText
+     * to text.
+     */
+    RRule.prototype.toText = function (gettext, language, dateFormatter) {
+        return toText(this, gettext, language, dateFormatter);
+    };
+    RRule.prototype.isFullyConvertibleToText = function () {
+        return isFullyConvertible(this);
+    };
+    /**
+     * @return a RRule instance with the same freq and options
+     * as this one (cache is not cloned)
+     */
+    RRule.prototype.clone = function () {
+        return new RRule(this.origOptions);
+    };
+    // RRule class 'constants'
+    RRule.FREQUENCIES = [
+        'YEARLY',
+        'MONTHLY',
+        'WEEKLY',
+        'DAILY',
+        'HOURLY',
+        'MINUTELY',
+        'SECONDLY',
+    ];
+    RRule.YEARLY = Frequency.YEARLY;
+    RRule.MONTHLY = Frequency.MONTHLY;
+    RRule.WEEKLY = Frequency.WEEKLY;
+    RRule.DAILY = Frequency.DAILY;
+    RRule.HOURLY = Frequency.HOURLY;
+    RRule.MINUTELY = Frequency.MINUTELY;
+    RRule.SECONDLY = Frequency.SECONDLY;
+    RRule.MO = Days.MO;
+    RRule.TU = Days.TU;
+    RRule.WE = Days.WE;
+    RRule.TH = Days.TH;
+    RRule.FR = Days.FR;
+    RRule.SA = Days.SA;
+    RRule.SU = Days.SU;
+    RRule.parseString = parseString;
+    RRule.optionsToString = optionsToString;
+    return RRule;
+}());
+
+//# sourceMappingURL=rrule.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/iterset.js
+
+
+
+function iterSet(iterResult, _rrule, _exrule, _rdate, _exdate, tzid) {
+    var _exdateHash = {};
+    var _accept = iterResult.accept;
+    function evalExdate(after, before) {
+        _exrule.forEach(function (rrule) {
+            rrule.between(after, before, true).forEach(function (date) {
+                _exdateHash[Number(date)] = true;
+            });
+        });
+    }
+    _exdate.forEach(function (date) {
+        var zonedDate = new DateWithZone(date, tzid).rezonedDate();
+        _exdateHash[Number(zonedDate)] = true;
+    });
+    iterResult.accept = function (date) {
+        var dt = Number(date);
+        if (isNaN(dt))
+            return _accept.call(this, date);
+        if (!_exdateHash[dt]) {
+            evalExdate(new Date(dt - 1), new Date(dt + 1));
+            if (!_exdateHash[dt]) {
+                _exdateHash[dt] = true;
+                return _accept.call(this, date);
+            }
+        }
+        return true;
+    };
+    if (iterResult.method === 'between') {
+        evalExdate(iterResult.args.after, iterResult.args.before);
+        iterResult.accept = function (date) {
+            var dt = Number(date);
+            if (!_exdateHash[dt]) {
+                _exdateHash[dt] = true;
+                return _accept.call(this, date);
+            }
+            return true;
+        };
+    }
+    for (var i = 0; i < _rdate.length; i++) {
+        var zonedDate = new DateWithZone(_rdate[i], tzid).rezonedDate();
+        if (!iterResult.accept(new Date(zonedDate.getTime())))
+            break;
+    }
+    _rrule.forEach(function (rrule) {
+        iter(iterResult, rrule.options);
+    });
+    var res = iterResult._result;
+    sort(res);
+    switch (iterResult.method) {
+        case 'all':
+        case 'between':
+            return res;
+        case 'before':
+            return ((res.length && res[res.length - 1]) || null);
+        case 'after':
+        default:
+            return ((res.length && res[0]) || null);
+    }
+}
+//# sourceMappingURL=iterset.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rrulestr.js
+
+
+
+
+
+
+/**
+ * RRuleStr
+ * To parse a set of rrule strings
+ */
+var rrulestr_DEFAULT_OPTIONS = {
+    dtstart: null,
+    cache: false,
+    unfold: false,
+    forceset: false,
+    compatible: false,
+    tzid: null,
+};
+function parseInput(s, options) {
+    var rrulevals = [];
+    var rdatevals = [];
+    var exrulevals = [];
+    var exdatevals = [];
+    var parsedDtstart = parseDtstart(s);
+    var dtstart = parsedDtstart.dtstart;
+    var tzid = parsedDtstart.tzid;
+    var lines = splitIntoLines(s, options.unfold);
+    lines.forEach(function (line) {
+        var _a;
+        if (!line)
+            return;
+        var _b = breakDownLine(line), name = _b.name, parms = _b.parms, value = _b.value;
+        switch (name.toUpperCase()) {
+            case 'RRULE':
+                if (parms.length) {
+                    throw new Error("unsupported RRULE parm: ".concat(parms.join(',')));
+                }
+                rrulevals.push(parseString(line));
+                break;
+            case 'RDATE':
+                var _c = (_a = /RDATE(?:;TZID=([^:=]+))?/i.exec(line)) !== null && _a !== void 0 ? _a : [], rdateTzid = _c[1];
+                if (rdateTzid && !tzid) {
+                    tzid = rdateTzid;
+                }
+                rdatevals = rdatevals.concat(parseRDate(value, parms));
+                break;
+            case 'EXRULE':
+                if (parms.length) {
+                    throw new Error("unsupported EXRULE parm: ".concat(parms.join(',')));
+                }
+                exrulevals.push(parseString(value));
+                break;
+            case 'EXDATE':
+                exdatevals = exdatevals.concat(parseRDate(value, parms));
+                break;
+            case 'DTSTART':
+                break;
+            default:
+                throw new Error('unsupported property: ' + name);
+        }
+    });
+    return {
+        dtstart: dtstart,
+        tzid: tzid,
+        rrulevals: rrulevals,
+        rdatevals: rdatevals,
+        exrulevals: exrulevals,
+        exdatevals: exdatevals,
+    };
+}
+function buildRule(s, options) {
+    var _a = parseInput(s, options), rrulevals = _a.rrulevals, rdatevals = _a.rdatevals, exrulevals = _a.exrulevals, exdatevals = _a.exdatevals, dtstart = _a.dtstart, tzid = _a.tzid;
+    var noCache = options.cache === false;
+    if (options.compatible) {
+        options.forceset = true;
+        options.unfold = true;
+    }
+    if (options.forceset ||
+        rrulevals.length > 1 ||
+        rdatevals.length ||
+        exrulevals.length ||
+        exdatevals.length) {
+        var rset_1 = new RRuleSet(noCache);
+        rset_1.dtstart(dtstart);
+        rset_1.tzid(tzid || undefined);
+        rrulevals.forEach(function (val) {
+            rset_1.rrule(new RRule(groomRruleOptions(val, dtstart, tzid), noCache));
+        });
+        rdatevals.forEach(function (date) {
+            rset_1.rdate(date);
+        });
+        exrulevals.forEach(function (val) {
+            rset_1.exrule(new RRule(groomRruleOptions(val, dtstart, tzid), noCache));
+        });
+        exdatevals.forEach(function (date) {
+            rset_1.exdate(date);
+        });
+        if (options.compatible && options.dtstart)
+            rset_1.rdate(dtstart);
+        return rset_1;
+    }
+    var val = rrulevals[0] || {};
+    return new RRule(groomRruleOptions(val, val.dtstart || options.dtstart || dtstart, val.tzid || options.tzid || tzid), noCache);
+}
+function rrulestr(s, options) {
+    if (options === void 0) { options = {}; }
+    return buildRule(s, rrulestr_initializeOptions(options));
+}
+function groomRruleOptions(val, dtstart, tzid) {
+    return __assign(__assign({}, val), { dtstart: dtstart, tzid: tzid });
+}
+function rrulestr_initializeOptions(options) {
+    var invalid = [];
+    var keys = Object.keys(options);
+    var defaultKeys = Object.keys(rrulestr_DEFAULT_OPTIONS);
+    keys.forEach(function (key) {
+        if (!includes(defaultKeys, key))
+            invalid.push(key);
+    });
+    if (invalid.length) {
+        throw new Error('Invalid options: ' + invalid.join(', '));
+    }
+    return __assign(__assign({}, rrulestr_DEFAULT_OPTIONS), options);
+}
+function extractName(line) {
+    if (line.indexOf(':') === -1) {
+        return {
+            name: 'RRULE',
+            value: line,
+        };
+    }
+    var _a = split(line, ':', 1), name = _a[0], value = _a[1];
+    return {
+        name: name,
+        value: value,
+    };
+}
+function breakDownLine(line) {
+    var _a = extractName(line), name = _a.name, value = _a.value;
+    var parms = name.split(';');
+    if (!parms)
+        throw new Error('empty property name');
+    return {
+        name: parms[0].toUpperCase(),
+        parms: parms.slice(1),
+        value: value,
+    };
+}
+function splitIntoLines(s, unfold) {
+    if (unfold === void 0) { unfold = false; }
+    s = s && s.trim();
+    if (!s)
+        throw new Error('Invalid empty string');
+    // More info about 'unfold' option
+    // Go head to http://www.ietf.org/rfc/rfc2445.txt
+    if (!unfold) {
+        return s.split(/\s/);
+    }
+    var lines = s.split('\n');
+    var i = 0;
+    while (i < lines.length) {
+        // TODO
+        var line = (lines[i] = lines[i].replace(/\s+$/g, ''));
+        if (!line) {
+            lines.splice(i, 1);
+        }
+        else if (i > 0 && line[0] === ' ') {
+            lines[i - 1] += line.slice(1);
+            lines.splice(i, 1);
+        }
+        else {
+            i += 1;
+        }
+    }
+    return lines;
+}
+function validateDateParm(parms) {
+    parms.forEach(function (parm) {
+        if (!/(VALUE=DATE(-TIME)?)|(TZID=)/.test(parm)) {
+            throw new Error('unsupported RDATE/EXDATE parm: ' + parm);
+        }
+    });
+}
+function parseRDate(rdateval, parms) {
+    validateDateParm(parms);
+    return rdateval.split(',').map(function (datestr) { return untilStringToDate(datestr); });
+}
+//# sourceMappingURL=rrulestr.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/rruleset.js
+
+
+
+
+
+
+
+function createGetterSetter(fieldName) {
+    var _this = this;
+    return function (field) {
+        if (field !== undefined) {
+            _this["_".concat(fieldName)] = field;
+        }
+        if (_this["_".concat(fieldName)] !== undefined) {
+            return _this["_".concat(fieldName)];
+        }
+        for (var i = 0; i < _this._rrule.length; i++) {
+            var field_1 = _this._rrule[i].origOptions[fieldName];
+            if (field_1) {
+                return field_1;
+            }
+        }
+    };
+}
+var RRuleSet = /** @class */ (function (_super) {
+    __extends(RRuleSet, _super);
+    /**
+     *
+     * @param {Boolean?} noCache
+     * The same stratagy as RRule on cache, default to false
+     * @constructor
+     */
+    function RRuleSet(noCache) {
+        if (noCache === void 0) { noCache = false; }
+        var _this = _super.call(this, {}, noCache) || this;
+        _this.dtstart = createGetterSetter.apply(_this, ['dtstart']);
+        _this.tzid = createGetterSetter.apply(_this, ['tzid']);
+        _this._rrule = [];
+        _this._rdate = [];
+        _this._exrule = [];
+        _this._exdate = [];
+        return _this;
+    }
+    RRuleSet.prototype._iter = function (iterResult) {
+        return iterSet(iterResult, this._rrule, this._exrule, this._rdate, this._exdate, this.tzid());
+    };
+    /**
+     * Adds an RRule to the set
+     *
+     * @param {RRule}
+     */
+    RRuleSet.prototype.rrule = function (rrule) {
+        _addRule(rrule, this._rrule);
+    };
+    /**
+     * Adds an EXRULE to the set
+     *
+     * @param {RRule}
+     */
+    RRuleSet.prototype.exrule = function (rrule) {
+        _addRule(rrule, this._exrule);
+    };
+    /**
+     * Adds an RDate to the set
+     *
+     * @param {Date}
+     */
+    RRuleSet.prototype.rdate = function (date) {
+        _addDate(date, this._rdate);
+    };
+    /**
+     * Adds an EXDATE to the set
+     *
+     * @param {Date}
+     */
+    RRuleSet.prototype.exdate = function (date) {
+        _addDate(date, this._exdate);
+    };
+    /**
+     * Get list of included rrules in this recurrence set.
+     *
+     * @return List of rrules
+     */
+    RRuleSet.prototype.rrules = function () {
+        return this._rrule.map(function (e) { return rrulestr(e.toString()); });
+    };
+    /**
+     * Get list of excluded rrules in this recurrence set.
+     *
+     * @return List of exrules
+     */
+    RRuleSet.prototype.exrules = function () {
+        return this._exrule.map(function (e) { return rrulestr(e.toString()); });
+    };
+    /**
+     * Get list of included datetimes in this recurrence set.
+     *
+     * @return List of rdates
+     */
+    RRuleSet.prototype.rdates = function () {
+        return this._rdate.map(function (e) { return new Date(e.getTime()); });
+    };
+    /**
+     * Get list of included datetimes in this recurrence set.
+     *
+     * @return List of exdates
+     */
+    RRuleSet.prototype.exdates = function () {
+        return this._exdate.map(function (e) { return new Date(e.getTime()); });
+    };
+    RRuleSet.prototype.valueOf = function () {
+        var result = [];
+        if (!this._rrule.length && this._dtstart) {
+            result = result.concat(optionsToString({ dtstart: this._dtstart }));
+        }
+        this._rrule.forEach(function (rrule) {
+            result = result.concat(rrule.toString().split('\n'));
+        });
+        this._exrule.forEach(function (exrule) {
+            result = result.concat(exrule
+                .toString()
+                .split('\n')
+                .map(function (line) { return line.replace(/^RRULE:/, 'EXRULE:'); })
+                .filter(function (line) { return !/^DTSTART/.test(line); }));
+        });
+        if (this._rdate.length) {
+            result.push(rdatesToString('RDATE', this._rdate, this.tzid()));
+        }
+        if (this._exdate.length) {
+            result.push(rdatesToString('EXDATE', this._exdate, this.tzid()));
+        }
+        return result;
+    };
+    /**
+     * to generate recurrence field such as:
+     * DTSTART:19970902T010000Z
+     * RRULE:FREQ=YEARLY;COUNT=2;BYDAY=TU
+     * RRULE:FREQ=YEARLY;COUNT=1;BYDAY=TH
+     */
+    RRuleSet.prototype.toString = function () {
+        return this.valueOf().join('\n');
+    };
+    /**
+     * Create a new RRuleSet Object completely base on current instance
+     */
+    RRuleSet.prototype.clone = function () {
+        var rrs = new RRuleSet(!!this._cache);
+        this._rrule.forEach(function (rule) { return rrs.rrule(rule.clone()); });
+        this._exrule.forEach(function (rule) { return rrs.exrule(rule.clone()); });
+        this._rdate.forEach(function (date) { return rrs.rdate(new Date(date.getTime())); });
+        this._exdate.forEach(function (date) { return rrs.exdate(new Date(date.getTime())); });
+        return rrs;
+    };
+    return RRuleSet;
+}(RRule));
+
+function _addRule(rrule, collection) {
+    if (!(rrule instanceof RRule)) {
+        throw new TypeError(String(rrule) + ' is not RRule instance');
+    }
+    if (!includes(collection.map(String), String(rrule))) {
+        collection.push(rrule);
+    }
+}
+function _addDate(date, collection) {
+    if (!(date instanceof Date)) {
+        throw new TypeError(String(date) + ' is not Date instance');
+    }
+    if (!includes(collection.map(Number), Number(date))) {
+        collection.push(date);
+        sort(collection);
+    }
+}
+function rdatesToString(param, rdates, tzid) {
+    var isUTC = !tzid || tzid.toUpperCase() === 'UTC';
+    var header = isUTC ? "".concat(param, ":") : "".concat(param, ";TZID=").concat(tzid, ":");
+    var dateString = rdates
+        .map(function (rdate) { return timeToUntilString(rdate.valueOf(), isUTC); })
+        .join(',');
+    return "".concat(header).concat(dateString);
+}
+//# sourceMappingURL=rruleset.js.map
+;// ../../node_modules/.pnpm/rrule@2.8.1/node_modules/rrule/dist/esm/index.js
+/* !
+ * rrule.js - Library for working with recurrence rules for calendar dates.
+ * https://github.com/jakubroztocil/rrule
+ *
+ * Copyright 2010, Jakub Roztocil and Lars Schoning
+ * Licenced under the BSD licence.
+ * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
+ *
+ * Based on:
+ * python-dateutil - Extensions to the standard Python datetime module.
+ * Copyright (c) 2003-2011 - Gustavo Niemeyer <gustavo@niemeyer.net>
+ * Copyright (c) 2012 - Tomi Pieviläinen <tomi.pievilainen@iki.fi>
+ * https://github.com/jakubroztocil/rrule/blob/master/LICENCE
+ *
+ */
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
@@ -107125,6 +107256,7 @@ const misc = {
 };
 let prevented = null;
 let lastFiredEvent = null;
+const subscriptions = new Map();
 const onNodeRemove = () => {
   lastFiredEvent = null;
 };
@@ -107138,9 +107270,17 @@ const clickHandler = function (e) {
     if (originalEvent) {
       originalEvent.DXCLICK_FIRED = true;
     }
-    (0, _event_nodes_disposing.unsubscribeNodesDisposing)(lastFiredEvent, onNodeRemove);
+    if (subscriptions.has(lastFiredEvent)) {
+      const {
+        nodes,
+        callback
+      } = subscriptions.get(lastFiredEvent);
+      (0, _event_nodes_disposing.unsubscribeNodesDisposing)(lastFiredEvent, callback, nodes);
+      subscriptions.delete(lastFiredEvent);
+    }
     lastFiredEvent = originalEvent;
-    (0, _event_nodes_disposing.subscribeNodesDisposing)(lastFiredEvent, onNodeRemove);
+    const subscriptionData = (0, _event_nodes_disposing.subscribeNodesDisposing)(lastFiredEvent, onNodeRemove);
+    subscriptions.set(lastFiredEvent, subscriptionData);
     (0, _index.fireEvent)({
       type: CLICK_EVENT_NAME,
       originalEvent: e
@@ -107307,14 +107447,14 @@ class VerticalCurrentTimeShader extends _m_current_time_shader.default {
   }
   _renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
     for (let i = 0; i < groupCount; i++) {
-      const shaderWidth = this._getShaderWidth(i);
+      const shaderWidth = this._getShaderWidth();
       this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
       !isSolidShader && this._renderBottomShader(this._$shader, maxHeight, shaderHeight, shaderWidth, i);
       this._renderAllDayShader(shaderWidth, i);
     }
   }
   _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
-    const shaderWidth = this._getShaderWidth(0);
+    const shaderWidth = this._getShaderWidth();
     let bottomShaderWidth = shaderWidth - this._workSpace.getCellWidth();
     if (shaderHeight < 0) {
       shaderHeight = 0;
@@ -107366,8 +107506,8 @@ class VerticalCurrentTimeShader extends _m_current_time_shader.default {
   _getShaderMaxHeight() {
     return this._workSpace.getGroupedStrategy().getShaderMaxHeight();
   }
-  _getShaderWidth(i) {
-    return this._workSpace.getGroupedStrategy().getShaderWidth(i);
+  _getShaderWidth() {
+    return this._workSpace.getGroupedStrategy().getShaderWidth();
   }
   clean() {
     super.clean();
@@ -107656,8 +107796,7 @@ var _emitterGesture = _interopRequireDefault(__webpack_require__(86548));
 var _pointer = _interopRequireDefault(__webpack_require__(89797));
 var _index = __webpack_require__(98834);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function subscribeToEvent(eventName) {
   return (element, handler, eventData, namespace) => {
     const event = namespace ? (0, _index.addNamespace)(eventName, namespace) : eventName;
@@ -114152,7 +114291,6 @@ const editingControllerExtender = Base => class FormBasedEditingControllerExtend
       this._hideEditPopup();
     }
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
     if (this.isPopupEditMode()) {
@@ -114228,7 +114366,7 @@ const editingControllerExtender = Base => class FormBasedEditingControllerExtend
         isPopupForm: true
       });
       this._rowsView.renderDelayedTemplates();
-      (0, _renderer.default)(container).parent().attr('aria-label', this.localize('dxDataGrid-ariaEditForm'));
+      this.setAria('label', this.localize('dxDataGrid-ariaEditForm'), (0, _renderer.default)(container).parent());
     };
   }
   _repaintEditPopup() {
@@ -118218,6 +118356,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _events_engine = _interopRequireDefault(__webpack_require__(92774));
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _common = __webpack_require__(17781);
 var _extend = __webpack_require__(52576);
 var _iterator = __webpack_require__(21274);
@@ -118227,6 +118366,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 // @ts-expect-error ts-error
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 class ValidationSummary extends _collection_widget.default {
@@ -118303,6 +118443,36 @@ class ValidationSummary extends _collection_widget.default {
       }
     });
     this.option('items', items);
+    this._announceOnGroupValidation();
+  }
+  _announceOnGroupValidation() {
+    const {
+      items
+    } = this.option();
+    if (!(items !== null && items !== void 0 && items.length)) {
+      this._lastAnnouncedText = '';
+      this._removeAnnounceContainer();
+      return;
+    }
+    const text = items.map(item => item.text).join('. ');
+    if (text !== this._lastAnnouncedText) {
+      this._lastAnnouncedText = text;
+      this._announceText(text);
+    }
+  }
+  _removeAnnounceContainer() {
+    var _this$_$announceConta;
+    (_this$_$announceConta = this._$announceContainer) === null || _this$_$announceConta === void 0 || _this$_$announceConta.remove();
+    this._$announceContainer = undefined;
+  }
+  _renderAnnounceContainer() {
+    this._removeAnnounceContainer();
+    this._$announceContainer = (0, _renderer.default)('<div>').addClass(SCREEN_READER_ONLY_CLASS).attr('role', 'alert').appendTo(this.element());
+  }
+  _announceText(text) {
+    var _this$_$announceConta2;
+    this._renderAnnounceContainer();
+    (_this$_$announceConta2 = this._$announceContainer) === null || _this$_$announceConta2 === void 0 || _this$_$announceConta2.text(text);
   }
   _itemValidationHandler(_ref) {
     let {
@@ -118377,6 +118547,7 @@ class ValidationSummary extends _collection_widget.default {
     });
   }
   _dispose() {
+    this._removeAnnounceContainer();
     super._dispose();
     this._unsubscribeGroup();
   }
@@ -121460,14 +121631,13 @@ var _uiDiagram6 = _interopRequireDefault(__webpack_require__(12197));
 var _uiDiagram7 = _interopRequireDefault(__webpack_require__(57552));
 var _uiDiagram8 = _interopRequireDefault(__webpack_require__(66061));
 var _uiDiagram9 = _interopRequireDefault(__webpack_require__(2425));
-var _uiDiagram10 = _interopRequireDefault(__webpack_require__(78753));
-var _uiDiagram11 = _interopRequireDefault(__webpack_require__(29849));
-var _uiDiagram12 = _interopRequireDefault(__webpack_require__(37433));
+var _uiDiagram0 = _interopRequireDefault(__webpack_require__(78753));
+var _uiDiagram1 = _interopRequireDefault(__webpack_require__(29849));
+var _uiDiagram10 = _interopRequireDefault(__webpack_require__(37433));
 var _load_indicator = _interopRequireDefault(__webpack_require__(32677));
 var _overlay = _interopRequireDefault(__webpack_require__(79384));
 var zIndexPool = _interopRequireWildcard(__webpack_require__(27869));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
@@ -121748,7 +121918,7 @@ class Diagram extends _widget.default {
     const isServerSide = !(0, _window.hasWindow)();
     const $toolBox = (0, _renderer.default)('<div>').appendTo($parent);
     const bounds = this._getToolboxBounds($parent, isServerSide);
-    this._toolbox = this._createComponent($toolBox, _uiDiagram11.default, {
+    this._toolbox = this._createComponent($toolBox, _uiDiagram1.default, {
       isMobileView: this.isMobileScreenSize(),
       isVisible: this._isToolboxVisible(),
       container: this.$element(),
@@ -121846,7 +122016,7 @@ class Diagram extends _widget.default {
   _renderViewToolbar($parent) {
     const isServerSide = !(0, _window.hasWindow)();
     const $container = (0, _renderer.default)('<div>').addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS).appendTo($parent);
-    this._viewToolbar = this._createComponent($container, _uiDiagram12.default, (0, _extend.extend)(this._getToolbarBaseOptions(), {
+    this._viewToolbar = this._createComponent($container, _uiDiagram10.default, (0, _extend.extend)(this._getToolbarBaseOptions(), {
       commands: this.option('viewToolbar.commands'),
       locateInMenu: 'never'
     }));
@@ -121923,7 +122093,7 @@ class Diagram extends _widget.default {
       offsetY,
       propertyTabs: this.option('propertiesPanel.tabs'),
       onCreateToolbar: e => {
-        e.toolbar = this._createComponent(e.$parent, _uiDiagram10.default, (0, _extend.extend)(this._getToolbarBaseOptions(), {
+        e.toolbar = this._createComponent(e.$parent, _uiDiagram0.default, (0, _extend.extend)(this._getToolbarBaseOptions(), {
           commands: e.commands,
           locateInMenu: 'never',
           editorStylingMode: 'outlined'
@@ -124665,7 +124835,7 @@ class DataController extends (0, _m_data_helper_mixin.DataHelperMixin)(_m_module
           filterApplied = true;
         }
       }
-      const excludedOptionNames = ['ai', 'width', 'visibleWidth', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'filterValues', 'filterType'];
+      const excludedOptionNames = ['width', 'visibleWidth', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'filterValues', 'filterType'];
       if (!that._needApplyFilter && !_m_utils.default.checkChanges(optionNames, excludedOptionNames)) {
         // TODO remove resubscribing
         that._columnsController.columnsChanged.add(updateItemsHandler);
@@ -126545,7 +126715,7 @@ var _const = __webpack_require__(14930);
 const _excluded = ["elementRef", "children"],
   _excluded2 = ["elementRef", "onKeyDown", "children"],
   _excluded3 = ["enabled", "ref", "onKeyDown"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
     r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -127464,7 +127634,7 @@ const _excluded = ["accessKey", "activeStateEnabled", "aria", "children", "class
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const getCssClasses = model => {
   const {
     classes,
@@ -128373,21 +128543,21 @@ class FileManagerThumbnailsItemList extends _uiFile_manager2.default {
   }
   _selectItemSingleSelection(item) {
     if (item) {
-      var _this$_itemList10;
-      (_this$_itemList10 = this._itemList) === null || _this$_itemList10 === void 0 || _this$_itemList10.selectItem(item);
+      var _this$_itemList0;
+      (_this$_itemList0 = this._itemList) === null || _this$_itemList0 === void 0 || _this$_itemList0.selectItem(item);
     } else {
-      var _this$_itemList11;
-      (_this$_itemList11 = this._itemList) === null || _this$_itemList11 === void 0 || _this$_itemList11.clearSelection();
+      var _this$_itemList1;
+      (_this$_itemList1 = this._itemList) === null || _this$_itemList1 === void 0 || _this$_itemList1.clearSelection();
     }
   }
   clearSelection() {
-    var _this$_itemList12;
-    (_this$_itemList12 = this._itemList) === null || _this$_itemList12 === void 0 || _this$_itemList12.clearSelection();
+    var _this$_itemList10;
+    (_this$_itemList10 = this._itemList) === null || _this$_itemList10 === void 0 || _this$_itemList10.clearSelection();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getSelectedItems() {
-    var _this$_itemList13;
-    return (_this$_itemList13 = this._itemList) === null || _this$_itemList13 === void 0 ? void 0 : _this$_itemList13.getSelectedItems();
+    var _this$_itemList11;
+    return (_this$_itemList11 = this._itemList) === null || _this$_itemList11 === void 0 ? void 0 : _this$_itemList11.getSelectedItems();
   }
 }
 var _default = exports["default"] = FileManagerThumbnailsItemList;
@@ -128749,8 +128919,7 @@ var accessibility = _interopRequireWildcard(__webpack_require__(16191));
 var _a11y_status_container_component = __webpack_require__(56430);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file */
 
@@ -130117,7 +130286,7 @@ var _extend = __webpack_require__(52576);
 var _size = __webpack_require__(57653);
 var _window = __webpack_require__(3104);
 var _box = _interopRequireDefault(__webpack_require__(6554));
-var _m_time_view = _interopRequireDefault(__webpack_require__(14705));
+var _time_view = _interopRequireDefault(__webpack_require__(13533));
 var _m_date_boxStrategy = _interopRequireDefault(__webpack_require__(49403));
 var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -130153,7 +130322,7 @@ class CalendarWithTimeStrategy extends _m_date_boxStrategy.default {
   }
   _renderWidget() {
     super._renderWidget();
-    this._timeView = this.dateBox._createComponent((0, _renderer.default)('<div>'), _m_time_view.default, {
+    this._timeView = this.dateBox._createComponent((0, _renderer.default)('<div>'), _time_view.default, {
       value: this.dateBoxValue(),
       _showClock: !this._isShrinkView(),
       use24HourFormat: this._is24HourFormat(),
@@ -131932,7 +132101,7 @@ class DiagramFloatingPanel extends _uiDiagram.default {
     'onVisibilityChanged');
   }
   _optionChanged(args) {
-    var _this$_popup4, _this$_popup5, _this$_popup6, _this$_popup7, _this$_popup8, _this$_popup9, _this$_popup10;
+    var _this$_popup4, _this$_popup5, _this$_popup6, _this$_popup7, _this$_popup8, _this$_popup9, _this$_popup0;
     switch (args.name) {
       case 'onVisibilityChanging':
         this._createOnVisibilityChangingAction();
@@ -131959,7 +132128,7 @@ class DiagramFloatingPanel extends _uiDiagram.default {
         (_this$_popup9 = this._popup) === null || _this$_popup9 === void 0 || _this$_popup9.option('minWidth', this._getPopupMinWidth());
         break;
       case 'minHeight':
-        (_this$_popup10 = this._popup) === null || _this$_popup10 === void 0 || _this$_popup10.option('minHeight', this._getPopupMinHeight());
+        (_this$_popup0 = this._popup) === null || _this$_popup0 === void 0 || _this$_popup0.option('minHeight', this._getPopupMinHeight());
         break;
       case 'isMobileView':
         this._invalidate();
@@ -132026,7 +132195,7 @@ var _inferno = __webpack_require__(76231);
 var _shallow_equals = __webpack_require__(1270);
 const _excluded = ["isEqual"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const isDxElementWrapper = element => !!element.toArray;
 const buildTemplateArgs = (model, template) => {
   const args = {
@@ -134983,13 +135152,6 @@ const columnHeadersViewExtender = Base => class AIColumnHeadersViewExtender exte
       return;
     }
     super.renderDragCellContent($dragContainer, column);
-  }
-  dispose() {
-    super.dispose();
-    this.activeDropDownButtonInstance = null;
-    if (this.aiColumnOptionChangedHandler) {
-      this._columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
-    }
   }
 };
 exports.columnHeadersViewExtender = columnHeadersViewExtender;
@@ -139041,8 +139203,7 @@ var _wrapper = _interopRequireDefault(__webpack_require__(19583));
 var _m_popup = _interopRequireDefault(__webpack_require__(43864));
 var _toolbarMenu = _interopRequireWildcard(__webpack_require__(14279));
 var _toolbar = __webpack_require__(90859);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
@@ -141828,9 +141989,7 @@ class ColumnKeyboardNavigationController extends _m_keyboard_navigation_core.Key
     return this.processOnKeyDown(e);
   }
   getVisibleIndex(column, rowIndex) {
-    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
-    const columnIndexOffset = this.getColumnIndexOffset(visibleIndex);
-    return visibleIndex >= 0 ? visibleIndex + columnIndexOffset : -1;
+    return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
   getNewVisibleIndex(visibleIndex, rowIndex, direction) {
     /*
@@ -144549,8 +144708,7 @@ var transformEvents = _interopRequireWildcard(__webpack_require__(37008));
 var _extend = __webpack_require__(52576);
 var _type = __webpack_require__(11528);
 var _utils = __webpack_require__(98013);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable no-bitwise */
@@ -145967,7 +146125,7 @@ var _default = exports["default"] = {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = void 0;
+exports["default"] = exports.DataSourceAdapterTreeList = void 0;
 var _array_store = _interopRequireDefault(__webpack_require__(80556));
 var _array_utils = __webpack_require__(43792);
 var _query = _interopRequireDefault(__webpack_require__(30771));
@@ -146251,8 +146409,18 @@ class DataSourceAdapterTreeList extends _m_data_source_adapter.default {
       keys: resultKeys
     };
   }
+  _isOperationIdOutdated(operationId) {
+    return operationId !== undefined && this._lastOperationId !== undefined && operationId !== this._lastOperationId;
+  }
   _loadParentsOrChildren(data, options, needChildren) {
     var _options$storeLoadOpt, _options$loadOptions;
+    if (this._isOperationIdOutdated(options.operationId)) {
+      this._dataSource.cancel(options.operationId);
+      // @ts-expect-error
+      const rejectedDeferred = new _deferred.Deferred();
+      rejectedDeferred.reject();
+      return rejectedDeferred;
+    }
     let filter;
     let needLocalFiltering;
     const {
@@ -146295,6 +146463,10 @@ class DataSourceAdapterTreeList extends _m_data_source_adapter.default {
     });
     const store = options.fullData ? new _array_store.default(options.fullData) : this._dataSource.store();
     this.loadFromStore(loadOptions, store).done(loadedData => {
+      if (this._isOperationIdOutdated(options.operationId)) {
+        d.reject();
+        return;
+      }
       if (loadedData.length) {
         if (needLocalFiltering) {
           // @ts-expect-error
@@ -146688,6 +146860,7 @@ class DataSourceAdapterTreeList extends _m_data_source_adapter.default {
     _m_core.default.foreachNodes(nodes, callback);
   }
 }
+exports.DataSourceAdapterTreeList = DataSourceAdapterTreeList;
 let DataSourceAdapterTreeListType = DataSourceAdapterTreeList;
 var _default = exports["default"] = {
   extend(extender) {
@@ -146708,20 +146881,30 @@ var _default = exports["default"] = {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.hasInvalidCustomCommand = exports.getDefaultOptionsByCommand = exports.getAICommandName = exports.defaultCommandNames = exports.buildCommandsMap = exports.buildAICommandParams = exports.AI_DIALOG_CUSTOM_COMMAND_NAME = exports.AI_DIALOG_ASKAI_COMMAND_NAME = void 0;
+exports.hasInvalidCustomCommand = exports.getDefaultOptionsByCommand = exports.getDefaultCommandName = exports.getAICommandName = exports.commandMessageKeys = exports.buildCommandsMap = exports.buildAICommandParams = exports.AI_DIALOG_CUSTOM_COMMAND_NAME = exports.AI_DIALOG_ASKAI_COMMAND_NAME = void 0;
+var _message = _interopRequireDefault(__webpack_require__(4671));
 var _capitalize = __webpack_require__(72928);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const AI_DIALOG_ASKAI_COMMAND_NAME = exports.AI_DIALOG_ASKAI_COMMAND_NAME = 'askAI';
 const AI_DIALOG_CUSTOM_COMMAND_NAME = exports.AI_DIALOG_CUSTOM_COMMAND_NAME = 'custom';
-const defaultCommandNames = exports.defaultCommandNames = {
-  summarize: 'Summarize',
-  proofread: 'Proofread',
-  expand: 'Expand',
-  shorten: 'Shorten',
-  changeStyle: 'Change Style',
-  changeTone: 'Change Tone',
-  translate: 'Translate',
-  askAI: 'Ask AI'
+const commandMessageKeys = exports.commandMessageKeys = {
+  summarize: 'dxHtmlEditor-aiCommandSummarize',
+  proofread: 'dxHtmlEditor-aiCommandProofread',
+  expand: 'dxHtmlEditor-aiCommandExpand',
+  shorten: 'dxHtmlEditor-aiCommandShorten',
+  changeStyle: 'dxHtmlEditor-aiCommandChangeStyle',
+  changeTone: 'dxHtmlEditor-aiCommandChangeTone',
+  translate: 'dxHtmlEditor-aiCommandTranslate',
+  askAI: 'dxHtmlEditor-aiCommandAskAI'
 };
+const getDefaultCommandName = name => {
+  const key = commandMessageKeys[name];
+  if (key) {
+    return _message.default.format(key);
+  }
+  return (0, _capitalize.capitalize)(name);
+};
+exports.getDefaultCommandName = getDefaultCommandName;
 const htmlEditorAIChangeStyleOptions = ['formal', 'informal', 'technical', 'business', 'creative', 'journalistic', 'academic', 'persuasive', 'narrative', 'expository', 'descriptive', 'conversational'];
 const htmlEditorAIChangeToneOptions = ['professional', 'casual', 'straightforward', 'confident', 'friendly'];
 const htmlEditorAITranslateOptions = ['arabic', 'chinese', 'english', 'french', 'german', 'japanese', 'spanish'];
@@ -146736,19 +146919,20 @@ const aiCommandNames = {
   askAI: 'execute',
   custom: 'execute'
 };
+const getLocalizedCommandOption = command => option => _message.default.format(`dxHtmlEditor-aiCommand${(0, _capitalize.capitalize)(command)}${(0, _capitalize.capitalize)(option)}`);
 const getDefaultOptionsByCommand = command => {
+  const getLocalizedOption = getLocalizedCommandOption(command);
   const commandToOptionsMap = {
-    changeStyle: htmlEditorAIChangeStyleOptions,
-    changeTone: htmlEditorAIChangeToneOptions,
-    translate: htmlEditorAITranslateOptions
+    changeStyle: htmlEditorAIChangeStyleOptions.map(getLocalizedOption),
+    changeTone: htmlEditorAIChangeToneOptions.map(getLocalizedOption),
+    translate: htmlEditorAITranslateOptions.map(getLocalizedOption)
   };
   return commandToOptionsMap[command];
 };
 exports.getDefaultOptionsByCommand = getDefaultOptionsByCommand;
 const createDefinitionFromString = commandName => {
-  var _getDefaultOptionsByC;
-  const text = defaultCommandNames[commandName] ?? (0, _capitalize.capitalize)(commandName);
-  const defaultOptions = (_getDefaultOptionsByC = getDefaultOptionsByCommand(commandName)) === null || _getDefaultOptionsByC === void 0 ? void 0 : _getDefaultOptionsByC.map(_capitalize.capitalize);
+  const text = getDefaultCommandName(commandName);
+  const defaultOptions = getDefaultOptionsByCommand(commandName);
   return {
     id: commandName,
     text,
@@ -146757,10 +146941,9 @@ const createDefinitionFromString = commandName => {
   };
 };
 const createDefinitionFromObject = (id, name, text, rawOptions, prompt) => {
-  var _getDefaultOptionsByC2;
   const capitalizedRaw = rawOptions === null || rawOptions === void 0 ? void 0 : rawOptions.map(_capitalize.capitalize);
-  const options = capitalizedRaw ?? ((_getDefaultOptionsByC2 = getDefaultOptionsByCommand(name)) === null || _getDefaultOptionsByC2 === void 0 ? void 0 : _getDefaultOptionsByC2.map(_capitalize.capitalize));
-  const displayText = text ?? defaultCommandNames[name] ?? (0, _capitalize.capitalize)(name);
+  const options = capitalizedRaw ?? getDefaultOptionsByCommand(name);
+  const displayText = text ?? getDefaultCommandName(name);
   const definition = {
     id,
     name,
@@ -149625,7 +149808,7 @@ var _data = __webpack_require__(11036);
 var _type = __webpack_require__(11528);
 const groupKey = 'key';
 function getDataSourceOptions(dataSource) {
-  if (!(0, _data.isGroupItemsArray)(dataSource)) {
+  if (!(0, _data.isGroupItemsArray)(dataSource) || dataSource.some(item => Object.keys(item).length !== 2)) {
     return dataSource;
   }
   let hasSimpleItems = false;
@@ -149683,8 +149866,7 @@ var _utils = __webpack_require__(98013);
 var circularIndicators = _interopRequireWildcard(__webpack_require__(31735));
 var _circular_range_container = _interopRequireDefault(__webpack_require__(98120));
 var _common = __webpack_require__(80586);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable operator-assignment */
 /* eslint-disable spellcheck/spell-checker */
@@ -149997,7 +150179,7 @@ var _inferno = __webpack_require__(76231);
 var _index = __webpack_require__(92940);
 var _utils = __webpack_require__(50860);
 const _excluded = ["onKeyDown", "keyDownConfig", "children"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
     r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -150443,7 +150625,7 @@ var _index = __webpack_require__(6257);
 var _date_table = __webpack_require__(74282);
 var _date_table_month_cell = __webpack_require__(83725);
 const _excluded = ["viewData", "viewContext", "addDateTableClass", "addVerticalSizesClassToRows", "dataCellTemplate", "groupOrientation", "tableRef", "width"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class DateTableMonth extends _index.InfernoWrapperComponent {
   createEffects() {
     return [(0, _index.createReRenderEffect)()];
@@ -152110,8 +152292,7 @@ var _size = __webpack_require__(57653);
 var _type = __webpack_require__(11528);
 var _themes = __webpack_require__(52071);
 var _collection_widget = _interopRequireDefault(__webpack_require__(26821));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -153431,8 +153612,7 @@ exports.defaultOptions = void 0;
 var GridCore = _interopRequireWildcard(__webpack_require__(75932));
 var ContentView = _interopRequireWildcard(__webpack_require__(87996));
 var HeaderPanel = _interopRequireWildcard(__webpack_require__(6347));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 const defaultOptions = exports.defaultOptions = Object.assign({}, GridCore.defaultOptions, ContentView.defaultOptions, HeaderPanel.defaultOptions);
 
 /***/ }),
@@ -157359,8 +157539,7 @@ var _constants = __webpack_require__(50634);
 var _m_popup_drag = _interopRequireDefault(__webpack_require__(26513));
 var _m_popup_overflow_manager = __webpack_require__(27129);
 var _popup_position_controller = __webpack_require__(31523);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // STYLE popup
 const window = _m_window.default.getWindow();
@@ -159006,17 +159185,10 @@ class AIColumnIntegrationController extends _m_modules.Controller {
     this.abortRequest(columnName);
   }
   getAICommandCallbacks(columnName, cachedResponse, callBacks) {
-    const column = this.columnsController.getColumnByName(columnName);
     const callbacks = {
       onComplete: finalResponse => {
         if (this.isRequestAwaitingCompletion(columnName)) {
           var _callBacks$onComplete;
-          const args = {
-            column,
-            error: null,
-            data: finalResponse.data
-          };
-          this.executeAction('onAIColumnResponseReceived', args);
           this.aiColumnCacheController.setCachedResponse(columnName, finalResponse.data);
           this.processCommandCompletion(columnName);
           callBacks === null || callBacks === void 0 || (_callBacks$onComplete = callBacks.onComplete) === null || _callBacks$onComplete === void 0 || _callBacks$onComplete.call(callBacks, finalResponse);
@@ -159025,11 +159197,6 @@ class AIColumnIntegrationController extends _m_modules.Controller {
       onError: error => {
         var _callBacks$onError;
         const message = (error === null || error === void 0 ? void 0 : error.message) ?? error;
-        this.executeAction('onAIColumnResponseReceived', {
-          column,
-          error: message,
-          data: null
-        });
         this.showError(message);
         this.processCommandCompletion(columnName);
         callBacks === null || callBacks === void 0 || (_callBacks$onError = callBacks.onError) === null || _callBacks$onError === void 0 || _callBacks$onError.call(callBacks, error);
@@ -159044,7 +159211,6 @@ class AIColumnIntegrationController extends _m_modules.Controller {
     this.aiColumnCacheController = new _m_ai_column_cache_controller.AIColumnCacheController(this.component);
     this.aiColumnCacheController.init();
     this.createAction('onAIColumnRequestCreating');
-    this.createAction('onAIColumnResponseReceived');
   }
   sendRequestCore(_ref) {
     let {
@@ -160104,8 +160270,7 @@ var _controller2 = __webpack_require__(51914);
 var _view = __webpack_require__(84103);
 var _controller3 = __webpack_require__(10567);
 var _view2 = __webpack_require__(39706);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function register(diContext) {
   (0, _index.setupStateManager)({
     diContext,
@@ -162135,8 +162300,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.defaultOptions = void 0;
 var Base = _interopRequireWildcard(__webpack_require__(3538));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 const defaultOptions = exports.defaultOptions = Object.assign({
   wordWrapEnabled: false,
   cardsPerRow: 3,
@@ -163687,19 +163851,14 @@ class SchedulerWorkSpace extends _ui2.default {
   _getGroupHeaderCells() {
     return this.$element().find(`.${GROUP_HEADER_CLASS}`);
   }
-  _getScrollCoordinates(hours, minutes, date, groupIndex, allDay) {
+  _getScrollCoordinates(date, groupIndex, allDay) {
     const currentDate = date || new Date(this.option('currentDate'));
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
-    if (hours < startDayHour) {
-      hours = startDayHour;
+    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
+    if (!cell) {
+      return undefined;
     }
-    if (hours >= endDayHour) {
-      hours = endDayHour - 1;
-    }
-    currentDate.setHours(hours, minutes, 0, 0);
-    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay);
-    return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(cell === null || cell === void 0 ? void 0 : cell.cellData, cell === null || cell === void 0 ? void 0 : cell.position, currentDate, (0, _index3.isDateAndTimeView)(this.type), this.viewDirection === 'vertical');
+    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(cell.cellData, cell.position, currentDate, (0, _index3.isDateAndTimeView)(this.type), this.viewDirection === 'vertical');
   }
   _isOutsideScrollable(target, event) {
     const $dateTableScrollableElement = this._dateTableScrollable.$element();
@@ -163805,25 +163964,6 @@ class SchedulerWorkSpace extends _ui2.default {
   }
   getCellMinWidth() {
     return DATE_TABLE_MIN_CELL_WIDTH;
-  }
-  getRoundedCellWidth(groupIndex, startIndex, cellCount) {
-    if (groupIndex < 0 || !(0, _window.hasWindow)()) {
-      return 0;
-    }
-    const $row = this.$element().find(`.${_m_classes.DATE_TABLE_ROW_CLASS}`).eq(0);
-    let width = 0;
-    const $cells = $row.find(`.${DATE_TABLE_CELL_CLASS}`);
-    const totalCellCount = this._getCellCount() * groupIndex;
-    cellCount = cellCount || this._getCellCount();
-    if (!(0, _type.isDefined)(startIndex)) {
-      startIndex = totalCellCount;
-    }
-    for (let i = startIndex; i < totalCellCount + cellCount; i++) {
-      const element = (0, _renderer.default)($cells).eq(i).get(0);
-      const elementWidth = element ? (0, _position.getBoundingRect)(element).width : 0;
-      width += elementWidth;
-    }
-    return width / (totalCellCount + cellCount - startIndex);
   }
   // Mappings
   getCellWidth() {
@@ -163992,12 +164132,16 @@ class SchedulerWorkSpace extends _ui2.default {
   scrollTo(date, groupValues) {
     let allDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
     let throwWarning = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    let align = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'center';
     if (!this._isValidScrollDate(date, throwWarning)) {
       return;
     }
     const groupIndex = this._getGroupCount() && groupValues ? this._getGroupIndexByGroupValues(groupValues) : 0;
     const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
-    const coordinates = this._getScrollCoordinates(date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay);
+    const coordinates = this._getScrollCoordinates(date, groupIndex, isScrollToAllDay);
+    if (!coordinates) {
+      return;
+    }
     const scrollable = this.getScrollable();
     const $scrollable = scrollable.$element();
     const cellWidth = this.getCellWidth();
@@ -164005,8 +164149,8 @@ class SchedulerWorkSpace extends _ui2.default {
     const scrollableHeight = (0, _size.getHeight)($scrollable);
     const scrollableWidth = (0, _size.getWidth)($scrollable);
     const cellHeight = this.getCellHeight();
-    const xShift = (scrollableWidth - cellWidth) / 2;
-    const yShift = (scrollableHeight - cellHeight) / 2;
+    const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
+    const yShift = align === 'start' ? 0 : (scrollableHeight - cellHeight) / 2;
     const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
     let top = coordinates.top - scrollable.scrollTop() - yShift;
     if (isScrollToAllDay && !this._isVerticalGroupedWorkSpace()) {
@@ -164028,8 +164172,9 @@ class SchedulerWorkSpace extends _ui2.default {
   }
   _isValidScrollDate(date) {
     let throwWarning = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    const min = this.getStartViewDate();
-    const max = this.getEndViewDate();
+    const viewOffset = this.option('viewOffset');
+    const min = new Date(this.getStartViewDate().getTime() + viewOffset);
+    const max = new Date(this.getEndViewDate().getTime() + viewOffset);
     if (date < min || date > max) {
       throwWarning && _ui.default.log('W1008', date);
       return false;
@@ -167701,7 +167846,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.DEFAULT_SCHEDULER_OPTIONS_RULES = exports.DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_INTERNAL_OPTIONS = exports.DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = exports.DEFAULT_ICONS_SHOW_MODE = void 0;
-var _message = _interopRequireDefault(__webpack_require__(4671));
 var _devices = _interopRequireDefault(__webpack_require__(65951));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _date = _interopRequireDefault(__webpack_require__(41380));
@@ -167780,7 +167924,7 @@ const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
   timeZone: '',
   startDateTimeZoneExpr: 'startDateTimeZone',
   endDateTimeZoneExpr: 'endDateTimeZone',
-  noDataText: _message.default.format('dxCollectionWidget-noDataText'),
+  noDataText: '',
   adaptivityEnabled: false,
   scrolling: {
     mode: 'standard'
@@ -168271,7 +168415,7 @@ var _widget_wrapper = __webpack_require__(44831);
 const _excluded = ["selected"],
   _excluded2 = ["selected"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class TreeView extends _widget_wrapper.InfernoWrapper {
   getComponentFabric() {
     return _tree_view.default;
@@ -169911,7 +170055,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.generateRecurrenceUTCDates = void 0;
 var _date = __webpack_require__(55594);
-var _rrule = __webpack_require__(4755);
+var _rrule = __webpack_require__(27692);
 var _base = __webpack_require__(57872);
 var _get_date_information = __webpack_require__(98861);
 const WEEK_DAY_NUMBERS = [6, 0, 1, 2, 3, 4, 5];
@@ -170466,6 +170610,10 @@ const LocalStore = exports.LocalStore = _class.default.inherit(function () {
         }
       }
       return drillDownItems;
+    },
+    dispose() {
+      var _this$_dataSource;
+      (_this$_dataSource = this._dataSource) === null || _this$_dataSource === void 0 || _this$_dataSource.dispose();
     }
   };
 }()).include(_m_widget_utils.storeDrillDownMixin);
@@ -171187,8 +171335,7 @@ var _string = __webpack_require__(54497);
 var _type = __webpack_require__(11528);
 var _window = __webpack_require__(3104);
 var _m_widget_utils = _interopRequireWildcard(__webpack_require__(12062));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Utility functions
 function union(elements) {
@@ -173433,7 +173580,7 @@ var _widget_wrapper = __webpack_require__(44831);
 const _excluded = ["items"];
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const excludedStateOptions = ['onInput', 'inputAttr', 'elementAttr'];
 class Toolbar extends _widget_wrapper.InfernoWrapper {
   getComponentFabric() {
@@ -173485,7 +173632,7 @@ exports.Toolbar = Toolbar;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COMMAND_COLUMNS_WITH_REQUIRED_NAMES = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
+exports.VIRTUAL_COMMAND_COLUMN_NAME = exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.HEADERS_LOCATION = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COMMAND_COLUMNS_WITH_REQUIRED_NAMES = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
 const USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
 const USER_STATE_FIELD_NAMES = exports.USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
 // eslint-disable-next-line @stylistic/max-len
@@ -173497,6 +173644,7 @@ const IGNORE_COLUMN_OPTION_NAMES = exports.IGNORE_COLUMN_OPTION_NAMES = {
 const COMMAND_EXPAND_CLASS = exports.COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const MAX_SAFE_INTEGER = exports.MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991 /* IE11 */;
 const GROUP_COMMAND_COLUMN_NAME = exports.GROUP_COMMAND_COLUMN_NAME = 'groupExpand';
+const VIRTUAL_COMMAND_COLUMN_NAME = exports.VIRTUAL_COMMAND_COLUMN_NAME = 'virtual';
 const DETAIL_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = 'detailExpand';
 const COLUMN_OPTION_REGEXP = exports.COLUMN_OPTION_REGEXP = /columns\[(\d+)\]\.?/gi;
 const DEFAULT_COLUMN_OPTIONS = exports.DEFAULT_COLUMN_OPTIONS = {
@@ -173518,6 +173666,7 @@ const COLUMN_INDEX_OPTIONS = exports.COLUMN_INDEX_OPTIONS = {
 };
 const GROUP_LOCATION = exports.GROUP_LOCATION = 'group';
 const COLUMN_CHOOSER_LOCATION = exports.COLUMN_CHOOSER_LOCATION = 'columnChooser';
+const HEADERS_LOCATION = exports.HEADERS_LOCATION = 'headers';
 const UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = ['fixed', 'fixedPosition', 'type', 'buttons'];
 const COMMAND_COLUMNS_WITH_REQUIRED_NAMES = exports.COMMAND_COLUMNS_WITH_REQUIRED_NAMES = ['ai'];
 
@@ -173708,8 +173857,7 @@ var _m_support = _interopRequireDefault(__webpack_require__(85991));
 var _m_column_state_mixin = __webpack_require__(96790);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -175091,8 +175239,7 @@ var _type = __webpack_require__(11528);
 var _utils = __webpack_require__(98013);
 var _area_series = __webpack_require__(38525);
 var scatterSeries = _interopRequireWildcard(__webpack_require__(39294));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/prefer-for-of */
@@ -175755,8 +175902,7 @@ exports.getDiagram = getDiagram;
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _devexpressDiagram = _interopRequireWildcard(__webpack_require__(36761));
 var Diagram = _devexpressDiagram;
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getDiagram() {
@@ -179869,8 +180015,7 @@ var _layout = __webpack_require__(49291);
 var _messagebubble = _interopRequireWildcard(__webpack_require__(1243));
 var _messagegroup = _interopRequireWildcard(__webpack_require__(97806));
 var _typingindicator = _interopRequireDefault(__webpack_require__(85134));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
@@ -182291,8 +182436,7 @@ var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _search_box_controller = _interopRequireWildcard(__webpack_require__(47843));
 var _list = _interopRequireDefault(__webpack_require__(71442));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // STYLE list
 const LIST_CLASS_PREFIX = 'dx-list';
@@ -182618,46 +182762,48 @@ exports["default"] = void 0;
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _devices = _interopRequireDefault(__webpack_require__(65951));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
-var _calendar = _interopRequireDefault(__webpack_require__(22195));
 var _ui = _interopRequireDefault(__webpack_require__(98894));
 var _ui2 = _interopRequireDefault(__webpack_require__(10720));
-var _ui3 = _interopRequireDefault(__webpack_require__(20876));
-var _ui4 = _interopRequireDefault(__webpack_require__(11118));
+var _widget = _interopRequireDefault(__webpack_require__(89275));
+var _calendar = _interopRequireDefault(__webpack_require__(92874));
+var _scrollable = _interopRequireDefault(__webpack_require__(85326));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
-class SchedulerCalendar extends _ui4.default {
-  show(target) {
-    if (!this._isMobileLayout()) {
-      this._overlay.option('target', target);
+class SchedulerCalendar extends _widget.default {
+  async show(target) {
+    var _this$_overlay2;
+    if (!SchedulerCalendar._isMobileLayout()) {
+      var _this$_overlay;
+      (_this$_overlay = this._overlay) === null || _this$_overlay === void 0 || _this$_overlay.option('target', target);
     }
-    this._overlay.show();
+    await ((_this$_overlay2 = this._overlay) === null || _this$_overlay2 === void 0 ? void 0 : _this$_overlay2.show());
   }
-  hide() {
-    this._overlay.hide();
+  async hide() {
+    var _this$_overlay3;
+    await ((_this$_overlay3 = this._overlay) === null || _this$_overlay3 === void 0 ? void 0 : _this$_overlay3.hide());
   }
   _keyboardHandler(opts) {
     var _this$_calendar;
-    (_this$_calendar = this._calendar) === null || _this$_calendar === void 0 || _this$_calendar._keyboardHandler(opts);
+    return ((_this$_calendar = this._calendar) === null || _this$_calendar === void 0 ? void 0 : _this$_calendar._keyboardHandler(opts)) ?? false;
   }
   _init() {
-    // @ts-expect-error
     super._init();
     this.$element();
   }
   _render() {
-    // @ts-expect-error
     super._render();
     this._renderOverlay();
   }
   _renderOverlay() {
     this.$element().addClass(CALENDAR_POPOVER_CLASS);
-    const isMobileLayout = this._isMobileLayout();
-    const overlayType = isMobileLayout ? _ui2.default : _ui.default;
-    // @ts-expect-error
-    this._overlay = this._createComponent(this.$element(), overlayType, {
+    const isMobileLayout = SchedulerCalendar._isMobileLayout();
+    const overlayConfig = {
       contentTemplate: () => this._createOverlayContent(),
-      onShown: () => this._calendar.focus(),
+      onShown: () => {
+        var _this$_calendar2;
+        (_this$_calendar2 = this._calendar) === null || _this$_calendar2 === void 0 || _this$_calendar2.focus();
+      },
       defaultOptionsRules: [{
         device: () => isMobileLayout,
         options: {
@@ -182671,58 +182817,70 @@ class SchedulerCalendar extends _ui4.default {
           enableBodyScroll: false
         }
       }]
-    });
+    };
+    if (isMobileLayout) {
+      this._overlay = this._createComponent(this.$element(), _ui2.default, overlayConfig);
+    } else {
+      this._overlay = this._createComponent(this.$element(), _ui.default, overlayConfig);
+    }
   }
   _createOverlayContent() {
     const result = (0, _renderer.default)('<div>').addClass(CALENDAR_CLASS);
-    // @ts-expect-error
     this._calendar = this._createComponent(result, _calendar.default, this._getCalendarOptions());
-    if (this._isMobileLayout()) {
+    if (SchedulerCalendar._isMobileLayout()) {
       const scrollable = this._createScrollable(result);
       return scrollable.$element();
     }
     return result;
   }
   _createScrollable(content) {
-    // @ts-expect-error
-    const result = this._createComponent('<div>', _ui3.default, {
+    const result = this._createComponent('<div>', _scrollable.default, {
       height: 'auto',
       direction: 'both'
     });
     result.$content().append(content);
     return result;
   }
-  _optionChanged(_ref) {
-    var _this$_calendar2;
-    let {
+  _optionChanged(args) {
+    var _this$_calendar3;
+    const {
       name,
       value
-    } = _ref;
+    } = args;
     switch (name) {
       case 'value':
-        (_this$_calendar2 = this._calendar) === null || _this$_calendar2 === void 0 || _this$_calendar2.option('value', value);
+        (_this$_calendar3 = this._calendar) === null || _this$_calendar3 === void 0 || _this$_calendar3.option('value', value);
         break;
       default:
         break;
     }
   }
   _getCalendarOptions() {
+    const {
+      value,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged
+    } = this.option();
     return {
-      value: this.option('value'),
-      min: this.option('min'),
-      max: this.option('max'),
-      firstDayOfWeek: this.option('firstDayOfWeek'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      onValueChanged: this.option('onValueChanged'),
-      skipFocusCheck: true,
-      tabIndex: this.option('tabIndex')
+      value,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged,
+      // @ts-expect-error skipFocusCheck is an internal Calendar property
+      skipFocusCheck: true
     };
   }
-  _isMobileLayout() {
+  static _isMobileLayout() {
     return !_devices.default.current().generic;
   }
 }
-// @ts-expect-error
 exports["default"] = SchedulerCalendar;
 (0, _component_registrator.default)('dxSchedulerCalendarPopup', SchedulerCalendar);
 
@@ -184650,9 +184808,8 @@ exports.computed = computed;
 exports.effect = effect;
 exports.signal = signal;
 exports.untracked = untracked;
-var SignalsCore = _interopRequireWildcard(__webpack_require__(70037));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+var SignalsCore = _interopRequireWildcard(__webpack_require__(64602));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function signal(initialValue) {
   return SignalsCore.signal(initialValue);
 }
@@ -187306,8 +187463,8 @@ const validatingEditorFactoryExtender = Base => class ValidatingEditorFactoryExt
     const shouldSetValidationAriaAttributes = [EDIT_MODE_CELL, EDIT_MODE_BATCH, EDIT_MODE_ROW].includes(editMode);
     if (shouldSetValidationAriaAttributes) {
       const $focusElement = this._getCurrentFocusElement($focus);
-      $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
-      $focusElement.attr('aria-invalid', true);
+      this.setAria('labelledby', inputDescriptionValues.join(' '), $focusElement);
+      this.setAria('invalid', true, $focusElement);
     }
   }
   _getCurrentFocusElement($focus) {
@@ -190083,7 +190240,7 @@ const _excluded = ["accessKey", "activeStateEnabled", "aria", "className", "clas
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const getCssClasses = model => {
   const {
     text,
@@ -191822,16 +191979,16 @@ const columnsResizer = Base => class ColumnResizerColumnFixingExtender extends B
       });
     }
   }
-  _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  _getTargetPoint(pointsByColumns, currentPoint, deltaX) {
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
     if ($transparentColumn && $transparentColumn.length) {
       const boundingRect = (0, _position.getBoundingRect)($transparentColumn.get(0));
-      if (currentX <= boundingRect.left || currentX >= boundingRect.right) {
-        return super._getTargetPoint(this._pointsByFixedColumns, currentX, deltaX);
+      if (currentPoint.x <= boundingRect.left || currentPoint.x >= boundingRect.right) {
+        return super._getTargetPoint(this._pointsByFixedColumns, currentPoint, deltaX);
       }
     }
-    return super._getTargetPoint(pointsByColumns, currentX, deltaX);
+    return super._getTargetPoint(pointsByColumns, currentPoint, deltaX);
   }
 };
 const resizing = Base => class ResizingColumnFixingExtender extends Base {
@@ -204113,6 +204270,7 @@ const CLASSES = {
   formIcon: 'dx-scheduler-form-icon',
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
+  recurrenceStartDateEditor: 'dx-scheduler-form-recurrence-start-date-editor',
   frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
   byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',
   dayOfMonthEditor: 'dx-scheduler-form-day-of-month-editor',
@@ -204187,7 +204345,7 @@ const weekDays = _date.default.getDayNames('abbreviated').map(dayName => dayName
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 class RecurrenceForm {
   constructor(scheduler) {
-    this._recurrenceRule = new _utils.RecurrenceRule('', new Date());
+    this.recurrenceRule = new _utils.RecurrenceRule('', new Date());
     this.weekDayItems = [];
     this._weekDayButtons = {};
     this._readOnly = false;
@@ -204239,12 +204397,6 @@ class RecurrenceForm {
   setReadOnly(value) {
     this._readOnly = value;
   }
-  get recurrenceRule() {
-    return this._recurrenceRule;
-  }
-  set recurrenceRule(value) {
-    this._recurrenceRule = value;
-  }
   createRecurrenceFormGroup() {
     return {
       name: RECURRENCE_GROUP_NAME,
@@ -204270,6 +204422,7 @@ class RecurrenceForm {
         template: (0, _utils.createFormIconTemplate)('clock')
       }, (0, _extend.extend)(true, (0, _utils.getStartDateCommonConfig)(this.scheduler.getFirstDayOfWeek()), {
         name: EDITOR_NAMES.recurrenceStartDateEditor,
+        cssClass: CLASSES.recurrenceStartDateEditor,
         label: {
           text: _message.default.format('dxScheduler-editorLabelStartDate')
         },
@@ -204311,6 +204464,9 @@ class RecurrenceForm {
     };
   }
   createRecurrenceRuleGroup() {
+    // Change of frequency editor's value causes rerender of the recurrencePatternGroup.
+    // To prevent focus loss in this editor, we use this flag.
+    let needRestoreFrequencyEditorFocus = false;
     return {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleRepeatGroup,
@@ -204354,11 +204510,20 @@ class RecurrenceForm {
           displayExpr: 'text',
           onContentReady: e => {
             e.component.option('value', this.recurrenceRule.frequency);
+            if (needRestoreFrequencyEditorFocus) {
+              setTimeout(() => {
+                e.component.focus();
+                needRestoreFrequencyEditorFocus = false;
+              });
+            }
           },
           onValueChanged: e => {
             const previousValue = this.recurrenceRule.frequency;
             if (previousValue === e.value) {
               return;
+            }
+            if (e.event) {
+              needRestoreFrequencyEditorFocus = true;
             }
             this.recurrenceRule.frequency = e.value;
             this.updateDayEditorsVisibility();
@@ -204378,22 +204543,30 @@ class RecurrenceForm {
       template: () => {
         const $container = (0, _renderer.default)('<div>').addClass(CLASSES.daysOfWeekButtons);
         this.weekDayItems.forEach(item => {
+          var _this$_weekDayButtons;
           const buttonContainer = (0, _renderer.default)('<div>').appendTo($container);
+          (_this$_weekDayButtons = this._weekDayButtons[item.key]) === null || _this$_weekDayButtons === void 0 || _this$_weekDayButtons.dispose();
           this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, _button.default, {
             text: item.text,
             disabled: this._readOnly,
             onContentReady: e => {
               (0, _renderer.default)(e.element).removeClass('dx-button-has-text');
+              const isSelected = this.recurrenceRule.byDay.includes(item.key);
+              e.component.option('stylingMode', isSelected ? 'contained' : 'outlined');
+              e.component.option('type', isSelected ? 'default' : 'normal');
             },
-            onClick: () => {
+            onClick: e => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
               if (isSelected) {
                 const index = this.recurrenceRule.byDay.indexOf(item.key);
                 this.recurrenceRule.byDay.splice(index, 1);
+                e.component.option('stylingMode', 'outlined');
+                e.component.option('type', 'normal');
               } else {
                 this.recurrenceRule.byDay.push(item.key);
+                e.component.option('stylingMode', 'contained');
+                e.component.option('type', 'default');
               }
-              this.updateWeekDaysButtons();
             }
           });
         });
@@ -204525,7 +204698,9 @@ class RecurrenceForm {
             'aria-label': _message.default.format('dxScheduler-recurrenceUntilDateLabel')
           },
           onContentReady: e => {
+            const repeatEndValue = this.recurrenceRule.repeatEnd;
             e.component.option('value', this.recurrenceRule.until);
+            e.component.option('disabled', repeatEndValue !== 'until');
           },
           onValueChanged: e => {
             this.recurrenceRule.until = e.value;
@@ -204548,7 +204723,9 @@ class RecurrenceForm {
             'aria-label': _message.default.format('dxScheduler-recurrenceOccurrenceLabel')
           },
           onContentReady: e => {
+            const repeatEndValue = this.recurrenceRule.repeatEnd;
             e.component.option('value', this.recurrenceRule.count ?? undefined);
+            e.component.option('disabled', repeatEndValue !== 'count');
           },
           onValueChanged: e => {
             this.recurrenceRule.count = e.value;
@@ -204557,11 +204734,11 @@ class RecurrenceForm {
       }]
     };
   }
-  updateRecurrenceFormValues(repeatEditorValue, recurrenceRuleRaw, startDate) {
+  updateRecurrenceFormValues(recurrenceRuleRaw, startDate) {
     var _this$dxForm$getEdito, _this$dxForm$getEdito2, _this$dxForm$getEdito3, _this$dxForm$getEdito4, _this$dxForm$getEdito5, _this$dxForm$getEdito6;
-    this.recurrenceRule = this.createRecurrenceRule(repeatEditorValue, recurrenceRuleRaw, startDate);
+    this.recurrenceRule = this.createRecurrenceRule(recurrenceRuleRaw, startDate);
     (_this$dxForm$getEdito = this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDateEditor)) === null || _this$dxForm$getEdito === void 0 || _this$dxForm$getEdito.option('value', this.recurrenceRule.startDate);
-    (_this$dxForm$getEdito2 = this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)) === null || _this$dxForm$getEdito2 === void 0 || _this$dxForm$getEdito2.option('value', repeatEditorValue);
+    (_this$dxForm$getEdito2 = this.dxForm.getEditor(EDITOR_NAMES.recurrencePeriodEditor)) === null || _this$dxForm$getEdito2 === void 0 || _this$dxForm$getEdito2.option('value', this.recurrenceRule.frequency);
     (_this$dxForm$getEdito3 = this.dxForm.getEditor(EDITOR_NAMES.recurrenceCountEditor)) === null || _this$dxForm$getEdito3 === void 0 || _this$dxForm$getEdito3.option('value', this.recurrenceRule.interval);
     (_this$dxForm$getEdito4 = this.dxForm.getEditor(EDITOR_NAMES.recurrenceRepeatEndEditor)) === null || _this$dxForm$getEdito4 === void 0 || _this$dxForm$getEdito4.option('value', this.recurrenceRule.repeatEnd);
     (_this$dxForm$getEdito5 = this.dxForm.getEditor(EDITOR_NAMES.recurrenceEndUntilEditor)) === null || _this$dxForm$getEdito5 === void 0 || _this$dxForm$getEdito5.option('value', this.recurrenceRule.until);
@@ -204569,16 +204746,11 @@ class RecurrenceForm {
     this.updateRepeatEndEditors();
     this.updateDayEditorsVisibility();
   }
-  createRecurrenceRule(repeatEditorValue, recurrenceRuleRaw, startDate) {
+  createRecurrenceRule(recurrenceRuleRaw, startDate) {
     const recurrenceRule = new _utils.RecurrenceRule(recurrenceRuleRaw ?? '', startDate);
-    const {
-      frequency
-    } = recurrenceRule;
-    if (frequency !== repeatEditorValue) {
-      const newRecurrenceRule = new _utils.RecurrenceRule(`freq=${repeatEditorValue};`, startDate);
+    if (recurrenceRule.byDay.length === 0) {
       const defaultByDay = [weekDays[(startDate === null || startDate === void 0 ? void 0 : startDate.getDay()) ?? this.scheduler.getFirstDayOfWeek()]];
-      newRecurrenceRule.byDay = defaultByDay;
-      return newRecurrenceRule;
+      recurrenceRule.byDay = defaultByDay;
     }
     return recurrenceRule;
   }
@@ -204590,11 +204762,11 @@ class RecurrenceForm {
     countEditor === null || countEditor === void 0 || countEditor.option('disabled', repeatEndValue !== 'count');
   }
   updateDayEditorsVisibility() {
-    this.dxForm.beginUpdate();
     const recurrencePatternGroupPath = `${RECURRENCE_GROUP_NAME}.${GROUP_NAMES.recurrenceRuleGroup}.${GROUP_NAMES.recurrencePatternGroup}`;
     const daysOfWeekGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDaysOfWeekEditor}`;
     const dayOfMonthGroup = `${recurrencePatternGroupPath}.${EDITOR_NAMES.recurrenceDayOfMonthEditor}`;
     const dayOfYearGroup = `${recurrencePatternGroupPath}.${GROUP_NAMES.recurrenceDayOfYearGroup}`;
+    this.dxForm.beginUpdate();
     this.dxForm.itemOption(daysOfWeekGroup, 'visible', false);
     this.dxForm.itemOption(dayOfMonthGroup, 'visible', false);
     this.dxForm.itemOption(dayOfYearGroup, 'visible', false);
@@ -204612,15 +204784,6 @@ class RecurrenceForm {
         break;
     }
     this.dxForm.endUpdate();
-    this.updateWeekDaysButtons();
-  }
-  updateWeekDaysButtons() {
-    Object.entries(this._weekDayButtons).forEach(_ref => {
-      let [dayKey, button] = _ref;
-      const isSelected = this.recurrenceRule.byDay.includes(dayKey);
-      button.option('stylingMode', isSelected ? 'contained' : 'outlined');
-      button.option('type', isSelected ? 'default' : 'normal');
-    });
   }
 }
 exports.RecurrenceForm = RecurrenceForm;
@@ -204854,8 +205017,7 @@ var SortingControllerModule = _interopRequireWildcard(__webpack_require__(37386)
 var _controller2 = __webpack_require__(34272);
 var _view4 = __webpack_require__(5061);
 var _widget_mock = __webpack_require__(87354);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -205607,8 +205769,7 @@ var _parse_utils = __webpack_require__(40650);
 var _utils = __webpack_require__(98013);
 var _range = __webpack_require__(8315);
 var _translator2d = __webpack_require__(50912);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-rest-params */
@@ -209753,8 +209914,7 @@ var _date2 = _interopRequireDefault(__webpack_require__(45508));
 var iteratorUtils = _interopRequireWildcard(__webpack_require__(26044));
 var _m_type = __webpack_require__(39918);
 var _globalize = _interopRequireDefault(__webpack_require__(87626));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable spellcheck/spell-checker */
 
@@ -213624,7 +213784,7 @@ const compileCriteria = (() => {
     notcontains: createStringFuncFormatter('not contains')
   });
   const compileBinary = criteria => {
-    var _fieldTypes;
+    var _fieldTypes, _fieldTypes2;
     criteria = (0, _m_utils.normalizeBinaryCriterion)(criteria);
     const op = criteria[1];
     const fieldName = criteria[0];
@@ -213642,7 +213802,7 @@ const compileCriteria = (() => {
     if ((_fieldTypes = fieldTypes) !== null && _fieldTypes !== void 0 && _fieldTypes[fieldName]) {
       value = (0, _m_utils2.convertPrimitiveValue)(fieldTypes[fieldName], value);
     }
-    return formatter((0, _m_utils2.serializePropName)(fieldName), (0, _m_utils2.serializeValue)(value, protocolVersion));
+    return formatter((0, _m_utils2.serializePropName)(fieldName), (0, _m_utils2.serializeValue)(value, protocolVersion, (_fieldTypes2 = fieldTypes) === null || _fieldTypes2 === void 0 ? void 0 : _fieldTypes2[fieldName]));
   };
   const compileUnary = criteria => {
     const op = criteria[0];
@@ -213779,7 +213939,7 @@ const createODataQueryAdapter = queryOptions => {
         jsonp: queryOptions.jsonp,
         withCredentials: queryOptions.withCredentials,
         countOnly: _countQuery,
-        deserializeDates: queryOptions.deserializeDates,
+        processDatesAsUtc: queryOptions.processDatesAsUtc,
         fieldTypes: queryOptions.fieldTypes,
         isPaged: isFinite(_take)
       });
@@ -214880,6 +215040,7 @@ const columnHeadersView = Base => class ColumnHeadersViewFilterRowExtender exten
       wrapperAttr: {
         class: filterRangeOverlayClass
       },
+      container: this.element(),
       animation: false,
       position: {
         my: 'top',
@@ -214912,10 +215073,12 @@ const columnHeadersView = Base => class ColumnHeadersViewFilterRowExtender exten
         that._renderEditor($editor, editorOptions);
         _events_engine.default.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', e => {
           if ((0, _index.normalizeKeyName)(e) === 'tab' && !e.shiftKey) {
-            e.preventDefault();
             that._hideFilterRange();
-            // @ts-expect-error
-            _events_engine.default.trigger($cell.next().find('[tabindex]').first(), 'focus');
+            if ($cell.next().length) {
+              e.preventDefault();
+              // @ts-expect-error
+              _events_engine.default.trigger($cell.next().find('[tabindex]').first(), 'focus');
+            }
           }
         });
         return (0, _renderer.default)(contentElement).addClass(that.getWidgetContainerClass());
@@ -215191,15 +215354,11 @@ const columnHeadersView = Base => class ColumnHeadersViewFilterRowExtender exten
         editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
-        // @ts-expect-error
-        _events_engine.default.trigger($menu, 'blur');
         restoreFocus();
       },
       onContentReady(e) {
         _events_engine.default.on($menu, 'blur', () => {
-          const menu = e.component;
-          // @ts-expect-error
-          menu._hideSubmenuAfterTimeout();
+          e.component._hideSubmenuAfterTimeout();
           restoreFocus();
         });
       },
@@ -215382,17 +215541,20 @@ class ApplyFilterViewController extends _m_modules.default.ViewController {
 exports.ApplyFilterViewController = ApplyFilterViewController;
 const columnsResizer = Base => class FilterRowColumnsResizerExtender extends Base {
   _startResizing() {
-    const that = this;
     // @ts-expect-error
-    super._startResizing.apply(that, arguments);
-    if (that.isResizing()) {
+    super._startResizing.apply(this, arguments);
+    if (this.isResizing()) {
       // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
-      if (overlayInstance) {
-        const cellIndex = overlayInstance.$element().closest('td').index();
-        if (cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-          overlayInstance.$content().hide();
-        }
+      const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
+      if (!overlayInstance || !this._targetPoint) {
+        return;
+      }
+      const cellIndex = overlayInstance.$element().closest('td').index();
+      const {
+        columnIndex: resizingColumnIndex
+      } = this._targetPoint;
+      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
+        overlayInstance.$content().hide();
       }
     }
   }
@@ -216846,14 +217008,14 @@ class FileItemsController {
       var _this$_fileProvider4;
       return (_this$_fileProvider4 = this._fileProvider) === null || _this$_fileProvider4 === void 0 ? void 0 : _this$_fileProvider4.moveItems([item], destinationDirectory.fileItem);
     }, itemInfo => {
-      var _this$_editingEvents10, _this$_editingEvents11;
+      var _this$_editingEvents0, _this$_editingEvents1;
       const args = {
         sourceItem: itemInfo.fileItem,
         parentDirectory: destinationDirectory.fileItem,
         itemName: itemInfo.fileItem.name,
         itemPath: (0, _utils.pathCombine)(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
       };
-      (_this$_editingEvents10 = this._editingEvents) === null || _this$_editingEvents10 === void 0 || (_this$_editingEvents11 = _this$_editingEvents10.onItemMoved) === null || _this$_editingEvents11 === void 0 || _this$_editingEvents11.call(_this$_editingEvents10, args);
+      (_this$_editingEvents0 = this._editingEvents) === null || _this$_editingEvents0 === void 0 || (_this$_editingEvents1 = _this$_editingEvents0.onItemMoved) === null || _this$_editingEvents1 === void 0 || _this$_editingEvents1.call(_this$_editingEvents0, args);
     }, needChangeCurrentDirectory => {
       itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
       if (needChangeCurrentDirectory) {
@@ -216866,22 +217028,22 @@ class FileItemsController {
   copyItems(itemInfos, destinationDirectory) {
     const actionInfo = this._createEditActionInfo('copy', itemInfos, destinationDirectory);
     return this._processEditAction(actionInfo, (args, itemInfo) => {
-      var _this$_editingEvents12, _this$_editingEvents13;
+      var _this$_editingEvents10, _this$_editingEvents11;
       args.item = itemInfo.fileItem;
       args.destinationDirectory = destinationDirectory.fileItem;
-      (_this$_editingEvents12 = this._editingEvents) === null || _this$_editingEvents12 === void 0 || (_this$_editingEvents13 = _this$_editingEvents12.onItemCopying) === null || _this$_editingEvents13 === void 0 || _this$_editingEvents13.call(_this$_editingEvents12, args);
+      (_this$_editingEvents10 = this._editingEvents) === null || _this$_editingEvents10 === void 0 || (_this$_editingEvents11 = _this$_editingEvents10.onItemCopying) === null || _this$_editingEvents11 === void 0 || _this$_editingEvents11.call(_this$_editingEvents10, args);
     }, item => {
       var _this$_fileProvider5;
       return (_this$_fileProvider5 = this._fileProvider) === null || _this$_fileProvider5 === void 0 ? void 0 : _this$_fileProvider5.copyItems([item], destinationDirectory.fileItem);
     }, itemInfo => {
-      var _this$_editingEvents14, _this$_editingEvents15;
+      var _this$_editingEvents12, _this$_editingEvents13;
       const args = {
         sourceItem: itemInfo.fileItem,
         parentDirectory: destinationDirectory.fileItem,
         itemName: itemInfo.fileItem.name,
         itemPath: (0, _utils.pathCombine)(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
       };
-      (_this$_editingEvents14 = this._editingEvents) === null || _this$_editingEvents14 === void 0 || (_this$_editingEvents15 = _this$_editingEvents14.onItemCopied) === null || _this$_editingEvents15 === void 0 || _this$_editingEvents15.call(_this$_editingEvents14, args);
+      (_this$_editingEvents12 = this._editingEvents) === null || _this$_editingEvents12 === void 0 || (_this$_editingEvents13 = _this$_editingEvents12.onItemCopied) === null || _this$_editingEvents13 === void 0 || _this$_editingEvents13.call(_this$_editingEvents12, args);
     }, needChangeCurrentDirectory => {
       if (needChangeCurrentDirectory) {
         // eslint-disable-next-line no-param-reassign
@@ -216896,15 +217058,15 @@ class FileItemsController {
     const directory = itemInfos.length > 0 ? itemInfos[0].parentDirectory : null;
     const actionInfo = this._createEditActionInfo('delete', itemInfos, directory);
     return this._processEditAction(actionInfo, (args, itemInfo) => {
-      var _this$_editingEvents16, _this$_editingEvents17;
+      var _this$_editingEvents14, _this$_editingEvents15;
       args.item = itemInfo.fileItem;
-      (_this$_editingEvents16 = this._editingEvents) === null || _this$_editingEvents16 === void 0 || (_this$_editingEvents17 = _this$_editingEvents16.onItemDeleting) === null || _this$_editingEvents17 === void 0 || _this$_editingEvents17.call(_this$_editingEvents16, args);
+      (_this$_editingEvents14 = this._editingEvents) === null || _this$_editingEvents14 === void 0 || (_this$_editingEvents15 = _this$_editingEvents14.onItemDeleting) === null || _this$_editingEvents15 === void 0 || _this$_editingEvents15.call(_this$_editingEvents14, args);
     }, item => {
       var _this$_fileProvider6;
       return (_this$_fileProvider6 = this._fileProvider) === null || _this$_fileProvider6 === void 0 ? void 0 : _this$_fileProvider6.deleteItems([item]);
     }, itemInfo => {
-      var _this$_editingEvents18, _this$_editingEvents19;
-      return (_this$_editingEvents18 = this._editingEvents) === null || _this$_editingEvents18 === void 0 || (_this$_editingEvents19 = _this$_editingEvents18.onItemDeleted) === null || _this$_editingEvents19 === void 0 ? void 0 : _this$_editingEvents19.call(_this$_editingEvents18, {
+      var _this$_editingEvents16, _this$_editingEvents17;
+      return (_this$_editingEvents16 = this._editingEvents) === null || _this$_editingEvents16 === void 0 || (_this$_editingEvents17 = _this$_editingEvents16.onItemDeleted) === null || _this$_editingEvents17 === void 0 ? void 0 : _this$_editingEvents17.call(_this$_editingEvents16, {
         item: itemInfo.fileItem
       });
     }, () => {
@@ -216934,10 +217096,10 @@ class FileItemsController {
       (_this$_securityContro3 = this._securityController) === null || _this$_securityContro3 === void 0 || _this$_securityContro3.validateMaxFileSize(fileData.size);
       (_this$_securityContro4 = this._securityController) === null || _this$_securityContro4 === void 0 || _this$_securityContro4.validateExtension(fileData.name);
       startDeferred = this._processBeforeItemEditAction(args => {
-        var _this$_editingEvents20, _this$_editingEvents21;
+        var _this$_editingEvents18, _this$_editingEvents19;
         args.fileData = fileData;
         args.destinationDirectory = destinationDirectory;
-        (_this$_editingEvents20 = this._editingEvents) === null || _this$_editingEvents20 === void 0 || (_this$_editingEvents21 = _this$_editingEvents20.onFileUploading) === null || _this$_editingEvents21 === void 0 || _this$_editingEvents21.call(_this$_editingEvents20, args);
+        (_this$_editingEvents18 = this._editingEvents) === null || _this$_editingEvents18 === void 0 || (_this$_editingEvents19 = _this$_editingEvents18.onFileUploading) === null || _this$_editingEvents19 === void 0 || _this$_editingEvents19.call(_this$_editingEvents18, args);
       });
     } else {
       // @ts-expect-error ts-error
@@ -216949,12 +217111,12 @@ class FileItemsController {
     });
     if (chunksInfo.chunkIndex === chunksInfo.chunkCount - 1) {
       result = result.done(() => {
-        var _this$_editingEvents22, _this$_editingEvents23;
+        var _this$_editingEvents20, _this$_editingEvents21;
         const args = {
           fileData,
           parentDirectory: destinationDirectory
         };
-        (_this$_editingEvents22 = this._editingEvents) === null || _this$_editingEvents22 === void 0 || (_this$_editingEvents23 = _this$_editingEvents22.onFileUploaded) === null || _this$_editingEvents23 === void 0 || _this$_editingEvents23.call(_this$_editingEvents22, args);
+        (_this$_editingEvents20 = this._editingEvents) === null || _this$_editingEvents20 === void 0 || (_this$_editingEvents21 = _this$_editingEvents20.onFileUploaded) === null || _this$_editingEvents21 === void 0 || _this$_editingEvents21.call(_this$_editingEvents20, args);
       });
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -216976,17 +217138,17 @@ class FileItemsController {
   }
   downloadItems(itemInfos) {
     const deferreds = itemInfos.map(itemInfo => this._processBeforeItemEditAction(args => {
-      var _this$_editingEvents24, _this$_editingEvents25;
+      var _this$_editingEvents22, _this$_editingEvents23;
       args.item = itemInfo.fileItem;
-      (_this$_editingEvents24 = this._editingEvents) === null || _this$_editingEvents24 === void 0 || (_this$_editingEvents25 = _this$_editingEvents24.onItemDownloading) === null || _this$_editingEvents25 === void 0 || _this$_editingEvents25.call(_this$_editingEvents24, args);
+      (_this$_editingEvents22 = this._editingEvents) === null || _this$_editingEvents22 === void 0 || (_this$_editingEvents23 = _this$_editingEvents22.onItemDownloading) === null || _this$_editingEvents23 === void 0 || _this$_editingEvents23.call(_this$_editingEvents22, args);
     }, itemInfo));
     return (0, _deferred.when)(...deferreds).then(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     () => {
-      var _this$_fileProvider10;
+      var _this$_fileProvider0;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       const items = itemInfos.map(i => i.fileItem);
-      return (0, _deferred.when)(this._getItemActionResult((_this$_fileProvider10 = this._fileProvider) === null || _this$_fileProvider10 === void 0 ? void 0 : _this$_fileProvider10.downloadItems(items))).then(() => {}, errorInfo => {
+      return (0, _deferred.when)(this._getItemActionResult((_this$_fileProvider0 = this._fileProvider) === null || _this$_fileProvider0 === void 0 ? void 0 : _this$_fileProvider0.downloadItems(items))).then(() => {}, errorInfo => {
         this._raiseDownloadItemsError(itemInfos, itemInfos[0].parentDirectory, errorInfo);
       });
     }, errorInfo => {
@@ -216995,10 +217157,10 @@ class FileItemsController {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getItemContent(itemInfos) {
-    var _this$_fileProvider11;
+    var _this$_fileProvider1;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const items = itemInfos.map(i => i.fileItem);
-    return (0, _deferred.when)((_this$_fileProvider11 = this._fileProvider) === null || _this$_fileProvider11 === void 0 ? void 0 : _this$_fileProvider11.getItemsContent(items));
+    return (0, _deferred.when)((_this$_fileProvider1 = this._fileProvider) === null || _this$_fileProvider1 === void 0 ? void 0 : _this$_fileProvider1.getItemsContent(items));
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
@@ -219709,8 +219871,7 @@ var _compatibility = __webpack_require__(96356);
 var _controller = __webpack_require__(67278);
 var _options = __webpack_require__(1658);
 var _view = __webpack_require__(10171);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 
 /***/ }),
 
@@ -220178,8 +220339,7 @@ Object.defineProperty(exports, "isLoadResultObject", ({
   }
 }));
 var _m_custom_store = _interopRequireWildcard(__webpack_require__(12764));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 
 /***/ }),
 
@@ -220466,7 +220626,8 @@ const getStartDateCommonConfig = firstDayOfWeek => ({
     type: 'date',
     useMaskBehavior: true,
     calendarOptions: {
-      firstDayOfWeek
+      firstDayOfWeek,
+      showTodayButton: true
     }
   }
 });
@@ -220600,7 +220761,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.applyUserState = exports.addExpandColumn = void 0;
 exports.assignColumns = assignColumns;
-exports.isFirstOrLastColumn = exports.isColumnNameRequired = exports.isColumnFixed = exports.getValueDataType = exports.getSerializationFormat = exports.getRowCount = exports.getParentBandColumns = exports.getFixedPosition = exports.getDataColumns = exports.getCustomizeTextByDataType = exports.getColumnIndexByVisibleIndex = exports.getColumnHeaderCellSelector = exports.getColumnFullPath = exports.getColumnByIndexes = exports.getChildrenByBandColumn = exports.getAlignmentByDataType = exports.fireOptionChanged = exports.fireColumnsChanged = exports.findColumn = exports.digitsCount = exports.defaultSetCellValue = exports.customizeTextForBooleanDataType = exports.createColumnsFromOptions = exports.createColumnsFromDataSource = exports.createColumn = exports.convertOwnerBandToColumnReference = exports.columnOptionCore = exports.calculateColspan = void 0;
+exports.getColumnHeaderCellSelector = exports.getColumnFullPath = exports.getColumnByIndexes = exports.getChildrenByBandColumn = exports.getAlignmentByDataType = exports.fireOptionChanged = exports.fireColumnsChanged = exports.findColumn = exports.digitsCount = exports.defaultSetCellValue = exports.customizeTextForBooleanDataType = exports.createColumnsFromOptions = exports.createColumnsFromDataSource = exports.createColumn = exports.convertOwnerBandToColumnReference = exports.columnOptionCore = exports.calculateColspan = void 0;
+exports.getColumnIndexByVisibleIndex = getColumnIndexByVisibleIndex;
+exports.isFirstOrLastColumn = exports.isColumnNameRequired = exports.isColumnFixed = exports.getValueDataType = exports.getSerializationFormat = exports.getRowCount = exports.getParentBandColumns = exports.getFixedPosition = exports.getDataColumns = exports.getCustomizeTextByDataType = void 0;
 exports.isSortOrderValid = isSortOrderValid;
 exports.updateSortOrderWhenGrouping = exports.updateSerializers = exports.updateIndexes = exports.updateColumnVisibleIndexes = exports.updateColumnSortIndexes = exports.updateColumnIndexes = exports.updateColumnGroupIndexes = exports.updateColumnChanges = exports.strictParseNumber = exports.sortColumns = exports.setFilterOperationsAsDefaultValues = exports.resetColumnsCache = exports.resetBandColumnsCache = exports.processExpandColumns = exports.processBandColumns = exports.numberToString = exports.moveColumnToGroup = exports.mergeColumns = void 0;
 var _number = _interopRequireDefault(__webpack_require__(52771));
@@ -220969,20 +221132,37 @@ const updateColumnVisibleIndexes = function (that, currentColumn) {
   (0, _array.normalizeIndexes)(result, 'visibleIndex', currentColumn);
 };
 exports.updateColumnVisibleIndexes = updateColumnVisibleIndexes;
-const getColumnIndexByVisibleIndex = function (that, visibleIndex, location) {
-  // @ts-expect-error
-  const rowIndex = (0, _type.isObject)(visibleIndex) ? visibleIndex.rowIndex : null;
-  const columns = location === _const4.GROUP_LOCATION ? that.getGroupColumns() : location === _const4.COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex, true);
-  let column;
-  // @ts-expect-error
-  visibleIndex = (0, _type.isObject)(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
-  column = columns[visibleIndex];
-  if (column && column.type === _const4.GROUP_COMMAND_COLUMN_NAME) {
-    column = that._columns.filter(col => column.type === col.type)[0] || column;
+function getColumnsByLocation(that, location, rowIndex) {
+  switch (location) {
+    case _const4.GROUP_LOCATION:
+      return that.getGroupColumns();
+    case _const4.COLUMN_CHOOSER_LOCATION:
+      return that.getChooserColumns();
+    default:
+      return that.getVisibleColumns(rowIndex);
   }
-  return column && (0, _type.isDefined)(column.index) ? column.index : -1;
-};
-exports.getColumnIndexByVisibleIndex = getColumnIndexByVisibleIndex;
+}
+function correctVisibleIndex(that, visibleIndex) {
+  return (0, _type.isObject)(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+}
+function getColumnByVisibleIndex(that, visibleIndex, location) {
+  const rowIndex = (0, _type.isObject)(visibleIndex) ? visibleIndex.rowIndex : null;
+  const columns = getColumnsByLocation(that, location, rowIndex);
+  const correctedVisibleIndex = correctVisibleIndex(that, visibleIndex);
+  const column = columns[correctedVisibleIndex];
+  if ((column === null || column === void 0 ? void 0 : column.type) === _const4.GROUP_COMMAND_COLUMN_NAME) {
+    return that._columns.filter(col => column.type === col.type)[0] || column;
+  }
+  if (that.isVirtualMode() && (!column || column.command === _const4.VIRTUAL_COMMAND_COLUMN_NAME)) {
+    const columnIndexOffset = that.getColumnIndexOffset();
+    return that.getVisibleColumns(rowIndex, true)[correctedVisibleIndex + columnIndexOffset];
+  }
+  return column;
+}
+function getColumnIndexByVisibleIndex(that, visibleIndex, location) {
+  const column = getColumnByVisibleIndex(that, visibleIndex, location);
+  return (column === null || column === void 0 ? void 0 : column.index) ?? -1;
+}
 const moveColumnToGroup = function (that, column, groupIndex) {
   const groupColumns = that.getGroupColumns();
   let i;
@@ -222278,20 +222458,20 @@ const implementationsMap = exports.implementationsMap = {
     return elementSizeHelper('innerWidth', ...args);
   },
   setInnerWidth: function () {
-    for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-      args[_key10] = arguments[_key10];
+    for (var _len0 = arguments.length, args = new Array(_len0), _key0 = 0; _key0 < _len0; _key0++) {
+      args[_key0] = arguments[_key0];
     }
     return elementSizeHelper('innerWidth', ...args);
   },
   getInnerHeight: function () {
-    for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-      args[_key11] = arguments[_key11];
+    for (var _len1 = arguments.length, args = new Array(_len1), _key1 = 0; _key1 < _len1; _key1++) {
+      args[_key1] = arguments[_key1];
     }
     return elementSizeHelper('innerHeight', ...args);
   },
   setInnerHeight: function () {
-    for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-      args[_key12] = arguments[_key12];
+    for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+      args[_key10] = arguments[_key10];
     }
     return elementSizeHelper('innerHeight', ...args);
   }
@@ -222393,6 +222573,25 @@ const getOffset = el => {
   };
 };
 exports.getOffset = getOffset;
+
+/***/ }),
+
+/***/ 64602:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Computed: () => (/* binding */ y),
+/* harmony export */   Effect: () => (/* binding */ p),
+/* harmony export */   Signal: () => (/* binding */ u),
+/* harmony export */   batch: () => (/* binding */ r),
+/* harmony export */   computed: () => (/* binding */ w),
+/* harmony export */   effect: () => (/* binding */ E),
+/* harmony export */   signal: () => (/* binding */ d),
+/* harmony export */   untracked: () => (/* binding */ n)
+/* harmony export */ });
+var i=Symbol.for("preact-signals");function t(){if(!(s>1)){var i,t=!1;while(void 0!==h){var r=h;h=void 0;f++;while(void 0!==r){var o=r.o;r.o=void 0;r.f&=-3;if(!(8&r.f)&&c(r))try{r.c()}catch(r){if(!t){i=r;t=!0}}r=o}}f=0;s--;if(t)throw i}else s--}function r(i){if(s>0)return i();s++;try{return i()}finally{t()}}var o=void 0;function n(i){var t=o;o=void 0;try{return i()}finally{o=t}}var h=void 0,s=0,f=0,v=0;function e(i){if(void 0!==o){var t=i.n;if(void 0===t||t.t!==o){t={i:0,S:i,p:o.s,n:void 0,t:o,e:void 0,x:void 0,r:t};if(void 0!==o.s)o.s.n=t;o.s=t;i.n=t;if(32&o.f)i.S(t);return t}else if(-1===t.i){t.i=0;if(void 0!==t.n){t.n.p=t.p;if(void 0!==t.p)t.p.n=t.n;t.p=o.s;t.n=void 0;o.s.n=t;o.s=t}return t}}}function u(i,t){this.v=i;this.i=0;this.n=void 0;this.t=void 0;this.W=null==t?void 0:t.watched;this.Z=null==t?void 0:t.unwatched;this.name=null==t?void 0:t.name}u.prototype.brand=i;u.prototype.h=function(){return!0};u.prototype.S=function(i){var t=this,r=this.t;if(r!==i&&void 0===i.e){i.x=r;this.t=i;if(void 0!==r)r.e=i;else n(function(){var i;null==(i=t.W)||i.call(t)})}};u.prototype.U=function(i){var t=this;if(void 0!==this.t){var r=i.e,o=i.x;if(void 0!==r){r.x=o;i.e=void 0}if(void 0!==o){o.e=r;i.x=void 0}if(i===this.t){this.t=o;if(void 0===o)n(function(){var i;null==(i=t.Z)||i.call(t)})}}};u.prototype.subscribe=function(i){var t=this;return E(function(){var r=t.value,n=o;o=void 0;try{i(r)}finally{o=n}},{name:"sub"})};u.prototype.valueOf=function(){return this.value};u.prototype.toString=function(){return this.value+""};u.prototype.toJSON=function(){return this.value};u.prototype.peek=function(){var i=o;o=void 0;try{return this.value}finally{o=i}};Object.defineProperty(u.prototype,"value",{get:function(){var i=e(this);if(void 0!==i)i.i=this.i;return this.v},set:function(i){if(i!==this.v){if(f>100)throw new Error("Cycle detected");this.v=i;this.i++;v++;s++;try{for(var r=this.t;void 0!==r;r=r.x)r.t.N()}finally{t()}}}});function d(i,t){return new u(i,t)}function c(i){for(var t=i.s;void 0!==t;t=t.n)if(t.S.i!==t.i||!t.S.h()||t.S.i!==t.i)return!0;return!1}function a(i){for(var t=i.s;void 0!==t;t=t.n){var r=t.S.n;if(void 0!==r)t.r=r;t.S.n=t;t.i=-1;if(void 0===t.n){i.s=t;break}}}function l(i){var t=i.s,r=void 0;while(void 0!==t){var o=t.p;if(-1===t.i){t.S.U(t);if(void 0!==o)o.n=t.n;if(void 0!==t.n)t.n.p=o}else r=t;t.S.n=t.r;if(void 0!==t.r)t.r=void 0;t=o}i.s=r}function y(i,t){u.call(this,void 0);this.x=i;this.s=void 0;this.g=v-1;this.f=4;this.W=null==t?void 0:t.watched;this.Z=null==t?void 0:t.unwatched;this.name=null==t?void 0:t.name}y.prototype=new u;y.prototype.h=function(){this.f&=-3;if(1&this.f)return!1;if(32==(36&this.f))return!0;this.f&=-5;if(this.g===v)return!0;this.g=v;this.f|=1;if(this.i>0&&!c(this)){this.f&=-2;return!0}var i=o;try{a(this);o=this;var t=this.x();if(16&this.f||this.v!==t||0===this.i){this.v=t;this.f&=-17;this.i++}}catch(i){this.v=i;this.f|=16;this.i++}o=i;l(this);this.f&=-2;return!0};y.prototype.S=function(i){if(void 0===this.t){this.f|=36;for(var t=this.s;void 0!==t;t=t.n)t.S.S(t)}u.prototype.S.call(this,i)};y.prototype.U=function(i){if(void 0!==this.t){u.prototype.U.call(this,i);if(void 0===this.t){this.f&=-33;for(var t=this.s;void 0!==t;t=t.n)t.S.U(t)}}};y.prototype.N=function(){if(!(2&this.f)){this.f|=6;for(var i=this.t;void 0!==i;i=i.x)i.t.N()}};Object.defineProperty(y.prototype,"value",{get:function(){if(1&this.f)throw new Error("Cycle detected");var i=e(this);this.h();if(void 0!==i)i.i=this.i;if(16&this.f)throw this.v;return this.v}});function w(i,t){return new y(i,t)}function _(i){var r=i.u;i.u=void 0;if("function"==typeof r){s++;var n=o;o=void 0;try{r()}catch(t){i.f&=-2;i.f|=8;b(i);throw t}finally{o=n;t()}}}function b(i){for(var t=i.s;void 0!==t;t=t.n)t.S.U(t);i.x=void 0;i.s=void 0;_(i)}function g(i){if(o!==this)throw new Error("Out-of-order effect");l(this);o=i;this.f&=-2;if(8&this.f)b(this);t()}function p(i,t){this.x=i;this.u=void 0;this.s=void 0;this.o=void 0;this.f=32;this.name=null==t?void 0:t.name}p.prototype.c=function(){var i=this.S();try{if(8&this.f)return;if(void 0===this.x)return;var t=this.x();if("function"==typeof t)this.u=t}finally{i()}};p.prototype.S=function(){if(1&this.f)throw new Error("Cycle detected");this.f|=1;this.f&=-9;_(this);a(this);s++;var i=o;o=this;return g.bind(this,i)};p.prototype.N=function(){if(!(2&this.f)){this.f|=2;this.o=h;h=this}};p.prototype.d=function(){this.f|=8;if(!(1&this.f))b(this)};p.prototype.dispose=function(){this.d()};function E(i,t){var r=new p(i,t);try{r.c()}catch(i){r.d();throw i}var o=r.d.bind(r);o[Symbol.dispose]=o;return o}//# sourceMappingURL=signals-core.module.js.map
+
 
 /***/ }),
 
@@ -222767,8 +222966,8 @@ const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-comp
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
 class CompactAppointmentsHelper {
   constructor(instance) {
-    this.instance = instance;
     this.elements = [];
+    this.instance = instance;
   }
   render(options) {
     const {
@@ -222791,7 +222990,9 @@ class CompactAppointmentsHelper {
   }
   _onButtonClick(e, options) {
     const $button = (0, _renderer.default)(e.element);
-    this.instance.showAppointmentTooltipCore($button, $button.data('items'), this._getExtraOptionsForTooltip(options, $button));
+    this.instance.showAppointmentTooltipCore($button,
+    // @ts-expect-error
+    $button.data('items'), this._getExtraOptionsForTooltip(options, $button));
   }
   _getExtraOptionsForTooltip(options, $appointmentCollector) {
     return {
@@ -222836,6 +223037,7 @@ class CompactAppointmentsHelper {
   }
   _createCompactButton(template, options) {
     const $button = this._createCompactButtonElement(options);
+    // @ts-expect-error
     return this.instance._createComponent($button, _button.default, {
       type: 'default',
       width: options.width,
@@ -222867,7 +223069,7 @@ class CompactAppointmentsHelper {
       sortedIndex,
       items
     } = _ref;
-    const appointmentDate = this._getDateText(items[0].appointment);
+    const appointmentDate = this._getDateText(items[0].appointment, items[0].targetedAppointment);
     const result = (0, _renderer.default)('<div>').addClass(APPOINTMENT_COLLECTOR_CLASS).attr('aria-roledescription', appointmentDate).toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact).appendTo($container);
     result.data(_constants.APPOINTMENT_SETTINGS_KEY, {
       sortedIndex
@@ -222901,21 +223103,12 @@ class CompactAppointmentsHelper {
   _localizeDate(date) {
     return `${_date.default.format(date, 'monthAndDay')}, ${_date.default.format(date, 'year')}`;
   }
-  _getStartDate(appointment) {
-    const date = appointment.startDate;
-    return date ? new Date(date) : null;
-  }
-  _getEndDate(appointment) {
-    const date = appointment.endDate;
-    return date ? new Date(date) : null;
-  }
-  _getDateText(appointment) {
-    const startDate = this.instance._dataAccessors.get('startDate', appointment);
-    const endDate = this.instance._dataAccessors.get('endDate', appointment);
-    const startDateText = startDate ? this._localizeDate(startDate) : '';
-    const endDateText = endDate ? this._localizeDate(endDate) : '';
-    const dateText = startDateText === endDateText ? `${startDateText}` : `${startDateText} - ${endDateText}`;
-    return `${dateText}`;
+  _getDateText(appointment, targetedAppointment) {
+    const startDate = (targetedAppointment === null || targetedAppointment === void 0 ? void 0 : targetedAppointment.displayStartDate) ?? appointment.startDate;
+    const endDate = (targetedAppointment === null || targetedAppointment === void 0 ? void 0 : targetedAppointment.displayEndDate) ?? appointment.endDate;
+    const startDateText = this._localizeDate(startDate);
+    const endDateText = this._localizeDate(endDate);
+    return startDateText === endDateText ? startDateText : `${startDateText} - ${endDateText}`;
   }
 }
 exports.CompactAppointmentsHelper = CompactAppointmentsHelper;
@@ -223636,8 +223829,7 @@ var _m_icon = __webpack_require__(42463);
 var _collection_widget = _interopRequireDefault(__webpack_require__(12191));
 var _connector = _interopRequireDefault(__webpack_require__(95094));
 var _stepper_item = _interopRequireWildcard(__webpack_require__(1452));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const STEPPER_CLASS = exports.STEPPER_CLASS = 'dx-stepper';
 const STEP_LIST_CLASS = exports.STEP_LIST_CLASS = 'dx-step-list';
@@ -226891,26 +227083,26 @@ class FileManagerDetailsItemList extends _uiFile_manager3.default {
     }
   }
   _setSelectedItemKeys(itemKeys) {
-    var _this$_filesView10;
-    (_this$_filesView10 = this._filesView) === null || _this$_filesView10 === void 0 || _this$_filesView10.option('selectedRowKeys', itemKeys);
+    var _this$_filesView0;
+    (_this$_filesView0 = this._filesView) === null || _this$_filesView0 === void 0 || _this$_filesView0.option('selectedRowKeys', itemKeys);
   }
   _setFocusedItemKey(itemKey) {
-    var _this$_filesView11;
-    (_this$_filesView11 = this._filesView) === null || _this$_filesView11 === void 0 || _this$_filesView11.option('focusedRowKey', itemKey);
+    var _this$_filesView1;
+    (_this$_filesView1 = this._filesView) === null || _this$_filesView1 === void 0 || _this$_filesView1.option('focusedRowKey', itemKey);
   }
   clearSelection() {
     if (this._isMultipleSelectionMode()) {
-      var _this$_filesView12;
-      (_this$_filesView12 = this._filesView) === null || _this$_filesView12 === void 0 || _this$_filesView12.clearSelection();
+      var _this$_filesView10;
+      (_this$_filesView10 = this._filesView) === null || _this$_filesView10 === void 0 || _this$_filesView10.clearSelection();
     } else {
-      var _this$_filesView13;
-      (_this$_filesView13 = this._filesView) === null || _this$_filesView13 === void 0 || _this$_filesView13.option('focusedRowIndex', -1);
+      var _this$_filesView11;
+      (_this$_filesView11 = this._filesView) === null || _this$_filesView11 === void 0 || _this$_filesView11.option('focusedRowIndex', -1);
     }
   }
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/no-misused-promises
   refresh(options, operation) {
-    var _this$_filesView14, _this$_refreshDeferre;
+    var _this$_filesView12, _this$_refreshDeferre;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const actualOptions = {
       dataSource: this._createDataSource()
@@ -226929,20 +227121,20 @@ class FileManagerDetailsItemList extends _uiFile_manager3.default {
       };
       this._needResetScrollPosition = true;
     }
-    (_this$_filesView14 = this._filesView) === null || _this$_filesView14 === void 0 || _this$_filesView14.option(actualOptions);
+    (_this$_filesView12 = this._filesView) === null || _this$_filesView12 === void 0 || _this$_filesView12.option(actualOptions);
     // @ts-expect-error ts-error
     this._refreshDeferred = new _deferred.Deferred();
     return (_this$_refreshDeferre = this._refreshDeferred) === null || _this$_refreshDeferre === void 0 ? void 0 : _this$_refreshDeferre.promise();
   }
   _getScrollable() {
-    var _this$_filesView15;
-    return (_this$_filesView15 = this._filesView) === null || _this$_filesView15 === void 0 ? void 0 : _this$_filesView15.getScrollable();
+    var _this$_filesView13;
+    return (_this$_filesView13 = this._filesView) === null || _this$_filesView13 === void 0 ? void 0 : _this$_filesView13.getScrollable();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getSelectedItems() {
     if (this._isMultipleSelectionMode()) {
-      var _this$_filesView16;
-      return (_this$_filesView16 = this._filesView) === null || _this$_filesView16 === void 0 ? void 0 : _this$_filesView16.getSelectedRowsData();
+      var _this$_filesView14;
+      return (_this$_filesView14 = this._filesView) === null || _this$_filesView14 === void 0 ? void 0 : _this$_filesView14.getSelectedRowsData();
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._focusedItem && !this._isParentDirectoryItem(this._focusedItem) ? [this._focusedItem] : [];
@@ -227523,8 +227715,7 @@ var _view2 = __webpack_require__(39706);
 var _main_view2 = __webpack_require__(26893);
 var _options = __webpack_require__(41932);
 var _options_controller2 = __webpack_require__(42015);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
@@ -229883,8 +230074,12 @@ class Lookup extends _m_drop_down_list.default {
     return '';
   }
   _renderInput() {
-    this._$field = (0, _renderer.default)('<div>').addClass(LOOKUP_FIELD_CLASS);
-    this._applyInputAttributes(this.option('inputAttr'));
+    const {
+      inputAttr
+    } = this.option();
+    this._$field = (0, _renderer.default)('<div>');
+    this._applyInputAttributes(inputAttr);
+    this._$field.addClass(LOOKUP_FIELD_CLASS);
     const $arrow = (0, _renderer.default)('<div>').addClass(LOOKUP_ARROW_CLASS);
     this._$fieldWrapper = (0, _renderer.default)('<div>').addClass(LOOKUP_FIELD_WRAPPER_CLASS).append(this._$field).append($arrow).appendTo(this.$element());
   }
@@ -230478,8 +230673,8 @@ class Lookup extends _m_drop_down_list.default {
         var _this$_searchBox7;
         (_this$_searchBox7 = this._searchBox) === null || _this$_searchBox7 === void 0 || _this$_searchBox7.focus();
       } else {
-        var _this$_list10;
-        (_this$_list10 = this._list) === null || _this$_list10 === void 0 || _this$_list10.focus();
+        var _this$_list0;
+        (_this$_list0 = this._list) === null || _this$_list0 === void 0 || _this$_list0.focus();
       }
     });
   }
@@ -230494,8 +230689,8 @@ class Lookup extends _m_drop_down_list.default {
     this._selectListItem(e.itemData, e.event.currentTarget);
   }
   _selectListItem(itemData, target) {
-    var _this$_list11;
-    (_this$_list11 = this._list) === null || _this$_list11 === void 0 || _this$_list11.selectItem(target);
+    var _this$_list1;
+    (_this$_list1 = this._list) === null || _this$_list1 === void 0 || _this$_list1.selectItem(target);
     const {
       applyValueMode
     } = this.option();
@@ -230504,10 +230699,10 @@ class Lookup extends _m_drop_down_list.default {
     }
   }
   _currentSelectedItem() {
-    var _this$_list12;
+    var _this$_list10;
     return this.option('grouped')
     // @ts-expect-error ts-error
-    ? this._list.option('selectedItems[0]').items[0] : (_this$_list12 = this._list) === null || _this$_list12 === void 0 ? void 0 : _this$_list12.option('selectedItems[0]');
+    ? this._list.option('selectedItems[0]').items[0] : (_this$_list10 = this._list) === null || _this$_list10 === void 0 ? void 0 : _this$_list10.option('selectedItems[0]');
   }
   _resetValue(e) {
     this._saveValueChangeEvent(e.event);
@@ -230819,8 +231014,7 @@ var _emitter_registrator = _interopRequireDefault(__webpack_require__(81411));
 var _index = __webpack_require__(98834);
 var iteratorUtils = _interopRequireWildcard(__webpack_require__(21274));
 var _math = __webpack_require__(50254);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DX_PREFIX = 'dx';
 const TRANSFORM = 'transform';
@@ -231162,14 +231356,28 @@ var _events_engine = _interopRequireDefault(__webpack_require__(92774));
 var _remove = __webpack_require__(28630);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function nodesByEvent(event) {
-  return event && [event.target, event.delegateTarget, event.relatedTarget, event.currentTarget].filter(node => !!node);
+  return event && [event.target, event.delegateTarget, event.relatedTarget, event.currentTarget].reduce((res, node) => {
+    if (!!node && !res.includes(node)) {
+      res.push(node);
+    }
+    return res;
+  }, []);
 }
 const subscribeNodesDisposing = (event, callback) => {
-  _events_engine.default.one(nodesByEvent(event), _remove.removeEvent, callback);
+  const nodes = nodesByEvent(event);
+  const onceCallback = function () {
+    _events_engine.default.off(nodes, _remove.removeEvent, onceCallback);
+    return callback(...arguments);
+  };
+  _events_engine.default.on(nodes, _remove.removeEvent, onceCallback);
+  return {
+    onceCallback,
+    nodes
+  };
 };
 exports.subscribeNodesDisposing = subscribeNodesDisposing;
-const unsubscribeNodesDisposing = (event, callback) => {
-  _events_engine.default.off(nodesByEvent(event), _remove.removeEvent, callback);
+const unsubscribeNodesDisposing = (event, callback, nodes) => {
+  _events_engine.default.off(nodes || nodesByEvent(event), _remove.removeEvent, callback);
 };
 exports.unsubscribeNodesDisposing = unsubscribeNodesDisposing;
 
@@ -231300,8 +231508,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.registerKeyboardAction = void 0;
 var accessibility = _interopRequireWildcard(__webpack_require__(16191));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 const registerKeyboardAction = function (viewName, instance, $element, selector, action) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let executeKeyDown = args => {};
@@ -232462,44 +232669,57 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
       }
     };
   }
+  _getBandColumnVisibility(columnIndex) {
+    const childColumns = this._columnsController.getChildrenByBandColumn(columnIndex, true);
+    return !!childColumns.some(column => !!column.visible);
+  }
+  _getColumnVisibility(columnIndex, isNodeSelected) {
+    const column = this._columnsController.columnOption(columnIndex);
+    const selectionOptions = this.option('columnChooser.selection');
+    const recursive = selectionOptions === null || selectionOptions === void 0 ? void 0 : selectionOptions.recursive;
+    if (recursive && column !== null && column !== void 0 && column.hasColumns) {
+      return this._getBandColumnVisibility(columnIndex);
+    }
+    return isNodeSelected;
+  }
+  _updateColumnVisibility(nodes) {
+    nodes.forEach(node => {
+      const columnIndex = node.itemData.id;
+      const isVisible = this._getColumnVisibility(columnIndex, node.selected);
+      this._columnsController.columnOption(columnIndex, 'visible', isVisible);
+    });
+  }
+  _getOrderedFlatNodes(nodes) {
+    const getFlattenedNodesRecursive = (sourceNodes, flatNodesArray) => sourceNodes.reduce((result, node) => {
+      result.push(node);
+      if (node.children.length) {
+        getFlattenedNodesRecursive(node.children, result);
+      }
+      return result;
+    }, flatNodesArray);
+    // Band columns should be updated after regular columns
+    return getFlattenedNodesRecursive(nodes, []).reverse();
+  }
   _prepareSelectModeConfig() {
-    const that = this;
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-    const getFlatNodes = nodes => {
-      const addNodesToArray = (nodes, flatNodesArray) => nodes.reduce((result, node) => {
-        result.push(node);
-        if (node.children.length) {
-          addNodesToArray(node.children, result);
-        }
-        return result;
-      }, flatNodesArray);
-      return addNodesToArray(nodes, []);
-    };
     const updateSelection = (e, nodes) => {
       nodes.filter(node => node.itemData.allowHiding === false).forEach(node => e.component.selectItem(node.key));
-    };
-    const updateColumnVisibility = nodes => {
-      nodes.forEach(node => {
-        const columnIndex = node.itemData.id;
-        const isVisible = node.selected !== false;
-        that._columnsController.columnOption(columnIndex, 'visible', isVisible);
-      });
     };
     let isUpdatingSelection = false;
     const selectionChangedHandler = e => {
       if (isUpdatingSelection) {
         return;
       }
-      const nodes = getFlatNodes(e.component.getNodes());
+      const nodes = this._getOrderedFlatNodes(e.component.getNodes());
       e.component.beginUpdate();
       isUpdatingSelection = true;
       updateSelection(e, nodes);
       e.component.endUpdate();
       isUpdatingSelection = false;
-      that.component.beginUpdate();
+      this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
-      updateColumnVisibility(nodes);
-      that.component.endUpdate();
+      this._updateColumnVisibility(nodes);
+      this.component.endUpdate();
       this._isUpdatingColumnVisibility = false;
     };
     return {
@@ -233259,23 +233479,6 @@ const headerFilterModule = exports.headerFilterModule = {
     }
   }
 };
-
-/***/ }),
-
-/***/ 70037:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Signal: () => (/* binding */ u),
-/* harmony export */   batch: () => (/* binding */ r),
-/* harmony export */   computed: () => (/* binding */ w),
-/* harmony export */   effect: () => (/* binding */ E),
-/* harmony export */   signal: () => (/* binding */ d),
-/* harmony export */   untracked: () => (/* binding */ n)
-/* harmony export */ });
-var i=Symbol.for("preact-signals");function t(){if(!(s>1)){var i,t=!1;while(void 0!==h){var r=h;h=void 0;f++;while(void 0!==r){var o=r.o;r.o=void 0;r.f&=-3;if(!(8&r.f)&&c(r))try{r.c()}catch(r){if(!t){i=r;t=!0}}r=o}}f=0;s--;if(t)throw i}else s--}function r(i){if(s>0)return i();s++;try{return i()}finally{t()}}var o=void 0;function n(i){var t=o;o=void 0;try{return i()}finally{o=t}}var h=void 0,s=0,f=0,v=0;function e(i){if(void 0!==o){var t=i.n;if(void 0===t||t.t!==o){t={i:0,S:i,p:o.s,n:void 0,t:o,e:void 0,x:void 0,r:t};if(void 0!==o.s)o.s.n=t;o.s=t;i.n=t;if(32&o.f)i.S(t);return t}else if(-1===t.i){t.i=0;if(void 0!==t.n){t.n.p=t.p;if(void 0!==t.p)t.p.n=t.n;t.p=o.s;t.n=void 0;o.s.n=t;o.s=t}return t}}}function u(i){this.v=i;this.i=0;this.n=void 0;this.t=void 0}u.prototype.brand=i;u.prototype.h=function(){return!0};u.prototype.S=function(i){if(this.t!==i&&void 0===i.e){i.x=this.t;if(void 0!==this.t)this.t.e=i;this.t=i}};u.prototype.U=function(i){if(void 0!==this.t){var t=i.e,r=i.x;if(void 0!==t){t.x=r;i.e=void 0}if(void 0!==r){r.e=t;i.x=void 0}if(i===this.t)this.t=r}};u.prototype.subscribe=function(i){var t=this;return E(function(){var r=t.value,n=o;o=void 0;try{i(r)}finally{o=n}})};u.prototype.valueOf=function(){return this.value};u.prototype.toString=function(){return this.value+""};u.prototype.toJSON=function(){return this.value};u.prototype.peek=function(){var i=o;o=void 0;try{return this.value}finally{o=i}};Object.defineProperty(u.prototype,"value",{get:function(){var i=e(this);if(void 0!==i)i.i=this.i;return this.v},set:function(i){if(i!==this.v){if(f>100)throw new Error("Cycle detected");this.v=i;this.i++;v++;s++;try{for(var r=this.t;void 0!==r;r=r.x)r.t.N()}finally{t()}}}});function d(i){return new u(i)}function c(i){for(var t=i.s;void 0!==t;t=t.n)if(t.S.i!==t.i||!t.S.h()||t.S.i!==t.i)return!0;return!1}function a(i){for(var t=i.s;void 0!==t;t=t.n){var r=t.S.n;if(void 0!==r)t.r=r;t.S.n=t;t.i=-1;if(void 0===t.n){i.s=t;break}}}function l(i){var t=i.s,r=void 0;while(void 0!==t){var o=t.p;if(-1===t.i){t.S.U(t);if(void 0!==o)o.n=t.n;if(void 0!==t.n)t.n.p=o}else r=t;t.S.n=t.r;if(void 0!==t.r)t.r=void 0;t=o}i.s=r}function y(i){u.call(this,void 0);this.x=i;this.s=void 0;this.g=v-1;this.f=4}(y.prototype=new u).h=function(){this.f&=-3;if(1&this.f)return!1;if(32==(36&this.f))return!0;this.f&=-5;if(this.g===v)return!0;this.g=v;this.f|=1;if(this.i>0&&!c(this)){this.f&=-2;return!0}var i=o;try{a(this);o=this;var t=this.x();if(16&this.f||this.v!==t||0===this.i){this.v=t;this.f&=-17;this.i++}}catch(i){this.v=i;this.f|=16;this.i++}o=i;l(this);this.f&=-2;return!0};y.prototype.S=function(i){if(void 0===this.t){this.f|=36;for(var t=this.s;void 0!==t;t=t.n)t.S.S(t)}u.prototype.S.call(this,i)};y.prototype.U=function(i){if(void 0!==this.t){u.prototype.U.call(this,i);if(void 0===this.t){this.f&=-33;for(var t=this.s;void 0!==t;t=t.n)t.S.U(t)}}};y.prototype.N=function(){if(!(2&this.f)){this.f|=6;for(var i=this.t;void 0!==i;i=i.x)i.t.N()}};Object.defineProperty(y.prototype,"value",{get:function(){if(1&this.f)throw new Error("Cycle detected");var i=e(this);this.h();if(void 0!==i)i.i=this.i;if(16&this.f)throw this.v;return this.v}});function w(i){return new y(i)}function _(i){var r=i.u;i.u=void 0;if("function"==typeof r){s++;var n=o;o=void 0;try{r()}catch(t){i.f&=-2;i.f|=8;g(i);throw t}finally{o=n;t()}}}function g(i){for(var t=i.s;void 0!==t;t=t.n)t.S.U(t);i.x=void 0;i.s=void 0;_(i)}function p(i){if(o!==this)throw new Error("Out-of-order effect");l(this);o=i;this.f&=-2;if(8&this.f)g(this);t()}function b(i){this.x=i;this.u=void 0;this.s=void 0;this.o=void 0;this.f=32}b.prototype.c=function(){var i=this.S();try{if(8&this.f)return;if(void 0===this.x)return;var t=this.x();if("function"==typeof t)this.u=t}finally{i()}};b.prototype.S=function(){if(1&this.f)throw new Error("Cycle detected");this.f|=1;this.f&=-9;_(this);a(this);s++;var i=o;o=this;return p.bind(this,i)};b.prototype.N=function(){if(!(2&this.f)){this.f|=2;this.o=h;h=this}};b.prototype.d=function(){this.f|=8;if(!(1&this.f))g(this)};function E(i){var t=new b(i);try{t.c()}catch(i){t.d();throw i}return t.d.bind(t)}//# sourceMappingURL=signals-core.module.js.map
-
 
 /***/ }),
 
@@ -238076,10 +238279,10 @@ var _uiGantt6 = __webpack_require__(76315);
 var _uiGantt7 = __webpack_require__(55886);
 var _uiGantt8 = __webpack_require__(91389);
 var _uiGantt9 = __webpack_require__(93002);
-var _uiGantt10 = __webpack_require__(64490);
-var _uiGantt11 = __webpack_require__(81495);
-var _uiGantt12 = __webpack_require__(17418);
-var _uiGantt13 = __webpack_require__(78199);
+var _uiGantt0 = __webpack_require__(64490);
+var _uiGantt1 = __webpack_require__(81495);
+var _uiGantt10 = __webpack_require__(17418);
+var _uiGantt11 = __webpack_require__(78199);
 var _load_panel = _interopRequireDefault(__webpack_require__(77986));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -238172,7 +238375,7 @@ class Gantt extends _widget.default {
     }
   }
   _renderTreeList() {
-    this._ganttTreeList = new _uiGantt12.GanttTreeList(this);
+    this._ganttTreeList = new _uiGantt10.GanttTreeList(this);
     // @ts-expect-error ts-error
     this._treeList = this._ganttTreeList.getTreeList();
     this._ganttTreeList.onAfterTreeListCreate();
@@ -238205,8 +238408,8 @@ class Gantt extends _widget.default {
     this._mappingHelper = new _uiGantt8.GanttMappingHelper(this);
     this._customFieldsManager = new _uiGantt3.GanttCustomFieldsManager(this);
     this._actionsManager = new _uiGantt.GanttActionsManager(this);
-    this._ganttTemplatesManager = new _uiGantt11.GanttTemplatesManager(this);
-    this._sizeHelper = new _uiGantt10.GanttSizeHelper(this);
+    this._ganttTemplatesManager = new _uiGantt1.GanttTemplatesManager(this);
+    this._sizeHelper = new _uiGantt0.GanttSizeHelper(this);
     this._dataProcessingHelper = new _uiGantt4.GanttDataChangesProcessingHelper();
   }
   _initGanttView() {
@@ -238234,7 +238437,7 @@ class Gantt extends _widget.default {
       taskTimeTooltipContentTemplate,
       taskContentTemplate
     } = this.option();
-    this._ganttView = this._createComponent(this._$ganttView, _uiGantt13.GanttView, {
+    this._ganttView = this._createComponent(this._$ganttView, _uiGantt11.GanttView, {
       width: '100%',
       height: (_this$_ganttTreeList = this._ganttTreeList) === null || _this$_ganttTreeList === void 0 ? void 0 : _this$_ganttTreeList.getOffsetHeight(),
       // @ts-expect-error ts-error
@@ -238361,11 +238564,11 @@ class Gantt extends _widget.default {
     this[`_${dataSourceName}`] = mappedData;
     this._setGanttViewOption(dataSourceName, mappedData);
     if (dataSourceName === GANTT_TASKS) {
-      var _this$_ganttTreeList8, _this$_ganttTreeList9, _this$_ganttTreeList10;
+      var _this$_ganttTreeList8, _this$_ganttTreeList9, _this$_ganttTreeList0;
       this._tasksRaw = validatedData;
       const forceUpdate = !((_this$_ganttTreeList8 = this._ganttTreeList) !== null && _this$_ganttTreeList8 !== void 0 && _this$_ganttTreeList8.getDataSource()) && !this._ganttView;
       (_this$_ganttTreeList9 = this._ganttTreeList) === null || _this$_ganttTreeList9 === void 0 || _this$_ganttTreeList9.saveExpandedKeys();
-      (_this$_ganttTreeList10 = this._ganttTreeList) === null || _this$_ganttTreeList10 === void 0 || _this$_ganttTreeList10.updateDataSource(validatedData, forceUpdate);
+      (_this$_ganttTreeList0 = this._ganttTreeList) === null || _this$_ganttTreeList0 === void 0 || _this$_ganttTreeList0.updateDataSource(validatedData, forceUpdate);
     }
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -238432,7 +238635,7 @@ class Gantt extends _widget.default {
         (_this$_customFieldsMa = this._customFieldsManager) === null || _this$_customFieldsMa === void 0 || _this$_customFieldsMa.addCustomFieldsDataFromCache(GANTT_NEW_TASK_CACHE_KEY, data);
       }
       dataOption.insert(data, response => {
-        var _this$_dataProcessing2, _this$_ganttTreeList11;
+        var _this$_dataProcessing2, _this$_ganttTreeList1;
         // @ts-expect-error ts-error
         const keyGetter = (0, _data.compileGetter)(this.option(`${optionName}.keyExpr`));
         // @ts-expect-error ts-error
@@ -238443,11 +238646,11 @@ class Gantt extends _widget.default {
           var _this$_actionsManager2;
           (_this$_actionsManager2 = this._actionsManager) === null || _this$_actionsManager2 === void 0 || _this$_actionsManager2.raiseInsertedAction(optionName, data, insertedId);
         }, true, isTaskInsert);
-        (_this$_ganttTreeList11 = this._ganttTreeList) === null || _this$_ganttTreeList11 === void 0 || _this$_ganttTreeList11.saveExpandedKeys();
+        (_this$_ganttTreeList1 = this._ganttTreeList) === null || _this$_ganttTreeList1 === void 0 || _this$_ganttTreeList1.saveExpandedKeys();
         dataOption._reloadDataSource().done(() => {
           if (isTaskInsert) {
-            var _this$_ganttTreeList12;
-            (_this$_ganttTreeList12 = this._ganttTreeList) === null || _this$_ganttTreeList12 === void 0 || _this$_ganttTreeList12.onTaskInserted(insertedId, record.parentId);
+            var _this$_ganttTreeList10;
+            (_this$_ganttTreeList10 = this._ganttTreeList) === null || _this$_ganttTreeList10 === void 0 || _this$_ganttTreeList10.onTaskInserted(insertedId, record.parentId);
           }
         });
       });
@@ -238465,9 +238668,9 @@ class Gantt extends _widget.default {
         (_this$_customFieldsMa3 = this._customFieldsManager) === null || _this$_customFieldsMa3 === void 0 || _this$_customFieldsMa3.addCustomFieldsDataFromCache(key, data);
       }
       dataOption.update(key, data, () => {
-        var _this$_ganttTreeList13, _this$_dataProcessing3;
+        var _this$_ganttTreeList11, _this$_dataProcessing3;
         this._executeFuncSetters(optionName, values, key);
-        (_this$_ganttTreeList13 = this._ganttTreeList) === null || _this$_ganttTreeList13 === void 0 || _this$_ganttTreeList13.saveExpandedKeys();
+        (_this$_ganttTreeList11 = this._ganttTreeList) === null || _this$_ganttTreeList11 === void 0 || _this$_ganttTreeList11.saveExpandedKeys();
         (_this$_dataProcessing3 = this._dataProcessingHelper) === null || _this$_dataProcessing3 === void 0 || _this$_dataProcessing3.addCompletionAction(() => {
           var _this$_actionsManager3;
           (_this$_actionsManager3 = this._actionsManager) === null || _this$_actionsManager3 === void 0 || _this$_actionsManager3.raiseUpdatedAction(optionName, data, key);
@@ -238480,8 +238683,8 @@ class Gantt extends _widget.default {
     const dataOption = this[`_${optionName}Option`];
     if (dataOption) {
       dataOption.remove(key, () => {
-        var _this$_ganttTreeList14, _this$_dataProcessing4;
-        (_this$_ganttTreeList14 = this._ganttTreeList) === null || _this$_ganttTreeList14 === void 0 || _this$_ganttTreeList14.saveExpandedKeys();
+        var _this$_ganttTreeList12, _this$_dataProcessing4;
+        (_this$_ganttTreeList12 = this._ganttTreeList) === null || _this$_ganttTreeList12 === void 0 || _this$_ganttTreeList12.saveExpandedKeys();
         (_this$_dataProcessing4 = this._dataProcessingHelper) === null || _this$_dataProcessing4 === void 0 || _this$_dataProcessing4.addCompletionAction(() => {
           var _this$_actionsManager4, _this$_mappingHelper2;
           (_this$_actionsManager4 = this._actionsManager) === null || _this$_actionsManager4 === void 0 || _this$_actionsManager4.raiseDeletedAction(optionName, key, (_this$_mappingHelper2 = this._mappingHelper) === null || _this$_mappingHelper2 === void 0 ? void 0 : _this$_mappingHelper2.convertCoreToMappedData(optionName, data));
@@ -238503,9 +238706,9 @@ class Gantt extends _widget.default {
       // split threads for treelist filter|sort and datasource update (T1082108)
       // eslint-disable-next-line no-restricted-globals
       setTimeout(() => {
-        var _this$_ganttTreeList15;
+        var _this$_ganttTreeList13;
         this._treeListParentRecalculatedDataUpdating = true;
-        (_this$_ganttTreeList15 = this._ganttTreeList) === null || _this$_ganttTreeList15 === void 0 || _this$_ganttTreeList15.setDataSource(treeDataSource);
+        (_this$_ganttTreeList13 = this._ganttTreeList) === null || _this$_ganttTreeList13 === void 0 || _this$_ganttTreeList13.setDataSource(treeDataSource);
       });
     }
     this.isSieving = false;
@@ -238546,9 +238749,9 @@ class Gantt extends _widget.default {
     })[0];
     const isClearSieving = ((_this$_savedSortFilte3 = this._savedSortFilterState) === null || _this$_savedSortFilte3 === void 0 ? void 0 : _this$_savedSortFilte3.sieveColumn) && !sieveColumn;
     if (sieveColumn || isClearSieving) {
-      var _this$_ganttTreeList16;
+      var _this$_ganttTreeList14;
       const sieveOptions = sieveColumn && {
-        sievedItems: (_this$_ganttTreeList16 = this._ganttTreeList) === null || _this$_ganttTreeList16 === void 0 ? void 0 : _this$_ganttTreeList16.getSievedItems(),
+        sievedItems: (_this$_ganttTreeList14 = this._ganttTreeList) === null || _this$_ganttTreeList14 === void 0 ? void 0 : _this$_ganttTreeList14.getSievedItems(),
         sieveColumn,
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         expandTasks: filterChanged || filterValue && sortedStateChanged
@@ -238745,19 +238948,19 @@ class Gantt extends _widget.default {
       return previous;
     }, {});
     (_promise = promise) === null || _promise === void 0 || _promise.then(() => {
-      var _this$_ganttView10, _this$_sizeHelper4;
-      (_this$_ganttView10 = this._ganttView) === null || _this$_ganttView10 === void 0 || _this$_ganttView10.applyTasksExpandedState(state);
+      var _this$_ganttView0, _this$_sizeHelper4;
+      (_this$_ganttView0 = this._ganttView) === null || _this$_ganttView0 === void 0 || _this$_ganttView0.applyTasksExpandedState(state);
       (_this$_sizeHelper4 = this._sizeHelper) === null || _this$_sizeHelper4 === void 0 || _this$_sizeHelper4.adjustHeight();
       delete this._lockRowExpandEvent;
     });
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTaskResources(key) {
-    var _this$_ganttView11;
+    var _this$_ganttView1;
     if (!(0, _type.isDefined)(key)) {
       return null;
     }
-    const coreData = (_this$_ganttView11 = this._ganttView) === null || _this$_ganttView11 === void 0 ? void 0 : _this$_ganttView11._ganttViewCore.getTaskResources(key);
+    const coreData = (_this$_ganttView1 = this._ganttView) === null || _this$_ganttView1 === void 0 ? void 0 : _this$_ganttView1._ganttViewCore.getTaskResources(key);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return coreData.map(r => {
       var _this$_mappingHelper3;
@@ -238766,35 +238969,35 @@ class Gantt extends _widget.default {
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getVisibleTaskKeys() {
-    var _this$_ganttView12;
+    var _this$_ganttView10;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_ganttView12 = this._ganttView) === null || _this$_ganttView12 === void 0 ? void 0 : _this$_ganttView12._ganttViewCore.getVisibleTaskKeys();
+    return (_this$_ganttView10 = this._ganttView) === null || _this$_ganttView10 === void 0 ? void 0 : _this$_ganttView10._ganttViewCore.getVisibleTaskKeys();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getVisibleDependencyKeys() {
-    var _this$_ganttView13;
+    var _this$_ganttView11;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_ganttView13 = this._ganttView) === null || _this$_ganttView13 === void 0 ? void 0 : _this$_ganttView13._ganttViewCore.getVisibleDependencyKeys();
+    return (_this$_ganttView11 = this._ganttView) === null || _this$_ganttView11 === void 0 ? void 0 : _this$_ganttView11._ganttViewCore.getVisibleDependencyKeys();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getVisibleResourceKeys() {
-    var _this$_ganttView14;
+    var _this$_ganttView12;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_ganttView14 = this._ganttView) === null || _this$_ganttView14 === void 0 ? void 0 : _this$_ganttView14._ganttViewCore.getVisibleResourceKeys();
+    return (_this$_ganttView12 = this._ganttView) === null || _this$_ganttView12 === void 0 ? void 0 : _this$_ganttView12._ganttViewCore.getVisibleResourceKeys();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getVisibleResourceAssignmentKeys() {
-    var _this$_ganttView15;
+    var _this$_ganttView13;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return (_this$_ganttView15 = this._ganttView) === null || _this$_ganttView15 === void 0 ? void 0 : _this$_ganttView15._ganttViewCore.getVisibleResourceAssignmentKeys();
+    return (_this$_ganttView13 = this._ganttView) === null || _this$_ganttView13 === void 0 ? void 0 : _this$_ganttView13._ganttViewCore.getVisibleResourceAssignmentKeys();
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getTaskData(key) {
-    var _this$_ganttView16;
+    var _this$_ganttView14;
     if (!(0, _type.isDefined)(key)) {
       return null;
     }
-    const coreData = (_this$_ganttView16 = this._ganttView) === null || _this$_ganttView16 === void 0 ? void 0 : _this$_ganttView16._ganttViewCore.getTaskData(key);
+    const coreData = (_this$_ganttView14 = this._ganttView) === null || _this$_ganttView14 === void 0 ? void 0 : _this$_ganttView14._ganttViewCore.getTaskData(key);
     const mappedData = this.getTaskDataByCoreData(coreData);
     return mappedData;
   }
@@ -238806,13 +239009,13 @@ class Gantt extends _widget.default {
     return mappedData;
   }
   insertTask(data) {
-    var _this$_customFieldsMa6, _this$_ganttView17, _this$_mappingHelper5;
+    var _this$_customFieldsMa6, _this$_ganttView15, _this$_mappingHelper5;
     (_this$_customFieldsMa6 = this._customFieldsManager) === null || _this$_customFieldsMa6 === void 0 || _this$_customFieldsMa6.saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, data);
-    (_this$_ganttView17 = this._ganttView) === null || _this$_ganttView17 === void 0 || _this$_ganttView17._ganttViewCore.insertTask((_this$_mappingHelper5 = this._mappingHelper) === null || _this$_mappingHelper5 === void 0 ? void 0 : _this$_mappingHelper5.convertMappedToCoreData(GANTT_TASKS, data));
+    (_this$_ganttView15 = this._ganttView) === null || _this$_ganttView15 === void 0 || _this$_ganttView15._ganttViewCore.insertTask((_this$_mappingHelper5 = this._mappingHelper) === null || _this$_mappingHelper5 === void 0 ? void 0 : _this$_mappingHelper5.convertMappedToCoreData(GANTT_TASKS, data));
   }
   deleteTask(key) {
-    var _this$_ganttView18;
-    (_this$_ganttView18 = this._ganttView) === null || _this$_ganttView18 === void 0 || _this$_ganttView18._ganttViewCore.deleteTask(key);
+    var _this$_ganttView16;
+    (_this$_ganttView16 = this._ganttView) === null || _this$_ganttView16 === void 0 || _this$_ganttView16._ganttViewCore.deleteTask(key);
   }
   updateTask(key, data) {
     var _this$_mappingHelper6, _this$_customFieldsMa7;
@@ -238832,74 +239035,74 @@ class Gantt extends _widget.default {
         });
       }
     } else {
-      var _this$_ganttView19;
-      (_this$_ganttView19 = this._ganttView) === null || _this$_ganttView19 === void 0 || _this$_ganttView19._ganttViewCore.updateTask(key, coreTaskData);
+      var _this$_ganttView17;
+      (_this$_ganttView17 = this._ganttView) === null || _this$_ganttView17 === void 0 || _this$_ganttView17._ganttViewCore.updateTask(key, coreTaskData);
     }
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getDependencyData(key) {
-    var _this$_ganttView20, _this$_mappingHelper7;
+    var _this$_ganttView18, _this$_mappingHelper7;
     if (!(0, _type.isDefined)(key)) {
       return null;
     }
-    const coreData = (_this$_ganttView20 = this._ganttView) === null || _this$_ganttView20 === void 0 ? void 0 : _this$_ganttView20._ganttViewCore.getDependencyData(key);
+    const coreData = (_this$_ganttView18 = this._ganttView) === null || _this$_ganttView18 === void 0 ? void 0 : _this$_ganttView18._ganttViewCore.getDependencyData(key);
     return coreData ? (_this$_mappingHelper7 = this._mappingHelper) === null || _this$_mappingHelper7 === void 0 ? void 0 : _this$_mappingHelper7.convertCoreToMappedData(GANTT_DEPENDENCIES, coreData) : null;
   }
   insertDependency(data) {
-    var _this$_ganttView21, _this$_mappingHelper8;
-    (_this$_ganttView21 = this._ganttView) === null || _this$_ganttView21 === void 0 || _this$_ganttView21._ganttViewCore.insertDependency((_this$_mappingHelper8 = this._mappingHelper) === null || _this$_mappingHelper8 === void 0 ? void 0 : _this$_mappingHelper8.convertMappedToCoreData(GANTT_DEPENDENCIES, data));
+    var _this$_ganttView19, _this$_mappingHelper8;
+    (_this$_ganttView19 = this._ganttView) === null || _this$_ganttView19 === void 0 || _this$_ganttView19._ganttViewCore.insertDependency((_this$_mappingHelper8 = this._mappingHelper) === null || _this$_mappingHelper8 === void 0 ? void 0 : _this$_mappingHelper8.convertMappedToCoreData(GANTT_DEPENDENCIES, data));
   }
   deleteDependency(key) {
-    var _this$_ganttView22;
-    (_this$_ganttView22 = this._ganttView) === null || _this$_ganttView22 === void 0 || _this$_ganttView22._ganttViewCore.deleteDependency(key);
+    var _this$_ganttView20;
+    (_this$_ganttView20 = this._ganttView) === null || _this$_ganttView20 === void 0 || _this$_ganttView20._ganttViewCore.deleteDependency(key);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getResourceData(key) {
-    var _this$_ganttView23, _this$_mappingHelper9;
-    const coreData = (_this$_ganttView23 = this._ganttView) === null || _this$_ganttView23 === void 0 ? void 0 : _this$_ganttView23._ganttViewCore.getResourceData(key);
+    var _this$_ganttView21, _this$_mappingHelper9;
+    const coreData = (_this$_ganttView21 = this._ganttView) === null || _this$_ganttView21 === void 0 ? void 0 : _this$_ganttView21._ganttViewCore.getResourceData(key);
     return coreData ? (_this$_mappingHelper9 = this._mappingHelper) === null || _this$_mappingHelper9 === void 0 ? void 0 : _this$_mappingHelper9.convertCoreToMappedData(GANTT_RESOURCES, coreData) : null;
   }
   deleteResource(key) {
-    var _this$_ganttView24;
-    (_this$_ganttView24 = this._ganttView) === null || _this$_ganttView24 === void 0 || _this$_ganttView24._ganttViewCore.deleteResource(key);
+    var _this$_ganttView22;
+    (_this$_ganttView22 = this._ganttView) === null || _this$_ganttView22 === void 0 || _this$_ganttView22._ganttViewCore.deleteResource(key);
   }
   insertResource(data, taskKeys) {
-    var _this$_ganttView25, _this$_mappingHelper10;
-    (_this$_ganttView25 = this._ganttView) === null || _this$_ganttView25 === void 0 || _this$_ganttView25._ganttViewCore.insertResource((_this$_mappingHelper10 = this._mappingHelper) === null || _this$_mappingHelper10 === void 0 ? void 0 : _this$_mappingHelper10.convertMappedToCoreData(GANTT_RESOURCES, data), taskKeys);
+    var _this$_ganttView23, _this$_mappingHelper0;
+    (_this$_ganttView23 = this._ganttView) === null || _this$_ganttView23 === void 0 || _this$_ganttView23._ganttViewCore.insertResource((_this$_mappingHelper0 = this._mappingHelper) === null || _this$_mappingHelper0 === void 0 ? void 0 : _this$_mappingHelper0.convertMappedToCoreData(GANTT_RESOURCES, data), taskKeys);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   getResourceAssignmentData(key) {
-    var _this$_ganttView26, _this$_mappingHelper11;
-    const coreData = (_this$_ganttView26 = this._ganttView) === null || _this$_ganttView26 === void 0 ? void 0 : _this$_ganttView26._ganttViewCore.getResourceAssignmentData(key);
-    return coreData ? (_this$_mappingHelper11 = this._mappingHelper) === null || _this$_mappingHelper11 === void 0 ? void 0 : _this$_mappingHelper11.convertCoreToMappedData(GANTT_RESOURCE_ASSIGNMENTS, coreData) : null;
+    var _this$_ganttView24, _this$_mappingHelper1;
+    const coreData = (_this$_ganttView24 = this._ganttView) === null || _this$_ganttView24 === void 0 ? void 0 : _this$_ganttView24._ganttViewCore.getResourceAssignmentData(key);
+    return coreData ? (_this$_mappingHelper1 = this._mappingHelper) === null || _this$_mappingHelper1 === void 0 ? void 0 : _this$_mappingHelper1.convertCoreToMappedData(GANTT_RESOURCE_ASSIGNMENTS, coreData) : null;
   }
   assignResourceToTask(resourceKey, taskKey) {
-    var _this$_ganttView27;
-    (_this$_ganttView27 = this._ganttView) === null || _this$_ganttView27 === void 0 || _this$_ganttView27._ganttViewCore.assignResourceToTask(resourceKey, taskKey);
+    var _this$_ganttView25;
+    (_this$_ganttView25 = this._ganttView) === null || _this$_ganttView25 === void 0 || _this$_ganttView25._ganttViewCore.assignResourceToTask(resourceKey, taskKey);
   }
   unassignResourceFromTask(resourceKey, taskKey) {
-    var _this$_ganttView28;
-    (_this$_ganttView28 = this._ganttView) === null || _this$_ganttView28 === void 0 || _this$_ganttView28._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
+    var _this$_ganttView26;
+    (_this$_ganttView26 = this._ganttView) === null || _this$_ganttView26 === void 0 || _this$_ganttView26._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
   }
   unassignAllResourcesFromTask(taskKey) {
-    var _this$_ganttView29;
-    (_this$_ganttView29 = this._ganttView) === null || _this$_ganttView29 === void 0 || _this$_ganttView29._ganttViewCore.unassignAllResourcesFromTask(taskKey);
+    var _this$_ganttView27;
+    (_this$_ganttView27 = this._ganttView) === null || _this$_ganttView27 === void 0 || _this$_ganttView27._ganttViewCore.unassignAllResourcesFromTask(taskKey);
   }
   updateDimensions() {
     var _this$_sizeHelper5;
     (_this$_sizeHelper5 = this._sizeHelper) === null || _this$_sizeHelper5 === void 0 || _this$_sizeHelper5.onAdjustControl();
   }
   scrollToDate(date) {
-    var _this$_ganttView30;
-    (_this$_ganttView30 = this._ganttView) === null || _this$_ganttView30 === void 0 || _this$_ganttView30._ganttViewCore.scrollToDate(date);
+    var _this$_ganttView28;
+    (_this$_ganttView28 = this._ganttView) === null || _this$_ganttView28 === void 0 || _this$_ganttView28._ganttViewCore.scrollToDate(date);
   }
   showResourceManagerDialog() {
-    var _this$_ganttView31;
-    (_this$_ganttView31 = this._ganttView) === null || _this$_ganttView31 === void 0 || _this$_ganttView31._ganttViewCore.showResourcesDialog();
+    var _this$_ganttView29;
+    (_this$_ganttView29 = this._ganttView) === null || _this$_ganttView29 === void 0 || _this$_ganttView29._ganttViewCore.showResourcesDialog();
   }
   showTaskDetailsDialog(taskKey) {
-    var _this$_ganttView32;
-    (_this$_ganttView32 = this._ganttView) === null || _this$_ganttView32 === void 0 || _this$_ganttView32._ganttViewCore.showTaskDetailsDialog(taskKey);
+    var _this$_ganttView30;
+    (_this$_ganttView30 = this._ganttView) === null || _this$_ganttView30 === void 0 || _this$_ganttView30._ganttViewCore.showTaskDetailsDialog(taskKey);
   }
   exportToPdf(options) {
     return this._exportToPdf(options);
@@ -238915,8 +239118,8 @@ class Gantt extends _widget.default {
     fullOptions.docCreateMethod ?? (fullOptions.docCreateMethod = ((_window$jspdf = window.jspdf) === null || _window$jspdf === void 0 ? void 0 : _window$jspdf.jsPDF) ?? window.jsPDF);
     fullOptions.format ?? (fullOptions.format = 'a4');
     return new Promise(resolve => {
-      var _this$_ganttView33;
-      const doc = (_this$_ganttView33 = this._ganttView) === null || _this$_ganttView33 === void 0 ? void 0 : _this$_ganttView33._ganttViewCore.exportToPdf(fullOptions);
+      var _this$_ganttView31;
+      const doc = (_this$_ganttView31 = this._ganttView) === null || _this$_ganttView31 === void 0 ? void 0 : _this$_ganttView31._ganttViewCore.exportToPdf(fullOptions);
       resolve(doc);
     });
   }
@@ -238965,19 +239168,19 @@ class Gantt extends _widget.default {
     this.option('showDependencies', value);
   }
   zoomIn() {
-    var _this$_ganttView34;
-    (_this$_ganttView34 = this._ganttView) === null || _this$_ganttView34 === void 0 || _this$_ganttView34._ganttViewCore.zoomIn();
+    var _this$_ganttView32;
+    (_this$_ganttView32 = this._ganttView) === null || _this$_ganttView32 === void 0 || _this$_ganttView32._ganttViewCore.zoomIn();
   }
   zoomOut() {
-    var _this$_ganttView35;
-    (_this$_ganttView35 = this._ganttView) === null || _this$_ganttView35 === void 0 || _this$_ganttView35._ganttViewCore.zoomOut();
+    var _this$_ganttView33;
+    (_this$_ganttView33 = this._ganttView) === null || _this$_ganttView33 === void 0 || _this$_ganttView33._ganttViewCore.zoomOut();
   }
   _getDefaultOptions() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (0, _extend.extend)(super._getDefaultOptions(), _uiGantt7.GanttHelper.getDefaultOptions());
   }
   _optionChanged(args) {
-    var _this$_ganttTreeList17, _this$_sizeHelper6, _this$_ganttTreeList18, _this$_actionsManager8, _this$_actionsManager9, _this$_actionsManager10, _this$_actionsManager11, _this$_actionsManager12, _this$_actionsManager13, _this$_actionsManager14, _this$_actionsManager15, _this$_actionsManager16, _this$_actionsManager17, _this$_actionsManager18, _this$_actionsManager19, _this$_actionsManager20, _this$_actionsManager21, _this$_actionsManager22, _this$_actionsManager23, _this$_actionsManager24, _this$_actionsManager25, _this$_actionsManager26, _this$_actionsManager27, _this$_actionsManager28, _this$_actionsManager29, _this$_actionsManager30, _this$_actionsManager31, _this$_actionsManager32, _this$_actionsManager33, _this$_actionsManager34, _this$_ganttTreeList19, _this$_ganttTreeList20, _this$_ganttTemplates5, _this$_ganttTemplates6, _this$_ganttTemplates7, _this$_ganttTemplates8, _this$_ganttTreeList21, _this$_sizeHelper7, _this$_sizeHelper8, _this$_ganttTreeList22, _this$_ganttTreeList23, _this$_ganttTreeList24;
+    var _this$_ganttTreeList15, _this$_sizeHelper6, _this$_ganttTreeList16, _this$_actionsManager8, _this$_actionsManager9, _this$_actionsManager0, _this$_actionsManager1, _this$_actionsManager10, _this$_actionsManager11, _this$_actionsManager12, _this$_actionsManager13, _this$_actionsManager14, _this$_actionsManager15, _this$_actionsManager16, _this$_actionsManager17, _this$_actionsManager18, _this$_actionsManager19, _this$_actionsManager20, _this$_actionsManager21, _this$_actionsManager22, _this$_actionsManager23, _this$_actionsManager24, _this$_actionsManager25, _this$_actionsManager26, _this$_actionsManager27, _this$_actionsManager28, _this$_actionsManager29, _this$_actionsManager30, _this$_actionsManager31, _this$_actionsManager32, _this$_ganttTreeList17, _this$_ganttTreeList18, _this$_ganttTemplates5, _this$_ganttTemplates6, _this$_ganttTemplates7, _this$_ganttTemplates8, _this$_ganttTreeList19, _this$_sizeHelper7, _this$_sizeHelper8, _this$_ganttTreeList20, _this$_ganttTreeList21, _this$_ganttTreeList22;
     const {
       name,
       fullName,
@@ -238997,7 +239200,7 @@ class Gantt extends _widget.default {
         this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
         break;
       case 'columns':
-        (_this$_ganttTreeList17 = this._ganttTreeList) === null || _this$_ganttTreeList17 === void 0 || _this$_ganttTreeList17.setOption('columns', this._ganttTreeList.getColumns());
+        (_this$_ganttTreeList15 = this._ganttTreeList) === null || _this$_ganttTreeList15 === void 0 || _this$_ganttTreeList15.setOption('columns', this._ganttTreeList.getColumns());
         break;
       case 'taskListWidth':
         (_this$_sizeHelper6 = this._sizeHelper) === null || _this$_sizeHelper6 === void 0 || _this$_sizeHelper6.setInnerElementsWidth();
@@ -239021,7 +239224,7 @@ class Gantt extends _widget.default {
         this._setGanttViewOption('endDateRange', value);
         break;
       case 'selectedRowKey':
-        (_this$_ganttTreeList18 = this._ganttTreeList) === null || _this$_ganttTreeList18 === void 0 || _this$_ganttTreeList18.selectRows(_uiGantt7.GanttHelper.getArrayFromOneElement(value));
+        (_this$_ganttTreeList16 = this._ganttTreeList) === null || _this$_ganttTreeList16 === void 0 || _this$_ganttTreeList16.selectRows(_uiGantt7.GanttHelper.getArrayFromOneElement(value));
         break;
       case 'onSelectionChanged':
         (_this$_actionsManager8 = this._actionsManager) === null || _this$_actionsManager8 === void 0 || _this$_actionsManager8.createSelectionChangedAction();
@@ -239030,86 +239233,86 @@ class Gantt extends _widget.default {
         (_this$_actionsManager9 = this._actionsManager) === null || _this$_actionsManager9 === void 0 || _this$_actionsManager9.createTaskClickAction();
         break;
       case 'onTaskDblClick':
-        (_this$_actionsManager10 = this._actionsManager) === null || _this$_actionsManager10 === void 0 || _this$_actionsManager10.createTaskDblClickAction();
+        (_this$_actionsManager0 = this._actionsManager) === null || _this$_actionsManager0 === void 0 || _this$_actionsManager0.createTaskDblClickAction();
         break;
       case 'onTaskInserting':
-        (_this$_actionsManager11 = this._actionsManager) === null || _this$_actionsManager11 === void 0 || _this$_actionsManager11.createTaskInsertingAction();
+        (_this$_actionsManager1 = this._actionsManager) === null || _this$_actionsManager1 === void 0 || _this$_actionsManager1.createTaskInsertingAction();
         break;
       case 'onTaskInserted':
-        (_this$_actionsManager12 = this._actionsManager) === null || _this$_actionsManager12 === void 0 || _this$_actionsManager12.createTaskInsertedAction();
+        (_this$_actionsManager10 = this._actionsManager) === null || _this$_actionsManager10 === void 0 || _this$_actionsManager10.createTaskInsertedAction();
         break;
       case 'onTaskDeleting':
-        (_this$_actionsManager13 = this._actionsManager) === null || _this$_actionsManager13 === void 0 || _this$_actionsManager13.createTaskDeletingAction();
+        (_this$_actionsManager11 = this._actionsManager) === null || _this$_actionsManager11 === void 0 || _this$_actionsManager11.createTaskDeletingAction();
         break;
       case 'onTaskDeleted':
-        (_this$_actionsManager14 = this._actionsManager) === null || _this$_actionsManager14 === void 0 || _this$_actionsManager14.createTaskDeletedAction();
+        (_this$_actionsManager12 = this._actionsManager) === null || _this$_actionsManager12 === void 0 || _this$_actionsManager12.createTaskDeletedAction();
         break;
       case 'onTaskUpdating':
-        (_this$_actionsManager15 = this._actionsManager) === null || _this$_actionsManager15 === void 0 || _this$_actionsManager15.createTaskUpdatingAction();
+        (_this$_actionsManager13 = this._actionsManager) === null || _this$_actionsManager13 === void 0 || _this$_actionsManager13.createTaskUpdatingAction();
         break;
       case 'onTaskUpdated':
-        (_this$_actionsManager16 = this._actionsManager) === null || _this$_actionsManager16 === void 0 || _this$_actionsManager16.createTaskUpdatedAction();
+        (_this$_actionsManager14 = this._actionsManager) === null || _this$_actionsManager14 === void 0 || _this$_actionsManager14.createTaskUpdatedAction();
         break;
       case 'onTaskMoving':
-        (_this$_actionsManager17 = this._actionsManager) === null || _this$_actionsManager17 === void 0 || _this$_actionsManager17.createTaskMovingAction();
+        (_this$_actionsManager15 = this._actionsManager) === null || _this$_actionsManager15 === void 0 || _this$_actionsManager15.createTaskMovingAction();
         break;
       case 'onTaskEditDialogShowing':
-        (_this$_actionsManager18 = this._actionsManager) === null || _this$_actionsManager18 === void 0 || _this$_actionsManager18.createTaskEditDialogShowingAction();
+        (_this$_actionsManager16 = this._actionsManager) === null || _this$_actionsManager16 === void 0 || _this$_actionsManager16.createTaskEditDialogShowingAction();
         break;
       case 'onResourceManagerDialogShowing':
-        (_this$_actionsManager19 = this._actionsManager) === null || _this$_actionsManager19 === void 0 || _this$_actionsManager19.createResourceManagerDialogShowingAction();
+        (_this$_actionsManager17 = this._actionsManager) === null || _this$_actionsManager17 === void 0 || _this$_actionsManager17.createResourceManagerDialogShowingAction();
         break;
       case 'onDependencyInserting':
-        (_this$_actionsManager20 = this._actionsManager) === null || _this$_actionsManager20 === void 0 || _this$_actionsManager20.createDependencyInsertingAction();
+        (_this$_actionsManager18 = this._actionsManager) === null || _this$_actionsManager18 === void 0 || _this$_actionsManager18.createDependencyInsertingAction();
         break;
       case 'onDependencyInserted':
-        (_this$_actionsManager21 = this._actionsManager) === null || _this$_actionsManager21 === void 0 || _this$_actionsManager21.createDependencyInsertedAction();
+        (_this$_actionsManager19 = this._actionsManager) === null || _this$_actionsManager19 === void 0 || _this$_actionsManager19.createDependencyInsertedAction();
         break;
       case 'onDependencyDeleting':
-        (_this$_actionsManager22 = this._actionsManager) === null || _this$_actionsManager22 === void 0 || _this$_actionsManager22.createDependencyDeletingAction();
+        (_this$_actionsManager20 = this._actionsManager) === null || _this$_actionsManager20 === void 0 || _this$_actionsManager20.createDependencyDeletingAction();
         break;
       case 'onDependencyDeleted':
-        (_this$_actionsManager23 = this._actionsManager) === null || _this$_actionsManager23 === void 0 || _this$_actionsManager23.createDependencyDeletedAction();
+        (_this$_actionsManager21 = this._actionsManager) === null || _this$_actionsManager21 === void 0 || _this$_actionsManager21.createDependencyDeletedAction();
         break;
       case 'onResourceInserting':
-        (_this$_actionsManager24 = this._actionsManager) === null || _this$_actionsManager24 === void 0 || _this$_actionsManager24.createResourceInsertingAction();
+        (_this$_actionsManager22 = this._actionsManager) === null || _this$_actionsManager22 === void 0 || _this$_actionsManager22.createResourceInsertingAction();
         break;
       case 'onResourceInserted':
-        (_this$_actionsManager25 = this._actionsManager) === null || _this$_actionsManager25 === void 0 || _this$_actionsManager25.createResourceInsertedAction();
+        (_this$_actionsManager23 = this._actionsManager) === null || _this$_actionsManager23 === void 0 || _this$_actionsManager23.createResourceInsertedAction();
         break;
       case 'onResourceDeleting':
-        (_this$_actionsManager26 = this._actionsManager) === null || _this$_actionsManager26 === void 0 || _this$_actionsManager26.createResourceDeletingAction();
+        (_this$_actionsManager24 = this._actionsManager) === null || _this$_actionsManager24 === void 0 || _this$_actionsManager24.createResourceDeletingAction();
         break;
       case 'onResourceDeleted':
-        (_this$_actionsManager27 = this._actionsManager) === null || _this$_actionsManager27 === void 0 || _this$_actionsManager27.createResourceDeletedAction();
+        (_this$_actionsManager25 = this._actionsManager) === null || _this$_actionsManager25 === void 0 || _this$_actionsManager25.createResourceDeletedAction();
         break;
       case 'onResourceAssigning':
-        (_this$_actionsManager28 = this._actionsManager) === null || _this$_actionsManager28 === void 0 || _this$_actionsManager28.createResourceAssigningAction();
+        (_this$_actionsManager26 = this._actionsManager) === null || _this$_actionsManager26 === void 0 || _this$_actionsManager26.createResourceAssigningAction();
         break;
       case 'onResourceAssigned':
-        (_this$_actionsManager29 = this._actionsManager) === null || _this$_actionsManager29 === void 0 || _this$_actionsManager29.createResourceAssignedAction();
+        (_this$_actionsManager27 = this._actionsManager) === null || _this$_actionsManager27 === void 0 || _this$_actionsManager27.createResourceAssignedAction();
         break;
       case 'onResourceUnassigning':
-        (_this$_actionsManager30 = this._actionsManager) === null || _this$_actionsManager30 === void 0 || _this$_actionsManager30.createResourceUnassigningAction();
+        (_this$_actionsManager28 = this._actionsManager) === null || _this$_actionsManager28 === void 0 || _this$_actionsManager28.createResourceUnassigningAction();
         break;
       case 'onResourceUnassigned':
-        (_this$_actionsManager31 = this._actionsManager) === null || _this$_actionsManager31 === void 0 || _this$_actionsManager31.createResourceUnassignedAction();
+        (_this$_actionsManager29 = this._actionsManager) === null || _this$_actionsManager29 === void 0 || _this$_actionsManager29.createResourceUnassignedAction();
         break;
       case 'onCustomCommand':
-        (_this$_actionsManager32 = this._actionsManager) === null || _this$_actionsManager32 === void 0 || _this$_actionsManager32.createCustomCommandAction();
+        (_this$_actionsManager30 = this._actionsManager) === null || _this$_actionsManager30 === void 0 || _this$_actionsManager30.createCustomCommandAction();
         break;
       case 'onContextMenuPreparing':
-        (_this$_actionsManager33 = this._actionsManager) === null || _this$_actionsManager33 === void 0 || _this$_actionsManager33.createContextMenuPreparingAction();
+        (_this$_actionsManager31 = this._actionsManager) === null || _this$_actionsManager31 === void 0 || _this$_actionsManager31.createContextMenuPreparingAction();
         break;
       case 'onScaleCellPrepared':
-        (_this$_actionsManager34 = this._actionsManager) === null || _this$_actionsManager34 === void 0 || _this$_actionsManager34.createScaleCellPreparedAction();
+        (_this$_actionsManager32 = this._actionsManager) === null || _this$_actionsManager32 === void 0 || _this$_actionsManager32.createScaleCellPreparedAction();
         break;
       case 'allowSelection':
-        (_this$_ganttTreeList19 = this._ganttTreeList) === null || _this$_ganttTreeList19 === void 0 || _this$_ganttTreeList19.setOption('selection.mode', _uiGantt7.GanttHelper.getSelectionMode(value));
+        (_this$_ganttTreeList17 = this._ganttTreeList) === null || _this$_ganttTreeList17 === void 0 || _this$_ganttTreeList17.setOption('selection.mode', _uiGantt7.GanttHelper.getSelectionMode(value));
         this._setGanttViewOption('allowSelection', value);
         break;
       case 'showRowLines':
-        (_this$_ganttTreeList20 = this._ganttTreeList) === null || _this$_ganttTreeList20 === void 0 || _this$_ganttTreeList20.setOption('showRowLines', value);
+        (_this$_ganttTreeList18 = this._ganttTreeList) === null || _this$_ganttTreeList18 === void 0 || _this$_ganttTreeList18.setOption('showRowLines', value);
         this._setGanttViewOption('showRowLines', value);
         break;
       case 'stripLines':
@@ -239146,7 +239349,7 @@ class Gantt extends _widget.default {
         this._setGanttViewOption('taskContentTemplate', (_this$_ganttTemplates8 = this._ganttTemplatesManager) === null || _this$_ganttTemplates8 === void 0 ? void 0 : _this$_ganttTemplates8.getTaskContentTemplateFunc(value));
         break;
       case 'rootValue':
-        (_this$_ganttTreeList21 = this._ganttTreeList) === null || _this$_ganttTreeList21 === void 0 || _this$_ganttTreeList21.setOption('rootValue', value);
+        (_this$_ganttTreeList19 = this._ganttTreeList) === null || _this$_ganttTreeList19 === void 0 || _this$_ganttTreeList19.setOption('rootValue', value);
         break;
       case 'width':
         super._optionChanged(args);
@@ -239157,13 +239360,13 @@ class Gantt extends _widget.default {
         (_this$_sizeHelper8 = this._sizeHelper) === null || _this$_sizeHelper8 === void 0 || _this$_sizeHelper8.setGanttHeight((0, _size.getHeight)(this.$element()));
         break;
       case 'sorting':
-        (_this$_ganttTreeList22 = this._ganttTreeList) === null || _this$_ganttTreeList22 === void 0 || _this$_ganttTreeList22.setOption('sorting', this.option(name));
+        (_this$_ganttTreeList20 = this._ganttTreeList) === null || _this$_ganttTreeList20 === void 0 || _this$_ganttTreeList20.setOption('sorting', this.option(name));
         break;
       case 'filterRow':
-        (_this$_ganttTreeList23 = this._ganttTreeList) === null || _this$_ganttTreeList23 === void 0 || _this$_ganttTreeList23.setOption('filterRow', this.option(name));
+        (_this$_ganttTreeList21 = this._ganttTreeList) === null || _this$_ganttTreeList21 === void 0 || _this$_ganttTreeList21.setOption('filterRow', this.option(name));
         break;
       case 'headerFilter':
-        (_this$_ganttTreeList24 = this._ganttTreeList) === null || _this$_ganttTreeList24 === void 0 || _this$_ganttTreeList24.setOption('headerFilter', this.option(name));
+        (_this$_ganttTreeList22 = this._ganttTreeList) === null || _this$_ganttTreeList22 === void 0 || _this$_ganttTreeList22.setOption('headerFilter', this.option(name));
         break;
       default:
         super._optionChanged(args);
@@ -239874,14 +240077,19 @@ class DropDownButton extends _widget.default {
     }
   }
   _updateItemCollection(optionName) {
-    const selectedItemKey = this.option('selectedItemKey');
+    const {
+      selectedItemKey,
+      useSelectMode
+    } = this.option();
     this._setListOption('selectedItem', null);
     // @ts-expect-error ts-error
     this._setWidgetOption('_list', [optionName]);
     if ((0, _type.isDefined)(selectedItemKey)) {
       this._loadSelectedItem().done(selectedItem => {
-        this._setListOption('selectedItemKeys', [selectedItemKey]);
-        this._setListOption('selectedItem', selectedItem);
+        if (useSelectMode) {
+          this._setListOption('selectedItemKeys', [selectedItemKey]);
+          this._setListOption('selectedItem', selectedItem);
+        }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       }).fail(error => {
         this._setListOption('selectedItemKeys', []);
@@ -240339,7 +240547,9 @@ const defaultMessages = exports.defaultMessages = {
     "dxScheduler-editPopupSaveButtonText": "Save",
     "dxScheduler-editorLabelTitle": "Subject",
     "dxScheduler-editorLabelStartDate": "Start Date",
+    "dxScheduler-editorAriaLabelStartTime": "Start time",
     "dxScheduler-editorLabelEndDate": "End Date",
+    "dxScheduler-editorAriaLabelEndTime": "End time",
     "dxScheduler-editorLabelDescription": "Description",
     "dxScheduler-editorLabelRecurrence": "Repeat",
     "dxScheduler-noSubject": "(No subject)",
@@ -240610,6 +240820,38 @@ const defaultMessages = exports.defaultMessages = {
     "dxHtmlEditor-aiToolbarItemAriaLabel": "AI Assistant toolbar item",
     "dxHtmlEditor-aiResultTextAreaAriaLabel": "AI Assistant result",
     "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
+    "dxHtmlEditor-aiCommandSummarize": "Summarize",
+    "dxHtmlEditor-aiCommandProofread": "Proofread",
+    "dxHtmlEditor-aiCommandExpand": "Expand",
+    "dxHtmlEditor-aiCommandShorten": "Shorten",
+    "dxHtmlEditor-aiCommandChangeStyle": "Change Style",
+    "dxHtmlEditor-aiCommandChangeTone": "Change Tone",
+    "dxHtmlEditor-aiCommandTranslate": "Translate",
+    "dxHtmlEditor-aiCommandAskAI": "Ask AI",
+    "dxHtmlEditor-aiCommandChangeStyleFormal": "Formal",
+    "dxHtmlEditor-aiCommandChangeStyleInformal": "Informal",
+    "dxHtmlEditor-aiCommandChangeStyleTechnical": "Technical",
+    "dxHtmlEditor-aiCommandChangeStyleBusiness": "Business",
+    "dxHtmlEditor-aiCommandChangeStyleCreative": "Creative",
+    "dxHtmlEditor-aiCommandChangeStyleJournalistic": "Journalistic",
+    "dxHtmlEditor-aiCommandChangeStyleAcademic": "Academic",
+    "dxHtmlEditor-aiCommandChangeStylePersuasive": "Persuasive",
+    "dxHtmlEditor-aiCommandChangeStyleNarrative": "Narrative",
+    "dxHtmlEditor-aiCommandChangeStyleExpository": "Expository",
+    "dxHtmlEditor-aiCommandChangeStyleDescriptive": "Descriptive",
+    "dxHtmlEditor-aiCommandChangeStyleConversational": "Conversational",
+    "dxHtmlEditor-aiCommandChangeToneProfessional": "Professional",
+    "dxHtmlEditor-aiCommandChangeToneCasual": "Casual",
+    "dxHtmlEditor-aiCommandChangeToneStraightforward": "Straightforward",
+    "dxHtmlEditor-aiCommandChangeToneConfident": "Confident",
+    "dxHtmlEditor-aiCommandChangeToneFriendly": "Friendly",
+    "dxHtmlEditor-aiCommandTranslateArabic": "Arabic",
+    "dxHtmlEditor-aiCommandTranslateChinese": "Chinese",
+    "dxHtmlEditor-aiCommandTranslateEnglish": "English",
+    "dxHtmlEditor-aiCommandTranslateFrench": "French",
+    "dxHtmlEditor-aiCommandTranslateGerman": "German",
+    "dxHtmlEditor-aiCommandTranslateJapanese": "Japanese",
+    "dxHtmlEditor-aiCommandTranslateSpanish": "Spanish",
     "dxFileManager-newDirectoryName": "Untitled directory",
     "dxFileManager-rootDirectoryName": "Files",
     "dxFileManager-errorNoAccess": "Access Denied. Operation could not be completed.",
@@ -243057,7 +243299,7 @@ var _date_table_cell_base = __webpack_require__(48661);
 var _layout_props = __webpack_require__(76322);
 var _table = __webpack_require__(46189);
 const _excluded = ["viewData", "viewContext", "tableRef", "addDateTableClass", "width", "cellTemplate", "dataCellTemplate", "groupOrientation", "addVerticalSizesClassToRows"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const DateTableDefaultProps = exports.DateTableDefaultProps = Object.assign({}, _layout_props.LayoutDefaultProps, {
   cellTemplate: _date_table_cell_base.DateTableCellBase
 });
@@ -245088,7 +245330,6 @@ var _update_views_borders = __webpack_require__(20574);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/method-signature-style */
 
 // @ts-expect-error
 
@@ -245181,12 +245422,16 @@ class ModuleItem {
     return this._actions[actionName];
   }
   setAria(name, value, $target) {
+    if (!(0, _type.isDefined)(value)) {
+      return;
+    }
     const target = $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
-    if (target.setAttribute) {
-      target.setAttribute(prefix + name, value);
+    const normalizedValue = String(value).replace(/\s+/g, ' ').trim();
+    if (target !== null && target !== void 0 && target.setAttribute) {
+      target.setAttribute(prefix + name, normalizedValue);
     } else {
-      $target.attr(prefix + name, value);
+      $target.attr(prefix + name, normalizedValue);
     }
   }
   _createComponent($container, component, options) {
@@ -245455,9 +245700,7 @@ function processModules(componentInstance, componentClass) {
     } = _ref7;
     return Object.assign({}, types, getExtendedTypes(types, extenders === null || extenders === void 0 ? void 0 : extenders.views));
   }, rootViewTypes);
-  // eslint-disable-next-line no-param-reassign
   componentInstance._controllers = createModuleItems(controllerTypes);
-  // eslint-disable-next-line no-param-reassign
   componentInstance._views = createModuleItems(viewTypes);
 }
 const callModuleItemsMethod = function (that, methodName, args) {
@@ -247020,8 +247263,7 @@ var searchPanel = _interopRequireWildcard(__webpack_require__(61519));
 var selection = _interopRequireWildcard(__webpack_require__(99779));
 var sortingController = _interopRequireWildcard(__webpack_require__(37386));
 var toolbar = _interopRequireWildcard(__webpack_require__(86326));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const defaultOptions = exports.defaultOptions = Object.assign({}, dataController.defaultOptions, sortingController.defaultOptions, columnsController.defaultOptions, pager.defaultOptions, _index8.filterPanel.defaultOptions, filterController.defaultOptions, headerFilter.defaultOptions, filterSync.defaultOptions, contentView.defaultOptions, searchPanel.defaultOptions, columnChooser.defaultOptions, selection.defaultOptions, toolbar.defaultOptions, editing.defaultOptions, keyboardNavigation.defaultOptions);
 // TODO: separate by modules
@@ -250359,340 +250601,6 @@ if (_knockout.default) {
 
 /***/ }),
 
-/***/ 76982:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _date = _interopRequireDefault(__webpack_require__(38662));
-var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
-var _renderer = _interopRequireDefault(__webpack_require__(64553));
-var _date2 = _interopRequireDefault(__webpack_require__(41380));
-var _iterator = __webpack_require__(21274);
-var _editor = _interopRequireDefault(__webpack_require__(24768));
-var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
-var _m_date_view_roller = _interopRequireDefault(__webpack_require__(24845));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const DATEVIEW_CLASS = 'dx-dateview';
-const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';
-const DATEVIEW_WRAPPER_CLASS = 'dx-dateview-wrapper';
-const DATEVIEW_ROLLER_CONTAINER_CLASS = 'dx-dateview-rollers';
-const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
-const TYPE = {
-  date: 'date',
-  datetime: 'datetime',
-  time: 'time'
-};
-const ROLLER_TYPE = {
-  year: 'year',
-  month: 'month',
-  day: 'day',
-  hours: 'hours'
-};
-class DateView extends _editor.default {
-  _valueOption() {
-    const {
-      value
-    } = this.option();
-    const date = new Date(value);
-    // @ts-expect-error ts-error
-    return !value || isNaN(date) ? this._getDefaultDate() : date;
-  }
-  _getDefaultDate() {
-    const date = new Date();
-    const {
-      type
-    } = this.option();
-    if (type === TYPE.date) {
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    }
-    return date;
-  }
-  _getDefaultOptions() {
-    return Object.assign({}, super._getDefaultOptions(), {
-      minDate: _m_date_utils.default.MIN_DATEVIEW_DEFAULT_DATE,
-      maxDate: _m_date_utils.default.MAX_DATEVIEW_DEFAULT_DATE,
-      type: TYPE.date,
-      value: new Date(),
-      applyCompactClass: false
-    });
-  }
-  _defaultOptionsRules() {
-    return super._defaultOptionsRules().concat([{
-      device(device) {
-        return device.deviceType !== 'desktop';
-      },
-      options: {
-        applyCompactClass: true
-      }
-    }]);
-  }
-  _render() {
-    super._render();
-    this.$element().addClass(DATEVIEW_CLASS);
-    const {
-      type
-    } = this.option();
-    this._toggleFormatClasses(type);
-    this._toggleCompactClass();
-  }
-  _toggleFormatClasses(currentFormat, previousFormat) {
-    this.$element().addClass(`${DATEVIEW_CLASS}-${currentFormat}`);
-    previousFormat && this.$element().removeClass(`${DATEVIEW_CLASS}-${previousFormat}`);
-  }
-  _toggleCompactClass() {
-    const {
-      applyCompactClass
-    } = this.option();
-    this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, applyCompactClass);
-  }
-  _wrapper() {
-    return this._$wrapper;
-  }
-  _renderContentImpl() {
-    this._$wrapper = (0, _renderer.default)('<div>').addClass(DATEVIEW_WRAPPER_CLASS);
-    this._renderRollers();
-    this._$wrapper.appendTo(this.$element());
-  }
-  _renderRollers() {
-    if (!this._$rollersContainer) {
-      this._$rollersContainer = (0, _renderer.default)('<div>').addClass(DATEVIEW_ROLLER_CONTAINER_CLASS);
-    }
-    this._$rollersContainer.empty();
-    this._createRollerConfigs();
-    this._rollers = {};
-    const that = this;
-    (0, _iterator.each)(that._rollerConfigs, name => {
-      // @ts-expect-error ts-error
-      const $roller = (0, _renderer.default)('<div>').appendTo(that._$rollersContainer).addClass(`${DATEVIEW_ROLLER_CLASS}-${that._rollerConfigs[name].type}`);
-      that._rollers[that._rollerConfigs[name].type] = that._createComponent($roller, _m_date_view_roller.default, {
-        items: that._rollerConfigs[name].displayItems,
-        selectedIndex: that._rollerConfigs[name].selectedIndex,
-        showScrollbar: 'never',
-        scrollByContent: true,
-        onStart(e) {
-          const roller = e.component;
-          roller._toggleActive(true);
-          that._setActiveRoller(that._rollerConfigs[name]);
-        },
-        onEnd(e) {
-          const roller = e.component;
-          roller._toggleActive(false);
-        },
-        onClick(e) {
-          const roller = e.component;
-          roller._toggleActive(true);
-          that._setActiveRoller(that._rollerConfigs[name]);
-          that._setRollerState(that._rollerConfigs[name], roller.option('selectedIndex'));
-          roller._toggleActive(false);
-        },
-        onSelectedIndexChanged(e) {
-          const roller = e.component;
-          that._setRollerState(that._rollerConfigs[name], roller.option('selectedIndex'));
-        }
-      });
-    });
-    // @ts-expect-error ts-error
-    that._$rollersContainer.appendTo(that._wrapper());
-  }
-  _createRollerConfigs(type) {
-    const that = this;
-    type = type || that.option('type');
-    that._rollerConfigs = {};
-    // @ts-expect-error ts-error
-    _date.default.getFormatParts(_m_date_utils.default.FORMATS_MAP[type]).forEach(partName => {
-      that._createRollerConfig(partName);
-    });
-  }
-  _createRollerConfig(componentName) {
-    // @ts-expect-error ts-error
-    const componentInfo = _m_date_utils.default.DATE_COMPONENTS_INFO[componentName];
-    const valueRange = this._calculateRollerConfigValueRange(componentName);
-    const {
-      startValue
-    } = valueRange;
-    const {
-      endValue
-    } = valueRange;
-    const {
-      formatter
-    } = componentInfo;
-    const curDate = this._getCurrentDate();
-    const config = {
-      type: componentName,
-      setValue: componentInfo.setter,
-      valueItems: [],
-      displayItems: [],
-      getIndex(value) {
-        return value[componentInfo.getter]() - startValue;
-      }
-    };
-    for (let i = startValue; i <= endValue; i++) {
-      // @ts-expect-error ts-error
-      config.valueItems.push(i);
-      // @ts-expect-error ts-error
-      config.displayItems.push(formatter(i, curDate));
-    }
-    // @ts-expect-error ts-error
-    config.selectedIndex = config.getIndex(curDate);
-    this._rollerConfigs[componentName] = config;
-  }
-  _setActiveRoller(currentRoller) {
-    const activeRoller = currentRoller && this._rollers[currentRoller.type];
-    (0, _iterator.each)(this._rollers, function () {
-      this.toggleActiveState(this === activeRoller);
-    });
-  }
-  _updateRollersPosition() {
-    const that = this;
-    (0, _iterator.each)(this._rollers, function (type) {
-      const correctIndex = that._rollerConfigs[type].getIndex(that._getCurrentDate());
-      this.option('selectedIndex', correctIndex);
-    });
-  }
-  _setRollerState(roller, selectedIndex) {
-    if (selectedIndex !== roller.selectedIndex) {
-      const rollerValue = roller.valueItems[selectedIndex];
-      const {
-        setValue
-      } = roller;
-      let currentValue = new Date(this._getCurrentDate());
-      let currentDate = currentValue.getDate();
-      const minDate = this.option('minDate');
-      const maxDate = this.option('maxDate');
-      if (roller.type === ROLLER_TYPE.month) {
-        currentDate = Math.min(currentDate, _m_date_utils.default.getMaxMonthDay(currentValue.getFullYear(), rollerValue));
-      } else if (roller.type === ROLLER_TYPE.year) {
-        currentDate = Math.min(currentDate, _m_date_utils.default.getMaxMonthDay(rollerValue, currentValue.getMonth()));
-      }
-      currentValue.setDate(currentDate);
-      currentValue[setValue](rollerValue);
-      const normalizedDate = _date2.default.normalizeDate(currentValue, minDate, maxDate);
-      currentValue = _m_date_utils.default.mergeDates(normalizedDate, currentValue, 'time');
-      currentValue = _date2.default.normalizeDate(currentValue, minDate, maxDate);
-      this.option('value', currentValue);
-      roller.selectedIndex = selectedIndex;
-    }
-    if (roller.type === ROLLER_TYPE.year) {
-      this._refreshRollers();
-    }
-    if (roller.type === ROLLER_TYPE.month) {
-      this._refreshRoller(ROLLER_TYPE.day);
-      this._refreshRoller(ROLLER_TYPE.hours);
-    }
-  }
-  _refreshRoller(rollerType) {
-    const roller = this._rollers[rollerType];
-    if (roller) {
-      this._createRollerConfig(rollerType);
-      const rollerConfig = this._rollerConfigs[rollerType];
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      if (rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== roller.option('items').toString()) {
-        roller.option({
-          items: rollerConfig.displayItems,
-          selectedIndex: rollerConfig.selectedIndex
-        });
-      }
-    }
-  }
-  _getCurrentDate() {
-    const curDate = this._valueOption();
-    const minDate = this.option('minDate');
-    const maxDate = this.option('maxDate');
-    return _date2.default.normalizeDate(curDate, minDate, maxDate);
-  }
-  _calculateRollerConfigValueRange(componentName) {
-    const curDate = this._getCurrentDate();
-    const {
-      minDate,
-      maxDate
-    } = this.option();
-    const minYear = _date2.default.sameYear(curDate, minDate);
-    const minMonth = minYear && curDate.getMonth() === minDate.getMonth();
-    const maxYear = _date2.default.sameYear(curDate, maxDate);
-    const maxMonth = maxYear && curDate.getMonth() === maxDate.getMonth();
-    const minHour = minMonth && curDate.getDate() === minDate.getDate();
-    const maxHour = maxMonth && curDate.getDate() === maxDate.getDate();
-    // @ts-expect-error ts-error
-    const componentInfo = _m_date_utils.default.DATE_COMPONENTS_INFO[componentName];
-    let {
-      startValue
-    } = componentInfo;
-    let {
-      endValue
-    } = componentInfo;
-    if (componentName === ROLLER_TYPE.year) {
-      startValue = minDate.getFullYear();
-      endValue = maxDate.getFullYear();
-    }
-    if (componentName === ROLLER_TYPE.month) {
-      if (minYear) {
-        startValue = minDate.getMonth();
-      }
-      if (maxYear) {
-        endValue = maxDate.getMonth();
-      }
-    }
-    if (componentName === ROLLER_TYPE.day) {
-      endValue = _m_date_utils.default.getMaxMonthDay(curDate.getFullYear(), curDate.getMonth());
-      if (minYear && minMonth) {
-        startValue = minDate.getDate();
-      }
-      if (maxYear && maxMonth) {
-        endValue = maxDate.getDate();
-      }
-    }
-    if (componentName === ROLLER_TYPE.hours) {
-      startValue = minHour ? minDate.getHours() : startValue;
-      endValue = maxHour ? maxDate.getHours() : endValue;
-    }
-    return {
-      startValue,
-      endValue
-    };
-  }
-  _refreshRollers() {
-    this._refreshRoller(ROLLER_TYPE.month);
-    this._refreshRoller(ROLLER_TYPE.day);
-    this._refreshRoller(ROLLER_TYPE.hours);
-  }
-  _optionChanged(args) {
-    switch (args.name) {
-      case 'minDate':
-      case 'maxDate':
-      case 'type':
-        this._renderRollers();
-        this._toggleFormatClasses(args.value, args.previousValue);
-        break;
-      case 'visible':
-        super._optionChanged(args);
-        if (args.value) {
-          this._renderRollers();
-        }
-        break;
-      case 'value':
-        this.option('value', this._valueOption());
-        this._refreshRollers();
-        this._updateRollersPosition();
-        break;
-      default:
-        super._optionChanged(args);
-    }
-  }
-  _clean() {
-    super._clean();
-    delete this._$rollersContainer;
-  }
-}
-(0, _component_registrator.default)('dxDateView', DateView);
-var _default = exports["default"] = DateView;
-
-/***/ }),
-
 /***/ 76988:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -253933,8 +253841,7 @@ var _hover = __webpack_require__(638);
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _button = _interopRequireDefault(__webpack_require__(64973));
 var _m_button = _interopRequireWildcard(__webpack_require__(88244));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 class CustomButton extends _m_button.default {
@@ -254964,7 +254871,7 @@ var _themes = __webpack_require__(52071);
 var _overlay = _interopRequireDefault(__webpack_require__(79384));
 const _excluded = ["src"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 // STYLE loadPanel
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
@@ -256575,7 +256482,7 @@ const AdvancedChart = exports.AdvancedChart = _m_base_chart.BaseChart.inherit({
     const name = fullName.split(/[.[]/)[0];
     let index = fullName.match(/\d+/g);
     index = (0, _type.isDefined)(index) ? parseInt(index[0], 10) : index;
-    if (fullName.indexOf('visualRange') > 0) {
+    if (fullName.split('.').indexOf('visualRange') > 0) {
       if ((0, _type.type)(value) !== 'object') {
         value = wrapVisualRange(fullName, value) ?? value;
       }
@@ -256677,13 +256584,14 @@ const AdvancedChart = exports.AdvancedChart = _m_base_chart.BaseChart.inherit({
   _optionChanged(arg) {
     if (!this._optionChangedLocker) {
       const optionName = 'visualRange';
-      let axes;
-      const isDirectOption = arg.fullName.indexOf(optionName) > 0 ? true : this.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
+      const isDirectOption = arg.fullName.split('.').indexOf(optionName) > 0 ? true : this.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
       if ((0, _type.isDefined)(isDirectOption)) {
-        axes = this._getAxesByOptionPath(arg, isDirectOption, optionName);
+        const axes = this._getAxesByOptionPath(arg, isDirectOption, optionName);
         if (axes) {
           if (axes.length > 1 || isArray(arg.value)) {
-            axes.forEach((a, index) => setAxisVisualRangeByOption(arg, a, isDirectOption, index));
+            axes.forEach((a, index) => {
+              setAxisVisualRangeByOption(arg, a, isDirectOption, index);
+            });
           } else if (axes.length === 1) {
             setAxisVisualRangeByOption(arg, axes[0], isDirectOption);
           }
@@ -258621,8 +258529,7 @@ var _m_window = _interopRequireDefault(__webpack_require__(14470));
 var _widget = _interopRequireDefault(__webpack_require__(89275));
 var _overlay_position_controller = __webpack_require__(46967);
 var zIndexPool = _interopRequireWildcard(__webpack_require__(27869));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const ready = _ready_callbacks.default.add;
 const window = _m_window.default.getWindow();
@@ -259080,8 +258987,8 @@ class Overlay extends _widget.default {
       this._hidingDeferred.resolve();
     };
     const startCallback = (element, config) => {
-      var _this$_$content10;
-      (_this$_$content10 = this._$content) === null || _this$_$content10 === void 0 || _this$_$content10.css('pointerEvents', 'none');
+      var _this$_$content0;
+      (_this$_$content0 = this._$content) === null || _this$_$content0 === void 0 || _this$_$content0.css('pointerEvents', 'none');
       startHideAnimation.call(this, element, config);
       this._hideAnimationProcessing = true;
     };
@@ -259125,9 +259032,9 @@ class Overlay extends _widget.default {
     return this._hidingDeferred.promise();
   }
   _forceFocusLost() {
-    var _this$_$content11;
+    var _this$_$content1;
     const activeElement = _dom_adapter.default.getActiveElement();
-    const shouldResetActiveElement = !!((_this$_$content11 = this._$content) !== null && _this$_$content11 !== void 0 && _this$_$content11.find(activeElement).length);
+    const shouldResetActiveElement = !!((_this$_$content1 = this._$content) !== null && _this$_$content1 !== void 0 && _this$_$content1.find(activeElement).length);
     if (shouldResetActiveElement) {
       _m_dom.default.resetActiveElement();
     }
@@ -259169,9 +259076,9 @@ class Overlay extends _widget.default {
       (0, _visibility_change.triggerShownEvent)(this._$content);
       (0, _visibility_change.triggerResizeEvent)(this._$content);
     } else {
-      var _this$_$content12;
+      var _this$_$content10;
       this._toggleVisibility(visible);
-      (_this$_$content12 = this._$content) === null || _this$_$content12 === void 0 || _this$_$content12.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+      (_this$_$content10 = this._$content) === null || _this$_$content10 === void 0 || _this$_$content10.toggleClass(INVISIBLE_STATE_CLASS, !visible);
       this._updateZIndexStackPosition(visible);
       this._moveFromContainer();
     }
@@ -259208,9 +259115,9 @@ class Overlay extends _widget.default {
     this._updateZIndex();
   }
   _updateZIndex() {
-    var _this$_$wrapper, _this$_$content13;
+    var _this$_$wrapper, _this$_$content11;
     (_this$_$wrapper = this._$wrapper) === null || _this$_$wrapper === void 0 || _this$_$wrapper.css('zIndex', this._zIndex);
-    (_this$_$content13 = this._$content) === null || _this$_$content13 === void 0 || _this$_$content13.css('zIndex', this._zIndex);
+    (_this$_$content11 = this._$content) === null || _this$_$content11 === void 0 || _this$_$content11.css('zIndex', this._zIndex);
   }
   _toggleShading(visible) {
     var _this$_$wrapper2, _this$_$wrapper3;
@@ -259368,10 +259275,10 @@ class Overlay extends _widget.default {
     this._renderVisibilityAnimate(this._isVisible());
   }
   _appendContentToElement() {
-    var _this$_$content14;
-    if (!((_this$_$content14 = this._$content) !== null && _this$_$content14 !== void 0 && _this$_$content14.parent().is(this.$element()))) {
-      var _this$_$content15;
-      (_this$_$content15 = this._$content) === null || _this$_$content15 === void 0 || _this$_$content15.appendTo(this.$element());
+    var _this$_$content12;
+    if (!((_this$_$content12 = this._$content) !== null && _this$_$content12 !== void 0 && _this$_$content12.parent().is(this.$element()))) {
+      var _this$_$content13;
+      (_this$_$content13 = this._$content) === null || _this$_$content13 === void 0 || _this$_$content13.appendTo(this.$element());
     }
   }
   _renderContent() {
@@ -259533,8 +259440,8 @@ class Overlay extends _widget.default {
     }
   }
   _moveFromContainer() {
-    var _this$_$content16, _this$_$wrapper6;
-    (_this$_$content16 = this._$content) === null || _this$_$content16 === void 0 || _this$_$content16.appendTo(this.$element());
+    var _this$_$content14, _this$_$wrapper6;
+    (_this$_$content14 = this._$content) === null || _this$_$content14 === void 0 || _this$_$content14.appendTo(this.$element());
     (_this$_$wrapper6 = this._$wrapper) === null || _this$_$wrapper6 === void 0 || _this$_$wrapper6.detach();
   }
   _checkContainerExists() {
@@ -259555,8 +259462,8 @@ class Overlay extends _widget.default {
       (_this$_$wrapper7 = this._$wrapper) === null || _this$_$wrapper7 === void 0 || _this$_$wrapper7.appendTo($wrapperContainer);
     }
     if (this._$wrapper) {
-      var _this$_$content17;
-      (_this$_$content17 = this._$content) === null || _this$_$content17 === void 0 || _this$_$content17.appendTo(this._$wrapper);
+      var _this$_$content15;
+      (_this$_$content15 = this._$content) === null || _this$_$content15 === void 0 || _this$_$content15.appendTo(this._$wrapper);
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -259625,9 +259532,9 @@ class Overlay extends _widget.default {
     });
   }
   _renderDimensions() {
-    var _this$_$content18, _this$_$content19;
-    const content = (_this$_$content18 = this._$content) === null || _this$_$content18 === void 0 ? void 0 : _this$_$content18.get(0);
-    (_this$_$content19 = this._$content) === null || _this$_$content19 === void 0 || _this$_$content19.css({
+    var _this$_$content16, _this$_$content17;
+    const content = (_this$_$content16 = this._$content) === null || _this$_$content16 === void 0 ? void 0 : _this$_$content16.get(0);
+    (_this$_$content17 = this._$content) === null || _this$_$content17 === void 0 || _this$_$content17.css({
       minWidth: this._getOptionValue('minWidth', content),
       maxWidth: this._getOptionValue('maxWidth', content),
       minHeight: this._getOptionValue('minHeight', content),
@@ -259681,7 +259588,7 @@ class Overlay extends _widget.default {
     this._cleanFocusState();
   }
   _dispose() {
-    var _this$_$wrapper9, _this$_$content20;
+    var _this$_$wrapper9, _this$_$content18;
     if (this._$content) {
       _animation.fx.stop(this._$content.get(0), false);
     }
@@ -259698,13 +259605,13 @@ class Overlay extends _widget.default {
     this._actions = {};
     this._parentsScrollSubscriptionInfo = undefined;
     (_this$_$wrapper9 = this._$wrapper) === null || _this$_$wrapper9 === void 0 || _this$_$wrapper9.remove();
-    (_this$_$content20 = this._$content) === null || _this$_$content20 === void 0 || _this$_$content20.remove();
+    (_this$_$content18 = this._$content) === null || _this$_$content18 === void 0 || _this$_$content18.remove();
     this._$wrapper = null;
     this._$content = null;
   }
   _toggleRTLDirection(rtl) {
-    var _this$_$content21;
-    (_this$_$content21 = this._$content) === null || _this$_$content21 === void 0 || _this$_$content21.toggleClass(RTL_DIRECTION_CLASS, rtl);
+    var _this$_$content19;
+    (_this$_$content19 = this._$content) === null || _this$_$content19 === void 0 || _this$_$content19.toggleClass(RTL_DIRECTION_CLASS, rtl);
   }
   _optionChanged(args) {
     const {
@@ -262132,7 +262039,7 @@ var _split_interval_by_days = __webpack_require__(85588);
 var _trim_interval = __webpack_require__(28032);
 var _get_minutes_cell_intervals = __webpack_require__(55647);
 const _excluded = ["startDayHour", "endDayHour"];
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const getWeekIntervals = (compareOptions, cellDurationMinutes, viewOffset, isTimeline) => {
   const dateInterval = _objectWithoutPropertiesLoose(compareOptions, _excluded);
   const trimmedInterval = (0, _trim_interval.trimInterval)(dateInterval);
@@ -266533,24 +266440,24 @@ class Menu extends _menu_base.default {
     // @ts-expect-error ts-error
     eventArgs.submenu = params.submenu;
     (_this$_actions$onSubm5 = (_this$_actions7 = this._actions).onSubmenuHiding) === null || _this$_actions$onSubm5 === void 0 || _this$_actions$onSubm5.call(_this$_actions7, eventArgs);
+    if (eventArgs.cancel) {
+      return;
+    }
     const {
       focusedElement
     } = this.option();
-    const {
-      focusedElement: submenuFocusedElement
-    } = submenu.option();
-    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
-    const isFocusedElementHiding = focusedElement === submenuFocusedElement;
-    if (isVisibleSubmenuHiding && isFocusedElementHiding) {
+    const submenuContainerElement = (0, _renderer.default)(eventArgs.submenuContainer).get(0);
+    const focusedDomElement = (0, _renderer.default)(focusedElement).get(0);
+    const isFocusedElementInsideSubmenu = focusedDomElement && submenuContainerElement ? submenuContainerElement.contains(focusedDomElement) : false;
+    if (isFocusedElementInsideSubmenu) {
       this.option('focusedElement', (0, _element.getPublicElement)($menuAnchorItem));
     }
-    if (!eventArgs.cancel) {
-      if (isVisibleSubmenuHiding) {
-        this._visibleSubmenu = null;
-      }
-      $border.hide();
-      $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
+    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
+    if (isVisibleSubmenuHiding) {
+      this._visibleSubmenu = null;
     }
+    $border.hide();
+    $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
   _submenuOnHiddenHandler($menuAnchorItem, submenu, _ref3) {
     var _this$_actions$onSubm6, _this$_actions8;
@@ -267395,8 +267302,7 @@ exports.summaryDictionary = void 0;
 var _extend = __webpack_require__(52576);
 var _type = __webpack_require__(11528);
 var _m_widget_utils = _interopRequireWildcard(__webpack_require__(12062));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 const COLUMN = 'column';
 const ROW = 'row';
 const NULL = null;
@@ -267886,8 +267792,7 @@ var _type = __webpack_require__(11528);
 var _capitalize = __webpack_require__(72928);
 var _m_widget_utils = _interopRequireWildcard(__webpack_require__(12062));
 var _m_remote_store_utils = __webpack_require__(84265);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function createGroupingOptions(fields, useSortOrder) {
   const groupingOptions = [];
@@ -268376,6 +268281,10 @@ class RemoteStore {
         return store.load(extendedLoadOptions);
       }
     });
+  }
+  dispose() {
+    var _this$_dataSource;
+    (_this$_dataSource = this._dataSource) === null || _this$_dataSource === void 0 || _this$_dataSource.dispose();
   }
 }
 exports.RemoteStore = RemoteStore;
@@ -268938,7 +268847,7 @@ var _index = __webpack_require__(34396);
 var _constants_view = __webpack_require__(43582);
 const _excluded = ["startDate", "endDate", "isFirstGroupCell", "isLastGroupCell"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class DateHeaderDataGenerator {
   constructor(_viewDataGenerator) {
     this._viewDataGenerator = _viewDataGenerator;
@@ -269176,7 +269085,9 @@ class ErrorHandlingController extends _m_modules.default.ViewController {
   }
   _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
-    const $message = (0, _renderer.default)('<div>').attr('role', 'alert').attr('aria-roledescription', _message.default.format('dxDataGrid-ariaError')).addClass(ERROR_MESSAGE_CLASS).text(message);
+    const $message = (0, _renderer.default)('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
+    this.setAria('role', 'alert', $message);
+    this.setAria('roledescription', _message.default.format('dxDataGrid-ariaError'), $message);
     if (error.url) {
       (0, _renderer.default)('<a>').attr('href', error.url).text(error.url).appendTo($message);
     }
@@ -269863,7 +269774,7 @@ const _excluded = ["_rect", "gridCell"];
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -270683,9 +270594,9 @@ const headerFilterMixin = Base => class HeaderFilterMixin extends Base {
           $headerFilterIndicator.attr('tabindex', this.option('tabindex') || 0);
         }
         const indicatorLabel = _message.default.format('dxDataGrid-headerFilterIndicatorLabel', column.caption);
-        $headerFilterIndicator.attr('aria-label', indicatorLabel);
-        $headerFilterIndicator.attr('aria-haspopup', 'dialog');
-        $headerFilterIndicator.attr('role', 'button');
+        this.setAria('label', indicatorLabel, $headerFilterIndicator);
+        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+        this.setAria('role', 'button', $headerFilterIndicator);
       }
       return $headerFilterIndicator;
     }
@@ -274945,21 +274856,21 @@ class ContextMenu extends _menu_base.default {
     return promise;
   }
   _renderItems(nodes, submenuContainer) {
-    var _this$_overlay10;
+    var _this$_overlay0;
     super._renderItems(nodes, submenuContainer);
-    const $submenu = (0, _renderer.default)((_this$_overlay10 = this._overlay) === null || _this$_overlay10 === void 0 ? void 0 : _this$_overlay10.content()).children(`.${DX_SUBMENU_CLASS}`);
+    const $submenu = (0, _renderer.default)((_this$_overlay0 = this._overlay) === null || _this$_overlay0 === void 0 ? void 0 : _this$_overlay0.content()).children(`.${DX_SUBMENU_CLASS}`);
     if ($submenu.length) {
       this._initScrollable($submenu);
     }
   }
   _setAriaAttributes() {
-    var _this$_overlay11;
+    var _this$_overlay1;
     this._overlayContentId = `dx-${new _guid.default()}`;
     this.setAria('owns', this._overlayContentId);
     this.setAria({
       id: this._overlayContentId,
       role: 'menu'
-    }, (_this$_overlay11 = this._overlay) === null || _this$_overlay11 === void 0 ? void 0 : _this$_overlay11.$content());
+    }, (_this$_overlay1 = this._overlay) === null || _this$_overlay1 === void 0 ? void 0 : _this$_overlay1.$content());
   }
   _cleanAriaAttributes() {
     if (this._overlay) {
@@ -275379,6 +275290,368 @@ module.exports["default"] = exports.default;
 
 /***/ }),
 
+/***/ 84738:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _date = _interopRequireDefault(__webpack_require__(38662));
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _date2 = _interopRequireDefault(__webpack_require__(41380));
+var _editor = _interopRequireDefault(__webpack_require__(24768));
+var _m_date_utils = _interopRequireDefault(__webpack_require__(14922));
+var _m_date_view_roller = _interopRequireDefault(__webpack_require__(24845));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const DATEVIEW_CLASS = 'dx-dateview';
+const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';
+const DATEVIEW_WRAPPER_CLASS = 'dx-dateview-wrapper';
+const DATEVIEW_ROLLER_CONTAINER_CLASS = 'dx-dateview-rollers';
+const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
+const TYPE = {
+  date: 'date',
+  datetime: 'datetime',
+  time: 'time'
+};
+const ROLLER_TYPE = {
+  year: 'year',
+  month: 'month',
+  day: 'day',
+  hours: 'hours'
+};
+class DateView extends _editor.default {
+  _valueOption() {
+    const {
+      value
+    } = this.option();
+    const date = new Date(value);
+    return !value || isNaN(date.getTime()) ? this._getDefaultDate() : date;
+  }
+  _getDefaultDate() {
+    const date = new Date();
+    const {
+      type
+    } = this.option();
+    if (type === TYPE.date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    return date;
+  }
+  _getDefaultOptions() {
+    return Object.assign({}, super._getDefaultOptions(), {
+      minDate: _m_date_utils.default.MIN_DATEVIEW_DEFAULT_DATE,
+      maxDate: _m_date_utils.default.MAX_DATEVIEW_DEFAULT_DATE,
+      type: TYPE.date,
+      value: new Date(),
+      applyCompactClass: false
+    });
+  }
+  _defaultOptionsRules() {
+    return super._defaultOptionsRules().concat([{
+      device(device) {
+        return device.deviceType !== 'desktop';
+      },
+      options: {
+        applyCompactClass: true
+      }
+    }]);
+  }
+  _render() {
+    super._render();
+    this.$element().addClass(DATEVIEW_CLASS);
+    const {
+      type
+    } = this.option();
+    this._toggleFormatClasses(type);
+    this._toggleCompactClass();
+  }
+  _toggleFormatClasses(currentFormat, previousFormat) {
+    this.$element().addClass(`${DATEVIEW_CLASS}-${currentFormat}`);
+    if (previousFormat) {
+      this.$element().removeClass(`${DATEVIEW_CLASS}-${previousFormat}`);
+    }
+  }
+  _toggleCompactClass() {
+    const {
+      applyCompactClass
+    } = this.option();
+    this.$element().toggleClass(DATEVIEW_COMPACT_CLASS, applyCompactClass);
+  }
+  _wrapper() {
+    return this._$wrapper;
+  }
+  _renderContentImpl() {
+    this._$wrapper = (0, _renderer.default)('<div>').addClass(DATEVIEW_WRAPPER_CLASS);
+    this._renderRollers();
+    this._$wrapper.appendTo(this.$element());
+  }
+  _renderRollers() {
+    if (!this._$rollersContainer) {
+      this._$rollersContainer = (0, _renderer.default)('<div>').addClass(DATEVIEW_ROLLER_CONTAINER_CLASS);
+    }
+    this._$rollersContainer.empty();
+    this._createRollerConfigs();
+    this._rollers = {};
+    Object.keys(this._rollerConfigs).forEach(name => {
+      const rollerType = this._rollerConfigs[name].type;
+      const $roller = (0, _renderer.default)('<div>').appendTo(this._$rollersContainer).addClass(`${DATEVIEW_ROLLER_CLASS}-${rollerType}`);
+      this._rollers[rollerType] = this._createComponent($roller, _m_date_view_roller.default, {
+        items: this._rollerConfigs[name].displayItems,
+        selectedIndex: this._rollerConfigs[name].selectedIndex,
+        showScrollbar: 'never',
+        scrollByContent: true,
+        // TODO Add event type once m_date_view_roller types is refactored
+        onStart: e => {
+          const {
+            component
+          } = e;
+          const rollerConfig = this._rollerConfigs[name];
+          component._toggleActive(true);
+          this._setActiveRoller(rollerConfig);
+        },
+        // TODO Add event type once m_date_view_roller types is refactored
+        onEnd: e => {
+          e.component._toggleActive(false);
+        },
+        // TODO Add event type once m_date_view_roller types is refactored
+        onClick: e => {
+          const {
+            component
+          } = e;
+          const {
+            selectedIndex
+          } = component.option();
+          const rollerConfig = this._rollerConfigs[name];
+          component._toggleActive(true);
+          this._setActiveRoller(rollerConfig);
+          this._setRollerState(rollerConfig, selectedIndex);
+          component._toggleActive(false);
+        },
+        // TODO Add event type once m_date_view_roller types is refactored
+        onSelectedIndexChanged: e => {
+          const {
+            component
+          } = e;
+          const {
+            selectedIndex
+          } = component.option();
+          const rollerConfig = this._rollerConfigs[name];
+          this._setRollerState(rollerConfig, selectedIndex);
+        }
+      });
+    });
+    const $wrapper = this._wrapper();
+    if ($wrapper) {
+      this._$rollersContainer.appendTo($wrapper);
+    }
+  }
+  _createRollerConfigs(type) {
+    const {
+      type: defaultType
+    } = this.option();
+    const selectedType = type ?? defaultType;
+    this._rollerConfigs = {};
+    _date.default
+    // @ts-expect-error core/DateLocalization type should be fixed
+    .getFormatParts(_m_date_utils.default.FORMATS_MAP[selectedType]).forEach(partName => {
+      this._createRollerConfig(partName);
+    });
+  }
+  _createRollerConfig(componentName) {
+    // @ts-expect-error TODO remove once m_date_utils is refactored
+    const componentInfo = _m_date_utils.default.DATE_COMPONENTS_INFO[componentName];
+    const valueRange = this._calculateRollerConfigValueRange(componentName);
+    const {
+      startValue
+    } = valueRange;
+    const {
+      endValue
+    } = valueRange;
+    const {
+      formatter
+    } = componentInfo;
+    const curDate = this._getCurrentDate();
+    const config = {
+      type: componentName,
+      setValue: componentInfo.setter,
+      valueItems: [],
+      displayItems: [],
+      getIndex(value) {
+        return value[componentInfo.getter]() - startValue;
+      }
+    };
+    for (let i = startValue; i <= endValue; i += 1) {
+      config.valueItems.push(i);
+      config.displayItems.push(formatter(i, curDate));
+    }
+    config.selectedIndex = config.getIndex(curDate);
+    this._rollerConfigs[componentName] = config;
+  }
+  _setActiveRoller(currentRoller) {
+    const activeRoller = currentRoller && this._rollers[currentRoller.type];
+    Object.values(this._rollers).forEach(roller => {
+      roller.toggleActiveState(roller === activeRoller);
+    });
+  }
+  _updateRollersPosition() {
+    const currentDate = this._getCurrentDate();
+    Object.keys(this._rollers).forEach(type => {
+      const correctIndex = this._rollerConfigs[type].getIndex(currentDate);
+      this._rollers[type].option('selectedIndex', correctIndex);
+    });
+  }
+  _setRollerState(roller, selectedIndex) {
+    if (selectedIndex !== roller.selectedIndex) {
+      const rollerValue = roller.valueItems[selectedIndex];
+      const {
+        setValue
+      } = roller;
+      let currentValue = new Date(this._getCurrentDate());
+      let currentDate = currentValue.getDate();
+      const {
+        minDate,
+        maxDate
+      } = this.option();
+      if (roller.type === ROLLER_TYPE.month) {
+        currentDate = Math.min(currentDate, _m_date_utils.default.getMaxMonthDay(currentValue.getFullYear(), rollerValue));
+      } else if (roller.type === ROLLER_TYPE.year) {
+        currentDate = Math.min(currentDate, _m_date_utils.default.getMaxMonthDay(rollerValue, currentValue.getMonth()));
+      }
+      currentValue.setDate(currentDate);
+      currentValue[setValue](rollerValue);
+      const normalizedDate = _date2.default.normalizeDate(currentValue, minDate, maxDate);
+      currentValue = _m_date_utils.default.mergeDates(normalizedDate, currentValue, 'time');
+      currentValue = _date2.default.normalizeDate(currentValue, minDate, maxDate);
+      this.option('value', currentValue);
+      roller.selectedIndex = selectedIndex;
+    }
+    if (roller.type === ROLLER_TYPE.year) {
+      this._refreshRollers();
+    }
+    if (roller.type === ROLLER_TYPE.month) {
+      this._refreshRoller(ROLLER_TYPE.day);
+      this._refreshRoller(ROLLER_TYPE.hours);
+    }
+  }
+  _refreshRoller(rollerType) {
+    const roller = this._rollers[rollerType];
+    if (roller) {
+      // @ts-expect-error TODO Remove once m_date_view_roller is reworked
+      const {
+        items
+      } = roller.option();
+      this._createRollerConfig(rollerType);
+      const rollerConfig = this._rollerConfigs[rollerType];
+      if (rollerType === ROLLER_TYPE.day || rollerConfig.displayItems.toString() !== items.toString()) {
+        roller.option({
+          items: rollerConfig.displayItems,
+          selectedIndex: rollerConfig.selectedIndex
+        });
+      }
+    }
+  }
+  _getCurrentDate() {
+    const curDate = this._valueOption();
+    const {
+      minDate,
+      maxDate
+    } = this.option();
+    return _date2.default.normalizeDate(curDate, minDate, maxDate);
+  }
+  _calculateRollerConfigValueRange(componentName) {
+    const curDate = this._getCurrentDate();
+    const {
+      minDate,
+      maxDate
+    } = this.option();
+    const minYear = _date2.default.sameYear(curDate, minDate);
+    const minMonth = minYear && curDate.getMonth() === minDate.getMonth();
+    const maxYear = _date2.default.sameYear(curDate, maxDate);
+    const maxMonth = maxYear && curDate.getMonth() === maxDate.getMonth();
+    const minHour = minMonth && curDate.getDate() === minDate.getDate();
+    const maxHour = maxMonth && curDate.getDate() === maxDate.getDate();
+    // @ts-expect-error TODO remove once m_date_utils is refactored
+    const componentInfo = _m_date_utils.default.DATE_COMPONENTS_INFO[componentName];
+    let {
+      startValue
+    } = componentInfo;
+    let {
+      endValue
+    } = componentInfo;
+    if (componentName === ROLLER_TYPE.year) {
+      startValue = minDate.getFullYear();
+      endValue = maxDate.getFullYear();
+    }
+    if (componentName === ROLLER_TYPE.month) {
+      if (minYear) {
+        startValue = minDate.getMonth();
+      }
+      if (maxYear) {
+        endValue = maxDate.getMonth();
+      }
+    }
+    if (componentName === ROLLER_TYPE.day) {
+      endValue = _m_date_utils.default.getMaxMonthDay(curDate.getFullYear(), curDate.getMonth());
+      if (minYear && minMonth) {
+        startValue = minDate.getDate();
+      }
+      if (maxYear && maxMonth) {
+        endValue = maxDate.getDate();
+      }
+    }
+    if (componentName === ROLLER_TYPE.hours) {
+      startValue = minHour ? minDate.getHours() : startValue;
+      endValue = maxHour ? maxDate.getHours() : endValue;
+    }
+    return {
+      startValue,
+      endValue
+    };
+  }
+  _refreshRollers() {
+    this._refreshRoller(ROLLER_TYPE.month);
+    this._refreshRoller(ROLLER_TYPE.day);
+    this._refreshRoller(ROLLER_TYPE.hours);
+  }
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'minDate':
+      case 'maxDate':
+      case 'type':
+        this._renderRollers();
+        if (args.value) {
+          this._toggleFormatClasses(args.value, args.previousValue);
+        }
+        break;
+      case 'visible':
+        super._optionChanged(args);
+        if (args.value) {
+          this._renderRollers();
+        }
+        break;
+      case 'value':
+        this.option('value', this._valueOption());
+        this._refreshRollers();
+        this._updateRollersPosition();
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+  _clean() {
+    super._clean();
+    delete this._$rollersContainer;
+  }
+}
+(0, _component_registrator.default)('dxDateView', DateView);
+var _default = exports["default"] = DateView;
+
+/***/ }),
+
 /***/ 84751:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -275737,7 +276010,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.SchedulerHeader = void 0;
-__webpack_require__(17809);
 __webpack_require__(56582);
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _devices = _interopRequireDefault(__webpack_require__(65951));
@@ -275747,12 +276019,11 @@ var _data = __webpack_require__(31000);
 var _date = _interopRequireDefault(__webpack_require__(41380));
 var _extend = __webpack_require__(52576);
 var _toolbar = _interopRequireDefault(__webpack_require__(2850));
-var _ui = _interopRequireDefault(__webpack_require__(11118));
+var _widget = _interopRequireDefault(__webpack_require__(89275));
 var _m_calendar = _interopRequireDefault(__webpack_require__(52170));
 var _m_date_navigator = __webpack_require__(13842);
 var _m_utils = __webpack_require__(25379);
 var _m_view_switcher = __webpack_require__(94791);
-var _today = __webpack_require__(27311);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CLASSES = {
   component: 'dx-scheduler-header',
@@ -275763,14 +276034,16 @@ const ITEM_NAMES = {
   dateNavigator: 'dateNavigator',
   viewSwitcher: 'viewSwitcher'
 };
-class SchedulerHeader extends _ui.default {
+class SchedulerHeader extends _widget.default {
   get captionText() {
     return this._getCaption().text;
   }
   getIntervalOptions(date) {
-    const currentView = this.option('currentView');
+    const {
+      currentView,
+      firstDayOfWeek
+    } = this.option();
     const step = (0, _m_utils.getStep)(currentView.type);
-    const firstDayOfWeek = this.option('firstDayOfWeek');
     return {
       date,
       step,
@@ -275780,7 +276053,6 @@ class SchedulerHeader extends _ui.default {
     };
   }
   _getDefaultOptions() {
-    // @ts-expect-error
     return (0, _extend.extend)(super._getDefaultOptions(), {
       _useShortDateFormat: !_devices.default.real().generic || _devices.default.isSimulator()
     });
@@ -275789,10 +276061,7 @@ class SchedulerHeader extends _ui.default {
     this.eventMap = new Map([['currentView', []], ['views', []], ['currentDate', [this._getCalendarOptionUpdater('value')]], ['min', [this._getCalendarOptionUpdater('min')]], ['max', [this._getCalendarOptionUpdater('max')]], ['tabIndex', [this.repaint.bind(this)]], ['focusStateEnabled', [this.repaint.bind(this)]], ['useDropDownViewSwitcher', [this.repaint.bind(this)]], ['indicatorTime', []]]);
   }
   _addEvent(name, event) {
-    if (!this.eventMap.has(name)) {
-      this.eventMap.set(name, []);
-    }
-    const events = this.eventMap.get(name);
+    const events = this.eventMap.get(name) ?? [];
     this.eventMap.set(name, [...events, event]);
   }
   _optionChanged(args) {
@@ -275800,14 +276069,13 @@ class SchedulerHeader extends _ui.default {
       name,
       value
     } = args;
-    if (this.eventMap.has(name)) {
-      const events = this.eventMap.get(name);
-      events.forEach(event => {
-        event(value);
-      });
-    }
+    const events = this.eventMap.get(name);
+    events === null || events === void 0 || events.forEach(event => {
+      event(value);
+    });
   }
   onToolbarOptionChanged(fullName, value) {
+    var _this$_toolbar, _this$_toolbar2, _this$_toolbar3;
     const parts = (0, _data.getPathParts)(fullName);
     const optionName = fullName.replace(/^toolbar\./, '');
     this.option(fullName, value);
@@ -275817,26 +276085,21 @@ class SchedulerHeader extends _ui.default {
         this.repaint();
         break;
       case fullName === 'toolbar.items':
-        this._toolbar.option('items', value.map(item => this._parseItem(item)));
+        (_this$_toolbar = this._toolbar) === null || _this$_toolbar === void 0 || _this$_toolbar.option('items', value.map(item => this._parseItem(item)));
         break;
       case parts[1] === 'items' && parts.length === 3:
-        // `toolbar.items[i]` case
-        this._toolbar.option(optionName, this._parseItem(value));
+        (_this$_toolbar2 = this._toolbar) === null || _this$_toolbar2 === void 0 || _this$_toolbar2.option(optionName, this._parseItem(value));
         break;
       default:
-        // `toolbar.prop` case
-        // `toolbar.items[i].prop` case
-        this._toolbar.option(optionName, value);
+        (_this$_toolbar3 = this._toolbar) === null || _this$_toolbar3 === void 0 || _this$_toolbar3.option(optionName, value);
     }
   }
   _init() {
-    // @ts-expect-error
     super._init();
     this._createEventMap();
     this.$element().addClass(CLASSES.component);
   }
   _render() {
-    // @ts-expect-error
     super._render();
     this._createEventMap();
     this._renderToolbar();
@@ -275846,12 +276109,13 @@ class SchedulerHeader extends _ui.default {
     const config = this._createToolbarConfig();
     const toolbarElement = (0, _renderer.default)('<div>');
     toolbarElement.appendTo(this.$element());
-    // @ts-expect-error
     this._toolbar = this._createComponent(toolbarElement, _toolbar.default, config);
   }
   _toggleVisibility() {
-    const toolbarOptions = this.option('toolbar');
-    const isHeaderShown = toolbarOptions.visible || toolbarOptions.visible === undefined && toolbarOptions.items.length;
+    const {
+      toolbar
+    } = this.option();
+    const isHeaderShown = toolbar.visible ?? toolbar.items.length;
     if (isHeaderShown) {
       this.$element().removeClass(CLASSES.invisible);
     } else {
@@ -275859,9 +276123,11 @@ class SchedulerHeader extends _ui.default {
     }
   }
   _createToolbarConfig() {
-    const options = this.option('toolbar');
-    const parsedItems = options.items.map(element => this._parseItem(element));
-    return Object.assign({}, options, {
+    const {
+      toolbar
+    } = this.option();
+    const parsedItems = toolbar.items.map(element => this._parseItem(element));
+    return Object.assign({}, toolbar, {
       items: parsedItems
     });
   }
@@ -275871,9 +276137,9 @@ class SchedulerHeader extends _ui.default {
     if (itemName) {
       switch (itemName) {
         case ITEM_NAMES.today:
-          return (0, _today.getTodayButtonOptions)(this, itemOptions);
+          return (0, _m_date_navigator.getTodayButtonOptions)(this, itemOptions);
         case ITEM_NAMES.viewSwitcher:
-          return this.option('useDropDownViewSwitcher') ? (0, _m_view_switcher.getDropDownViewSwitcher)(this, itemOptions) : (0, _m_view_switcher.getTabViewSwitcher)(this, itemOptions);
+          return this.option().useDropDownViewSwitcher ? (0, _m_view_switcher.getDropDownViewSwitcher)(this, itemOptions) : (0, _m_view_switcher.getTabViewSwitcher)(this, itemOptions);
         case ITEM_NAMES.dateNavigator:
           this._renderCalendar();
           return (0, _m_date_navigator.getDateNavigator)(this, itemOptions);
@@ -275884,34 +276150,47 @@ class SchedulerHeader extends _ui.default {
     return (0, _extend.extend)(true, {}, item);
   }
   _callEvent(event, arg) {
-    if (this.eventMap.has(event)) {
-      const events = this.eventMap.get(event);
-      events.forEach(event => event(arg));
-    }
+    const events = this.eventMap.get(event);
+    events === null || events === void 0 || events.forEach(eventMapHandler => eventMapHandler(arg));
   }
   _updateCurrentView(view) {
-    this.option('onCurrentViewChange')(view.name);
+    const {
+      onCurrentViewChange
+    } = this.option();
+    onCurrentViewChange(view.name);
   }
   _updateCalendarValueAndCurrentDate(date) {
+    var _this$_calendar;
     this._updateCurrentDate(date);
-    this._calendar.option('value', date);
+    (_this$_calendar = this._calendar) === null || _this$_calendar === void 0 || _this$_calendar.option('value', date);
   }
   _updateCurrentDate(date) {
-    this.option('onCurrentDateChange')(date);
+    const {
+      onCurrentDateChange
+    } = this.option();
+    onCurrentDateChange(date);
     this._callEvent('currentDate', date);
   }
   _renderCalendar() {
-    // @ts-expect-error
+    const {
+      currentDate,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex
+    } = this.option();
     this._calendar = this._createComponent('<div>', _m_calendar.default, {
-      value: this.option('currentDate'),
-      min: this.option('min'),
-      max: this.option('max'),
-      firstDayOfWeek: this.option('firstDayOfWeek'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      tabIndex: this.option('tabIndex'),
-      onValueChanged: e => {
+      value: currentDate,
+      min,
+      max,
+      firstDayOfWeek,
+      focusStateEnabled,
+      tabIndex,
+      onValueChanged: async e => {
+        var _this$_calendar2;
         this._updateCurrentDate(e.value);
-        this._calendar.hide();
+        await ((_this$_calendar2 = this._calendar) === null || _this$_calendar2 === void 0 ? void 0 : _this$_calendar2.hide());
       }
     });
     this._calendar.$element().appendTo(this.$element());
@@ -275924,42 +276203,50 @@ class SchedulerHeader extends _ui.default {
     };
   }
   _getNextDate(direction, initialDate) {
-    const date = initialDate ?? this.option('currentDate');
+    const {
+      currentDate
+    } = this.option();
+    const date = initialDate ?? currentDate;
     const options = this.getIntervalOptions(date);
     return (0, _m_utils.getNextIntervalDate)(options, direction);
   }
   _getDisplayedDate() {
-    var _this$option;
-    const startViewDate = new Date(this.option('startViewDate'));
-    const isMonth = ((_this$option = this.option('currentView')) === null || _this$option === void 0 ? void 0 : _this$option.type) === 'month';
+    const {
+      startViewDate,
+      currentView
+    } = this.option();
+    const isMonth = currentView.type === 'month';
     return isMonth ? (0, _m_utils.nextWeek)(startViewDate) : startViewDate;
   }
   _getCaptionOptions() {
-    let date = this.option('currentDate');
-    if (this.option('startViewDate')) {
+    const {
+      currentDate,
+      startViewDate
+    } = this.option();
+    let date = currentDate;
+    if (startViewDate) {
       date = this._getDisplayedDate();
     }
     date = _date.default.trimTime(date);
     return this.getIntervalOptions(date);
   }
   _getCaption() {
+    const {
+      customizeDateNavigatorText
+    } = this.option();
     const options = this._getCaptionOptions();
-    const customizationFunction = this.option('customizeDateNavigatorText');
-    const useShortDateFormat = this.option('_useShortDateFormat');
-    return (0, _m_utils.getCaption)(options, Boolean(useShortDateFormat), customizationFunction);
+    const useShortDateFormat = this.option()._useShortDateFormat;
+    return (0, _m_utils.getCaption)(options, Boolean(useShortDateFormat), customizeDateNavigatorText);
   }
   _updateDateByDirection(direction) {
     const date = this._getNextDate(direction);
     this._updateCalendarValueAndCurrentDate(date);
   }
-  _showCalendar(e) {
-    this._calendar.show(e.element);
-  }
-  _hideCalendar() {
-    this._calendar.hide();
+  async _showCalendar(e) {
+    var _this$_calendar3;
+    await ((_this$_calendar3 = this._calendar) === null || _this$_calendar3 === void 0 ? void 0 : _this$_calendar3.show(e.element));
   }
 }
-// @ts-expect-error
 exports.SchedulerHeader = SchedulerHeader;
 (0, _component_registrator.default)('dxSchedulerHeader', SchedulerHeader);
 
@@ -277576,7 +277863,7 @@ var _themes = __webpack_require__(52071);
 const _excluded = ["imageSrc", "src"];
 /* eslint-disable max-classes-per-file */
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const isMobile = _devices.default.current().deviceType === 'phone';
 const DIALOG_IMAGE_CAPTION = 'dxHtmlEditor-dialogImageCaption';
 const DIALOG_UPDATE_IMAGE_CAPTION = 'dxHtmlEditor-dialogUpdateImageCaption';
@@ -278351,7 +278638,7 @@ var _icon = __webpack_require__(93445);
 var _sortable = __webpack_require__(87819);
 const _excluded = ["source", "getColumnByIndex", "allowDragging", "onColumnMove", "columnDragTemplate", "dropFeedbackMode"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const ALLOWED_DRAGGING_DISTANCE = 20;
 const CLASS = {
   widget: 'dx-widget',
@@ -278582,7 +278869,13 @@ const orderEach = function (map, func) {
 exports.orderEach = orderEach;
 const getDeepCopyTarget = item => {
   if ((0, _type.isObject)(item)) {
-    return Array.isArray(item) ? [] : {};
+    if (Array.isArray(item)) {
+      return [];
+    }
+    if (!(0, _type.isPlainObject)(item)) {
+      return Object.create(Object.getPrototypeOf(item));
+    }
+    return {};
   }
   return item;
 };
@@ -278763,6 +279056,13 @@ class HeadersKeyboardNavigationController extends _m_column_keyboard_navigation_
       originalEvent === null || originalEvent === void 0 || originalEvent.preventDefault();
     }
   }
+  correctFocusedColumnIndexAfterScroll(columnIndexOffset) {
+    var _this$_focusedCellPos;
+    if ((0, _type.isDefined)((_this$_focusedCellPos = this._focusedCellPosition) === null || _this$_focusedCellPos === void 0 ? void 0 : _this$_focusedCellPos.columnIndex)) {
+      const columnIndexOffsetDiff = this._columnsController.getColumnIndexOffset() - columnIndexOffset;
+      this.setFocusedColumnIndex(this._focusedCellPosition.columnIndex - columnIndexOffsetDiff);
+    }
+  }
   getColumnVisibleIndexCorrection(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   visibleColumnIndex,
@@ -278817,12 +279117,7 @@ class HeadersKeyboardNavigationController extends _m_column_keyboard_navigation_
   }
   _getCell(cellPosition) {
     var _this$_columnHeadersV;
-    const columnIndexOffset = this.getColumnIndexOffset(cellPosition.columnIndex);
-    const columnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex - columnIndexOffset : -1;
-    return (_this$_columnHeadersV = this._columnHeadersView) === null || _this$_columnHeadersV === void 0 ? void 0 : _this$_columnHeadersV.getCell({
-      rowIndex: cellPosition.rowIndex,
-      columnIndex
-    });
+    return (_this$_columnHeadersV = this._columnHeadersView) === null || _this$_columnHeadersV === void 0 ? void 0 : _this$_columnHeadersV.getCell(cellPosition);
   }
   getFocusedView() {
     return this.getView('columnHeadersView');
@@ -278872,7 +279167,10 @@ class HeadersKeyboardNavigationController extends _m_column_keyboard_navigation_
     }
     const focusedCellIsOutsideVisibleArea = $focusedCell.length && this.isOutsideVisibleArea($focusedCell, (0, _renderer.default)(this._columnHeadersView.getContent()));
     if (focusedCellIsOutsideVisibleArea) {
+      const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+      this.needToRestoreFocus = false;
       this.scrollToNextCell($focusedCell).then(() => {
+        this.correctFocusedColumnIndexAfterScroll(columnIndexOffset);
         super.restoreFocus();
       });
       return;
@@ -281871,8 +282169,8 @@ const DiagramDialogManager = {
         const window = (0, _window.getWindow)();
         // @ts-expect-error ts-error
         const reader = new window.FileReader();
-        reader.onload = () => {
-          args.component._commandParameter = e.target.result;
+        reader.onload = evt => {
+          args.component._commandParameter = evt.target.result;
         };
         reader.readAsDataURL(e.value[0]);
       }
@@ -283990,12 +284288,14 @@ class PivotGridDataSource {
     return this;
   }
   dispose() {
+    var _that$_store;
     const that = this;
     const delayedLoadTask = that._delayedLoadTask;
     this._eventsStrategy.dispose();
     if (delayedLoadTask) {
       delayedLoadTask.abort();
     }
+    (_that$_store = that._store) === null || _that$_store === void 0 || _that$_store.dispose();
     this._isDisposed = true;
   }
   isDisposed() {
@@ -284087,7 +284387,7 @@ var _type = __webpack_require__(11528);
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 const _excluded = ["items"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class DataConverter {
   constructor() {
     this._dataStructure = [];
@@ -284647,8 +284947,7 @@ var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _array = __webpack_require__(94487);
 var _dom = __webpack_require__(86858);
 var iteratorUtils = _interopRequireWildcard(__webpack_require__(21274));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DRAG_START_EVENT = exports.start = 'dxdragstart';
 const DRAG_EVENT = exports.move = 'dxdrag';
@@ -291681,8 +291980,7 @@ exports.effect = effect;
 exports.signal = signal;
 exports.untracked = untracked;
 var Reactive = _interopRequireWildcard(__webpack_require__(52581));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function signal(initialValue) {
   const signalInstance = Reactive.signal(initialValue);
   const trace = new Error().stack;
@@ -295175,7 +295473,7 @@ var _dom_component_wrapper = __webpack_require__(10922);
 var _index = __webpack_require__(6257);
 const _excluded = ["accessKey", "activeStateEnabled", "boundary", "className", "contentId", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "mode", "offset", "onClick", "onKeyDown", "positionSide", "rtlEnabled", "tabIndex", "target", "validationErrors", "visible", "visualContainer", "width"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const defaultValidationMessageProps = exports.defaultValidationMessageProps = Object.assign({}, _base_props.BaseWidgetDefaultProps, {
   mode: 'auto',
   positionSide: 'top',
@@ -296932,8 +297230,7 @@ var filterPanel_1 = _interopRequireWildcard(__webpack_require__(56375));
 exports.filterPanel = filterPanel_1;
 var _options = __webpack_require__(75229);
 var _public_methods = __webpack_require__(86711);
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 
 /***/ }),
 
@@ -298634,24 +298931,24 @@ const ModelChangesListener = exports.ModelChangesListener = {
         (_gantt$_actionsManage9 = gantt._actionsManager) === null || _gantt$_actionsManage9 === void 0 || _gantt$_actionsManage9.raiseDeletingAction(GANTT_DEPENDENCIES, args);
       },
       NotifyResourceCreating: args => {
-        var _gantt$_actionsManage10;
-        (_gantt$_actionsManage10 = gantt._actionsManager) === null || _gantt$_actionsManage10 === void 0 || _gantt$_actionsManage10.raiseInsertingAction(GANTT_RESOURCES, args);
+        var _gantt$_actionsManage0;
+        (_gantt$_actionsManage0 = gantt._actionsManager) === null || _gantt$_actionsManage0 === void 0 || _gantt$_actionsManage0.raiseInsertingAction(GANTT_RESOURCES, args);
       },
       NotifyResourceRemoving: args => {
-        var _gantt$_actionsManage11;
-        (_gantt$_actionsManage11 = gantt._actionsManager) === null || _gantt$_actionsManage11 === void 0 || _gantt$_actionsManage11.raiseDeletingAction(GANTT_RESOURCES, args);
+        var _gantt$_actionsManage1;
+        (_gantt$_actionsManage1 = gantt._actionsManager) === null || _gantt$_actionsManage1 === void 0 || _gantt$_actionsManage1.raiseDeletingAction(GANTT_RESOURCES, args);
       },
       NotifyResourceAssigning: args => {
-        var _gantt$_actionsManage12;
-        (_gantt$_actionsManage12 = gantt._actionsManager) === null || _gantt$_actionsManage12 === void 0 || _gantt$_actionsManage12.raiseInsertingAction(GANTT_RESOURCE_ASSIGNMENTS, args);
+        var _gantt$_actionsManage10;
+        (_gantt$_actionsManage10 = gantt._actionsManager) === null || _gantt$_actionsManage10 === void 0 || _gantt$_actionsManage10.raiseInsertingAction(GANTT_RESOURCE_ASSIGNMENTS, args);
       },
       NotifyResourceUnassigning: args => {
-        var _gantt$_actionsManage13;
-        (_gantt$_actionsManage13 = gantt._actionsManager) === null || _gantt$_actionsManage13 === void 0 || _gantt$_actionsManage13.raiseDeletingAction(GANTT_RESOURCE_ASSIGNMENTS, args);
+        var _gantt$_actionsManage11;
+        (_gantt$_actionsManage11 = gantt._actionsManager) === null || _gantt$_actionsManage11 === void 0 || _gantt$_actionsManage11.raiseDeletingAction(GANTT_RESOURCE_ASSIGNMENTS, args);
       },
       NotifyScaleCellPrepared: args => {
-        var _gantt$_actionsManage14;
-        (_gantt$_actionsManage14 = gantt._actionsManager) === null || _gantt$_actionsManage14 === void 0 || _gantt$_actionsManage14.raiseScaleCellPreparedAction(args);
+        var _gantt$_actionsManage12;
+        (_gantt$_actionsManage12 = gantt._actionsManager) === null || _gantt$_actionsManage12 === void 0 || _gantt$_actionsManage12.raiseScaleCellPreparedAction(args);
       },
       NotifyGanttViewUpdated: () => {
         gantt._onGanttViewCoreUpdated();
@@ -299199,7 +299496,7 @@ var _trial_panel = __webpack_require__(99671);
 var _types = __webpack_require__(13407);
 const _excluded = ["customerId", "maxVersionAllowed", "format", "internalUsageId"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const FORMAT = 1;
 const RTM_MIN_PATCH_VERSION = 3;
 const KEY_SPLITTER = '.';
@@ -300065,7 +300362,7 @@ class Widget extends _index.InfernoWrapperComponent {
     return [new _index.InfernoEffect(this.setRootElementRef, []), new _index.InfernoEffect(this.activeEffect, [this.props._feedbackShowTimeout, this.props.activeStateEnabled, this.props.activeStateUnit, this.props.disabled, this.props.onActive]), new _index.InfernoEffect(this.inactiveEffect, [this.props._feedbackHideTimeout, this.props.activeStateEnabled, this.props.activeStateUnit, this.props.onInactive, this.state.active]), new _index.InfernoEffect(this.clickEffect, [this.props.disabled, this.props.name, this.props.onClick]), new _index.InfernoEffect(this.focusInEffect, [this.props.disabled, this.props.focusStateEnabled, this.props.name, this.props.onFocusIn]), new _index.InfernoEffect(this.focusOutEffect, [this.props.focusStateEnabled, this.props.name, this.props.onFocusOut, this.state.focused]), new _index.InfernoEffect(this.hoverStartEffect, [this.props.activeStateUnit, this.props.disabled, this.props.hoverStateEnabled, this.props.onHoverStart, this.state.active]), new _index.InfernoEffect(this.hoverEndEffect, [this.props.activeStateUnit, this.props.hoverStateEnabled, this.props.onHoverEnd, this.state.hovered]), new _index.InfernoEffect(this.keyboardEffect, [this.props.focusStateEnabled, this.props.onKeyDown]), new _index.InfernoEffect(this.resizeEffect, [this.props.name, this.props.onDimensionChanged]), new _index.InfernoEffect(this.windowResizeEffect, [this.props.onDimensionChanged]), new _index.InfernoEffect(this.visibilityEffect, [this.props.name, this.props.onVisibilityChange]), new _index.InfernoEffect(this.checkDeprecation, [this.props.height, this.props.width]), new _index.InfernoEffect(this.applyCssTextEffect, [this.props.cssText]), (0, _index.createReRenderEffect)()];
   }
   updateEffects() {
-    var _this$_effects$, _this$_effects$2, _this$_effects$3, _this$_effects$4, _this$_effects$5, _this$_effects$6, _this$_effects$7, _this$_effects$8, _this$_effects$9, _this$_effects$10, _this$_effects$11, _this$_effects$12, _this$_effects$13;
+    var _this$_effects$, _this$_effects$2, _this$_effects$3, _this$_effects$4, _this$_effects$5, _this$_effects$6, _this$_effects$7, _this$_effects$8, _this$_effects$9, _this$_effects$0, _this$_effects$1, _this$_effects$10, _this$_effects$11;
     (_this$_effects$ = this._effects[1]) === null || _this$_effects$ === void 0 || _this$_effects$.update([this.props._feedbackShowTimeout, this.props.activeStateEnabled, this.props.activeStateUnit, this.props.disabled, this.props.onActive]);
     (_this$_effects$2 = this._effects[2]) === null || _this$_effects$2 === void 0 || _this$_effects$2.update([this.props._feedbackHideTimeout, this.props.activeStateEnabled, this.props.activeStateUnit, this.props.onInactive, this.state.active]);
     (_this$_effects$3 = this._effects[3]) === null || _this$_effects$3 === void 0 || _this$_effects$3.update([this.props.disabled, this.props.name, this.props.onClick]);
@@ -300075,10 +300372,10 @@ class Widget extends _index.InfernoWrapperComponent {
     (_this$_effects$7 = this._effects[7]) === null || _this$_effects$7 === void 0 || _this$_effects$7.update([this.props.activeStateUnit, this.props.hoverStateEnabled, this.props.onHoverEnd, this.state.hovered]);
     (_this$_effects$8 = this._effects[8]) === null || _this$_effects$8 === void 0 || _this$_effects$8.update([this.props.focusStateEnabled, this.props.onKeyDown]);
     (_this$_effects$9 = this._effects[9]) === null || _this$_effects$9 === void 0 || _this$_effects$9.update([this.props.name, this.props.onDimensionChanged]);
-    (_this$_effects$10 = this._effects[10]) === null || _this$_effects$10 === void 0 || _this$_effects$10.update([this.props.onDimensionChanged]);
-    (_this$_effects$11 = this._effects[11]) === null || _this$_effects$11 === void 0 || _this$_effects$11.update([this.props.name, this.props.onVisibilityChange]);
-    (_this$_effects$12 = this._effects[12]) === null || _this$_effects$12 === void 0 || _this$_effects$12.update([this.props.height, this.props.width]);
-    (_this$_effects$13 = this._effects[13]) === null || _this$_effects$13 === void 0 || _this$_effects$13.update([this.props.cssText]);
+    (_this$_effects$0 = this._effects[10]) === null || _this$_effects$0 === void 0 || _this$_effects$0.update([this.props.onDimensionChanged]);
+    (_this$_effects$1 = this._effects[11]) === null || _this$_effects$1 === void 0 || _this$_effects$1.update([this.props.name, this.props.onVisibilityChange]);
+    (_this$_effects$10 = this._effects[12]) === null || _this$_effects$10 === void 0 || _this$_effects$10.update([this.props.height, this.props.width]);
+    (_this$_effects$11 = this._effects[13]) === null || _this$_effects$11 === void 0 || _this$_effects$11.update([this.props.cssText]);
   }
   setRootElementRef() {
     var _this$widgetElementRe;
@@ -300263,8 +300560,8 @@ class Widget extends _index.InfernoWrapperComponent {
       focusStateEnabled
     } = this.props;
     if (focusStateEnabled && onKeyDown) {
-      var _this$widgetElementRe10, _this$widgetElementRe11;
-      const id = _short.keyboard.on((_this$widgetElementRe10 = this.widgetElementRef) === null || _this$widgetElementRe10 === void 0 ? void 0 : _this$widgetElementRe10.current, (_this$widgetElementRe11 = this.widgetElementRef) === null || _this$widgetElementRe11 === void 0 ? void 0 : _this$widgetElementRe11.current, e => onKeyDown(e));
+      var _this$widgetElementRe0, _this$widgetElementRe1;
+      const id = _short.keyboard.on((_this$widgetElementRe0 = this.widgetElementRef) === null || _this$widgetElementRe0 === void 0 ? void 0 : _this$widgetElementRe0.current, (_this$widgetElementRe1 = this.widgetElementRef) === null || _this$widgetElementRe1 === void 0 ? void 0 : _this$widgetElementRe1.current, e => onKeyDown(e));
       return () => _short.keyboard.off(id);
     }
     return undefined;
@@ -300275,13 +300572,13 @@ class Widget extends _index.InfernoWrapperComponent {
       onDimensionChanged
     } = this.props;
     if (onDimensionChanged) {
-      var _this$widgetElementRe12;
-      _short.resize.on((_this$widgetElementRe12 = this.widgetElementRef) === null || _this$widgetElementRe12 === void 0 ? void 0 : _this$widgetElementRe12.current, onDimensionChanged, {
+      var _this$widgetElementRe10;
+      _short.resize.on((_this$widgetElementRe10 = this.widgetElementRef) === null || _this$widgetElementRe10 === void 0 ? void 0 : _this$widgetElementRe10.current, onDimensionChanged, {
         namespace
       });
       return () => {
-        var _this$widgetElementRe13;
-        return _short.resize.off((_this$widgetElementRe13 = this.widgetElementRef) === null || _this$widgetElementRe13 === void 0 ? void 0 : _this$widgetElementRe13.current, {
+        var _this$widgetElementRe11;
+        return _short.resize.off((_this$widgetElementRe11 = this.widgetElementRef) === null || _this$widgetElementRe11 === void 0 ? void 0 : _this$widgetElementRe11.current, {
           namespace
         });
       };
@@ -300307,13 +300604,13 @@ class Widget extends _index.InfernoWrapperComponent {
     } = this.props;
     const namespace = `${name}VisibilityChange`;
     if (onVisibilityChange) {
-      var _this$widgetElementRe14;
-      _short.visibility.on((_this$widgetElementRe14 = this.widgetElementRef) === null || _this$widgetElementRe14 === void 0 ? void 0 : _this$widgetElementRe14.current, () => onVisibilityChange(true), () => onVisibilityChange(false), {
+      var _this$widgetElementRe12;
+      _short.visibility.on((_this$widgetElementRe12 = this.widgetElementRef) === null || _this$widgetElementRe12 === void 0 ? void 0 : _this$widgetElementRe12.current, () => onVisibilityChange(true), () => onVisibilityChange(false), {
         namespace
       });
       return () => {
-        var _this$widgetElementRe15;
-        return _short.visibility.off((_this$widgetElementRe15 = this.widgetElementRef) === null || _this$widgetElementRe15 === void 0 ? void 0 : _this$widgetElementRe15.current, {
+        var _this$widgetElementRe13;
+        return _short.visibility.off((_this$widgetElementRe13 = this.widgetElementRef) === null || _this$widgetElementRe13 === void 0 ? void 0 : _this$widgetElementRe13.current, {
           namespace
         });
       };
@@ -300333,11 +300630,11 @@ class Widget extends _index.InfernoWrapperComponent {
     }
   }
   applyCssTextEffect() {
-    var _this$widgetElementRe16;
+    var _this$widgetElementRe14;
     const {
       cssText
     } = this.props;
-    if (cssText !== undefined && cssText !== '' && (_this$widgetElementRe16 = this.widgetElementRef) !== null && _this$widgetElementRe16 !== void 0 && _this$widgetElementRe16.current) {
+    if (cssText !== undefined && cssText !== '' && (_this$widgetElementRe14 = this.widgetElementRef) !== null && _this$widgetElementRe14 !== void 0 && _this$widgetElementRe14.current) {
       this.widgetElementRef.current.style.cssText = cssText;
     }
   }
@@ -300431,13 +300728,13 @@ class Widget extends _index.InfernoWrapperComponent {
     return isFocusable ? tabIndex : undefined;
   }
   focus() {
-    var _this$widgetElementRe17;
-    _short.focus.trigger((_this$widgetElementRe17 = this.widgetElementRef) === null || _this$widgetElementRe17 === void 0 ? void 0 : _this$widgetElementRe17.current);
+    var _this$widgetElementRe15;
+    _short.focus.trigger((_this$widgetElementRe15 = this.widgetElementRef) === null || _this$widgetElementRe15 === void 0 ? void 0 : _this$widgetElementRe15.current);
   }
   blur() {
-    var _this$widgetElementRe18, _this$widgetElementRe19;
-    const activeElement = _dom_adapter.default.getActiveElement((_this$widgetElementRe18 = this.widgetElementRef) === null || _this$widgetElementRe18 === void 0 ? void 0 : _this$widgetElementRe18.current);
-    if (((_this$widgetElementRe19 = this.widgetElementRef) === null || _this$widgetElementRe19 === void 0 ? void 0 : _this$widgetElementRe19.current) === activeElement) {
+    var _this$widgetElementRe16, _this$widgetElementRe17;
+    const activeElement = _dom_adapter.default.getActiveElement((_this$widgetElementRe16 = this.widgetElementRef) === null || _this$widgetElementRe16 === void 0 ? void 0 : _this$widgetElementRe16.current);
+    if (((_this$widgetElementRe17 = this.widgetElementRef) === null || _this$widgetElementRe17 === void 0 ? void 0 : _this$widgetElementRe17.current) === activeElement) {
       activeElement.blur();
     }
   }
@@ -302488,8 +302785,7 @@ var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _search_box_controller = _interopRequireWildcard(__webpack_require__(47843));
 var _m_text_box = _interopRequireDefault(__webpack_require__(85968));
 var _data_converter = _interopRequireDefault(__webpack_require__(88175));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const EXPANDED = 'expanded';
 const SELECTED = 'selected';
@@ -302960,12 +303256,16 @@ const ClASS = {
   dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content'
 };
 const getViewsAndSelectedView = header => {
-  const views = (0, _m_utils.formatViews)(header.option('views'));
-  const selectedView = (0, _m_utils.getViewName)(header.option('currentView'));
-  const isSelectedViewInViews = views.some(view => view.name === selectedView);
+  const {
+    views,
+    currentView
+  } = header.option();
+  const formattedViews = (0, _m_utils.formatViews)(views);
+  const selectedView = (0, _m_utils.getViewName)(currentView);
+  const isSelectedViewInViews = formattedViews.some(view => view.name === selectedView);
   return {
     selectedView: isSelectedViewInViews ? selectedView : undefined,
-    views
+    views: formattedViews
   };
 };
 const isViewSwitcherVisible = views => views.length > 1;
@@ -302975,8 +303275,7 @@ const getTabViewSwitcher = (header, item) => {
     views
   } = getViewsAndSelectedView(header);
   const isVisible = isViewSwitcherVisible(views);
-  // @ts-expect-error
-  const stylingMode = (0, _themes.isFluent)() ? 'outlined' : 'contained';
+  const stylingMode = (0, _themes.isFluent)((0, _themes.current)()) ? 'outlined' : 'contained';
   return Object.assign({
     widget: 'dxButtonGroup',
     locateInMenu: 'auto',
@@ -303272,12 +303571,6 @@ class AIPromptEditorView extends _m_modules.View {
     }
     if ((0, _utils.isRefreshOption)(optionName, value)) {
       // TODO: this.component.refresh();
-    }
-  }
-  dispose() {
-    super.dispose();
-    if (this.aiColumnOptionChangedHandler) {
-      this.columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
     }
   }
 }
@@ -304553,8 +304846,8 @@ class FileUploader extends _editor.default {
   }
   _renderInputContainer() {
     this._$inputContainer = (0, _renderer.default)('<div>').addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS).appendTo(this._$inputWrapper);
-    this._$fileInput.addClass(FILEUPLOADER_INPUT_CLASS);
     this._renderInput();
+    this._$fileInput.addClass(FILEUPLOADER_INPUT_CLASS);
     const labelId = `dx-fileuploader-input-label-${new _guid.default()}`;
     this._$inputLabel.attr('id', labelId).addClass(FILEUPLOADER_INPUT_LABEL_CLASS).appendTo(this._$inputContainer);
     this.setAria('labelledby', labelId, this._$fileInput);
@@ -304875,9 +305168,9 @@ class FileUploader extends _editor.default {
   }
   _getTotalFilesSize() {
     if (!this._totalFilesSize) {
-      var _this$_files10;
+      var _this$_files0;
       this._totalFilesSize = 0;
-      (_this$_files10 = this._files) === null || _this$_files10 === void 0 || _this$_files10.forEach(file => {
+      (_this$_files0 = this._files) === null || _this$_files0 === void 0 || _this$_files0.forEach(file => {
         this._totalFilesSize += file.value.size;
       });
     }
@@ -304885,9 +305178,9 @@ class FileUploader extends _editor.default {
   }
   _getTotalLoadedFilesSize() {
     if (!this._totalLoadedFilesSize) {
-      var _this$_files11;
+      var _this$_files1;
       this._totalLoadedFilesSize = 0;
-      (_this$_files11 = this._files) === null || _this$_files11 === void 0 || _this$_files11.forEach(file => {
+      (_this$_files1 = this._files) === null || _this$_files1 === void 0 || _this$_files1.forEach(file => {
         this._totalLoadedFilesSize += file.loadedSize;
       });
     }
@@ -304947,14 +305240,14 @@ class FileUploader extends _editor.default {
     return document.documentElement.scrollLeft || document.body.scrollLeft;
   }
   _updateReadOnlyState() {
-    var _this$_files12;
+    var _this$_files10;
     const {
       readOnly
     } = this.option();
     this._selectButton.option({
       disabled: readOnly
     });
-    (_this$_files12 = this._files) === null || _this$_files12 === void 0 || _this$_files12.forEach(file => {
+    (_this$_files10 = this._files) === null || _this$_files10 === void 0 || _this$_files10.forEach(file => {
       var _file$cancelButton3;
       return (_file$cancelButton3 = file.cancelButton) === null || _file$cancelButton3 === void 0 ? void 0 : _file$cancelButton3.option({
         disabled: readOnly
@@ -304964,7 +305257,7 @@ class FileUploader extends _editor.default {
     this._attachDragEventHandlers(this._$inputWrapper);
   }
   _updateHoverState() {
-    var _this$_selectButton, _this$_uploadButton, _this$_files13;
+    var _this$_selectButton, _this$_uploadButton, _this$_files11;
     const {
       hoverStateEnabled: value
     } = this.option();
@@ -304974,7 +305267,7 @@ class FileUploader extends _editor.default {
     (_this$_uploadButton = this._uploadButton) === null || _this$_uploadButton === void 0 || _this$_uploadButton.option({
       hoverStateEnabled: value
     });
-    (_this$_files13 = this._files) === null || _this$_files13 === void 0 || _this$_files13.forEach(file => {
+    (_this$_files11 = this._files) === null || _this$_files11 === void 0 || _this$_files11.forEach(file => {
       var _file$uploadButton3, _file$cancelButton4;
       (_file$uploadButton3 = file.uploadButton) === null || _file$uploadButton3 === void 0 || _file$uploadButton3.option({
         hoverStateEnabled: value
@@ -304985,7 +305278,7 @@ class FileUploader extends _editor.default {
     });
   }
   _optionChanged(args) {
-    var _this$_files14;
+    var _this$_files12;
     const {
       name,
       value,
@@ -305049,7 +305342,7 @@ class FileUploader extends _editor.default {
         }
         break;
       case '_buttonStylingMode':
-        (_this$_files14 = this._files) === null || _this$_files14 === void 0 || _this$_files14.forEach(file => {
+        (_this$_files12 = this._files) === null || _this$_files12 === void 0 || _this$_files12.forEach(file => {
           var _file$uploadButton4, _file$cancelButton5;
           (_file$uploadButton4 = file.uploadButton) === null || _file$uploadButton4 === void 0 || _file$uploadButton4.option({
             stylingMode: value
@@ -306060,7 +306353,7 @@ var _popup = _interopRequireDefault(__webpack_require__(97643));
 var _button = __webpack_require__(59310);
 const _excluded = ["onApplyButtonClick", "onCancelButtonClick"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (e.includes(n)) continue; t[n] = r[n]; } return t; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS = exports.CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS = 'dx-chat-confirmation-popup-wrapper';
 const POPUP_WIDTH = 240;
 class ConfirmationPopup {
@@ -309379,8 +309672,7 @@ var _type = __webpack_require__(11528);
 var _widget = _interopRequireDefault(__webpack_require__(89275));
 var _avatar = _interopRequireDefault(__webpack_require__(95093));
 var _messagebubble = _interopRequireWildcard(__webpack_require__(1243));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const CHAT_MESSAGEGROUP_CLASS = exports.CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = exports.CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
@@ -311585,8 +311877,7 @@ var _utils = __webpack_require__(98013);
 var _common = __webpack_require__(80586);
 var linearIndicators = _interopRequireWildcard(__webpack_require__(11691));
 var _linear_range_container = _interopRequireDefault(__webpack_require__(17884));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable prefer-rest-params */
@@ -311883,8 +312174,7 @@ var _m_support = _interopRequireDefault(__webpack_require__(85991));
 var _multi_view = _interopRequireDefault(__webpack_require__(56484));
 var _tabs = _interopRequireWildcard(__webpack_require__(43474));
 var _item = _interopRequireDefault(__webpack_require__(41211));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // STYLE tabPanel
 const TABPANEL_CLASS = exports.TABPANEL_CLASS = 'dx-tabpanel';
@@ -312539,8 +312829,7 @@ var _base_point = __webpack_require__(35394);
 var _range_series = __webpack_require__(18519);
 var scatterSeries = _interopRequireWildcard(__webpack_require__(39294));
 var stackedSeries = _interopRequireWildcard(__webpack_require__(92659));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-depth */

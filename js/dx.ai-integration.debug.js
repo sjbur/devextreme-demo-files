@@ -1,9 +1,9 @@
 /*!
 * DevExtreme (dx.ai-integration.debug.js)
-* Version: 25.2.2
-* Build date: Thu Dec 04 2025
+* Version: 26.1.0
+* Build date: Tue Jan 27 2026
 *
-* Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
 */
 "use strict";
@@ -26,7 +26,7 @@
   \*************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-eval("{\n\nexports.version = exports.fullVersion = void 0;\nconst version = exports.version = '25.2.2';\nconst fullVersion = exports.fullVersion = '25.2.2';//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMTk1Ni5qcyIsIm1hcHBpbmdzIjoiQUFBYTs7QUFFYixlQUFlLEdBQUcsbUJBQW1CO0FBQ3JDLGdCQUFnQixlQUFlO0FBQy9CLG9CQUFvQixtQkFBbUIiLCJzb3VyY2VzIjpbImRldmV4dHJlbWU6Ly8vLi9hcnRpZmFjdHMvdHJhbnNwaWxlZC1yZW5vdmF0aW9uLW5wbS9jb3JlL3ZlcnNpb24uanMiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2Ugc3RyaWN0XCI7XG5cbmV4cG9ydHMudmVyc2lvbiA9IGV4cG9ydHMuZnVsbFZlcnNpb24gPSB2b2lkIDA7XG5jb25zdCB2ZXJzaW9uID0gZXhwb3J0cy52ZXJzaW9uID0gJzI1LjIuMic7XG5jb25zdCBmdWxsVmVyc2lvbiA9IGV4cG9ydHMuZnVsbFZlcnNpb24gPSAnMjUuMi4yJzsiXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///1956\n\n}");
+eval("{\n\nexports.version = exports.fullVersion = void 0;\nconst version = exports.version = '26.1.0';\nconst fullVersion = exports.fullVersion = '26.1.0';//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMTk1Ni5qcyIsIm1hcHBpbmdzIjoiQUFBYTs7QUFFYixlQUFlLEdBQUcsbUJBQW1CO0FBQ3JDLGdCQUFnQixlQUFlO0FBQy9CLG9CQUFvQixtQkFBbUIiLCJzb3VyY2VzIjpbImRldmV4dHJlbWU6Ly8vLi9hcnRpZmFjdHMvdHJhbnNwaWxlZC1yZW5vdmF0aW9uLW5wbS9jb3JlL3ZlcnNpb24uanMiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2Ugc3RyaWN0XCI7XG5cbmV4cG9ydHMudmVyc2lvbiA9IGV4cG9ydHMuZnVsbFZlcnNpb24gPSB2b2lkIDA7XG5jb25zdCB2ZXJzaW9uID0gZXhwb3J0cy52ZXJzaW9uID0gJzI2LjEuMCc7XG5jb25zdCBmdWxsVmVyc2lvbiA9IGV4cG9ydHMuZnVsbFZlcnNpb24gPSAnMjYuMS4wJzsiXSwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///1956\n\n}");
 
 /***/ }),
 

@@ -1,9 +1,9 @@
 /*!
 * DevExtreme (dx.ai-integration.js)
-* Version: 25.2.2
-* Build date: Thu Dec 04 2025
+* Version: 26.1.0
+* Build date: Tue Jan 27 2026
 *
-* Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
 */
 "use strict";
@@ -18,8 +18,8 @@
 
 
 exports.version = exports.fullVersion = void 0;
-const version = exports.version = '25.2.2';
-const fullVersion = exports.fullVersion = '25.2.2';
+const version = exports.version = '26.1.0';
+const fullVersion = exports.fullVersion = '26.1.0';
 
 /***/ }),
 
