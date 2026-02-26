@@ -67752,7 +67752,11 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   /**
    * @name ErrorsUIWidgets.W1027
    */
-  W1027: 'A prompt should be specified for a custom command.'
+  W1027: 'A prompt should be specified for a custom command.',
+  /**
+   * @name ErrorsUIWidgets.W1028
+   */
+  W1028: 'Nested/banded columns do not support the following properties: {0}.'
 });
 module.exports = exports.default;
 module.exports["default"] = exports.default;
@@ -74915,7 +74919,7 @@ var _drag = __webpack_require__(59144);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const _min = Math.min;
 const _max = Math.max;
-const MIN_SCROLL_BAR_SIZE = 2;
+const MIN_SCROLL_BAR_SIZE = 10;
 const ScrollBar = function (renderer, group) {
   this._translator = new _translator2d.Translator2D({}, {}, {});
   this._scroll = renderer.rect().append(group);
@@ -75098,14 +75102,39 @@ ScrollBar.prototype = {
   _applyPosition: function (x1, x2) {
     const that = this;
     const visibleArea = that._translator.getCanvasVisibleArea();
-    x1 = _max(x1, visibleArea.min);
-    x1 = _min(x1, visibleArea.max);
-    x2 = _min(x2, visibleArea.max);
-    x2 = _max(x2, visibleArea.min);
-    const height = Math.abs(x2 - x1);
+    const min = visibleArea.min;
+    const max = visibleArea.max;
+    if (max <= min) {
+      return;
+    }
+    if (x1 > x2) {
+      [x1, x2] = [x2, x1];
+    }
+    x1 = Math.max(x1, min);
+    x2 = Math.min(x2, max);
+    if (x2 - x1 < MIN_SCROLL_BAR_SIZE) {
+      if (max - min < MIN_SCROLL_BAR_SIZE) {
+        x1 = min;
+        x2 = max;
+      } else {
+        const center = (x1 + x2) / 2;
+        x1 = center - MIN_SCROLL_BAR_SIZE / 2;
+        x2 = center + MIN_SCROLL_BAR_SIZE / 2;
+        if (x1 < min) {
+          x1 = min;
+          x2 = min + MIN_SCROLL_BAR_SIZE;
+        } else if (x2 > max) {
+          x2 = max;
+          x1 = max - MIN_SCROLL_BAR_SIZE;
+        }
+      }
+    }
+    x1 = Math.max(x1, min);
+    x2 = Math.min(x2, max);
+    const height = Math.max(x2 - x1, 0);
     that._scroll.attr({
       y: x1,
-      height: height < MIN_SCROLL_BAR_SIZE ? MIN_SCROLL_BAR_SIZE : height
+      height
     });
   }
 };
@@ -99242,7 +99271,6 @@ const _max = _math.max;
 const _round = _math.round;
 const DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 var _default = exports["default"] = (0, _extend2.extend)({}, _bar_point.default, {
-  _calculateVisibility: _symbol_point.default._calculateVisibility,
   _getContinuousPoints: function (openCoord, closeCoord) {
     const that = this;
     const x = that.x;
@@ -99456,17 +99484,20 @@ var _default = exports["default"] = (0, _extend2.extend)({}, _bar_point.default,
     return this.x !== null && this.lowY !== null && this.highY !== null;
   },
   _translate: function () {
-    const that = this;
-    const rotated = that._options.rotated;
-    const valTranslator = that._getValTranslator();
-    const x = that._getArgTranslator().translate(that.argument);
-    that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
-    that.openY = that.openValue !== null ? valTranslator.translate(that.openValue) : null;
-    that.highY = valTranslator.translate(that.highValue);
-    that.lowY = valTranslator.translate(that.lowValue);
-    that.closeY = that.closeValue !== null ? valTranslator.translate(that.closeValue) : null;
-    const centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
-    that._calculateVisibility(!rotated ? that.x : centerValue, !rotated ? centerValue : that.x);
+    const valTranslator = this._getValTranslator();
+    const x = this._getArgTranslator().translate(this.argument);
+    this.vx = this.vy = this.x = x === null ? x : x + (this.xCorrection || 0);
+    this.openY = this.openValue !== null ? valTranslator.translate(this.openValue) : null;
+    this.highY = valTranslator.translate(this.highValue);
+    this.lowY = valTranslator.translate(this.lowValue);
+    this.closeY = this.closeValue !== null ? valTranslator.translate(this.closeValue) : null;
+    const minValue = Math.min(this.lowY, this.highY);
+    const height = Math.abs(this.lowY - this.highY);
+    if (this._options.rotated) {
+      this._calculateVisibility(minValue, this.x, height, 0);
+    } else {
+      this._calculateVisibility(this.x, minValue, 0, height);
+    }
   },
   getCrosshairData: function (x, y) {
     const that = this;

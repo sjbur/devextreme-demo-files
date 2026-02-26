@@ -40052,23 +40052,31 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
     });
     this._columnChooserList.endUpdate();
   }
-  _columnOptionChanged(e) {
-    super._columnOptionChanged(e);
+  _columnOptionChanged(changes) {
+    super._columnOptionChanged(changes);
+    const {
+      optionNames
+    } = changes;
     const isSelectMode = this.isSelectMode();
-    if (isSelectMode && this._columnChooserList && !this._isUpdatingColumnVisibility) {
-      const {
-        optionNames
-      } = e;
-      const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
-      const columnIndices = (0, _type.isDefined)(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
-      const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some(optionName => optionNames[optionName]) || e.changeTypes.columns && optionNames.all;
-      if (needUpdate) {
-        this._updateItemsSelection(columnIndices);
-        if (!onlyVisibleChanged) {
-          this._updateItems();
-        }
-      }
+    const onlyVisibleChanged = this.isColumnVisibilityOnlyUpdated(optionNames);
+    const isOnlyColumnVisibilityUpdated = this._isUpdatingColumnVisibility && onlyVisibleChanged;
+    if (!isSelectMode || !this._columnChooserList || isOnlyColumnVisibilityUpdated) {
+      return;
     }
+    const columnIndices = (0, _type.isDefined)(changes.columnIndex) ? [changes.columnIndex] : changes.columnIndices;
+    const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS.some(optionName => optionNames[optionName]);
+    const needUpdate = hasItemsOptionNames || changes.changeTypes.columns && optionNames.all;
+    if (!needUpdate) {
+      return;
+    }
+    this._updateItemsSelection(columnIndices);
+    if (!onlyVisibleChanged) {
+      this._updateItems();
+    }
+  }
+  isColumnVisibilityOnlyUpdated(optionNames) {
+    const optionKeys = Object.keys(optionNames ?? {}).filter(key => key !== 'length');
+    return optionKeys.length === 1 && optionKeys[0] === 'visible';
   }
   getColumnElements() {
     var _this$_popupContainer;
@@ -41934,7 +41942,7 @@ var _default = exports["default"] = ColumnStateMixin;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
+exports.USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.MAX_SAFE_INTEGER = exports.IGNORE_COLUMN_OPTION_NAMES = exports.GROUP_LOCATION = exports.GROUP_COMMAND_COLUMN_NAME = exports.DETAIL_COMMAND_COLUMN_NAME = exports.DEFAULT_COLUMN_OPTIONS = exports.DATATYPE_OPERATIONS = exports.COMMAND_EXPAND_CLASS = exports.COLUMN_OPTION_REGEXP = exports.COLUMN_INDEX_OPTIONS = exports.COLUMN_CHOOSER_LOCATION = void 0;
 const USER_STATE_FIELD_NAMES_15_1 = exports.USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];
 const USER_STATE_FIELD_NAMES = exports.USER_STATE_FIELD_NAMES = ['visibleIndex', 'dataField', 'name', 'dataType', 'width', 'visible', 'sortOrder', 'lastSortOrder', 'sortIndex', 'groupIndex', 'filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'added'].concat(USER_STATE_FIELD_NAMES_15_1);
 // eslint-disable-next-line @stylistic/max-len
@@ -41967,6 +41975,7 @@ const COLUMN_INDEX_OPTIONS = exports.COLUMN_INDEX_OPTIONS = {
 };
 const GROUP_LOCATION = exports.GROUP_LOCATION = 'group';
 const COLUMN_CHOOSER_LOCATION = exports.COLUMN_CHOOSER_LOCATION = 'columnChooser';
+const UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = exports.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = ['fixed', 'fixedPosition', 'type', 'buttons'];
 
 /***/ }),
 
@@ -43561,6 +43570,7 @@ var _object = __webpack_require__(22263);
 var _position = __webpack_require__(41639);
 var _type = __webpack_require__(11528);
 var _variable_wrapper = _interopRequireDefault(__webpack_require__(40216));
+var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _const = __webpack_require__(26854);
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 var _const2 = __webpack_require__(87396);
@@ -43569,6 +43579,25 @@ var _const3 = __webpack_require__(48795);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable prefer-destructuring */
 
+const warnFixedInChildColumnsOnce = (controller, childColumns) => {
+  if (controller !== null && controller !== void 0 && controller._isWarnedAboutUnsupportedProperties) return;
+  if (!childColumns || !Array.isArray(childColumns) || (childColumns === null || childColumns === void 0 ? void 0 : childColumns.length) === 0) return;
+  let unsupportedProperty = null;
+  for (const column of childColumns) {
+    if (unsupportedProperty) break;
+    if (!column || typeof column !== 'object' || column === null) continue;
+    for (const property of _const3.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+      if (property in column) {
+        unsupportedProperty = property;
+        break;
+      }
+    }
+  }
+  if (unsupportedProperty) {
+    controller && (controller._isWarnedAboutUnsupportedProperties = true);
+    _ui.default.log('W1028', unsupportedProperty);
+  }
+};
 const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
 };
@@ -43627,6 +43656,7 @@ const createColumnsFromOptions = function (that, columnsOptions, bandColumn, cre
         }
         result.push(column);
         if (column.columns) {
+          warnFixedInChildColumnsOnce(that, column.columns);
           result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
@@ -62603,7 +62633,7 @@ var _iterator = __webpack_require__(21274);
 var _type = __webpack_require__(11528);
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _m_support = _interopRequireDefault(__webpack_require__(85991));
-var _m_selection = _interopRequireDefault(__webpack_require__(53544));
+var _selection = _interopRequireDefault(__webpack_require__(80876));
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -62841,7 +62871,8 @@ class SelectionController extends _m_modules.default.Controller {
   }
   _createSelection() {
     const options = this._getSelectionConfig();
-    return new _m_selection.default(options);
+    // @ts-expect-error TKey
+    return new _selection.default(options);
   }
   /**
    * @extended: state_storing, TreeList's selection
@@ -82644,7 +82675,7 @@ var _signalsCore = __webpack_require__(70037);
 var _index = __webpack_require__(61124);
 var _index2 = __webpack_require__(8927);
 var _const = __webpack_require__(7896);
-var _m_selection = _interopRequireDefault(__webpack_require__(53544));
+var _selection = _interopRequireDefault(__webpack_require__(80876));
 var _items_controller = __webpack_require__(58761);
 var _options_controller = __webpack_require__(76385);
 var _controller = __webpack_require__(34272);
@@ -82733,7 +82764,7 @@ class SelectionController {
         return undefined;
       }
       const selectionConfig = this.getSelectionConfig(dataSource, selectionOption);
-      return new _m_selection.default(selectionConfig);
+      return new _selection.default(selectionConfig);
     });
     (0, _signalsCore.effect)(() => {
       const selectedCardKeys = this.normalizedSelectedCardKeys.value;
@@ -82928,6 +82959,7 @@ class SelectionController {
   }
   getSelectedCardsData() {
     var _this$selectionHelper4;
+    // @ts-expect-error undefined is not assignable to DataObject[]
     return (_this$selectionHelper4 = this.selectionHelper) === null || _this$selectionHelper4 === void 0 || (_this$selectionHelper4 = _this$selectionHelper4.peek()) === null || _this$selectionHelper4 === void 0 ? void 0 : _this$selectionHelper4.getSelectedItems();
   }
   getSelectedCardKeys() {
@@ -96048,6 +96080,8 @@ const selection = Base => class SelectionControllerTreeListExtender extends Base
     const dataController = that._dataController;
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
     const selectedRowsData = [];
+    // @ts-expect-error selection may be deferred only in DataGrid,
+    // we need to improve GridCore types to take it into account
     selectedKeys.forEach(key => {
       // @ts-expect-error
       const node = dataController.getNodeByKey(key);
@@ -101337,7 +101371,6 @@ class SchedulerAppointments extends _uiCollection_widget.default {
       allowResize: true,
       allowAllDayResize: true,
       onAppointmentDblClick: null,
-      _collectorOffset: 0,
       groups: [],
       resources: []
     });
@@ -101932,10 +101965,6 @@ class SchedulerAppointments extends _uiCollection_widget.default {
   }
   renderDropDownAppointment($fragment, appointment) {
     const virtualItems = appointment.items;
-    const buttonWidth = this.invoke('getDropDownAppointmentWidth', appointment.allDay);
-    const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-    const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
-    const isGroupCompact = !appointment.allDay && this.invoke('supportCompactDropDownAppointments');
     const items = {
       data: [],
       colors: [],
@@ -101956,17 +101985,16 @@ class SchedulerAppointments extends _uiCollection_widget.default {
       $container: $fragment,
       coordinates: {
         top: appointment.top,
-        left: appointment.left + rtlOffset
+        left: appointment.left
       },
       items,
       buttonColor: items.colors[0],
       sortedIndex: appointment.sortedIndex,
-      width: buttonWidth - this.option('_collectorOffset'),
-      height: buttonHeight,
+      width: appointment.width,
+      height: appointment.height,
       onAppointmentClick: this.option('onItemClick'),
       allowDrag: this.option('allowDrag'),
-      cellWidth: this.invoke('getCellWidth'),
-      isCompact: this.invoke('isAdaptive') || isGroupCompact
+      isCompact: appointment.isCompact
     });
     this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
     return $item;
@@ -102297,6 +102325,64 @@ const formatDates = (startDate, endDate, formatType) => {
   }
 };
 exports.formatDates = formatDates;
+
+/***/ }),
+
+/***/ 334:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getDeltaTime = void 0;
+var _date = _interopRequireDefault(__webpack_require__(41380));
+var _constants = __webpack_require__(25307);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const toMs = _date.default.dateToMilliseconds;
+const MIN_RESIZABLE_STEP = 2;
+const getAllDayDeltaWidth = (args, initialSize, resizableStep) => {
+  const intervalWidth = resizableStep || MIN_RESIZABLE_STEP;
+  const initialWidth = initialSize.width;
+  return Math.round((args.width - initialWidth) / intervalWidth);
+};
+const getHorizontalDeltaTime = (args, initialSize, _ref) => {
+  let {
+    cellSize,
+    cellDurationInMinutes
+  } = _ref;
+  const deltaWidth = args.width - initialSize.width;
+  const deltaTime = toMs('minute') * Math.round(deltaWidth * cellDurationInMinutes / cellSize.width);
+  return deltaTime;
+};
+const getVerticalDeltaTime = (args, initialSize, _ref2) => {
+  let {
+    cellSize,
+    cellDurationInMinutes
+  } = _ref2;
+  const deltaHeight = args.height - initialSize.height;
+  const deltaTime = toMs('minute') * Math.round(deltaHeight * cellDurationInMinutes / cellSize.height);
+  return deltaTime;
+};
+const getDeltaTime = (args, initialSize, options) => {
+  const {
+    viewType,
+    resizableStep,
+    isAllDay
+  } = options;
+  switch (true) {
+    case ['timelineMonth', 'month'].includes(viewType) || Boolean(isAllDay):
+      return getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day');
+    case viewType === 'agenda':
+      return 0;
+    case _constants.VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDay:
+      return getVerticalDeltaTime(args, initialSize, options);
+    default:
+      return getHorizontalDeltaTime(args, initialSize, options);
+  }
+};
+exports.getDeltaTime = getDeltaTime;
 
 /***/ }),
 
@@ -102706,12 +102792,13 @@ var _default = exports["default"] = NotifyScheduler;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VERTICAL_GROUP_ORIENTATION = exports.LIST_ITEM_DATA_KEY = exports.LIST_ITEM_CLASS = exports.HORIZONTAL_GROUP_ORIENTATION = exports.APPOINTMENT_SETTINGS_KEY = void 0;
+exports.VERTICAL_VIEW_TYPES = exports.VERTICAL_GROUP_ORIENTATION = exports.LIST_ITEM_DATA_KEY = exports.LIST_ITEM_CLASS = exports.HORIZONTAL_GROUP_ORIENTATION = exports.APPOINTMENT_SETTINGS_KEY = void 0;
 const LIST_ITEM_DATA_KEY = exports.LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_ITEM_CLASS = exports.LIST_ITEM_CLASS = 'dx-list-item';
 const APPOINTMENT_SETTINGS_KEY = exports.APPOINTMENT_SETTINGS_KEY = 'dxAppointmentSettings';
 const VERTICAL_GROUP_ORIENTATION = exports.VERTICAL_GROUP_ORIENTATION = 'vertical';
 const HORIZONTAL_GROUP_ORIENTATION = exports.HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
+const VERTICAL_VIEW_TYPES = exports.VERTICAL_VIEW_TYPES = ['day', 'week', 'workWeek'];
 
 /***/ }),
 
@@ -103985,8 +104072,6 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
-const WEEK_VIEW_COLLECTOR_OFFSET = 5;
-const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 class CompactAppointmentsHelper {
   constructor(instance) {
     this.instance = instance;
@@ -104070,12 +104155,6 @@ class CompactAppointmentsHelper {
       };
       workSpace._createDragBehaviorBase($element, $schedulerElement, options);
     };
-  }
-  _getCollectorOffset(width, cellWidth) {
-    return cellWidth - width - this._getCollectorRightOffset();
-  }
-  _getCollectorRightOffset() {
-    return this.instance.getRenderingStrategyInstance()._isCompactTheme() ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET : WEEK_VIEW_COLLECTOR_OFFSET;
   }
   _setPosition(element, position) {
     (0, _translator.move)(element, {
@@ -106352,7 +106431,6 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     if (currentViewOptions.startDate) {
       this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
     }
-    this._appointments.option('_collectorOffset', this.getCollectorOffset());
   }
   _recalculateWorkspace() {
     // @ts-expect-error
@@ -107034,27 +107112,31 @@ var _extend = __webpack_require__(52576);
 var _iterator = __webpack_require__(21274);
 var _type = __webpack_require__(11528);
 var _m_text_utils = __webpack_require__(9680);
+var _get_delta_time = __webpack_require__(334);
+var _constants = __webpack_require__(25307);
 var _m_classes = __webpack_require__(80126);
 var _m_utils = __webpack_require__(5327);
+var _base = __webpack_require__(44611);
 var _appointment_adapter = __webpack_require__(36791);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const toMs = _date.default.dateToMilliseconds;
+const isAllDay = (scheduler, appointmentData) => {
+  const adapter = new _appointment_adapter.AppointmentAdapter(appointmentData, scheduler._dataAccessors);
+  if (scheduler.currentView.type === 'agenda') {
+    return false;
+  }
+  if (_constants.VERTICAL_VIEW_TYPES.includes(scheduler.currentView.type)) {
+    return (0, _base.isAppointmentTakesAllDay)(adapter, scheduler.option('allDayPanelMode'));
+  }
+  return adapter.allDay;
+};
 const subscribes = {
   isCurrentViewAgenda() {
     return this.currentView.type === 'agenda';
   },
-  currentViewUpdated(currentView) {
-    this.option('currentView', currentView);
-  },
-  currentDateUpdated(date) {
-    this.option('currentDate', date);
-  },
   getOption(name) {
     return this.option(name);
-  },
-  getWorkspaceOption(name) {
-    return this.getWorkSpace().option(name);
   },
   isVirtualScrolling() {
     return this.isVirtualScrolling();
@@ -107153,7 +107235,7 @@ const subscribes = {
     } = options;
     const groups = this.getViewOption('groups');
     if (groups !== null && groups !== void 0 && groups.length) {
-      if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
+      if (allDay || !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
@@ -107162,7 +107244,7 @@ const subscribes = {
           bottom: 0
         };
       }
-      if (this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
+      if (!allDay && _constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace._isVerticalGroupedWorkSpace()) {
         const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: 0,
@@ -107178,16 +107260,19 @@ const subscribes = {
     return this.getWorkSpace().needRecalculateResizableArea();
   },
   isAllDay(appointmentData) {
-    return this.getLayoutManager().getRenderingStrategyInstance().isAllDay(appointmentData);
+    return isAllDay(this, appointmentData);
   },
   getDeltaTime(e, initialSize, itemData) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
-  },
-  getDropDownAppointmentWidth(isAllDay) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentWidth(this.currentView.intervalCount, isAllDay);
-  },
-  getDropDownAppointmentHeight() {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
+    return (0, _get_delta_time.getDeltaTime)(e, initialSize, {
+      viewType: this.currentView.type,
+      cellSize: {
+        width: this.getWorkSpace().getCellWidth(),
+        height: this.getWorkSpace().getCellHeight()
+      },
+      cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
+      resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
+      isAllDay: isAllDay(this, itemData)
+    });
   },
   getCellWidth() {
     return this.getWorkSpace().getCellWidth();
@@ -107195,14 +107280,11 @@ const subscribes = {
   getCellHeight() {
     return this.getWorkSpace().getCellHeight();
   },
-  getMaxAppointmentCountPerCellByType(isAllDay) {
-    return this.getLayoutManager().getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
-  },
   needCorrectAppointmentDates() {
-    return this.getLayoutManager().getRenderingStrategyInstance().needCorrectAppointmentDates();
+    return !['month', 'timelineMonth'].includes(this.currentView.type);
   },
   getRenderingStrategyDirection() {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDirection();
+    return _constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type) ? 'vertical' : 'horizontal';
   },
   updateAppointmentEndDate(options) {
     const {
@@ -107224,9 +107306,6 @@ const subscribes = {
   },
   clearCompactAppointments() {
     this._compactAppointmentsHelper.clear();
-  },
-  supportCompactDropDownAppointments() {
-    return this.getLayoutManager().getRenderingStrategyInstance().supportCompactDropDownAppointments();
   },
   getGroupCount() {
     return this._workSpace._getGroupCount();
@@ -115386,6 +115465,9 @@ const processVirtualAppointment = (virtualAppointments, appointmentSetting) => {
       sortedIndex: appointmentSetting.sortedIndex,
       top: virtualAppointment.top,
       left: virtualAppointment.left,
+      width: virtualAppointment.width,
+      height: virtualAppointment.height,
+      isCompact: virtualAppointment.isCompact,
       items: []
     };
   }
@@ -116636,7 +116718,6 @@ class AgendaRenderingStrategy extends _m_strategy_base.default {
     return this.options.agendaDuration;
   }
   getAppointmentMinSize() {}
-  getDeltaTime() {}
   keepAppointmentSettings() {
     return true;
   }
@@ -116704,8 +116785,6 @@ class AgendaRenderingStrategy extends _m_strategy_base.default {
     }
     return undefined;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getDeltaWidth(args, initialSize) {}
   _getAppointmentMaxWidth() {
     return this.cellWidth;
   }
@@ -116969,13 +117048,8 @@ class BaseRenderingStrategy {
   keepAppointmentSettings() {
     return false;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDeltaTime(args, initialSize, appointment) {}
   getAppointmentGeometry(coordinates) {
     return coordinates;
-  }
-  needCorrectAppointmentDates() {
-    return true;
   }
   getDirection() {
     return 'horizontal';
@@ -117002,11 +117076,6 @@ class BaseRenderingStrategy {
     const positionArray = this._getSortedPositions(map);
     const resultPositions = this._getResultPositions(positionArray);
     return this._getExtendedPositionMap(map, resultPositions);
-  }
-  _getDeltaWidth(args, initialSize) {
-    const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
-    const initialWidth = initialSize.width;
-    return Math.round((args.width - initialWidth) / intervalWidth);
   }
   _correctRtlCoordinates(coordinates) {
     const width = coordinates[0].width || this._getAppointmentMaxWidth();
@@ -117382,11 +117451,14 @@ class BaseRenderingStrategy {
         left
       } = coordinates;
       const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
+      const width = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay) - this.options._collectorOffset;
+      const height = this.getDropDownAppointmentHeight();
+      const rtlOffset = this.rtlEnabled ? width : 0;
       coordinates.virtual = {
-        left: left + this._getCollectorLeftOffset(isAllDay),
+        left: left + this._getCollectorLeftOffset(isAllDay) + rtlOffset,
         top,
-        width: this.getDropDownAppointmentWidth(this.intervalCount, isAllDay),
-        height: this.getDropDownAppointmentHeight(),
+        width,
+        height,
         index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
         isAllDay,
         groupIndex: coordinates.groupIndex,
@@ -117546,13 +117618,6 @@ class BaseRenderingStrategy {
   _getAppointmentMinWidth() {
     return this._getAppointmentDefaultWidth();
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _needVerticalGroupBounds(allDay) {
-    return false;
-  }
-  _needHorizontalGroupBounds() {
-    return false;
-  }
   getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {
     if (allDay) {
       const appointmentDuration = apptEndDate.getTime() - apptStartDate.getTime();
@@ -117681,12 +117746,6 @@ class HorizontalRenderingStrategy extends _m_strategy_base.default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getDropDownAppointmentWidth(intervalCount, isAllDay) {
     return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
-  }
-  getDeltaTime(args, initialSize) {
-    let deltaTime = 0;
-    const deltaWidth = args.width - initialSize.width;
-    deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.cellDurationInMinutes);
-    return deltaTime;
   }
   isAllDay(appointmentData) {
     return this.dataAccessors.get('allDay', appointmentData);
@@ -117868,15 +117927,6 @@ class HorizontalMonthRenderingStrategy extends _m_strategy_horizontal_month_line
     const offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
     return this.cellWidth - offset;
   }
-  needCorrectAppointmentDates() {
-    return false;
-  }
-  _needVerticalGroupBounds() {
-    return false;
-  }
-  _needHorizontalGroupBounds() {
-    return true;
-  }
 }
 var _default = exports["default"] = HorizontalMonthRenderingStrategy;
 
@@ -117896,9 +117946,6 @@ var _date = _interopRequireDefault(__webpack_require__(41380));
 var _m_utils = __webpack_require__(99982);
 var _m_strategy_horizontal = _interopRequireDefault(__webpack_require__(40439));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
-const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 class HorizontalMonthLineRenderingStrategy extends _m_strategy_horizontal.default {
   calculateAppointmentWidth(_, position) {
@@ -117924,9 +117971,6 @@ class HorizontalMonthLineRenderingStrategy extends _m_strategy_horizontal.defaul
     const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
     return adjustedDuration / _date.default.dateToMilliseconds('day') || ZERO_APPOINTMENT_DURATION_IN_DAYS;
   }
-  getDeltaTime(args, initialSize) {
-    return HOURS_IN_DAY * MINUTES_IN_HOUR * MILLISECONDS_IN_MINUTE * this._getDeltaWidth(args, initialSize);
-  }
   isAllDay() {
     return false;
   }
@@ -117943,9 +117987,6 @@ class HorizontalMonthLineRenderingStrategy extends _m_strategy_horizontal.defaul
       result = (0, _query.default)(result).sortBy('top').thenBy('left').thenBy('cellPosition').thenBy('i').toArray();
     }
     return result;
-  }
-  needCorrectAppointmentDates() {
-    return false;
   }
   getPositionShift(timeShift) {
     return {
@@ -117982,16 +118023,6 @@ const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 const toMs = _date.default.dateToMilliseconds;
 class VerticalRenderingStrategy extends _m_strategy_base.default {
-  getDeltaTime(args, initialSize, appointment) {
-    let deltaTime = 0;
-    if (this.isAllDay(appointment)) {
-      deltaTime = this._getDeltaWidth(args, initialSize) * toMs('day');
-    } else {
-      const deltaHeight = args.height - initialSize.height;
-      deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.cellDurationInMinutes);
-    }
-    return deltaTime;
-  }
   _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
     if (isAllDay) {
       super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
@@ -118317,13 +118348,6 @@ class VerticalRenderingStrategy extends _m_strategy_base.default {
   _getMaxHeight() {
     return this.allDayHeight || this.getAppointmentMinSize();
   }
-  // eslint-disable-next-line class-methods-use-this
-  _needVerticalGroupBounds(allDay) {
-    return !allDay;
-  }
-  _needHorizontalGroupBounds() {
-    return false;
-  }
   getPositionShift(timeShift, isAllDay) {
     if (!isAllDay && this.isAdaptive && this._getMaxAppointmentCountPerCellByType(isAllDay) === 0) {
       return {
@@ -118483,6 +118507,7 @@ class AppointmentLayoutManager {
       intervalDuration: workspace.getIntervalDuration(),
       allDayIntervalDuration: workspace.getIntervalDuration(true),
       isVerticalGroupOrientation: workspace.isVerticalOrientation(),
+      _collectorOffset: this.instance.getCollectorOffset(),
       DOMMetaData,
       // agenda only
       instance: this.instance,
@@ -133044,6 +133069,7 @@ class MessageList extends _widget.default {
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
+        // @ts-expect-error itemElement
         onClick: e => {
           const onMessageEditStarted = onMessageEditingStart === null || onMessageEditingStart === void 0 ? void 0 : onMessageEditingStart({
             event: e.event,
@@ -133061,6 +133087,7 @@ class MessageList extends _widget.default {
       buttons.push({
         icon: 'trash',
         text: deleteText,
+        // @ts-expect-error itemElement
         onClick(e) {
           onMessageDeleting === null || onMessageDeleting === void 0 || onMessageDeleting({
             event: e.event,
@@ -134624,12 +134651,10 @@ class CollectionWidget extends _widget.default {
       return;
     }
     const itemData = this._getItemData($itemElement);
-    // @ts-expect-error ts-error
-    if (itemData !== null && itemData !== void 0 && itemData.onClick) {
+    if (_item.default.isClickableItem(itemData)) {
       const actionArgs = {
         event: e
       };
-      // @ts-expect-error
       this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
     }
     // @ts-expect-error ts-error
@@ -135454,15 +135479,13 @@ class CollectionWidget extends _widget.default {
     return $itemContent;
   }
   _attachItemClickEvent(itemData, $itemElement) {
-    // @ts-expect-error ts-error
-    if (!itemData || !itemData.onClick) {
+    if (!itemData || !_item.default.isClickableItem(itemData)) {
       return;
     }
     _events_engine.default.on($itemElement, _click.name, e => {
       const actionArgs = {
         event: e
       };
-      // @ts-expect-error ts-error
       this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
     });
   }
@@ -135701,7 +135724,7 @@ var _type = __webpack_require__(11528);
 var _ui = _interopRequireDefault(__webpack_require__(35185));
 var _collection_widget = _interopRequireDefault(__webpack_require__(36266));
 var _collection_widgetEditStrategy = _interopRequireDefault(__webpack_require__(83986));
-var _m_selection = _interopRequireDefault(__webpack_require__(53544));
+var _selection = _interopRequireDefault(__webpack_require__(80876));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
@@ -135824,7 +135847,8 @@ class CollectionWidget extends _collection_widget.default {
       selectionMode,
       maxFilterLengthInRequest
     } = this.option();
-    this._selection = new _m_selection.default({
+    // @ts-expect-error TItem
+    this._selection = new _selection.default({
       allowNullValue: this._nullValueSelectionSupported(),
       mode: selectionMode,
       maxFilterLengthInRequest,
@@ -136043,7 +136067,6 @@ class CollectionWidget extends _collection_widget.default {
         selectionRequired
       } = this.option();
       if (newSelection.length > 1 || !newSelection.length && selectionRequired && items !== null && items !== void 0 && items.length) {
-        var _normalizedSelection;
         const currentSelection = this._selection.getSelectedItems();
         let normalizedSelection = newSelection[0] ?? currentSelection[0];
         if (normalizedSelection === undefined) {
@@ -136053,7 +136076,8 @@ class CollectionWidget extends _collection_widget.default {
         const {
           grouped
         } = this.option();
-        if (grouped && (_normalizedSelection = normalizedSelection) !== null && _normalizedSelection !== void 0 && _normalizedSelection.items) {
+        const hasSubItems = item => (0, _type.isObject)(item) && 'items' in item && Array.isArray(item.items);
+        if (grouped && hasSubItems(normalizedSelection)) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
         this._selection.setSelection(this._getKeysByItems([normalizedSelection]));
@@ -136990,6 +137014,7 @@ exports["default"] = void 0;
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _iterator = __webpack_require__(21274);
 var _public_component = __webpack_require__(85521);
+var _type = __webpack_require__(11528);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -137072,8 +137097,10 @@ class CollectionItem {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance($element) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return (0, _public_component.getInstanceByElement)($element, this);
+  }
+  static isClickableItem(item) {
+    return (0, _type.isObject)(item) && 'onClick' in item;
   }
 }
 var _default = exports["default"] = CollectionItem;
@@ -139200,7 +139227,6 @@ class ContextMenu extends _menu_base.default {
     return position;
   }
   // TODO: try to simplify it
-  // @ts-expect-error ts-error
   _updateSubmenuVisibilityOnClick(actionArgs) {
     var _actionArgs$args;
     if (!((_actionArgs$args = actionArgs.args) !== null && _actionArgs$args !== void 0 && _actionArgs$args.length)) {
@@ -139228,7 +139254,6 @@ class ContextMenu extends _menu_base.default {
     if ($itemElement.context === $submenu.context && $submenu.css('visibility') === 'visible') {
       return;
     }
-    // @ts-expect-error ts-error
     this._updateSelectedItemOnClick(actionArgs);
     // T238943. Give the workaround with e.cancel and remove this hack
     const notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
@@ -139858,7 +139883,6 @@ class MenuBase extends _hierarchical_collection_widget.default {
     }
     return delay;
   }
-  // TODO: try to simplify
   _getItemElementByEventArgs(eventArgs) {
     let $target = (0, _renderer.default)(eventArgs.target);
     if ($target.hasClass(this._itemClass()) || $target.get(0) === eventArgs.currentTarget) {
@@ -140003,6 +140027,9 @@ class MenuBase extends _hierarchical_collection_widget.default {
     });
     e._skipHandling = true;
   }
+  _isUrlItem(item) {
+    return !!item && 'url' in item && !!item.url;
+  }
   _itemClick(actionArgs) {
     var _actionArgs$args;
     const {
@@ -140014,7 +140041,7 @@ class MenuBase extends _hierarchical_collection_widget.default {
     }
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement === null || $itemElement === void 0 ? void 0 : $itemElement.find(`.${ITEM_URL_CLASS}`)[0];
-    if (!(itemData !== null && itemData !== void 0 && itemData.url) || !link) {
+    if (!this._isUrlItem(itemData) || !link) {
       return;
     }
     const isNativeLinkClick = (0, _renderer.default)(event.target).closest(`.${ITEM_URL_CLASS}`).length;
@@ -140133,7 +140160,8 @@ class MenuBase extends _hierarchical_collection_widget.default {
     });
   }
   selectItem(itemElement) {
-    const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
+    const isElement = item => typeof item === 'object' && 'nodeType' in item && !!item.nodeType;
+    const itemData = isElement(itemElement) ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
     const node = this._dataAdapter.getNodeByItem(itemData);
@@ -148399,9 +148427,9 @@ class DropDownList extends _m_drop_down_editor.default {
   }
   _getSpecificDataSourceOption() {
     const {
-      dataSource,
       grouped
     } = this.option();
+    const dataSource = this.option('dataSource');
     if (dataSource && grouped) {
       return (0, _grouped.getDataSourceOptions)(dataSource);
     }
@@ -164248,9 +164276,9 @@ class ListBase extends _collection_widget.default {
   }
   _getSpecificDataSourceOption() {
     const {
-      dataSource,
       grouped
     } = this.option();
+    const dataSource = this.option('dataSource');
     if (dataSource && grouped) {
       return (0, _grouped.getDataSourceOptions)(dataSource);
     }
@@ -190336,7 +190364,7 @@ exports.ScrollDirection = ScrollDirection;
 
 /***/ }),
 
-/***/ 53544:
+/***/ 80876:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -190349,26 +190377,22 @@ var _common = __webpack_require__(17781);
 var _deferred = __webpack_require__(87739);
 var _extend = __webpack_require__(52576);
 var _type = __webpack_require__(11528);
-var _m_selectionStrategy = _interopRequireDefault(__webpack_require__(33060));
-var _m_selectionStrategy2 = _interopRequireDefault(__webpack_require__(98893));
+var _selectionStrategy = _interopRequireDefault(__webpack_require__(33256));
+var _selectionStrategy2 = _interopRequireDefault(__webpack_require__(50702));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class Selection {
   constructor(options) {
     this.options = (0, _extend.extend)(this._getDefaultOptions(), options, {
-      selectedItemKeys: options.selectedKeys || []
+      selectedItemKeys: options.selectedKeys ?? []
     });
-    this._selectionStrategy = this.options.deferred
-    // eslint-disable-next-line new-cap
-    ? new _m_selectionStrategy.default(this.options)
-    // eslint-disable-next-line new-cap
-    : new _m_selectionStrategy2.default(this.options);
+    this._selectionStrategy = this.options.deferred ? new _selectionStrategy.default(this.options) : new _selectionStrategy2.default(this.options);
     this._focusedItemIndex = -1;
     if (!this.options.equalByReference) {
       this._selectionStrategy.updateSelectedItemKeyHash(this.options.selectedItemKeys);
     }
   }
   _getDefaultOptions() {
-    return {
+    const defaultOptions = {
       allowNullValue: false,
       deferred: false,
       equalByReference: false,
@@ -190377,7 +190401,9 @@ class Selection {
       selectionFilter: [],
       maxFilterLengthInRequest: 0,
       onSelectionChanged: _common.noop,
-      key: _common.noop,
+      key() {
+        return undefined;
+      },
       keyOf(item) {
         return item;
       },
@@ -190396,9 +190422,14 @@ class Selection {
       getItemData(item) {
         return item;
       },
-      dataFields: _common.noop,
-      filter: _common.noop
+      dataFields() {
+        return undefined;
+      },
+      filter() {
+        return undefined;
+      }
     };
+    return defaultOptions;
   }
   validate() {
     this._selectionStrategy.validate();
@@ -190406,16 +190437,23 @@ class Selection {
   getSelectedItemKeys() {
     return this._selectionStrategy.getSelectedItemKeys();
   }
+  _isStandardStrategy(strategy) {
+    return this.options.deferred;
+  }
   getSelectedItems() {
     return this._selectionStrategy.getSelectedItems();
   }
   selectionFilter(value) {
     if (value === undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.options.selectionFilter;
     }
     const filterIsChanged = this.options.selectionFilter !== value && JSON.stringify(this.options.selectionFilter) !== JSON.stringify(value);
     this.options.selectionFilter = value;
-    filterIsChanged && this.onSelectionChanged();
+    if (filterIsChanged) {
+      this.onSelectionChanged();
+    }
+    return undefined;
   }
   setSelection(keys, updatedKeys) {
     return this.selectedItemKeys(keys, false, false, false, updatedKeys);
@@ -190427,16 +190465,16 @@ class Selection {
     return this.selectedItemKeys(keys, true, true);
   }
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
-    const that = this;
-    keys = keys ?? [];
-    keys = Array.isArray(keys) ? keys : [keys];
-    that.validate();
-    return this._selectionStrategy.selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys);
+    let normalizedKeys = keys ?? [];
+    normalizedKeys = Array.isArray(normalizedKeys) ? normalizedKeys : [normalizedKeys];
+    this.validate();
+    return this._selectionStrategy.selectedItemKeys(normalizedKeys, preserve, isDeselect, isSelectAll, updatedKeys);
   }
   clearSelection() {
     return this.selectedItemKeys([]);
   }
   _addSelectedItem(itemData, key) {
+    // @ts-expect-error addSelectedItem
     this._selectionStrategy.addSelectedItem(key, itemData);
   }
   _removeSelectedItem(key) {
@@ -190448,12 +190486,15 @@ class Selection {
   onSelectionChanged() {
     this._selectionStrategy.onSelectionChanged();
   }
-  // @ts-expect-error
-  changeItemSelection(itemIndex, keys, setFocusOnly) {
+  changeItemSelection(itemIndex) {
     var _this$options$allowLo, _this$options;
-    let isSelectedItemsChanged;
+    let keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    let setFocusOnly = arguments.length > 2 ? arguments[2] : undefined;
+    let isSelectedItemsChanged = false;
     const items = this.options.plainItems();
     const item = items[itemIndex];
+    let focusedItemIndex = itemIndex;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let deferred;
     const {
       isVirtualPaging
@@ -190462,14 +190503,15 @@ class Selection {
     const {
       alwaysSelectByShift
     } = this.options;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let indexOffset;
     let focusedItemNotInLoadedRange = false;
     let shiftFocusedItemNotInLoadedRange = false;
     const itemIsNotInLoadedRange = index => index >= 0 && !items.filter(it => it.loadIndex === index).length;
     if (isVirtualPaging && (0, _type.isDefined)(item)) {
       if (allowLoadByRange) {
-        indexOffset = item.loadIndex - itemIndex;
-        itemIndex = item.loadIndex;
+        indexOffset = item.loadIndex - focusedItemIndex;
+        focusedItemIndex = item.loadIndex;
       }
       focusedItemNotInLoadedRange = itemIsNotInLoadedRange(this._focusedItemIndex);
       if ((0, _type.isDefined)(this._shiftFocusedItemIndex)) {
@@ -190481,19 +190523,18 @@ class Selection {
     }
     const itemData = this.options.getItemData(item);
     const itemKey = this.options.keyOf(itemData);
-    keys = keys || {};
     let allowSelectByShift = keys.shift;
     if (alwaysSelectByShift === false && allowSelectByShift) {
       allowSelectByShift = allowLoadByRange !== false || !focusedItemNotInLoadedRange && !shiftFocusedItemNotInLoadedRange;
     }
     if (allowSelectByShift && this.options.mode === 'multiple' && this._focusedItemIndex >= 0) {
       if (allowLoadByRange && (focusedItemNotInLoadedRange || shiftFocusedItemNotInLoadedRange)) {
-        isSelectedItemsChanged = itemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
+        isSelectedItemsChanged = focusedItemIndex !== this._shiftFocusedItemIndex || this._focusedItemIndex !== this._shiftFocusedItemIndex;
         if (isSelectedItemsChanged) {
-          deferred = this.changeItemSelectionWhenShiftKeyInVirtualPaging(itemIndex);
+          deferred = this.changeItemSelectionWhenShiftKeyInVirtualPaging(focusedItemIndex);
         }
       } else {
-        isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items, indexOffset);
+        isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(focusedItemIndex, items, indexOffset);
       }
     } else if (keys.control) {
       this._resetItemSelectionWhenShiftKeyPressed();
@@ -190519,11 +190560,14 @@ class Selection {
     }
     if (isSelectedItemsChanged) {
       (0, _deferred.when)(deferred).done(() => {
-        this._focusedItemIndex = itemIndex;
-        !setFocusOnly && this.onSelectionChanged();
+        this._focusedItemIndex = focusedItemIndex;
+        if (!setFocusOnly) {
+          this.onSelectionChanged();
+        }
       });
       return true;
     }
+    return undefined;
   }
   isDataItem(item) {
     return this.options.isSelectableItem(item);
@@ -190536,29 +190580,30 @@ class Selection {
       checkPending: true
     });
   }
-  isItemSelected(arg, options) {
+  isItemSelected(arg) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     return this._selectionStrategy.isItemKeySelected(arg, options);
   }
   _resetItemSelectionWhenShiftKeyPressed() {
-    // @ts-expect-error
     delete this._shiftFocusedItemIndex;
   }
   _resetFocusedItemIndex() {
     this._focusedItemIndex = -1;
   }
   changeItemSelectionWhenShiftKeyInVirtualPaging(loadIndex) {
-    const loadOptions = this.options.getLoadOptions(loadIndex, this._focusedItemIndex, this._shiftFocusedItemIndex);
+    var _this$options$getLoad, _this$options2;
+    const loadOptions = ((_this$options$getLoad = (_this$options2 = this.options).getLoadOptions) === null || _this$options$getLoad === void 0 ? void 0 : _this$options$getLoad.call(_this$options2, loadIndex, this._focusedItemIndex, this._shiftFocusedItemIndex)) ?? {};
     const deferred = (0, _deferred.Deferred)();
     const indexOffset = loadOptions.skip;
     this.options.load(loadOptions).done(items => {
-      this.changeItemSelectionWhenShiftKeyPressed(loadIndex, items, indexOffset);
+      const filteredItems = !Array.isArray(items) && (0, _type.isPlainObject)(items) ? items.data : items;
+      this.changeItemSelectionWhenShiftKeyPressed(loadIndex, filteredItems, indexOffset);
       deferred.resolve();
     });
     return deferred.promise();
   }
   changeItemSelectionWhenShiftKeyPressed(itemIndex, items, indexOffset) {
     let isSelectedItemsChanged = false;
-    let itemIndexStep;
     const indexOffsetDefined = (0, _type.isDefined)(indexOffset);
     let index = indexOffsetDefined ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
     const {
@@ -190571,10 +190616,11 @@ class Selection {
     if (!(0, _type.isDefined)(this._shiftFocusedItemIndex)) {
       this._shiftFocusedItemIndex = this._focusedItemIndex;
     }
-    let data;
+    let itemIndexStep = 0;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let itemKey;
-    let startIndex;
-    let endIndex;
+    let startIndex = 0;
+    let endIndex = 0;
     if (this._shiftFocusedItemIndex !== this._focusedItemIndex) {
       itemIndexStep = this._focusedItemIndex < this._shiftFocusedItemIndex ? 1 : -1;
       startIndex = indexOffsetDefined ? this._focusedItemIndex - indexOffset : this._focusedItemIndex;
@@ -190593,7 +190639,7 @@ class Selection {
       endIndex = indexOffsetDefined ? this._shiftFocusedItemIndex - indexOffset : this._shiftFocusedItemIndex;
       for (index = startIndex; index !== endIndex; index += itemIndexStep) {
         if (indexOffsetDefined || this.isDataItem(items[index])) {
-          data = this.options.getItemData(items[index]);
+          const data = this.options.getItemData(items[index]);
           itemKey = keyOf(data);
           this._addSelectedItem(data, itemKey);
           isSelectedItemsChanged = true;
@@ -190634,7 +190680,7 @@ exports["default"] = Selection;
 
 /***/ }),
 
-/***/ 33060:
+/***/ 33256:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -190647,23 +190693,24 @@ var _query = _interopRequireDefault(__webpack_require__(30771));
 var _deferred = __webpack_require__(87739);
 var _type = __webpack_require__(11528);
 var _ui = _interopRequireDefault(__webpack_require__(35185));
-var _m_selection = _interopRequireDefault(__webpack_require__(13085));
+var _selection = _interopRequireDefault(__webpack_require__(18993));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-class DeferredStrategy extends _m_selection.default {
+class DeferredStrategy extends _selection.default {
   getSelectedItems() {
     return this._loadFilteredData(this.options.selectionFilter);
   }
   getSelectedItemKeys() {
     const d = (0, _deferred.Deferred)();
-    const that = this;
     const key = this.options.key();
     const select = (0, _type.isString)(key) ? [key] : key;
+    const getKey = item => this.options.keyOf(item);
     this._loadFilteredData(this.options.selectionFilter, null, select).done(items => {
-      // @ts-expect-error
-      const keys = items.map(item => that.options.keyOf(item));
+      const keys = (Array.isArray(items) ? items : []).map(getKey);
       d.resolve(keys);
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    }).fail(d.reject);
+    }).fail(error => {
+      // @ts-expect-error error
+      d.reject(error);
+    });
     return d.promise();
   }
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll) {
@@ -190679,22 +190726,22 @@ class DeferredStrategy extends _m_selection.default {
       if (!preserve) {
         this._setOption('selectionFilter', []);
       }
-      for (let i = 0; i < keys.length; i++) {
+      keys.forEach(key => {
         if (isDeselect) {
-          this.removeSelectedItem(keys[i]);
+          this.removeSelectedItem(key);
         } else {
-          this.addSelectedItem(keys[i], isSelectAll, !preserve);
+          this.addSelectedItem(key, isSelectAll, !preserve);
         }
-      }
+      });
     }
     this.onSelectionChanged();
     return (0, _deferred.Deferred)().resolve();
   }
   setSelectedItems(keys) {
     this._setOption('selectionFilter', null);
-    for (let i = 0; i < keys.length; i++) {
-      this.addSelectedItem(keys[i]);
-    }
+    keys.forEach(key => {
+      this.addSelectedItem(key);
+    });
   }
   isItemDataSelected(itemData) {
     return this.isItemKeySelected(itemData);
@@ -190707,7 +190754,7 @@ class DeferredStrategy extends _m_selection.default {
       return true;
     }
     const queryParams = this._getQueryParams();
-    // @ts-expect-error
+    // @ts-expect-error dataQuery
     return !!(0, _query.default)([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
   _getKeyExpr() {
@@ -190720,6 +190767,7 @@ class DeferredStrategy extends _m_selection.default {
   _normalizeKey(key) {
     const keyExpr = this.options.key();
     if (Array.isArray(keyExpr) && keyExpr.length === 1) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return key[keyExpr[0]];
     }
     return key;
@@ -190729,7 +190777,7 @@ class DeferredStrategy extends _m_selection.default {
     let filter = [keyField, '=', this._normalizeKey(key)];
     if (Array.isArray(keyField)) {
       filter = [];
-      for (let i = 0; i < keyField.length; i++) {
+      for (let i = 0; i < keyField.length; i += 1) {
         filter.push([keyField[i], '=', key[keyField[i]]]);
         if (i !== keyField.length - 1) {
           filter.push('and');
@@ -190757,7 +190805,7 @@ class DeferredStrategy extends _m_selection.default {
   _findSubFilter(selectionFilter, filter) {
     if (!selectionFilter) return -1;
     const filterString = JSON.stringify(filter);
-    for (let index = 0; index < selectionFilter.length; index++) {
+    for (let index = 0; index < selectionFilter.length; index += 1) {
       const subFilter = selectionFilter[index];
       if (subFilter && JSON.stringify(subFilter) === filterString) {
         return index;
@@ -190772,19 +190820,22 @@ class DeferredStrategy extends _m_selection.default {
     return false;
   }
   _addFilterOperator(selectionFilter, filterOperator) {
-    if (selectionFilter.length > 1 && (0, _type.isString)(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
-      selectionFilter = [selectionFilter];
-    }
-    if (selectionFilter.length) {
-      selectionFilter.push(filterOperator);
-    }
-    return selectionFilter;
-  }
-  _denormalizeFilter(filter) {
-    if (filter && (0, _type.isString)(filter[0])) {
+    let filter = selectionFilter;
+    if (filter.length > 1 && (0, _type.isString)(filter[1]) && filter[1] !== filterOperator) {
       filter = [filter];
     }
+    if (Array.isArray(filter) && filter.length) {
+      filter.push(filterOperator);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return filter;
+  }
+  _denormalizeFilter(filter) {
+    let resultFilter = filter;
+    if (resultFilter && (0, _type.isString)(resultFilter[0])) {
+      resultFilter = [resultFilter];
+    }
+    return resultFilter;
   }
   _isOnlyNegativeFiltersLeft(filters) {
     return filters.every((filterItem, i) => {
@@ -190796,35 +190847,36 @@ class DeferredStrategy extends _m_selection.default {
   }
   _addSelectionFilter(isDeselect, filter, isSelectAll, skipFilter) {
     var _selectionFilter;
-    const that = this;
-    const currentFilter = isDeselect ? ['!', filter] : filter;
     const currentOperation = isDeselect ? 'and' : 'or';
     let needAddFilter = true;
-    let selectionFilter = that.options.selectionFilter || [];
-    selectionFilter = that._denormalizeFilter(selectionFilter);
+    let selectionFilter = this.options.selectionFilter || [];
+    selectionFilter = this._denormalizeFilter(selectionFilter);
     if ((_selectionFilter = selectionFilter) !== null && _selectionFilter !== void 0 && _selectionFilter.length && !skipFilter) {
-      const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
-      const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+      const removedIndex = this._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
+      const filterIndex = this._removeSameFilter(selectionFilter, filter, !isDeselect);
       const shouldCleanFilter = isDeselect && (removedIndex !== -1 || filterIndex !== -1) && this._isOnlyNegativeFiltersLeft(selectionFilter);
       if (shouldCleanFilter) {
         selectionFilter = [];
       }
       const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
-      needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
+      needAddFilter = !!(filter !== null && filter !== void 0 && filter.length) && !isKeyOperatorsAfterRemoved;
     }
     if (needAddFilter) {
-      selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
-      selectionFilter.push(currentFilter);
+      selectionFilter = this._addFilterOperator(selectionFilter, currentOperation);
+      if (Array.isArray(selectionFilter) && filter) {
+        const currentFilter = isDeselect ? ['!', filter] : filter;
+        selectionFilter.push(currentFilter);
+      }
     }
-    selectionFilter = that._normalizeFilter(selectionFilter);
-    that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
+    selectionFilter = this._normalizeFilter(selectionFilter);
+    this._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
   }
   _normalizeFilter(filter) {
-    if (filter && filter.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      filter = filter[0];
+    let resultFilter = filter;
+    if (resultFilter && resultFilter.length === 1) {
+      [resultFilter] = resultFilter;
     }
-    return filter;
+    return resultFilter;
   }
   _removeFilterByIndex(filter, filterIndex, isSelectAll) {
     const operation = filter[1];
@@ -190838,22 +190890,22 @@ class DeferredStrategy extends _m_selection.default {
     }
   }
   _isSimpleKeyFilter(filter, key) {
-    return filter.length === 3 && filter[0] === key && filter[1] === '=';
+    return (filter === null || filter === void 0 ? void 0 : filter.length) === 3 && filter[0] === key && filter[1] === '=';
   }
   _isKeyFilter(filter) {
-    if (filter.length === 2 && filter[0] === '!') {
+    if ((filter === null || filter === void 0 ? void 0 : filter.length) === 2 && (filter === null || filter === void 0 ? void 0 : filter[0]) === '!') {
       return this._isKeyFilter(filter[1]);
     }
     const keyField = this._getKeyExpr();
     if (Array.isArray(keyField)) {
-      if (filter.length !== keyField.length * 2 - 1) {
+      if ((filter === null || filter === void 0 ? void 0 : filter.length) !== keyField.length * 2 - 1) {
         return false;
       }
-      for (let i = 0; i < keyField.length; i++) {
-        if (i > 0 && filter[i * 2 - 1] !== 'and') {
+      for (let i = 0; i < keyField.length; i += 1) {
+        if (i > 0 && (filter === null || filter === void 0 ? void 0 : filter[i * 2 - 1]) !== 'and') {
           return false;
         }
-        if (!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {
+        if (!this._isSimpleKeyFilter(filter === null || filter === void 0 ? void 0 : filter[i * 2], keyField[i])) {
           return false;
         }
       }
@@ -190863,7 +190915,7 @@ class DeferredStrategy extends _m_selection.default {
   }
   _hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex) {
     if (filterIndex >= 0) {
-      for (let i = filterIndex; i < selectionFilter.length; i++) {
+      for (let i = filterIndex; i < selectionFilter.length; i += 1) {
         if (typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
           return false;
         }
@@ -190873,27 +190925,28 @@ class DeferredStrategy extends _m_selection.default {
     return false;
   }
   _removeSameFilter(selectionFilter, filter, inverted, isSelectAll) {
-    filter = inverted ? ['!', filter] : filter;
-    if (JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
+    const sameFilter = inverted ? ['!', filter] : filter;
+    if (JSON.stringify(sameFilter) === JSON.stringify(selectionFilter)) {
       selectionFilter.splice(0, selectionFilter.length);
       return 0;
     }
-    const filterIndex = this._findSubFilter(selectionFilter, filter);
+    const filterIndex = this._findSubFilter(selectionFilter, sameFilter);
     if (filterIndex >= 0) {
       this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
       return filterIndex;
     }
-    for (let i = 0; i < selectionFilter.length; i++) {
+    for (let i = 0; i < selectionFilter.length; i += 1) {
       if (Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2) {
-        const filterIndex = this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
-        if (filterIndex >= 0) {
+        const innerFilterIndex = this._removeSameFilter(selectionFilter[i], sameFilter, false, isSelectAll);
+        if (innerFilterIndex >= 0) {
+          // eslint-disable-next-line max-depth
           if (!selectionFilter[i].length) {
             this._removeFilterByIndex(selectionFilter, i, isSelectAll);
           } else if (selectionFilter[i].length === 1) {
-            // eslint-disable-next-line prefer-destructuring
-            selectionFilter[i] = selectionFilter[i][0];
+            const [firstFilter] = selectionFilter[i];
+            selectionFilter[i] = firstFilter;
           }
-          return filterIndex;
+          return innerFilterIndex;
         }
       }
     }
@@ -190906,7 +190959,7 @@ class DeferredStrategy extends _m_selection.default {
     } = this.options;
     if (!selectionFilter) return true;
     if (!selectionFilter.length) return false;
-    if (!filter || !filter.length) return undefined;
+    if (!(filter !== null && filter !== void 0 && filter.length)) return undefined;
     selectionFilter = this._denormalizeFilter(selectionFilter);
     if (this._isLastSubFilter(selectionFilter, filter)) {
       return true;
@@ -190934,7 +190987,7 @@ exports["default"] = DeferredStrategy;
 
 /***/ }),
 
-/***/ 13085:
+/***/ 18993:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -191038,11 +191091,10 @@ class SelectionStrategy {
     return items.filter(item => !(item !== null && item !== void 0 && item.disabled));
   }
   _clearSelection(keys, preserve, isDeselect, isSelectAll) {
-    keys = keys || [];
-    keys = Array.isArray(keys) ? keys : [keys];
+    let normalizedKeys = keys || [];
+    normalizedKeys = Array.isArray(normalizedKeys) ? normalizedKeys : [normalizedKeys];
     this.validate();
-    // @ts-expect-error
-    return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
+    return this.selectedItemKeys(normalizedKeys, preserve, isDeselect, isSelectAll);
   }
   _removeTemplateProperty(remoteFilter) {
     if (Array.isArray(remoteFilter)) {
@@ -191058,7 +191110,7 @@ class SelectionStrategy {
       sensitivity
     } = this.options;
     if (!sensitivity) {
-      return;
+      return undefined;
     }
     return {
       langParams: {
@@ -191075,26 +191127,30 @@ class SelectionStrategy {
     const queryParams = this._getQueryParams();
     const loadOptions = _extends({
       filter: needLoadAllData ? undefined : remoteFilter,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()
     }, queryParams);
-    if (remoteFilter && remoteFilter.length === 0) {
+    if (remoteFilter && Array.isArray(remoteFilter) && remoteFilter.length === 0) {
       deferred.resolve([]);
     } else {
       this.options.load(loadOptions).done(items => {
-        let filteredItems = (0, _type.isPlainObject)(items) ? items.data : items;
+        let filteredItems = !Array.isArray(items) && (0, _type.isPlainObject)(items) ? items.data : items;
         if (localFilter && !isSelectAll) {
           filteredItems = filteredItems.filter(localFilter);
         } else if (needLoadAllData) {
-          // @ts-expect-error
+          // @ts-expect-error dataQuary
           filteredItems = (0, _query.default)(filteredItems).filter(remoteFilter).toArray();
         }
         deferred.resolve(filteredItems);
-      }).fail(deferred.reject.bind(deferred));
+      }).fail(error => {
+        // @ts-expect-error error
+        deferred.reject(error);
+      });
     }
     return deferred;
   }
   updateSelectedItemKeyHash(keys) {
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i += 1) {
       const keyHash = (0, _common.getKeyHash)(keys[i]);
       if (!(0, _type.isObject)(keyHash)) {
         this.options.keyHashIndices[keyHash] = this.options.keyHashIndices[keyHash] || [];
@@ -191104,19 +191160,20 @@ class SelectionStrategy {
     }
   }
   _isAnyItemSelected(items) {
-    for (let i = 0; i < items.length; i++) {
-      if (this.options.isItemSelected(items[i])) {
-        return undefined;
-      }
+    if (items.find(item => this.options.isItemSelected(item))) {
+      return undefined;
     }
     return false;
   }
   _getFullSelectAllState() {
     const items = this.options.plainItems();
-    const dataFilter = this.options.filter();
+    const {
+      filter
+    } = this.options;
+    const dataFilter = filter();
     let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter(item => !(item !== null && item !== void 0 && item.disabled));
     if (dataFilter) {
-      // @ts-expect-error
+      // @ts-expect-error dataQuery
       selectedItems = (0, _query.default)(selectedItems).filter(dataFilter).toArray();
     }
     const selectedItemsLength = selectedItems.length;
@@ -191133,8 +191190,7 @@ class SelectionStrategy {
     const items = this.getSelectableItems(this.options.plainItems());
     let hasSelectedItems = false;
     let hasUnselectedItems = false;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    items.forEach(item => {
       const itemData = this.options.getItemData(item);
       const key = this.options.keyOf(itemData);
       if (this.options.isSelectableItem(item)) {
@@ -191144,18 +191200,39 @@ class SelectionStrategy {
           hasUnselectedItems = true;
         }
       }
-    }
+    });
     if (hasSelectedItems) {
       return !hasUnselectedItems ? true : undefined;
     }
     return false;
   }
+  selectedItemKeys(
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  keys,
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  preserve,
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  isDeselect,
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  isSelectAll,
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  updatedKeys,
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  forceCombinedFilter) {
+    throw new Error('selectedItemKeys method should be overriden');
+  }
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   isItemKeySelected(itemKey) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     throw new Error('isItemKeySelected method should be overriden');
   }
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  addSelectedItem(itemKey, itemData) {
+  isItemDataSelected(itemKey) {
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    throw new Error('isItemKeySelected method should be overriden');
+  }
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  addSelectedItem(itemKey, dataOrIsSelectAll, skipFilter) {
     throw new Error('addSelectedItem method should be overriden');
   }
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
@@ -191164,8 +191241,7 @@ class SelectionStrategy {
   }
   _selectAllPlainItems(isDeselect) {
     const items = this.getSelectableItems(this.options.plainItems());
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    items.forEach(item => {
       if (this.options.isSelectableItem(item)) {
         const itemData = this.options.getItemData(item);
         const itemKey = this.options.keyOf(itemData);
@@ -191177,14 +191253,14 @@ class SelectionStrategy {
           this.removeSelectedItem(itemKey);
         }
       }
-    }
+    });
   }
 }
 exports["default"] = SelectionStrategy;
 
 /***/ }),
 
-/***/ 98893:
+/***/ 50702:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -191201,9 +191277,9 @@ var _deferred = __webpack_require__(87739);
 var _selection_filter = __webpack_require__(52877);
 var _type = __webpack_require__(11528);
 var _ui = _interopRequireDefault(__webpack_require__(35185));
-var _m_selection = _interopRequireDefault(__webpack_require__(13085));
+var _selection = _interopRequireDefault(__webpack_require__(18993));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-class StandardStrategy extends _m_selection.default {
+class StandardStrategy extends _selection.default {
   constructor(options) {
     super(options);
     this._lastSelectAllPageDeferred = (0, _deferred.Deferred)().reject();
@@ -191222,27 +191298,26 @@ class StandardStrategy extends _m_selection.default {
     const {
       keyOf
     } = this.options;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let keyIndicesToRemoveMap;
-    let keyIndex;
-    let i;
     if (!keyOf) return;
     const isBatchDeselect = isDeselect && items.length > 1 && !this.options.equalByReference;
     if (isBatchDeselect) {
       keyIndicesToRemoveMap = {};
     }
-    for (i = 0; i < items.length; i++) {
-      const item = items[i];
+    items.forEach(item => {
       const key = keyOf(item);
       if (isDeselect) {
-        keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item === null || item === void 0 ? void 0 : item.disabled);
-        if (keyIndicesToRemoveMap && keyIndex >= 0) {
+        const keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item && typeof item === 'object' && 'disabled' in item ? !!item.disabled : false);
+        if (keyIndicesToRemoveMap && (0, _type.isNumeric)(keyIndex) && keyIndex >= 0) {
           keyIndicesToRemoveMap[keyIndex] = true;
         }
       } else {
         this.addSelectedItem(key, item);
       }
-    }
+    });
     if (isBatchDeselect) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this._batchRemoveSelectedItems(keyIndicesToRemoveMap);
     }
   }
@@ -191251,7 +191326,7 @@ class StandardStrategy extends _m_selection.default {
     const selectedItems = this.options.selectedItems.slice(0);
     this.options.selectedItemKeys.length = 0;
     this.options.selectedItems.length = 0;
-    for (let i = 0; i < selectedItemKeys.length; i++) {
+    for (let i = 0; i < selectedItemKeys.length; i += 1) {
       if (!keyIndicesToRemoveMap[i]) {
         this.options.selectedItemKeys.push(selectedItemKeys[i]);
         this.options.selectedItems.push(selectedItems[i]);
@@ -191280,7 +191355,7 @@ class StandardStrategy extends _m_selection.default {
         selectedItems
       } = this.options;
       deselectedItems = combinedFilter && keys.length !== selectedItems.length
-      // @ts-expect-error
+      // @ts-expect-error dataQuery
       ? (0, _query.default)(selectedItems).filter(combinedFilter).toArray() : selectedItems.slice(0);
     }
     let filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems(true).filter(this.options.isSelectableItem).map(this.options.getItemData);
@@ -191294,29 +191369,22 @@ class StandardStrategy extends _m_selection.default {
     return deferred;
   }
   _replaceSelectionUpdate(items) {
-    const internalKeys = [];
     const {
       keyOf
     } = this.options;
     if (!keyOf) return;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const key = keyOf(item);
-      // @ts-expect-error
-      internalKeys.push(key);
-    }
+    const internalKeys = items.map(item => keyOf(item));
     this.setSelectedItems(internalKeys, items);
   }
   _warnOnIncorrectKeys(keys) {
     const {
       allowNullValue
     } = this.options;
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
+    keys.forEach(key => {
       if ((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
         _ui.default.log('W1002', key);
       }
-    }
+    });
   }
   _isMultiSelectEnabled() {
     const {
@@ -191328,12 +191396,13 @@ class StandardStrategy extends _m_selection.default {
     var _this$_lastLoadDeferr;
     return ((_this$_lastLoadDeferr = this._lastLoadDeferred) === null || _this$_lastLoadDeferr === void 0 ? void 0 : _this$_lastLoadDeferr.state()) === 'pending';
   }
-  _concatRequestsItems(keys, isDeselect, oldRequestItems, updatedKeys) {
-    let selectedItems;
+  _concatRequestsItems(keys, oldRequestItems, isDeselect, updatedKeys) {
+    let selectedItems = [];
     const deselectedItems = isDeselect ? keys : [];
     if (updatedKeys) {
       selectedItems = updatedKeys;
     } else {
+      // @ts-expect-error removeDuplicates
       selectedItems = (0, _array.removeDuplicates)(keys, this.options.selectedItemKeys);
     }
     return {
@@ -191349,54 +191418,64 @@ class StandardStrategy extends _m_selection.default {
       removed: []
     };
     const multiSelectEnabled = this._isMultiSelectEnabled();
-    let lastRequestData = multiSelectEnabled ? this._lastRequestData : {};
-    if (multiSelectEnabled) {
-      if (this._shouldMergeWithLastRequest) {
-        if (isDeselectAll) {
-          this._lastLoadDeferred.reject();
-          lastRequestData = {};
-        } else if (!(0, _array_compare.isKeysEqual)(keys, this.options.selectedItemKeys)) {
-          oldRequestItems.added = lastRequestData.addedItems;
-          oldRequestItems.removed = lastRequestData.removedItems;
-          if (!isDeselect) {
-            this._lastLoadDeferred.reject();
-          }
+    const emptyData = {
+      addedItems: [],
+      removedItems: [],
+      keys: []
+    };
+    if (!multiSelectEnabled) {
+      return emptyData;
+    }
+    let lastRequestData = this._lastRequestData ?? emptyData;
+    if (this._shouldMergeWithLastRequest) {
+      if (isDeselectAll) {
+        var _this$_lastLoadDeferr2;
+        (_this$_lastLoadDeferr2 = this._lastLoadDeferred) === null || _this$_lastLoadDeferr2 === void 0 || _this$_lastLoadDeferr2.reject();
+        lastRequestData = {};
+      } else if (!(0, _array_compare.isKeysEqual)(keys, this.options.selectedItemKeys)) {
+        var _lastRequestData, _lastRequestData2;
+        oldRequestItems.added = (_lastRequestData = lastRequestData) === null || _lastRequestData === void 0 ? void 0 : _lastRequestData.addedItems;
+        oldRequestItems.removed = (_lastRequestData2 = lastRequestData) === null || _lastRequestData2 === void 0 ? void 0 : _lastRequestData2.removedItems;
+        if (!isDeselect) {
+          var _this$_lastLoadDeferr3;
+          (_this$_lastLoadDeferr3 = this._lastLoadDeferred) === null || _this$_lastLoadDeferr3 === void 0 || _this$_lastLoadDeferr3.reject();
         }
       }
-      lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
     }
+    lastRequestData = this._concatRequestsItems(keys, oldRequestItems, isDeselect, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
     return lastRequestData;
   }
   _updateKeysByLastRequestData(keys, isDeselect, isSelectAll) {
     let currentKeys = keys;
-    if (this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
-      var _this$_lastRequestDat, _this$_lastRequestDat2;
-      currentKeys = (0, _array.removeDuplicates)(keys.concat((_this$_lastRequestDat = this._lastRequestData) === null || _this$_lastRequestDat === void 0 ? void 0 : _this$_lastRequestDat.addedItems), (_this$_lastRequestDat2 = this._lastRequestData) === null || _this$_lastRequestDat2 === void 0 ? void 0 : _this$_lastRequestDat2.removedItems);
+    if (this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && this._lastRequestData && !isDeselect && !isSelectAll) {
+      var _this$_lastRequestDat;
+      currentKeys = (0, _array.removeDuplicates)(
+      // @ts-expect-error removeDuplicates
+      [...keys, ...this._lastRequestData.addedItems], (_this$_lastRequestDat = this._lastRequestData) === null || _this$_lastRequestDat === void 0 ? void 0 : _this$_lastRequestDat.removedItems);
+      // @ts-expect-error getUniqueValues
       currentKeys = (0, _array.getUniqueValues)(currentKeys);
     }
     return currentKeys;
   }
   _loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys) {
     let forceCombinedFilter = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-    const that = this;
     const deferred = (0, _deferred.Deferred)();
-    const filter = that.options.filter();
+    const filter = this.options.filter();
     this._shouldMergeWithLastRequest = this._requestInProgress();
     this._lastRequestData = this._collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys);
-    (0, _deferred.when)(that._lastLoadDeferred).always(() => {
-      const currentKeys = that._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
-      that._shouldMergeWithLastRequest = false;
-      that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll, filter, forceCombinedFilter)
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      .done(deferred.resolve)
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      .fail(deferred.reject);
+    (0, _deferred.when)(this._lastLoadDeferred).always(() => {
+      const currentKeys = this._updateKeysByLastRequestData(keys, isDeselect, isSelectAll);
+      this._shouldMergeWithLastRequest = false;
+      this._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll, filter, forceCombinedFilter).done(result => {
+        deferred.resolve(result);
+      }).fail(error => {
+        deferred.reject(error);
+      });
     });
-    that._lastLoadDeferred = deferred;
+    this._lastLoadDeferred = deferred;
     return deferred;
   }
-  selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
-    let forceCombinedFilter = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+  selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter) {
     if (this._isCancelingInProgress) {
       return (0, _deferred.Deferred)().reject();
     }
@@ -191422,9 +191501,9 @@ class StandardStrategy extends _m_selection.default {
     });
     return selectionDeferred;
   }
-  addSelectedItem(key, itemData) {
-    if ((0, _type.isDefined)(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
-      if (this.options.disabledItemKeys.indexOf(key) === -1) {
+  addSelectedItem(key, item) {
+    if ((0, _type.isDefined)(item) && !this.options.ignoreDisabledItems && item.disabled) {
+      if (!this.options.disabledItemKeys.includes(key)) {
         this.options.disabledItemKeys.push(key);
       }
       return;
@@ -191436,20 +191515,15 @@ class StandardStrategy extends _m_selection.default {
       }
       this.options.selectedItemKeys.push(key);
       this.options.addedItemKeys.push(key);
-      this.options.addedItems.push(itemData);
-      this.options.selectedItems.push(itemData);
+      this.options.addedItems.push(item);
+      this.options.selectedItems.push(item);
     }
   }
   _getSelectedIndexByKey(key, ignoreIndicesMap) {
     const {
       selectedItemKeys
     } = this.options;
-    for (let index = 0; index < selectedItemKeys.length; index++) {
-      if ((!ignoreIndicesMap || !ignoreIndicesMap[index]) && this.equalKeys(selectedItemKeys[index], key)) {
-        return index;
-      }
-    }
-    return -1;
+    return selectedItemKeys.findIndex((_, index) => !(ignoreIndicesMap !== null && ignoreIndicesMap !== void 0 && ignoreIndicesMap[index]) && this.equalKeys(selectedItemKeys[index], key));
   }
   _getSelectedIndexByHash(key, ignoreIndicesMap) {
     let indices = this.options.keyHashIndices[key];
@@ -191459,7 +191533,7 @@ class StandardStrategy extends _m_selection.default {
     return indices && indices[0] >= 0 ? indices[0] : -1;
   }
   _indexOfSelectedItemKey(key, ignoreIndicesMap) {
-    let selectedIndex;
+    let selectedIndex = -1;
     if (this.options.equalByReference) {
       selectedIndex = this.options.selectedItemKeys.indexOf(key);
     } else if ((0, _type.isObject)(key)) {
@@ -191470,21 +191544,22 @@ class StandardStrategy extends _m_selection.default {
     return selectedIndex;
   }
   _shiftSelectedKeyIndices(keyIndex) {
-    for (let currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex++) {
+    for (let currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex += 1) {
       const currentKey = this.options.selectedItemKeys[currentKeyIndex];
       const currentKeyHash = (0, _common.getKeyHash)(currentKey);
       const currentKeyIndices = this.options.keyHashIndices[currentKeyHash];
+      // eslint-disable-next-line no-continue
       if (!currentKeyIndices) continue;
-      for (let i = 0; i < currentKeyIndices.length; i++) {
+      for (let i = 0; i < currentKeyIndices.length; i += 1) {
         if (currentKeyIndices[i] > keyIndex) {
-          currentKeyIndices[i]--;
+          currentKeyIndices[i] -= 1;
         }
       }
     }
   }
   removeSelectedItem(key, keyIndicesToRemoveMap, isDisabled) {
     if (!this.options.ignoreDisabledItems && isDisabled) {
-      return;
+      return undefined;
     }
     const keyHash = this._getKeyHash(key);
     const isBatchDeselect = !!keyIndicesToRemoveMap;
@@ -191515,15 +191590,15 @@ class StandardStrategy extends _m_selection.default {
     return keyIndex;
   }
   _updateAddedItemKeys(keys, items) {
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i += 1) {
       if (!this.isItemKeySelected(keys[i])) {
         this.options.addedItemKeys.push(keys[i]);
         this.options.addedItems.push(items[i]);
       }
     }
   }
-  _updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems) {
-    for (let i = 0; i < oldSelectedKeys.length; i++) {
+  _updateRemovedItemKeys(_, oldSelectedKeys, oldSelectedItems) {
+    for (let i = 0; i < oldSelectedKeys.length; i += 1) {
       if (!this.isItemKeySelected(oldSelectedKeys[i])) {
         this.options.removedItemKeys.push(oldSelectedKeys[i]);
         this.options.removedItems.push(oldSelectedItems[i]);
@@ -191533,12 +191608,14 @@ class StandardStrategy extends _m_selection.default {
   _isItemSelectionInProgress(key, checkPending) {
     const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
     if (shouldCheckPending) {
-      const addedItems = this._lastRequestData.addedItems ?? [];
+      var _this$_lastRequestDat2;
+      const addedItems = ((_this$_lastRequestDat2 = this._lastRequestData) === null || _this$_lastRequestDat2 === void 0 ? void 0 : _this$_lastRequestDat2.addedItems) ?? [];
       return addedItems.includes(key);
     }
     return false;
   }
   _getKeyHash(key) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.options.equalByReference ? key : (0, _common.getKeyHash)(key);
   }
   setSelectedItems(keys, items) {
@@ -191599,6 +191676,9 @@ class StandardStrategy extends _m_selection.default {
   }
   _restoreSelectionState() {
     this._clearItemKeys();
+    if (!this._storedSelectionState) {
+      return;
+    }
     const {
       selectedItemKeys,
       selectedItems,
@@ -203909,7 +203989,10 @@ class TreeViewBase extends _hierarchical_collection_widget.default {
     }
   }
   focus() {
-    if (this._selectAllEnabled()) {
+    const {
+      items = []
+    } = this.option();
+    if (this._selectAllEnabled() && items.length) {
       // @ts-expect-error ts-error
       _events_engine.default.trigger(this._$selectAllItem, 'focus');
       return;
@@ -204250,7 +204333,7 @@ var _default = exports["default"] = TreeViewBase;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = void 0;
+exports["default"] = exports.TREEVIEW_CLASS_PREFIX = void 0;
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _search_box_controller = _interopRequireDefault(__webpack_require__(47843));
@@ -204258,7 +204341,7 @@ var _m_text_box = _interopRequireDefault(__webpack_require__(85968));
 var _tree_view = _interopRequireDefault(__webpack_require__(55785));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
+const TREEVIEW_CLASS_PREFIX = exports.TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 _search_box_controller.default.setEditorClass(_m_text_box.default);
 class TreeViewSearch extends _tree_view.default {
@@ -204416,7 +204499,10 @@ class TreeViewSearch extends _tree_view.default {
   }
   _itemContainer(isSearchMode, selectAllEnabled) {
     const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
-    if (isSelectAllEnabled) {
+    const {
+      items = []
+    } = this.option();
+    if (isSelectAllEnabled && items.length) {
       return this._getNodeContainer();
     }
     if (this._scrollable && isSearchMode) {
@@ -243217,7 +243303,7 @@ var _events_engine = _interopRequireDefault(__webpack_require__(92774));
 var _bindable_template = __webpack_require__(27286);
 var _scroll_view = _interopRequireDefault(__webpack_require__(91374));
 var _uiCollection_widget = _interopRequireDefault(__webpack_require__(7607));
-var _m_selection = _interopRequireDefault(__webpack_require__(53544));
+var _selection = _interopRequireDefault(__webpack_require__(80876));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
@@ -243433,7 +243519,7 @@ class FileManagerThumbnailListBox extends _uiCollection_widget.default {
         this._updateSelectedItems(args);
       }
     });
-    this._selection = new _m_selection.default(options);
+    this._selection = new _selection.default(options);
   }
   _updateSelectedItems(args) {
     const addedItemKeys = args.addedItemKeys;
@@ -254298,7 +254384,11 @@ var _default = exports["default"] = (0, _error.default)(_errors.default.ERROR_ME
   /**
    * @name ErrorsUIWidgets.W1027
    */
-  W1027: 'A prompt should be specified for a custom command.'
+  W1027: 'A prompt should be specified for a custom command.',
+  /**
+   * @name ErrorsUIWidgets.W1028
+   */
+  W1028: 'Nested/banded columns do not support the following properties: {0}.'
 });
 module.exports = exports.default;
 module.exports["default"] = exports.default;
