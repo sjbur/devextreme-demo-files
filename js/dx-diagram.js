@@ -1,9 +1,9 @@
 /*!
  * DevExpress Diagram (dx-diagram)
- * Version: 2.2.21
- * Build date: Wed Aug 20 2025
+ * Version: 2.2.25
+ * Build date: Mon Feb 23 2026
  *
- * Copyright (c) 2012 - 2025 Developer Express Inc. ALL RIGHTS RESERVED
+ * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
  * Read about DevExpress licensing here: https://www.devexpress.com/Support/EULAs
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -20,8 +20,8 @@ return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 9279:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8424
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -242,10 +242,10 @@ var Browser = (function () {
 exports.Browser = Browser;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1772:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 815
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -312,10 +312,10 @@ var EmptyBatchUpdatableObject = (function () {
 exports.EmptyBatchUpdatableObject = EmptyBatchUpdatableObject;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7820:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3393
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -364,15 +364,15 @@ var Flag = (function () {
 exports.Flag = Flag;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6799:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3196
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExtendedMinMax = exports.ExtendedMax = exports.ExtendedMin = exports.MinMaxNumber = exports.MinMax = void 0;
-var tslib_1 = __webpack_require__(655);
+var tslib_1 = __webpack_require__(5215);
 var MinMax = (function () {
     function MinMax(minElement, maxElement) {
         this.minElement = minElement;
@@ -425,10 +425,10 @@ var ExtendedMinMax = (function (_super) {
 exports.ExtendedMinMax = ExtendedMinMax;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9291:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9500
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -570,10 +570,10 @@ var UnitConverter = (function () {
 exports.UnitConverter = UnitConverter;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5596:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4496
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -594,10 +594,10 @@ var Metrics = (function () {
 exports.Metrics = Metrics;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4125:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8601
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -708,10 +708,10 @@ var Offsets = (function () {
 exports.Offsets = Offsets;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8900:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5327
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -788,19 +788,19 @@ var Point = (function () {
 exports.Point = Point;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8011:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4412
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RectangleDeviation = exports.HitTestDeviation = exports.Rectangle = void 0;
-var flag_1 = __webpack_require__(7820);
-var algorithms_1 = __webpack_require__(1104);
-var fixed_1 = __webpack_require__(8860);
-var point_1 = __webpack_require__(8900);
-var size_1 = __webpack_require__(6353);
+var flag_1 = __webpack_require__(3393);
+var algorithms_1 = __webpack_require__(2095);
+var fixed_1 = __webpack_require__(2871);
+var point_1 = __webpack_require__(5327);
+var size_1 = __webpack_require__(3844);
 var Rectangle = (function () {
     function Rectangle(x, y, width, height) {
         this.x = x;
@@ -1108,18 +1108,18 @@ var RectangleDeviation = (function () {
 exports.RectangleDeviation = RectangleDeviation;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1335:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 476
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Segment = void 0;
-var math_1 = __webpack_require__(8679);
-var metrics_1 = __webpack_require__(5596);
-var point_1 = __webpack_require__(8900);
-var rectangle_1 = __webpack_require__(8011);
+var math_1 = __webpack_require__(594);
+var metrics_1 = __webpack_require__(4496);
+var point_1 = __webpack_require__(5327);
+var rectangle_1 = __webpack_require__(4412);
 var Segment = (function () {
     function Segment(startPoint, endPoint) {
         this.startPoint = startPoint;
@@ -1204,10 +1204,10 @@ var Segment = (function () {
 exports.Segment = Segment;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6353:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3844
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1274,10 +1274,10 @@ var Size = (function () {
 exports.Size = Size;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9716:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4166
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1341,18 +1341,18 @@ var Vector = (function () {
 exports.Vector = Vector;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1104:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2095
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IntervalAlgorithms = void 0;
-var list_1 = __webpack_require__(2940);
-var search_1 = __webpack_require__(2400);
-var fixed_1 = __webpack_require__(8860);
-var collector_1 = __webpack_require__(6102);
+var list_1 = __webpack_require__(2892);
+var search_1 = __webpack_require__(124);
+var fixed_1 = __webpack_require__(2871);
+var collector_1 = __webpack_require__(5725);
 var IntervalAlgorithms = (function () {
     function IntervalAlgorithms() {
     }
@@ -1510,10 +1510,10 @@ var IntervalAlgorithms = (function () {
 exports.IntervalAlgorithms = IntervalAlgorithms;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7814:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 7446
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1560,16 +1560,16 @@ var ConstInterval = (function () {
 exports.ConstInterval = ConstInterval;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8860:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2871
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FixedInterval = void 0;
-var tslib_1 = __webpack_require__(655);
-var mutable_1 = __webpack_require__(8678);
+var tslib_1 = __webpack_require__(5215);
+var mutable_1 = __webpack_require__(2807);
 var FixedInterval = (function (_super) {
     tslib_1.__extends(FixedInterval, _super);
     function FixedInterval(start, length) {
@@ -1631,16 +1631,16 @@ var FixedInterval = (function (_super) {
 exports.FixedInterval = FixedInterval;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8678:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2807
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MutableInterval = void 0;
-var tslib_1 = __webpack_require__(655);
-var const_1 = __webpack_require__(7814);
+var tslib_1 = __webpack_require__(5215);
+var const_1 = __webpack_require__(7446);
 var MutableInterval = (function (_super) {
     tslib_1.__extends(MutableInterval, _super);
     function MutableInterval() {
@@ -1656,15 +1656,15 @@ var MutableInterval = (function (_super) {
 exports.MutableInterval = MutableInterval;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6102:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5725
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SparseIntervalsCollector = void 0;
-var intervals_1 = __webpack_require__(448);
+var intervals_1 = __webpack_require__(2428);
 var SparseIntervalsCollector = (function () {
     function SparseIntervalsCollector(template) {
         this.intervals = [];
@@ -1686,16 +1686,16 @@ var SparseIntervalsCollector = (function () {
 exports.SparseIntervalsCollector = SparseIntervalsCollector;
 
 
-/***/ }),
+/***/ },
 
-/***/ 448:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2428
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SparseIntervals = void 0;
-var iterator_1 = __webpack_require__(8094);
-var objects_iterator_1 = __webpack_require__(510);
+var iterator_1 = __webpack_require__(1454);
+var objects_iterator_1 = __webpack_require__(149);
 var SparseIntervals = (function () {
     function SparseIntervals(list) {
         if (list === void 0) { list = []; }
@@ -1736,10 +1736,10 @@ var SparseIntervals = (function () {
 exports.SparseIntervals = SparseIntervals;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8094:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 1454
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1800,16 +1800,16 @@ var SparseIntervalsIterator = (function () {
 exports.SparseIntervalsIterator = SparseIntervalsIterator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 510:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 149
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SparseObjectsIterator = void 0;
-var tslib_1 = __webpack_require__(655);
-var iterator_1 = __webpack_require__(8094);
+var tslib_1 = __webpack_require__(5215);
+var iterator_1 = __webpack_require__(1454);
 var SparseObjectsIterator = (function (_super) {
     tslib_1.__extends(SparseObjectsIterator, _super);
     function SparseObjectsIterator(sparseIntervals, objects) {
@@ -1825,16 +1825,16 @@ var SparseObjectsIterator = (function (_super) {
 exports.SparseObjectsIterator = SparseObjectsIterator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6477:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 807
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Base64Utils = void 0;
-var file_1 = __webpack_require__(2674);
-var mime_type_1 = __webpack_require__(4633);
+var file_1 = __webpack_require__(1930);
+var mime_type_1 = __webpack_require__(3233);
 var Base64Utils = (function () {
     function Base64Utils() {
     }
@@ -1897,15 +1897,15 @@ var Base64Utils = (function () {
 exports.Base64Utils = Base64Utils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 13:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9553
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ColorUtils = void 0;
-var string_1 = __webpack_require__(49);
+var string_1 = __webpack_require__(4989);
 var ColorUtils = (function () {
     function ColorUtils() {
     }
@@ -2056,15 +2056,15 @@ var ColorUtils = (function () {
 exports.ColorUtils = ColorUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2491:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 961
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.numberToStringHex = exports.numberToStringBin = exports.isOdd = exports.isEven = exports.isNonNullString = exports.isString = exports.isNumber = exports.boolToString = exports.boolToInt = exports.isDefined = void 0;
-var string_1 = __webpack_require__(49);
+var string_1 = __webpack_require__(4989);
 function isDefined(value) {
     return value !== undefined && value !== null;
 }
@@ -2109,10 +2109,10 @@ function numberToStringHex(num, minLength) {
 exports.numberToStringHex = numberToStringHex;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4170:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3262
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -2148,18 +2148,18 @@ var Equals = (function () {
 exports.Equals = Equals;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6907:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 750
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DomUtils = void 0;
-var browser_1 = __webpack_require__(9279);
-var common_1 = __webpack_require__(2491);
-var math_1 = __webpack_require__(8679);
-var string_1 = __webpack_require__(49);
+var browser_1 = __webpack_require__(8424);
+var common_1 = __webpack_require__(961);
+var math_1 = __webpack_require__(594);
+var string_1 = __webpack_require__(4989);
 var DomUtils = (function () {
     function DomUtils() {
     }
@@ -2625,10 +2625,10 @@ function getAbsoluteScrollOffset_OperaFF(curEl, isX) {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ 9712:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9030
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -2644,9 +2644,9 @@ var EncodeUtils = (function () {
     };
     EncodeUtils.decodeHtml = function (text) {
         return text
-            .replace(/&amp;/g, '&')
             .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>');
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
     };
     EncodeUtils.prepareTextForRequest = function (text) {
         return text
@@ -2674,18 +2674,18 @@ var EncodeUtils = (function () {
 exports.EncodeUtils = EncodeUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3714:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8451
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EvtUtils = void 0;
-var browser_1 = __webpack_require__(9279);
-var common_1 = __webpack_require__(2491);
-var dom_1 = __webpack_require__(6907);
-var touch_1 = __webpack_require__(1632);
+var browser_1 = __webpack_require__(8424);
+var common_1 = __webpack_require__(961);
+var dom_1 = __webpack_require__(750);
+var touch_1 = __webpack_require__(1065);
 var EvtUtils = (function () {
     function EvtUtils() {
     }
@@ -2782,17 +2782,17 @@ var EvtUtils = (function () {
 exports.EvtUtils = EvtUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2674:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1930
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FileUtils = void 0;
-var browser_1 = __webpack_require__(9279);
-var base64_1 = __webpack_require__(6477);
-var common_1 = __webpack_require__(2491);
+var browser_1 = __webpack_require__(8424);
+var base64_1 = __webpack_require__(807);
+var common_1 = __webpack_require__(961);
 var FileUtils = (function () {
     function FileUtils() {
     }
@@ -2852,17 +2852,17 @@ var FileUtils = (function () {
 exports.FileUtils = FileUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2153:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6537
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeyCode = exports.ModifierKey = exports.KeyUtils = void 0;
-var browser_1 = __webpack_require__(9279);
-var encode_1 = __webpack_require__(9712);
-var string_1 = __webpack_require__(49);
+var browser_1 = __webpack_require__(8424);
+var encode_1 = __webpack_require__(9030);
+var string_1 = __webpack_require__(4989);
 var KeyUtils = (function () {
     function KeyUtils() {
     }
@@ -3133,16 +3133,16 @@ var KeyCode;
 })(KeyCode = exports.KeyCode || (exports.KeyCode = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 2940:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2892
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ListUtils = void 0;
-var min_max_1 = __webpack_require__(6799);
-var comparers_1 = __webpack_require__(4170);
+var min_max_1 = __webpack_require__(3196);
+var comparers_1 = __webpack_require__(3262);
 var ListUtils = (function () {
     function ListUtils() {
     }
@@ -3588,15 +3588,15 @@ var ListUtils = (function () {
 exports.ListUtils = ListUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8679:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 594
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MathUtils = void 0;
-var list_1 = __webpack_require__(2940);
+var list_1 = __webpack_require__(2892);
 var MathUtils = (function () {
     function MathUtils() {
     }
@@ -3649,10 +3649,10 @@ var MathUtils = (function () {
 exports.MathUtils = MathUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4633:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3233
+(__unused_webpack_module, exports) {
 
 
 var _a, _b, _c;
@@ -3788,10 +3788,10 @@ var MimeTypeUtils = (function () {
 exports.MimeTypeUtils = MimeTypeUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2400:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 124
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -3862,10 +3862,10 @@ var SearchUtils = (function () {
 exports.SearchUtils = SearchUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 49:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4989
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -3987,16 +3987,16 @@ var StringUtils = (function () {
 exports.StringUtils = StringUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1632:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1065
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TouchUtils = void 0;
-var browser_1 = __webpack_require__(9279);
-var common_1 = __webpack_require__(2491);
+var browser_1 = __webpack_require__(8424);
+var common_1 = __webpack_require__(961);
 var TouchUtils = (function () {
     function TouchUtils() {
     }
@@ -4032,20 +4032,20 @@ var TouchUtils = (function () {
 exports.TouchUtils = TouchUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7097:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-
-(__webpack_require__(8091).polyfill)();
+/***/ 4092
+(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 
-/***/ }),
 
-/***/ 8091:
-/***/ ((module) => {
+(__webpack_require__(9491).polyfill)();
+
+
+/***/ },
+
+/***/ 9491
+(module) {
 
 /**
  * Code refactored from Mozilla Developer Network:
@@ -4095,29 +4095,31 @@ module.exports = {
 };
 
 
-/***/ }),
+/***/ },
 
-/***/ 8721:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 540
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ }),
+/***/ },
 
-/***/ 5656:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8315
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4125,10 +4127,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiController = void 0;
-var batch_updatable_1 = __webpack_require__(1772);
-var Event_1 = __webpack_require__(6031);
-var ModelUtils_1 = __webpack_require__(4867);
-var __1 = __webpack_require__(3607);
+var batch_updatable_1 = __webpack_require__(815);
+var Event_1 = __webpack_require__(5428);
+var ModelUtils_1 = __webpack_require__(1922);
+var __1 = __webpack_require__(8156);
 var ApiController = (function (_super) {
     __extends(ApiController, _super);
     function ApiController(events, selection, model) {
@@ -4230,20 +4232,22 @@ var ApiControllerAction;
 })(ApiControllerAction || (ApiControllerAction = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 7185:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4235
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4251,7 +4255,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NativeConnector = exports.NativeShape = exports.NativeItem = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
+var ModelUtils_1 = __webpack_require__(1922);
 var NativeItem = (function () {
     function NativeItem(id, key) {
         this.id = id;
@@ -4297,20 +4301,22 @@ var NativeConnector = (function (_super) {
 exports.NativeConnector = NativeConnector;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8906:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8674
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4318,13 +4324,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutCommandBase = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
-var ScrollIntoViewHistoryItem_1 = __webpack_require__(7626);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
+var ScrollIntoViewHistoryItem_1 = __webpack_require__(4044);
 var AutoLayoutCommandBase = (function (_super) {
     __extends(AutoLayoutCommandBase, _super);
     function AutoLayoutCommandBase() {
@@ -4372,20 +4378,22 @@ var AutoLayoutCommandBase = (function (_super) {
 exports.AutoLayoutCommandBase = AutoLayoutCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 30:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4214
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4393,9 +4401,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutLayeredHorizontalCommand = void 0;
-var AutoLayoutCommandBase_1 = __webpack_require__(8906);
-var Sugiyama_1 = __webpack_require__(1256);
-var LayoutSettings_1 = __webpack_require__(8710);
+var AutoLayoutCommandBase_1 = __webpack_require__(8674);
+var Sugiyama_1 = __webpack_require__(2626);
+var LayoutSettings_1 = __webpack_require__(9212);
 var AutoLayoutLayeredHorizontalCommand = (function (_super) {
     __extends(AutoLayoutLayeredHorizontalCommand, _super);
     function AutoLayoutLayeredHorizontalCommand() {
@@ -4414,20 +4422,22 @@ var AutoLayoutLayeredHorizontalCommand = (function (_super) {
 exports.AutoLayoutLayeredHorizontalCommand = AutoLayoutLayeredHorizontalCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7826:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3589
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4435,8 +4445,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutLayeredHorizontalRightToLeftCommand = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
-var AutoLayoutLayeredHorizontalCommand_1 = __webpack_require__(30);
+var LayoutSettings_1 = __webpack_require__(9212);
+var AutoLayoutLayeredHorizontalCommand_1 = __webpack_require__(4214);
 var AutoLayoutLayeredHorizontalRightToLeftCommand = (function (_super) {
     __extends(AutoLayoutLayeredHorizontalRightToLeftCommand, _super);
     function AutoLayoutLayeredHorizontalRightToLeftCommand() {
@@ -4452,20 +4462,22 @@ var AutoLayoutLayeredHorizontalRightToLeftCommand = (function (_super) {
 exports.AutoLayoutLayeredHorizontalRightToLeftCommand = AutoLayoutLayeredHorizontalRightToLeftCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 554:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3974
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4473,8 +4485,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutLayeredVerticalBottomToTopCommand = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
-var AutoLayoutLayeredVerticalCommand_1 = __webpack_require__(9427);
+var LayoutSettings_1 = __webpack_require__(9212);
+var AutoLayoutLayeredVerticalCommand_1 = __webpack_require__(8827);
 var AutoLayoutLayeredVerticalBottomToTopCommand = (function (_super) {
     __extends(AutoLayoutLayeredVerticalBottomToTopCommand, _super);
     function AutoLayoutLayeredVerticalBottomToTopCommand() {
@@ -4490,20 +4502,22 @@ var AutoLayoutLayeredVerticalBottomToTopCommand = (function (_super) {
 exports.AutoLayoutLayeredVerticalBottomToTopCommand = AutoLayoutLayeredVerticalBottomToTopCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9427:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8827
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4511,9 +4525,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutLayeredVerticalCommand = void 0;
-var AutoLayoutCommandBase_1 = __webpack_require__(8906);
-var Sugiyama_1 = __webpack_require__(1256);
-var LayoutSettings_1 = __webpack_require__(8710);
+var AutoLayoutCommandBase_1 = __webpack_require__(8674);
+var Sugiyama_1 = __webpack_require__(2626);
+var LayoutSettings_1 = __webpack_require__(9212);
 var AutoLayoutLayeredVerticalCommand = (function (_super) {
     __extends(AutoLayoutLayeredVerticalCommand, _super);
     function AutoLayoutLayeredVerticalCommand() {
@@ -4532,20 +4546,22 @@ var AutoLayoutLayeredVerticalCommand = (function (_super) {
 exports.AutoLayoutLayeredVerticalCommand = AutoLayoutLayeredVerticalCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7004:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7283
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4553,9 +4569,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutTreeHorizontalCommand = void 0;
-var AutoLayoutCommandBase_1 = __webpack_require__(8906);
-var WideTree_1 = __webpack_require__(9533);
-var LayoutSettings_1 = __webpack_require__(8710);
+var AutoLayoutCommandBase_1 = __webpack_require__(8674);
+var WideTree_1 = __webpack_require__(8533);
+var LayoutSettings_1 = __webpack_require__(9212);
 var AutoLayoutTreeHorizontalCommand = (function (_super) {
     __extends(AutoLayoutTreeHorizontalCommand, _super);
     function AutoLayoutTreeHorizontalCommand() {
@@ -4575,20 +4591,22 @@ var AutoLayoutTreeHorizontalCommand = (function (_super) {
 exports.AutoLayoutTreeHorizontalCommand = AutoLayoutTreeHorizontalCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5010:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2899
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4596,8 +4614,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutTreeHorizontalRightToLeftCommand = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
-var AutoLayoutTreeHorizontalCommand_1 = __webpack_require__(7004);
+var LayoutSettings_1 = __webpack_require__(9212);
+var AutoLayoutTreeHorizontalCommand_1 = __webpack_require__(7283);
 var AutoLayoutTreeHorizontalRightToLeftCommand = (function (_super) {
     __extends(AutoLayoutTreeHorizontalRightToLeftCommand, _super);
     function AutoLayoutTreeHorizontalRightToLeftCommand() {
@@ -4613,20 +4631,22 @@ var AutoLayoutTreeHorizontalRightToLeftCommand = (function (_super) {
 exports.AutoLayoutTreeHorizontalRightToLeftCommand = AutoLayoutTreeHorizontalRightToLeftCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2217:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 720
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4634,8 +4654,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutTreeVerticalBottomToTopCommand = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
-var AutoLayoutTreeVerticalCommand_1 = __webpack_require__(375);
+var LayoutSettings_1 = __webpack_require__(9212);
+var AutoLayoutTreeVerticalCommand_1 = __webpack_require__(1893);
 var AutoLayoutTreeVerticalBottomToTopCommand = (function (_super) {
     __extends(AutoLayoutTreeVerticalBottomToTopCommand, _super);
     function AutoLayoutTreeVerticalBottomToTopCommand() {
@@ -4651,20 +4671,22 @@ var AutoLayoutTreeVerticalBottomToTopCommand = (function (_super) {
 exports.AutoLayoutTreeVerticalBottomToTopCommand = AutoLayoutTreeVerticalBottomToTopCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 375:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1893
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4672,9 +4694,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoLayoutTreeVerticalCommand = void 0;
-var AutoLayoutCommandBase_1 = __webpack_require__(8906);
-var WideTree_1 = __webpack_require__(9533);
-var LayoutSettings_1 = __webpack_require__(8710);
+var AutoLayoutCommandBase_1 = __webpack_require__(8674);
+var WideTree_1 = __webpack_require__(8533);
+var LayoutSettings_1 = __webpack_require__(9212);
 var AutoLayoutTreeVerticalCommand = (function (_super) {
     __extends(AutoLayoutTreeVerticalCommand, _super);
     function AutoLayoutTreeVerticalCommand() {
@@ -4694,20 +4716,22 @@ var AutoLayoutTreeVerticalCommand = (function (_super) {
 exports.AutoLayoutTreeVerticalCommand = AutoLayoutTreeVerticalCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4982:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1311
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4715,7 +4739,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ClipboardCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ClipboardCommand = (function (_super) {
     __extends(ClipboardCommand, _super);
     function ClipboardCommand() {
@@ -4740,20 +4764,22 @@ var ClipboardCommand = (function (_super) {
 exports.ClipboardCommand = ClipboardCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5827:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7562
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4761,8 +4787,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CopySelectionCommand = void 0;
-var Exporter_1 = __webpack_require__(5885);
-var ClipboardCommand_1 = __webpack_require__(4982);
+var Exporter_1 = __webpack_require__(8762);
+var ClipboardCommand_1 = __webpack_require__(1311);
 var CopySelectionCommand = (function (_super) {
     __extends(CopySelectionCommand, _super);
     function CopySelectionCommand() {
@@ -4785,20 +4811,22 @@ var CopySelectionCommand = (function (_super) {
 exports.CopySelectionCommand = CopySelectionCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2664:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5162
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4806,9 +4834,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CutSelectionCommand = void 0;
-var Exporter_1 = __webpack_require__(5885);
-var ModelUtils_1 = __webpack_require__(4867);
-var ClipboardCommand_1 = __webpack_require__(4982);
+var Exporter_1 = __webpack_require__(8762);
+var ModelUtils_1 = __webpack_require__(1922);
+var ClipboardCommand_1 = __webpack_require__(1311);
 var CutSelectionCommand = (function (_super) {
     __extends(CutSelectionCommand, _super);
     function CutSelectionCommand() {
@@ -4838,20 +4866,22 @@ var CutSelectionCommand = (function (_super) {
 exports.CutSelectionCommand = CutSelectionCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4200:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4854
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4859,10 +4889,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PasteSelectionCommand = void 0;
-var point_1 = __webpack_require__(8900);
-var PasteSelectionCommandBase_1 = __webpack_require__(7688);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
+var point_1 = __webpack_require__(5327);
+var PasteSelectionCommandBase_1 = __webpack_require__(5451);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
 var PasteSelectionCommand = (function (_super) {
     __extends(PasteSelectionCommand, _super);
     function PasteSelectionCommand() {
@@ -4912,20 +4942,22 @@ var PasteSelectionCommand = (function (_super) {
 exports.PasteSelectionCommand = PasteSelectionCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7688:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5451
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -4933,15 +4965,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PasteSelectionCommandBase = void 0;
-var ClipboardCommand_1 = __webpack_require__(4982);
-var Importer_1 = __webpack_require__(2406);
-var Shape_1 = __webpack_require__(5503);
-var ImportShapeHistoryItem_1 = __webpack_require__(4383);
-var Connector_1 = __webpack_require__(7959);
-var ImportConnectorHistoryItem_1 = __webpack_require__(3849);
-var ModelUtils_1 = __webpack_require__(4867);
-var SetSelectionHistoryItem_1 = __webpack_require__(4297);
-var unit_converter_1 = __webpack_require__(9291);
+var ClipboardCommand_1 = __webpack_require__(1311);
+var Importer_1 = __webpack_require__(7857);
+var Shape_1 = __webpack_require__(8408);
+var ImportShapeHistoryItem_1 = __webpack_require__(7672);
+var Connector_1 = __webpack_require__(6320);
+var ImportConnectorHistoryItem_1 = __webpack_require__(506);
+var ModelUtils_1 = __webpack_require__(1922);
+var SetSelectionHistoryItem_1 = __webpack_require__(6512);
+var unit_converter_1 = __webpack_require__(9500);
 var PasteSelectionCommandBase = (function (_super) {
     __extends(PasteSelectionCommandBase, _super);
     function PasteSelectionCommandBase() {
@@ -5054,20 +5086,22 @@ var PasteSelectionCommandBase = (function (_super) {
 exports.PasteSelectionCommandBase = PasteSelectionCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 437:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3039
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5075,10 +5109,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PasteSelectionInPositionCommand = void 0;
-var PasteSelectionCommandBase_1 = __webpack_require__(7688);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var point_1 = __webpack_require__(8900);
+var PasteSelectionCommandBase_1 = __webpack_require__(5451);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var point_1 = __webpack_require__(5327);
 var PasteSelectionInPositionCommand = (function (_super) {
     __extends(PasteSelectionInPositionCommand, _super);
     function PasteSelectionInPositionCommand() {
@@ -5104,10 +5138,10 @@ var PasteSelectionInPositionCommand = (function (_super) {
 exports.PasteSelectionInPositionCommand = PasteSelectionInPositionCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9687:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4339
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -5177,74 +5211,74 @@ var CommandBase = (function () {
 exports.CommandBase = CommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7156:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5031
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommandManager = exports.DiagramCommand = void 0;
-var DeleteCommand_1 = __webpack_require__(264);
-var UndoCommand_1 = __webpack_require__(6679);
-var RedoCommand_1 = __webpack_require__(3614);
-var ImportCommand_1 = __webpack_require__(6596);
-var ExportCommand_1 = __webpack_require__(4845);
-var ToggleFontBoldCommand_1 = __webpack_require__(4378);
-var ToggleFontItalicCommand_1 = __webpack_require__(7607);
-var ToggleFontUnderlineCommand_1 = __webpack_require__(3411);
-var ChangeFontNameCommand_1 = __webpack_require__(7480);
-var ChangeFontSizeCommand_1 = __webpack_require__(4077);
-var ChangeFontColorCommand_1 = __webpack_require__(6106);
-var ChangeFillColorCommand_1 = __webpack_require__(1649);
-var ChangeStrokeColorCommand_1 = __webpack_require__(3166);
-var ChangeTextAlignCommand_1 = __webpack_require__(8700);
-var ChangeConnectorLineEndingCommand_1 = __webpack_require__(2301);
-var ChangeConnectorLineOptionCommand_1 = __webpack_require__(7306);
-var SelectAllCommand_1 = __webpack_require__(2452);
-var key_1 = __webpack_require__(2153);
-var AutoLayoutTreeVerticalCommand_1 = __webpack_require__(375);
-var ChangeSnapToGridCommand_1 = __webpack_require__(4503);
-var ChangeGridSizeCommand_1 = __webpack_require__(7550);
-var ChangePageLandscapeCommand_1 = __webpack_require__(7649);
-var ChangePageSizeCommand_1 = __webpack_require__(1813);
-var ExportPngCommand_1 = __webpack_require__(3690);
-var ExportSvgCommand_1 = __webpack_require__(2276);
-var ExportJpgCommand_1 = __webpack_require__(1203);
-var CopySelectionCommand_1 = __webpack_require__(5827);
-var CutSelectionCommand_1 = __webpack_require__(2664);
-var PasteSelectionCommand_1 = __webpack_require__(4200);
-var ImportBPMNCommand_1 = __webpack_require__(1239);
-var SendToBackCommand_1 = __webpack_require__(4624);
-var BringToFrontCommand_1 = __webpack_require__(3591);
-var AutoLayoutLayeredHorizontalCommand_1 = __webpack_require__(30);
-var MoveCommands_1 = __webpack_require__(5925);
-var ChangeZoomLevelCommand_1 = __webpack_require__(4522);
-var BindDocumentCommand_1 = __webpack_require__(9538);
-var UnbindDocumentCommand_1 = __webpack_require__(125);
-var AutoLayoutTreeHorizontalCommand_1 = __webpack_require__(7004);
-var AutoLayoutLayeredVerticalCommand_1 = __webpack_require__(9427);
-var LockCommand_1 = __webpack_require__(9031);
-var UnlockCommand_1 = __webpack_require__(6049);
-var CloneCommand_1 = __webpack_require__(4999);
-var ChangeUnitsCommand_1 = __webpack_require__(4419);
-var ChangePageColorCommand_1 = __webpack_require__(8016);
-var ChangeShowGridCommand_1 = __webpack_require__(72);
-var ToggleFullscreenCommand_1 = __webpack_require__(6619);
-var ToggleSimpleViewCommand_1 = __webpack_require__(7795);
-var ToggleReadOnlyCommand_1 = __webpack_require__(9970);
-var EditShapeImageCommand_1 = __webpack_require__(4281);
-var PasteSelectionInPosition_1 = __webpack_require__(437);
-var ImportXMLCommand_1 = __webpack_require__(5830);
-var InsertShapeImageCommand_1 = __webpack_require__(9158);
-var DeleteShapeImageCommand_1 = __webpack_require__(962);
-var ChangeStrokeStyleCommand_1 = __webpack_require__(4643);
-var ChangeStrokeWidthCommand_1 = __webpack_require__(4681);
-var AutoLayoutTreeVerticalBottomToTopCommand_1 = __webpack_require__(2217);
-var AutoLayoutTreeHorizontalRightToLeftCommand_1 = __webpack_require__(5010);
-var AutoLayoutLayeredVerticalBottomToTopCommand_1 = __webpack_require__(554);
-var AutoLayoutLayeredHorizontalRightToLeftCommand_1 = __webpack_require__(7826);
-var ChangeConnectorRoutingModeCommand_1 = __webpack_require__(7717);
+var DeleteCommand_1 = __webpack_require__(2993);
+var UndoCommand_1 = __webpack_require__(9198);
+var RedoCommand_1 = __webpack_require__(4448);
+var ImportCommand_1 = __webpack_require__(8022);
+var ExportCommand_1 = __webpack_require__(195);
+var ToggleFontBoldCommand_1 = __webpack_require__(1851);
+var ToggleFontItalicCommand_1 = __webpack_require__(2638);
+var ToggleFontUnderlineCommand_1 = __webpack_require__(7534);
+var ChangeFontNameCommand_1 = __webpack_require__(5351);
+var ChangeFontSizeCommand_1 = __webpack_require__(9713);
+var ChangeFontColorCommand_1 = __webpack_require__(531);
+var ChangeFillColorCommand_1 = __webpack_require__(9675);
+var ChangeStrokeColorCommand_1 = __webpack_require__(8162);
+var ChangeTextAlignCommand_1 = __webpack_require__(3188);
+var ChangeConnectorLineEndingCommand_1 = __webpack_require__(1550);
+var ChangeConnectorLineOptionCommand_1 = __webpack_require__(4276);
+var SelectAllCommand_1 = __webpack_require__(9185);
+var key_1 = __webpack_require__(6537);
+var AutoLayoutTreeVerticalCommand_1 = __webpack_require__(1893);
+var ChangeSnapToGridCommand_1 = __webpack_require__(1917);
+var ChangeGridSizeCommand_1 = __webpack_require__(7201);
+var ChangePageLandscapeCommand_1 = __webpack_require__(2198);
+var ChangePageSizeCommand_1 = __webpack_require__(8536);
+var ExportPngCommand_1 = __webpack_require__(132);
+var ExportSvgCommand_1 = __webpack_require__(2383);
+var ExportJpgCommand_1 = __webpack_require__(9784);
+var CopySelectionCommand_1 = __webpack_require__(7562);
+var CutSelectionCommand_1 = __webpack_require__(5162);
+var PasteSelectionCommand_1 = __webpack_require__(4854);
+var ImportBPMNCommand_1 = __webpack_require__(6389);
+var SendToBackCommand_1 = __webpack_require__(2408);
+var BringToFrontCommand_1 = __webpack_require__(2748);
+var AutoLayoutLayeredHorizontalCommand_1 = __webpack_require__(4214);
+var MoveCommands_1 = __webpack_require__(1998);
+var ChangeZoomLevelCommand_1 = __webpack_require__(871);
+var BindDocumentCommand_1 = __webpack_require__(3054);
+var UnbindDocumentCommand_1 = __webpack_require__(3591);
+var AutoLayoutTreeHorizontalCommand_1 = __webpack_require__(7283);
+var AutoLayoutLayeredVerticalCommand_1 = __webpack_require__(8827);
+var LockCommand_1 = __webpack_require__(3577);
+var UnlockCommand_1 = __webpack_require__(6800);
+var CloneCommand_1 = __webpack_require__(8495);
+var ChangeUnitsCommand_1 = __webpack_require__(459);
+var ChangePageColorCommand_1 = __webpack_require__(1548);
+var ChangeShowGridCommand_1 = __webpack_require__(4713);
+var ToggleFullscreenCommand_1 = __webpack_require__(4009);
+var ToggleSimpleViewCommand_1 = __webpack_require__(9923);
+var ToggleReadOnlyCommand_1 = __webpack_require__(8192);
+var EditShapeImageCommand_1 = __webpack_require__(5496);
+var PasteSelectionInPosition_1 = __webpack_require__(3039);
+var ImportXMLCommand_1 = __webpack_require__(5441);
+var InsertShapeImageCommand_1 = __webpack_require__(7615);
+var DeleteShapeImageCommand_1 = __webpack_require__(5065);
+var ChangeStrokeStyleCommand_1 = __webpack_require__(1932);
+var ChangeStrokeWidthCommand_1 = __webpack_require__(6435);
+var AutoLayoutTreeVerticalBottomToTopCommand_1 = __webpack_require__(720);
+var AutoLayoutTreeHorizontalRightToLeftCommand_1 = __webpack_require__(2899);
+var AutoLayoutLayeredVerticalBottomToTopCommand_1 = __webpack_require__(3974);
+var AutoLayoutLayeredHorizontalRightToLeftCommand_1 = __webpack_require__(3589);
+var ChangeConnectorRoutingModeCommand_1 = __webpack_require__(728);
 var DiagramCommand;
 (function (DiagramCommand) {
     DiagramCommand[DiagramCommand["Undo"] = 0] = "Undo";
@@ -5488,10 +5522,10 @@ var CommandManager = (function () {
 exports.CommandManager = CommandManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2102:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4424
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -5511,20 +5545,22 @@ var SimpleCommandState = (function () {
 exports.SimpleCommandState = SimpleCommandState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 264:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2993
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5532,8 +5568,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteCommand = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var DeleteCommand = (function (_super) {
     __extends(DeleteCommand, _super);
     function DeleteCommand() {
@@ -5560,20 +5596,22 @@ var DeleteCommand = (function (_super) {
 exports.DeleteCommand = DeleteCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3614:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4448
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5581,7 +5619,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RedoCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var RedoCommand = (function (_super) {
     __extends(RedoCommand, _super);
     function RedoCommand() {
@@ -5603,20 +5641,22 @@ var RedoCommand = (function (_super) {
 exports.RedoCommand = RedoCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2452:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9185
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5624,7 +5664,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SelectAllCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var SelectAllCommand = (function (_super) {
     __extends(SelectAllCommand, _super);
     function SelectAllCommand() {
@@ -5644,20 +5684,22 @@ var SelectAllCommand = (function (_super) {
 exports.SelectAllCommand = SelectAllCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6679:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9198
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5665,7 +5707,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UndoCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var UndoCommand = (function (_super) {
     __extends(UndoCommand, _super);
     function UndoCommand() {
@@ -5687,20 +5729,22 @@ var UndoCommand = (function (_super) {
 exports.UndoCommand = UndoCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9538:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3054
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5708,8 +5752,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BindDocumentCommand = void 0;
-var DataLayoutParameters_1 = __webpack_require__(3503);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var DataLayoutParameters_1 = __webpack_require__(2175);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var BindDocumentCommand = (function (_super) {
     __extends(BindDocumentCommand, _super);
     function BindDocumentCommand() {
@@ -5739,20 +5783,22 @@ var BindDocumentCommand = (function (_super) {
 exports.BindDocumentCommand = BindDocumentCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 125:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3591
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5760,8 +5806,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UnbindDocumentCommand = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var UnbindDocumentCommand = (function (_super) {
     __extends(UnbindDocumentCommand, _super);
     function UnbindDocumentCommand() {
@@ -5783,20 +5829,22 @@ var UnbindDocumentCommand = (function (_super) {
 exports.UnbindDocumentCommand = UnbindDocumentCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4845:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 195
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5804,8 +5852,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportCommand = void 0;
-var Exporter_1 = __webpack_require__(5885);
-var ExportImportCommandBase_1 = __webpack_require__(1081);
+var Exporter_1 = __webpack_require__(8762);
+var ExportImportCommandBase_1 = __webpack_require__(6089);
 var ExportCommand = (function (_super) {
     __extends(ExportCommand, _super);
     function ExportCommand() {
@@ -5822,20 +5870,22 @@ var ExportCommand = (function (_super) {
 exports.ExportCommand = ExportCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4012:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6634
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5843,14 +5893,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportImageCommand = void 0;
-var CanvasItemsManager_1 = __webpack_require__(8693);
-var CanvasExportManager_1 = __webpack_require__(3872);
-var ExportImportCommandBase_1 = __webpack_require__(1081);
-var Exporter_1 = __webpack_require__(5885);
-var RenderHelper_1 = __webpack_require__(1114);
-var TextMeasurer_1 = __webpack_require__(1733);
-var DOMManipulator_1 = __webpack_require__(6078);
-var ImageCache_1 = __webpack_require__(7176);
+var CanvasItemsManager_1 = __webpack_require__(9922);
+var CanvasExportManager_1 = __webpack_require__(8236);
+var ExportImportCommandBase_1 = __webpack_require__(6089);
+var Exporter_1 = __webpack_require__(8762);
+var RenderHelper_1 = __webpack_require__(8509);
+var TextMeasurer_1 = __webpack_require__(6727);
+var DOMManipulator_1 = __webpack_require__(6873);
+var ImageCache_1 = __webpack_require__(4062);
 var ExportImageCommand = (function (_super) {
     __extends(ExportImageCommand, _super);
     function ExportImageCommand(control) {
@@ -5908,20 +5958,22 @@ var ExportImageCommand = (function (_super) {
 exports.ExportImageCommand = ExportImageCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1081:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6089
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5929,7 +5981,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportImportCommandBase = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ExportImportCommandBase = (function (_super) {
     __extends(ExportImportCommandBase, _super);
     function ExportImportCommandBase() {
@@ -5943,20 +5995,22 @@ var ExportImportCommandBase = (function (_super) {
 exports.ExportImportCommandBase = ExportImportCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1203:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9784
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -5964,7 +6018,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportJpgCommand = void 0;
-var ExportImageCommand_1 = __webpack_require__(4012);
+var ExportImageCommand_1 = __webpack_require__(6634);
 var ExportJpgCommand = (function (_super) {
     __extends(ExportJpgCommand, _super);
     function ExportJpgCommand() {
@@ -5979,20 +6033,22 @@ var ExportJpgCommand = (function (_super) {
 exports.ExportJpgCommand = ExportJpgCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3690:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 132
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6000,7 +6056,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportPngCommand = void 0;
-var ExportImageCommand_1 = __webpack_require__(4012);
+var ExportImageCommand_1 = __webpack_require__(6634);
 var ExportPngCommand = (function (_super) {
     __extends(ExportPngCommand, _super);
     function ExportPngCommand() {
@@ -6015,20 +6071,22 @@ var ExportPngCommand = (function (_super) {
 exports.ExportPngCommand = ExportPngCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2276:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2383
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6036,7 +6094,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportSvgCommand = void 0;
-var ExportImageCommand_1 = __webpack_require__(4012);
+var ExportImageCommand_1 = __webpack_require__(6634);
 var ExportSvgCommand = (function (_super) {
     __extends(ExportSvgCommand, _super);
     function ExportSvgCommand() {
@@ -6051,20 +6109,22 @@ var ExportSvgCommand = (function (_super) {
 exports.ExportSvgCommand = ExportSvgCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1239:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6389
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6072,16 +6132,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImportBPMNCommand = void 0;
-var BPMNImporter_1 = __webpack_require__(5941);
-var ModelUtils_1 = __webpack_require__(4867);
-var AddShapeHistoryItem_1 = __webpack_require__(4145);
-var point_1 = __webpack_require__(8900);
-var Connector_1 = __webpack_require__(7959);
-var AddConnectorHistoryItem_1 = __webpack_require__(9603);
-var AddConnectionHistoryItem_1 = __webpack_require__(3477);
-var Sugiyama_1 = __webpack_require__(1256);
-var LayoutSettings_1 = __webpack_require__(8710);
-var ExportImportCommandBase_1 = __webpack_require__(1081);
+var BPMNImporter_1 = __webpack_require__(6056);
+var ModelUtils_1 = __webpack_require__(1922);
+var AddShapeHistoryItem_1 = __webpack_require__(8214);
+var point_1 = __webpack_require__(5327);
+var Connector_1 = __webpack_require__(6320);
+var AddConnectorHistoryItem_1 = __webpack_require__(4048);
+var AddConnectionHistoryItem_1 = __webpack_require__(4139);
+var Sugiyama_1 = __webpack_require__(2626);
+var LayoutSettings_1 = __webpack_require__(9212);
+var ExportImportCommandBase_1 = __webpack_require__(6089);
 var ImportBPMNCommand = (function (_super) {
     __extends(ImportBPMNCommand, _super);
     function ImportBPMNCommand() {
@@ -6134,20 +6194,22 @@ var ImportBPMNCommand = (function (_super) {
 exports.ImportBPMNCommand = ImportBPMNCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6596:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8022
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6155,8 +6217,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImportCommand = void 0;
-var Importer_1 = __webpack_require__(2406);
-var ExportImportCommandBase_1 = __webpack_require__(1081);
+var Importer_1 = __webpack_require__(7857);
+var ExportImportCommandBase_1 = __webpack_require__(6089);
 var ImportCommand = (function (_super) {
     __extends(ImportCommand, _super);
     function ImportCommand() {
@@ -6182,20 +6244,22 @@ var ImportCommand = (function (_super) {
 exports.ImportCommand = ImportCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5830:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5441
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6203,8 +6267,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImportXMLCommand = void 0;
-var XMLImporter_1 = __webpack_require__(780);
-var ExportImportCommandBase_1 = __webpack_require__(1081);
+var XMLImporter_1 = __webpack_require__(7892);
+var ExportImportCommandBase_1 = __webpack_require__(6089);
 var ImportXMLCommand = (function (_super) {
     __extends(ImportXMLCommand, _super);
     function ImportXMLCommand() {
@@ -6221,20 +6285,22 @@ var ImportXMLCommand = (function (_super) {
 exports.ImportXMLCommand = ImportXMLCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4999:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8495
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6242,8 +6308,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CloneDownCommand = exports.CloneUpCommand = exports.CloneRightCommand = exports.CloneLeftCommand = exports.CloneCommand = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var CloneCommand = (function (_super) {
     __extends(CloneCommand, _super);
     function CloneCommand() {
@@ -6318,20 +6384,22 @@ var CloneDownCommand = (function (_super) {
 exports.CloneDownCommand = CloneDownCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5925:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1998
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6339,11 +6407,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MoveStepDownCommand = exports.MoveDownCommand = exports.MoveStepUpCommand = exports.MoveUpCommand = exports.MoveStepRightCommand = exports.MoveRightCommand = exports.MoveStepLeftCommand = exports.MoveLeftCommand = exports.MoveCommand = void 0;
-var point_1 = __webpack_require__(8900);
-var ModelUtils_1 = __webpack_require__(4867);
-var unit_converter_1 = __webpack_require__(9291);
-var SimpleCommandBase_1 = __webpack_require__(9741);
-var DragHelper_1 = __webpack_require__(4742);
+var point_1 = __webpack_require__(5327);
+var ModelUtils_1 = __webpack_require__(1922);
+var unit_converter_1 = __webpack_require__(9500);
+var SimpleCommandBase_1 = __webpack_require__(3913);
+var DragHelper_1 = __webpack_require__(1416);
 var MoveCommand = (function (_super) {
     __extends(MoveCommand, _super);
     function MoveCommand() {
@@ -6475,20 +6543,22 @@ var MoveStepDownCommand = (function (_super) {
 exports.MoveStepDownCommand = MoveStepDownCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7550:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7201
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6496,7 +6566,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeGridSizeItemsCommand = exports.ChangeGridSizeCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangeGridSizeCommand = (function (_super) {
     __extends(ChangeGridSizeCommand, _super);
     function ChangeGridSizeCommand() {
@@ -6543,20 +6613,22 @@ var ChangeGridSizeItemsCommand = (function (_super) {
 exports.ChangeGridSizeItemsCommand = ChangeGridSizeItemsCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8016:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1548
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6564,10 +6636,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageColorCommand = void 0;
-var ChangePagePropertyCommand_1 = __webpack_require__(3499);
-var ChangePageColorHistoryItem_1 = __webpack_require__(7195);
-var Model_1 = __webpack_require__(6613);
-var color_1 = __webpack_require__(13);
+var ChangePagePropertyCommand_1 = __webpack_require__(1540);
+var ChangePageColorHistoryItem_1 = __webpack_require__(3158);
+var Model_1 = __webpack_require__(455);
+var color_1 = __webpack_require__(9553);
 var ChangePageColorCommand = (function (_super) {
     __extends(ChangePageColorCommand, _super);
     function ChangePageColorCommand() {
@@ -6587,20 +6659,22 @@ var ChangePageColorCommand = (function (_super) {
 exports.ChangePageColorCommand = ChangePageColorCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7649:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2198
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6608,8 +6682,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageLandscapeCommand = void 0;
-var ChangePagePropertyCommand_1 = __webpack_require__(3499);
-var ChangePageLandscapeHistoryItem_1 = __webpack_require__(1380);
+var ChangePagePropertyCommand_1 = __webpack_require__(1540);
+var ChangePageLandscapeHistoryItem_1 = __webpack_require__(8912);
 var ChangePageLandscapeCommand = (function (_super) {
     __extends(ChangePageLandscapeCommand, _super);
     function ChangePageLandscapeCommand() {
@@ -6626,20 +6700,22 @@ var ChangePageLandscapeCommand = (function (_super) {
 exports.ChangePageLandscapeCommand = ChangePageLandscapeCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3499:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1540
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6647,8 +6723,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePagePropertyCommand = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangePagePropertyCommand = (function (_super) {
     __extends(ChangePagePropertyCommand, _super);
     function ChangePagePropertyCommand() {
@@ -6671,20 +6747,22 @@ var ChangePagePropertyCommand = (function (_super) {
 exports.ChangePagePropertyCommand = ChangePagePropertyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1813:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8536
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6692,10 +6770,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageSizeItemsCommand = exports.ChangePageSizeCommand = void 0;
-var ChangePagePropertyCommand_1 = __webpack_require__(3499);
-var size_1 = __webpack_require__(6353);
-var ChangePageSizeHistoryItem_1 = __webpack_require__(1044);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ChangePagePropertyCommand_1 = __webpack_require__(1540);
+var size_1 = __webpack_require__(3844);
+var ChangePageSizeHistoryItem_1 = __webpack_require__(9066);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangePageSizeCommand = (function (_super) {
     __extends(ChangePageSizeCommand, _super);
     function ChangePageSizeCommand() {
@@ -6754,20 +6832,22 @@ var ChangePageSizeItemsCommand = (function (_super) {
 exports.ChangePageSizeItemsCommand = ChangePageSizeItemsCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 72:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4713
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6775,7 +6855,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShowGridCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangeShowGridCommand = (function (_super) {
     __extends(ChangeShowGridCommand, _super);
     function ChangeShowGridCommand() {
@@ -6800,20 +6880,22 @@ var ChangeShowGridCommand = (function (_super) {
 exports.ChangeShowGridCommand = ChangeShowGridCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4503:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1917
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6821,7 +6903,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeSnapToGridCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangeSnapToGridCommand = (function (_super) {
     __extends(ChangeSnapToGridCommand, _super);
     function ChangeSnapToGridCommand() {
@@ -6843,20 +6925,22 @@ var ChangeSnapToGridCommand = (function (_super) {
 exports.ChangeSnapToGridCommand = ChangeSnapToGridCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4419:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 459
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6864,10 +6948,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeViewUnitsCommand = exports.ChangeUnitsCommand = void 0;
-var ChangePagePropertyCommand_1 = __webpack_require__(3499);
-var ChangeUnitsHistoryItem_1 = __webpack_require__(7479);
-var SimpleCommandBase_1 = __webpack_require__(9741);
-var LocalizationService_1 = __webpack_require__(6224);
+var ChangePagePropertyCommand_1 = __webpack_require__(1540);
+var ChangeUnitsHistoryItem_1 = __webpack_require__(8437);
+var SimpleCommandBase_1 = __webpack_require__(3913);
+var LocalizationService_1 = __webpack_require__(820);
 var ChangeUnitsCommand = (function (_super) {
     __extends(ChangeUnitsCommand, _super);
     function ChangeUnitsCommand() {
@@ -6915,20 +6999,22 @@ var ChangeViewUnitsCommand = (function (_super) {
 exports.ChangeViewUnitsCommand = ChangeViewUnitsCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4522:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 871
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -6936,8 +7022,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleAutoZoomCommand = exports.ToggleAutoZoomToWidthCommand = exports.ToggleAutoZoomToContentCommand = exports.SwitchAutoZoomCommand = exports.FitToWidthCommand = exports.FitToScreenCommand = exports.ChangeZoomLevelItemsCommand = exports.ChangeZoomLevelTo200Command = exports.ChangeZoomLevelTo150Command = exports.ChangeZoomLevelTo125Command = exports.ChangeZoomLevelTo100Command = exports.ChangeZoomLevelTo75Command = exports.ChangeZoomLevelTo50Command = exports.ChangeZoomLevelTo25Command = exports.ChangeZoomLevelInPercentageCommand = exports.ChangeZoomLevelCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
-var Settings_1 = __webpack_require__(240);
+var SimpleCommandBase_1 = __webpack_require__(3913);
+var Settings_1 = __webpack_require__(9307);
 var ChangeZoomLevelCommand = (function (_super) {
     __extends(ChangeZoomLevelCommand, _super);
     function ChangeZoomLevelCommand() {
@@ -7209,20 +7295,22 @@ var ToggleAutoZoomCommand = (function (_super) {
 exports.ToggleAutoZoomCommand = ToggleAutoZoomCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6619:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4009
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7230,7 +7318,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleFullscreenCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ToggleFullscreenCommand = (function (_super) {
     __extends(ToggleFullscreenCommand, _super);
     function ToggleFullscreenCommand() {
@@ -7255,20 +7343,22 @@ var ToggleFullscreenCommand = (function (_super) {
 exports.ToggleFullscreenCommand = ToggleFullscreenCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9970:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8192
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7276,7 +7366,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleReadOnlyCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ToggleReadOnlyCommand = (function (_super) {
     __extends(ToggleReadOnlyCommand, _super);
     function ToggleReadOnlyCommand() {
@@ -7300,20 +7390,22 @@ var ToggleReadOnlyCommand = (function (_super) {
 exports.ToggleReadOnlyCommand = ToggleReadOnlyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7795:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9923
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7321,7 +7413,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleSimpleViewCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ToggleSimpleViewCommand = (function (_super) {
     __extends(ToggleSimpleViewCommand, _super);
     function ToggleSimpleViewCommand() {
@@ -7346,20 +7438,22 @@ var ToggleSimpleViewCommand = (function (_super) {
 exports.ToggleSimpleViewCommand = ToggleSimpleViewCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3591:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2748
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7367,8 +7461,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BringToFrontCommand = void 0;
-var ChangeZindexHistoryItem_1 = __webpack_require__(5982);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ChangeZindexHistoryItem_1 = __webpack_require__(672);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var BringToFrontCommand = (function (_super) {
     __extends(BringToFrontCommand, _super);
     function BringToFrontCommand() {
@@ -7420,20 +7514,22 @@ var BringToFrontCommand = (function (_super) {
 exports.BringToFrontCommand = BringToFrontCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2301:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1550
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7441,8 +7537,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorEndLineEndingCommand = exports.ChangeConnectorStartLineEndingCommand = void 0;
-var ChangeConnectorPropertyCommand_1 = __webpack_require__(7551);
-var ConnectorProperties_1 = __webpack_require__(4612);
+var ChangeConnectorPropertyCommand_1 = __webpack_require__(2078);
+var ConnectorProperties_1 = __webpack_require__(4385);
 var ChangeConnectorStartLineEndingCommand = (function (_super) {
     __extends(ChangeConnectorStartLineEndingCommand, _super);
     function ChangeConnectorStartLineEndingCommand() {
@@ -7473,20 +7569,22 @@ var ChangeConnectorEndLineEndingCommand = (function (_super) {
 exports.ChangeConnectorEndLineEndingCommand = ChangeConnectorEndLineEndingCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7306:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4276
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7494,8 +7592,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorLineOptionCommand = void 0;
-var ChangeConnectorPropertyCommand_1 = __webpack_require__(7551);
-var ConnectorProperties_1 = __webpack_require__(4612);
+var ChangeConnectorPropertyCommand_1 = __webpack_require__(2078);
+var ConnectorProperties_1 = __webpack_require__(4385);
 var ChangeConnectorLineOptionCommand = (function (_super) {
     __extends(ChangeConnectorLineOptionCommand, _super);
     function ChangeConnectorLineOptionCommand() {
@@ -7512,20 +7610,22 @@ var ChangeConnectorLineOptionCommand = (function (_super) {
 exports.ChangeConnectorLineOptionCommand = ChangeConnectorLineOptionCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7551:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2078
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7533,8 +7633,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorPropertyCommand = void 0;
-var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(8236);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(2448);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangeConnectorPropertyCommand = (function (_super) {
     __extends(ChangeConnectorPropertyCommand, _super);
     function ChangeConnectorPropertyCommand() {
@@ -7570,20 +7670,22 @@ var ChangeConnectorPropertyCommand = (function (_super) {
 exports.ChangeConnectorPropertyCommand = ChangeConnectorPropertyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 728
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7591,8 +7693,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorRoutingModeCommand = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
-var Settings_1 = __webpack_require__(240);
+var SimpleCommandBase_1 = __webpack_require__(3913);
+var Settings_1 = __webpack_require__(9307);
 var ChangeConnectorRoutingModeCommand = (function (_super) {
     __extends(ChangeConnectorRoutingModeCommand, _super);
     function ChangeConnectorRoutingModeCommand() {
@@ -7611,20 +7713,22 @@ var ChangeConnectorRoutingModeCommand = (function (_super) {
 exports.ChangeConnectorRoutingModeCommand = ChangeConnectorRoutingModeCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1307:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9314
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7632,8 +7736,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeLockedCommand = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ModelUtils_1 = __webpack_require__(1922);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var ChangeLockedCommand = (function (_super) {
     __extends(ChangeLockedCommand, _super);
     function ChangeLockedCommand() {
@@ -7656,20 +7760,22 @@ var ChangeLockedCommand = (function (_super) {
 exports.ChangeLockedCommand = ChangeLockedCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9031:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3577
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7677,7 +7783,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LockCommand = void 0;
-var ChangeLockedCommand_1 = __webpack_require__(1307);
+var ChangeLockedCommand_1 = __webpack_require__(9314);
 var LockCommand = (function (_super) {
     __extends(LockCommand, _super);
     function LockCommand() {
@@ -7691,20 +7797,22 @@ var LockCommand = (function (_super) {
 exports.LockCommand = LockCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4624:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2408
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7712,8 +7820,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SendToBackCommand = void 0;
-var ChangeZindexHistoryItem_1 = __webpack_require__(5982);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ChangeZindexHistoryItem_1 = __webpack_require__(672);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var SendToBackCommand = (function (_super) {
     __extends(SendToBackCommand, _super);
     function SendToBackCommand() {
@@ -7765,20 +7873,22 @@ var SendToBackCommand = (function (_super) {
 exports.SendToBackCommand = SendToBackCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6049:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6800
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7786,7 +7896,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UnLockCommand = void 0;
-var ChangeLockedCommand_1 = __webpack_require__(1307);
+var ChangeLockedCommand_1 = __webpack_require__(9314);
 var UnLockCommand = (function (_super) {
     __extends(UnLockCommand, _super);
     function UnLockCommand() {
@@ -7800,20 +7910,22 @@ var UnLockCommand = (function (_super) {
 exports.UnLockCommand = UnLockCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 962:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5065
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7821,7 +7933,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteShapeImageCommand = void 0;
-var EditShapeImageCommandBase_1 = __webpack_require__(7650);
+var EditShapeImageCommandBase_1 = __webpack_require__(877);
 var DeleteShapeImageCommand = (function (_super) {
     __extends(DeleteShapeImageCommand, _super);
     function DeleteShapeImageCommand() {
@@ -7839,20 +7951,22 @@ var DeleteShapeImageCommand = (function (_super) {
 exports.DeleteShapeImageCommand = DeleteShapeImageCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4281:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5496
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7860,7 +7974,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EditShapeImageCommand = void 0;
-var EditShapeImageCommandBase_1 = __webpack_require__(7650);
+var EditShapeImageCommandBase_1 = __webpack_require__(877);
 var EditShapeImageCommand = (function (_super) {
     __extends(EditShapeImageCommand, _super);
     function EditShapeImageCommand() {
@@ -7875,20 +7989,22 @@ var EditShapeImageCommand = (function (_super) {
 exports.EditShapeImageCommand = EditShapeImageCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7650:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 877
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7896,8 +8012,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EditShapeImageCommandBase = void 0;
-var ChangeShapeImageHistoryItem_1 = __webpack_require__(8210);
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var ChangeShapeImageHistoryItem_1 = __webpack_require__(472);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var EditShapeImageCommandBase = (function (_super) {
     __extends(EditShapeImageCommandBase, _super);
     function EditShapeImageCommandBase() {
@@ -7928,20 +8044,22 @@ var EditShapeImageCommandBase = (function (_super) {
 exports.EditShapeImageCommandBase = EditShapeImageCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9158:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7615
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7949,7 +8067,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsertShapeImageCommand = void 0;
-var EditShapeImageCommandBase_1 = __webpack_require__(7650);
+var EditShapeImageCommandBase_1 = __webpack_require__(877);
 var InsertShapeImageCommand = (function (_super) {
     __extends(InsertShapeImageCommand, _super);
     function InsertShapeImageCommand() {
@@ -7964,20 +8082,22 @@ var InsertShapeImageCommand = (function (_super) {
 exports.InsertShapeImageCommand = InsertShapeImageCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9741:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3913
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -7985,10 +8105,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleCommandBase = void 0;
-var CommandBase_1 = __webpack_require__(9687);
-var CommandStates_1 = __webpack_require__(2102);
-var ModelUtils_1 = __webpack_require__(4867);
-var LocalizationService_1 = __webpack_require__(6224);
+var CommandBase_1 = __webpack_require__(4339);
+var CommandStates_1 = __webpack_require__(4424);
+var ModelUtils_1 = __webpack_require__(1922);
+var LocalizationService_1 = __webpack_require__(820);
 var SimpleCommandBase = (function (_super) {
     __extends(SimpleCommandBase, _super);
     function SimpleCommandBase() {
@@ -8038,20 +8158,22 @@ var SimpleCommandBase = (function (_super) {
 exports.SimpleCommandBase = SimpleCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1649:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9675
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8059,8 +8181,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeFillColorCommand = void 0;
-var ChangeStylePropertyCommand_1 = __webpack_require__(5726);
-var color_1 = __webpack_require__(13);
+var ChangeStylePropertyCommand_1 = __webpack_require__(5963);
+var color_1 = __webpack_require__(9553);
 var ChangeFillColorCommand = (function (_super) {
     __extends(ChangeFillColorCommand, _super);
     function ChangeFillColorCommand() {
@@ -8077,20 +8199,22 @@ var ChangeFillColorCommand = (function (_super) {
 exports.ChangeFillColorCommand = ChangeFillColorCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6106:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 531
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8098,8 +8222,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeFontColorCommand = void 0;
-var ChangeStyleTextPropertyCommand_1 = __webpack_require__(2722);
-var color_1 = __webpack_require__(13);
+var ChangeStyleTextPropertyCommand_1 = __webpack_require__(6994);
+var color_1 = __webpack_require__(9553);
 var ChangeFontColorCommand = (function (_super) {
     __extends(ChangeFontColorCommand, _super);
     function ChangeFontColorCommand() {
@@ -8116,20 +8240,22 @@ var ChangeFontColorCommand = (function (_super) {
 exports.ChangeFontColorCommand = ChangeFontColorCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7480:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5351
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8137,7 +8263,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeFontNameCommand = void 0;
-var ChangeStyleTextPropertyCommand_1 = __webpack_require__(2722);
+var ChangeStyleTextPropertyCommand_1 = __webpack_require__(6994);
 var ChangeFontNameCommand = (function (_super) {
     __extends(ChangeFontNameCommand, _super);
     function ChangeFontNameCommand() {
@@ -8151,20 +8277,22 @@ var ChangeFontNameCommand = (function (_super) {
 exports.ChangeFontNameCommand = ChangeFontNameCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4077:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9713
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8172,7 +8300,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeFontSizeCommand = void 0;
-var ChangeStyleTextPropertyCommand_1 = __webpack_require__(2722);
+var ChangeStyleTextPropertyCommand_1 = __webpack_require__(6994);
 var ChangeFontSizeCommand = (function (_super) {
     __extends(ChangeFontSizeCommand, _super);
     function ChangeFontSizeCommand() {
@@ -8186,20 +8314,22 @@ var ChangeFontSizeCommand = (function (_super) {
 exports.ChangeFontSizeCommand = ChangeFontSizeCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3166:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8162
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8207,8 +8337,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStrokeColorCommand = void 0;
-var ChangeStylePropertyCommand_1 = __webpack_require__(5726);
-var color_1 = __webpack_require__(13);
+var ChangeStylePropertyCommand_1 = __webpack_require__(5963);
+var color_1 = __webpack_require__(9553);
 var ChangeStrokeColorCommand = (function (_super) {
     __extends(ChangeStrokeColorCommand, _super);
     function ChangeStrokeColorCommand() {
@@ -8225,20 +8355,22 @@ var ChangeStrokeColorCommand = (function (_super) {
 exports.ChangeStrokeColorCommand = ChangeStrokeColorCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4643:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1932
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8246,7 +8378,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStrokeStyleCommand = void 0;
-var ChangeStylePropertyCommand_1 = __webpack_require__(5726);
+var ChangeStylePropertyCommand_1 = __webpack_require__(5963);
 var ChangeStrokeStyleCommand = (function (_super) {
     __extends(ChangeStrokeStyleCommand, _super);
     function ChangeStrokeStyleCommand() {
@@ -8260,20 +8392,22 @@ var ChangeStrokeStyleCommand = (function (_super) {
 exports.ChangeStrokeStyleCommand = ChangeStrokeStyleCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4681:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6435
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8281,7 +8415,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStrokeWidthCommand = void 0;
-var ChangeStylePropertyCommand_1 = __webpack_require__(5726);
+var ChangeStylePropertyCommand_1 = __webpack_require__(5963);
 var ChangeStrokeWidthCommand = (function (_super) {
     __extends(ChangeStrokeWidthCommand, _super);
     function ChangeStrokeWidthCommand() {
@@ -8295,20 +8429,22 @@ var ChangeStrokeWidthCommand = (function (_super) {
 exports.ChangeStrokeWidthCommand = ChangeStrokeWidthCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5726:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5963
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8316,9 +8452,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStylePropertyCommand = void 0;
-var ChangeStylePropertyCommandBase_1 = __webpack_require__(521);
-var ChangeStyleHistoryItem_1 = __webpack_require__(4634);
-var Style_1 = __webpack_require__(1552);
+var ChangeStylePropertyCommandBase_1 = __webpack_require__(6649);
+var ChangeStyleHistoryItem_1 = __webpack_require__(3550);
+var Style_1 = __webpack_require__(5059);
 var ChangeStylePropertyCommand = (function (_super) {
     __extends(ChangeStylePropertyCommand, _super);
     function ChangeStylePropertyCommand() {
@@ -8344,20 +8480,22 @@ var ChangeStylePropertyCommand = (function (_super) {
 exports.ChangeStylePropertyCommand = ChangeStylePropertyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 521:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6649
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8365,7 +8503,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStylePropertyCommandBase = void 0;
-var StylePropertyCommandBase_1 = __webpack_require__(8351);
+var StylePropertyCommandBase_1 = __webpack_require__(7418);
 var ChangeStylePropertyCommandBase = (function (_super) {
     __extends(ChangeStylePropertyCommandBase, _super);
     function ChangeStylePropertyCommandBase() {
@@ -8395,20 +8533,22 @@ var ChangeStylePropertyCommandBase = (function (_super) {
 exports.ChangeStylePropertyCommandBase = ChangeStylePropertyCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2722:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6994
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8416,9 +8556,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStyleTextPropertyCommand = void 0;
-var ChangeStylePropertyCommandBase_1 = __webpack_require__(521);
-var ChangeStyleTextHistoryItem_1 = __webpack_require__(926);
-var Style_1 = __webpack_require__(1552);
+var ChangeStylePropertyCommandBase_1 = __webpack_require__(6649);
+var ChangeStyleTextHistoryItem_1 = __webpack_require__(5755);
+var Style_1 = __webpack_require__(5059);
 var ChangeStyleTextPropertyCommand = (function (_super) {
     __extends(ChangeStyleTextPropertyCommand, _super);
     function ChangeStyleTextPropertyCommand() {
@@ -8444,20 +8584,22 @@ var ChangeStyleTextPropertyCommand = (function (_super) {
 exports.ChangeStyleTextPropertyCommand = ChangeStyleTextPropertyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8700:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3188
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8465,7 +8607,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextRightAlignCommand = exports.TextCenterAlignCommand = exports.TextLeftAlignCommand = exports.ChangeTextAlignCommand = void 0;
-var ToggleStyleTextPropertyCommand_1 = __webpack_require__(6980);
+var ToggleStyleTextPropertyCommand_1 = __webpack_require__(3210);
 var ChangeTextAlignCommand = (function (_super) {
     __extends(ChangeTextAlignCommand, _super);
     function ChangeTextAlignCommand() {
@@ -8512,20 +8654,22 @@ var TextRightAlignCommand = (function (_super) {
 exports.TextRightAlignCommand = TextRightAlignCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8351:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7418
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8533,7 +8677,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StylePropertyCommandBase = void 0;
-var SimpleCommandBase_1 = __webpack_require__(9741);
+var SimpleCommandBase_1 = __webpack_require__(3913);
 var StylePropertyCommandBase = (function (_super) {
     __extends(StylePropertyCommandBase, _super);
     function StylePropertyCommandBase() {
@@ -8547,20 +8691,22 @@ var StylePropertyCommandBase = (function (_super) {
 exports.StylePropertyCommandBase = StylePropertyCommandBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4378:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1851
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8568,7 +8714,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleFontBoldCommand = void 0;
-var ToggleStyleTextPropertyCommand_1 = __webpack_require__(6980);
+var ToggleStyleTextPropertyCommand_1 = __webpack_require__(3210);
 var ToggleFontBoldCommand = (function (_super) {
     __extends(ToggleFontBoldCommand, _super);
     function ToggleFontBoldCommand() {
@@ -8585,20 +8731,22 @@ var ToggleFontBoldCommand = (function (_super) {
 exports.ToggleFontBoldCommand = ToggleFontBoldCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7607:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2638
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8606,7 +8754,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleFontItalicCommand = void 0;
-var ToggleStyleTextPropertyCommand_1 = __webpack_require__(6980);
+var ToggleStyleTextPropertyCommand_1 = __webpack_require__(3210);
 var ToggleFontItalicCommand = (function (_super) {
     __extends(ToggleFontItalicCommand, _super);
     function ToggleFontItalicCommand() {
@@ -8623,20 +8771,22 @@ var ToggleFontItalicCommand = (function (_super) {
 exports.ToggleFontItalicCommand = ToggleFontItalicCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3411:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7534
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8644,7 +8794,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleFontUnderlineCommand = void 0;
-var ToggleStyleTextPropertyCommand_1 = __webpack_require__(6980);
+var ToggleStyleTextPropertyCommand_1 = __webpack_require__(3210);
 var ToggleFontUnderlineCommand = (function (_super) {
     __extends(ToggleFontUnderlineCommand, _super);
     function ToggleFontUnderlineCommand() {
@@ -8661,20 +8811,22 @@ var ToggleFontUnderlineCommand = (function (_super) {
 exports.ToggleFontUnderlineCommand = ToggleFontUnderlineCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6980:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3210
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8682,9 +8834,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleStyleTextPropertyCommand = void 0;
-var StylePropertyCommandBase_1 = __webpack_require__(8351);
-var ChangeStyleTextHistoryItem_1 = __webpack_require__(926);
-var Style_1 = __webpack_require__(1552);
+var StylePropertyCommandBase_1 = __webpack_require__(7418);
+var ChangeStyleTextHistoryItem_1 = __webpack_require__(5755);
+var Style_1 = __webpack_require__(5059);
 var ToggleStyleTextPropertyCommand = (function (_super) {
     __extends(ToggleStyleTextPropertyCommand, _super);
     function ToggleStyleTextPropertyCommand() {
@@ -8718,20 +8870,22 @@ var ToggleStyleTextPropertyCommand = (function (_super) {
 exports.ToggleStyleTextPropertyCommand = ToggleStyleTextPropertyCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5035:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ 3831
+(__unused_webpack_module, exports) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -8817,17 +8971,17 @@ var DataSourceEdgeDataImporter = (function (_super) {
 exports.DataSourceEdgeDataImporter = DataSourceEdgeDataImporter;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3503:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2175
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataLayoutParameters = exports.DataLayoutType = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
-var WideTree_1 = __webpack_require__(9533);
-var Sugiyama_1 = __webpack_require__(1256);
+var LayoutSettings_1 = __webpack_require__(9212);
+var WideTree_1 = __webpack_require__(8533);
+var Sugiyama_1 = __webpack_require__(2626);
 var DataLayoutType;
 (function (DataLayoutType) {
     DataLayoutType[DataLayoutType["Tree"] = 0] = "Tree";
@@ -8862,43 +9016,43 @@ var DataLayoutParameters = (function () {
 exports.DataLayoutParameters = DataLayoutParameters;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4225:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8716
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataSource = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var point_1 = __webpack_require__(8900);
-var size_1 = __webpack_require__(6353);
-var AddConnectionHistoryItem_1 = __webpack_require__(3477);
-var AddConnectorHistoryItem_1 = __webpack_require__(9603);
-var AddShapeHistoryItem_1 = __webpack_require__(4145);
-var DeleteConnectionHistoryItem_1 = __webpack_require__(8930);
-var ResizeShapeHistoryItem_1 = __webpack_require__(4629);
-var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(8236);
-var ChangeConnectorTextHistoryItem_1 = __webpack_require__(5144);
-var ChangeCustomDataHistoryItem_1 = __webpack_require__(9559);
-var ChangeLockedHistoryItem_1 = __webpack_require__(7443);
-var ChangeShapeImageHistoryItem_1 = __webpack_require__(8210);
-var ChangeShapeTextHistoryItem_1 = __webpack_require__(6516);
-var ChangeZindexHistoryItem_1 = __webpack_require__(5982);
-var ChangeStyleHistoryItem_1 = __webpack_require__(4634);
-var ChangeStyleTextHistoryItem_1 = __webpack_require__(926);
-var Connector_1 = __webpack_require__(7959);
-var ModelUtils_1 = __webpack_require__(4867);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var Utils_1 = __webpack_require__(8675);
-var color_1 = __webpack_require__(13);
-var Data_1 = __webpack_require__(4914);
-var Svg_1 = __webpack_require__(8396);
-var TextUtils_1 = __webpack_require__(3490);
-var DataImporter_1 = __webpack_require__(5035);
-var DataSourceItems_1 = __webpack_require__(5558);
-var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(58);
+var unit_converter_1 = __webpack_require__(9500);
+var point_1 = __webpack_require__(5327);
+var size_1 = __webpack_require__(3844);
+var AddConnectionHistoryItem_1 = __webpack_require__(4139);
+var AddConnectorHistoryItem_1 = __webpack_require__(4048);
+var AddShapeHistoryItem_1 = __webpack_require__(8214);
+var DeleteConnectionHistoryItem_1 = __webpack_require__(6155);
+var ResizeShapeHistoryItem_1 = __webpack_require__(5685);
+var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(2448);
+var ChangeConnectorTextHistoryItem_1 = __webpack_require__(1914);
+var ChangeCustomDataHistoryItem_1 = __webpack_require__(9735);
+var ChangeLockedHistoryItem_1 = __webpack_require__(1684);
+var ChangeShapeImageHistoryItem_1 = __webpack_require__(472);
+var ChangeShapeTextHistoryItem_1 = __webpack_require__(6476);
+var ChangeZindexHistoryItem_1 = __webpack_require__(672);
+var ChangeStyleHistoryItem_1 = __webpack_require__(3550);
+var ChangeStyleTextHistoryItem_1 = __webpack_require__(5755);
+var Connector_1 = __webpack_require__(6320);
+var ModelUtils_1 = __webpack_require__(1922);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var Utils_1 = __webpack_require__(41);
+var color_1 = __webpack_require__(9553);
+var Data_1 = __webpack_require__(2620);
+var Svg_1 = __webpack_require__(7768);
+var TextUtils_1 = __webpack_require__(1842);
+var DataImporter_1 = __webpack_require__(3831);
+var DataSourceItems_1 = __webpack_require__(5206);
+var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(8818);
 var DataSource = (function () {
     function DataSource(key, nodeDataSource, edgeDataSource, parameters, nodeDataImporter, edgeDataImporter) {
         this.key = key;
@@ -9444,7 +9598,7 @@ var DataSource = (function () {
         var maxWidth = shape.getMaxWidth(shapeSizeSettings.shapeMaxWidth);
         var maxHeight = shape.getMaxHeight(shapeSizeSettings.shapeMaxHeight);
         var sizeToPx = function (size, isHorizontal) { return typeof (size) === "number" ? unit_converter_1.UnitConverter.twipsToPixelsF(size + (isHorizontal ? textHorOffset : textVerOffset)) : undefined; };
-        var newShapeTextSize = TextUtils_1.getOptimalTextRectangle(shape.text, shape.styleText, ITextMeasurer_1.TextOwner.Shape, measurer, shapeTextSize.clone().applyConverter(unit_converter_1.UnitConverter.twipsToPixelsF), shape.description.keepRatioOnAutoSize, sizeToPx(shape.getMinWidth(shapeSizeSettings.shapeMinWidth), true), sizeToPx(maxWidth, true), sizeToPx(shape.getMinHeight(shapeSizeSettings.shapeMinHeight), false), sizeToPx(maxHeight, false))
+        var newShapeTextSize = (0, TextUtils_1.getOptimalTextRectangle)(shape.text, shape.styleText, ITextMeasurer_1.TextOwner.Shape, measurer, shapeTextSize.clone().applyConverter(unit_converter_1.UnitConverter.twipsToPixelsF), shape.description.keepRatioOnAutoSize, sizeToPx(shape.getMinWidth(shapeSizeSettings.shapeMinWidth), true), sizeToPx(maxWidth, true), sizeToPx(shape.getMinHeight(shapeSizeSettings.shapeMinHeight), false), sizeToPx(maxHeight, false))
             .clone().applyConverter(unit_converter_1.UnitConverter.pixelsToTwips);
         if (!newShapeTextSize.equals(shapeTextSize)) {
             var shapeNewSize = shape.description.getSizeByText(newShapeTextSize, shape);
@@ -9470,7 +9624,7 @@ var DataSource = (function () {
             for (var key in dataItem.style) {
                 if (!Object.prototype.hasOwnProperty.call(dataItem.style, key))
                     continue;
-                var value = this.getPreparedStyleValue(dataItem.style[key], Svg_1.isColorProperty(key));
+                var value = this.getPreparedStyleValue(dataItem.style[key], (0, Svg_1.isColorProperty)(key));
                 if (value !== item.style[key])
                     history.addAndRedo(new ChangeStyleHistoryItem_1.ChangeStyleHistoryItem(item.key, key, value));
             }
@@ -9483,7 +9637,7 @@ var DataSource = (function () {
             for (var key in dataItem.styleText) {
                 if (!Object.prototype.hasOwnProperty.call(dataItem.styleText, key))
                     continue;
-                var value = this.getPreparedStyleValue(dataItem.styleText[key], Svg_1.isColorProperty(key));
+                var value = this.getPreparedStyleValue(dataItem.styleText[key], (0, Svg_1.isColorProperty)(key));
                 if (value !== item.styleText[key])
                     history.addAndRedo(new ChangeStyleTextHistoryItem_1.ChangeStyleTextHistoryItem(item.key, key, value));
             }
@@ -9663,20 +9817,22 @@ var DataSource = (function () {
 exports.DataSource = DataSource;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5558:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5206
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -9684,7 +9840,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataSourceEdgeItem = exports.DataSourceNodeItem = exports.DataSourceItem = void 0;
-var Connector_1 = __webpack_require__(7959);
+var Connector_1 = __webpack_require__(6320);
 var DataSourceItem = (function () {
     function DataSourceItem(sourceKey, key, dataObj) {
         this.sourceKey = sourceKey;
@@ -9729,20 +9885,22 @@ var DataSourceEdgeItem = (function (_super) {
 exports.DataSourceEdgeItem = DataSourceEdgeItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1581
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -9750,15 +9908,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentDataSource = exports.UpdateNodeKeyRelatedObjectsStackAction = exports.UpdateNodeKeyRelatedObjectsStackItem = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var DataSource_1 = __webpack_require__(4225);
-var ModelUtils_1 = __webpack_require__(4867);
-var Data_1 = __webpack_require__(4914);
-var Utils_1 = __webpack_require__(8675);
-var string_1 = __webpack_require__(49);
-var math_1 = __webpack_require__(8679);
+var ShapeTypes_1 = __webpack_require__(3255);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var DataSource_1 = __webpack_require__(8716);
+var ModelUtils_1 = __webpack_require__(1922);
+var Data_1 = __webpack_require__(2620);
+var Utils_1 = __webpack_require__(41);
+var string_1 = __webpack_require__(4989);
+var math_1 = __webpack_require__(594);
 var UpdateNodeKeyRelatedObjectsStackItem = (function () {
     function UpdateNodeKeyRelatedObjectsStackItem(shape, nodeObj) {
         this.shape = shape;
@@ -10459,10 +10617,10 @@ var DocumentDataSource = (function (_super) {
 exports.DocumentDataSource = DocumentDataSource;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9463:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9196
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -10495,7 +10653,7 @@ var Diagnostics = (function () {
             .filter(function (t) { return t.groupName === groupName; });
         if (!sameGroupTimers.filter(function (t) { return !t.endTime; }).length) {
             var average = sameGroupTimers.reduce(function (acc, t) { return acc + (t.endTime - t.startTime); }, 0) / sameGroupTimers.length;
-            this.log("average: " + average);
+            this.log("average: ".concat(average));
         }
     };
     Diagnostics.timer = function (message) {
@@ -10514,7 +10672,7 @@ var Diagnostics = (function () {
         var timer = this.lastCreatedTimer;
         var timeoutID = setTimeout(function () {
             timer.endTime = performance.now();
-            _this.showMessage("timer \"" + timer.message + "\": " + (timer.endTime - timer.startTime));
+            _this.showMessage("timer \"".concat(timer.message, "\": ").concat(timer.endTime - timer.startTime));
             timer.groupName && _this.tryLogAverage(timer.groupName);
         }, 0);
         this.timers[timeoutID] = timer;
@@ -10523,7 +10681,7 @@ var Diagnostics = (function () {
     Diagnostics.logPerfInfo = function () {
         var nodesCount = document.querySelector(".dxdi-control > svg").querySelectorAll("*").length;
         var memory = performance["memory"];
-        this.log("nodes: " + nodesCount.toLocaleString() + (memory ? " memory: " : "") + (memory ? memory["usedJSHeapSize"].toLocaleString() : ""));
+        this.log("nodes: ".concat(nodesCount.toLocaleString()).concat(memory ? " memory: " : "").concat(memory ? memory["usedJSHeapSize"].toLocaleString() : ""));
     };
     Diagnostics.log = function (message) {
         this.showMessage(message);
@@ -10588,42 +10746,42 @@ var Diagnostics = (function () {
 exports.Diagnostics = Diagnostics;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2106:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 701
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramControl = void 0;
-var point_1 = __webpack_require__(8900);
-var ModelManipulator_1 = __webpack_require__(1118);
-var CommandManager_1 = __webpack_require__(7156);
-var EventManager_1 = __webpack_require__(82);
-var Model_1 = __webpack_require__(6613);
-var Selection_1 = __webpack_require__(9021);
-var History_1 = __webpack_require__(1864);
-var BarManager_1 = __webpack_require__(2230);
-var RenderManager_1 = __webpack_require__(8098);
-var ShapeDescriptionManager_1 = __webpack_require__(8397);
-var DocumentDataSource_1 = __webpack_require__(8717);
-var Settings_1 = __webpack_require__(240);
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var ViewController_1 = __webpack_require__(6734);
-var ModelUtils_1 = __webpack_require__(4867);
-var ToolboxManager_1 = __webpack_require__(3298);
-var Utils_1 = __webpack_require__(8675);
-var ApiController_1 = __webpack_require__(5656);
-var ImageCache_1 = __webpack_require__(7176);
-var PermissionsProvider_1 = __webpack_require__(2883);
-var ConnectorRoutingModel_1 = __webpack_require__(5714);
-var TextMeasurer_1 = __webpack_require__(1733);
-var Connector_1 = __webpack_require__(7959);
-var DataLayoutParameters_1 = __webpack_require__(3503);
-var ReloadContentParameters_1 = __webpack_require__(6214);
-var Utils_2 = __webpack_require__(3500);
-var _1 = __webpack_require__(3607);
-var math_1 = __webpack_require__(8679);
+var point_1 = __webpack_require__(5327);
+var ModelManipulator_1 = __webpack_require__(2703);
+var CommandManager_1 = __webpack_require__(5031);
+var EventManager_1 = __webpack_require__(6309);
+var Model_1 = __webpack_require__(455);
+var Selection_1 = __webpack_require__(3099);
+var History_1 = __webpack_require__(7059);
+var BarManager_1 = __webpack_require__(6695);
+var RenderManager_1 = __webpack_require__(4306);
+var ShapeDescriptionManager_1 = __webpack_require__(281);
+var DocumentDataSource_1 = __webpack_require__(1581);
+var Settings_1 = __webpack_require__(9307);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var ViewController_1 = __webpack_require__(3659);
+var ModelUtils_1 = __webpack_require__(1922);
+var ToolboxManager_1 = __webpack_require__(1659);
+var Utils_1 = __webpack_require__(41);
+var ApiController_1 = __webpack_require__(8315);
+var ImageCache_1 = __webpack_require__(4062);
+var PermissionsProvider_1 = __webpack_require__(1040);
+var ConnectorRoutingModel_1 = __webpack_require__(5130);
+var TextMeasurer_1 = __webpack_require__(6727);
+var Connector_1 = __webpack_require__(6320);
+var DataLayoutParameters_1 = __webpack_require__(2175);
+var ReloadContentParameters_1 = __webpack_require__(5718);
+var Utils_2 = __webpack_require__(2136);
+var _1 = __webpack_require__(8156);
+var math_1 = __webpack_require__(594);
 var DiagramControl = (function () {
     function DiagramControl() {
         this.updateLockCount = 0;
@@ -11192,10 +11350,10 @@ var DiagramControl = (function () {
 exports.DiagramControl = DiagramControl;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5383:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9254
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -11213,20 +11371,22 @@ var PageOrientation;
 })(PageOrientation = exports.PageOrientation || (exports.PageOrientation = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 9946:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2803
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -11234,11 +11394,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContextMenuHandler = void 0;
-var Utils_1 = __webpack_require__(8675);
-var Event_1 = __webpack_require__(6031);
-var key_1 = __webpack_require__(2153);
-var batch_updatable_1 = __webpack_require__(1772);
-var browser_1 = __webpack_require__(9279);
+var Utils_1 = __webpack_require__(41);
+var Event_1 = __webpack_require__(5428);
+var key_1 = __webpack_require__(6537);
+var batch_updatable_1 = __webpack_require__(815);
+var browser_1 = __webpack_require__(8424);
 var ContextMenuHandler = (function (_super) {
     __extends(ContextMenuHandler, _super);
     function ContextMenuHandler() {
@@ -11311,20 +11471,22 @@ var ContextMenuHandler = (function (_super) {
 exports.ContextMenuHandler = ContextMenuHandler;
 
 
-/***/ }),
+/***/ },
 
-/***/ 151:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2394
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -11332,9 +11494,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContextMenuTouchHandler = void 0;
-var Event_1 = __webpack_require__(6031);
-var ContextMenuHandler_1 = __webpack_require__(9946);
-var ModelUtils_1 = __webpack_require__(4867);
+var Event_1 = __webpack_require__(5428);
+var ContextMenuHandler_1 = __webpack_require__(2803);
+var ModelUtils_1 = __webpack_require__(1922);
 var SELECTION_CHANGED_EVENT = 1;
 var ContextMenuTouchHandler = (function (_super) {
     __extends(ContextMenuTouchHandler, _super);
@@ -11428,18 +11590,18 @@ var ContextMenuTouchHandler = (function (_super) {
 exports.ContextMenuTouchHandler = ContextMenuTouchHandler;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4426:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7942
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContextToolboxHandler = void 0;
-var Event_1 = __webpack_require__(6031);
-var Utils_1 = __webpack_require__(8675);
-var key_1 = __webpack_require__(2153);
-var browser_1 = __webpack_require__(9279);
+var Event_1 = __webpack_require__(5428);
+var Utils_1 = __webpack_require__(41);
+var key_1 = __webpack_require__(6537);
+var browser_1 = __webpack_require__(8424);
 var ContextToolboxHandler = (function () {
     function ContextToolboxHandler() {
         this.contextToolboxVisible = false;
@@ -11483,20 +11645,22 @@ var ContextToolboxHandler = (function () {
 exports.ContextToolboxHandler = ContextToolboxHandler;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6031:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5428
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -11504,7 +11668,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramClipboardEvent = exports.DiagramKeyboardEvent = exports.DiagramContextMenuEvent = exports.DiagramWheelEvent = exports.DiagramMouseEvent = exports.DiagramMouseEventBase = exports.DiagramMouseEventTouch = exports.DiagramFocusEvent = exports.DiagramEvent = exports.ResizeEventSource = exports.MouseEventSource = exports.MouseEventElementType = exports.MouseButton = void 0;
-var key_1 = __webpack_require__(2153);
+var key_1 = __webpack_require__(6537);
 var MouseButton;
 (function (MouseButton) {
     MouseButton[MouseButton["None"] = 0] = "None";
@@ -11660,24 +11824,24 @@ var DiagramClipboardEvent = (function (_super) {
 exports.DiagramClipboardEvent = DiagramClipboardEvent;
 
 
-/***/ }),
+/***/ },
 
-/***/ 82:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6309
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventManager = void 0;
-var MouseHandler_1 = __webpack_require__(5689);
-var Utils_1 = __webpack_require__(8675);
-var TextInputHandler_1 = __webpack_require__(8376);
-var ContextMenuHandler_1 = __webpack_require__(9946);
-var ContextMenuTouchHandler_1 = __webpack_require__(151);
-var VisualizersManager_1 = __webpack_require__(7733);
-var VisualizersTouchManager_1 = __webpack_require__(7459);
-var ContextToolboxHandler_1 = __webpack_require__(4426);
-var browser_1 = __webpack_require__(9279);
-var key_1 = __webpack_require__(2153);
+var MouseHandler_1 = __webpack_require__(779);
+var Utils_1 = __webpack_require__(41);
+var TextInputHandler_1 = __webpack_require__(113);
+var ContextMenuHandler_1 = __webpack_require__(2803);
+var ContextMenuTouchHandler_1 = __webpack_require__(2394);
+var VisualizersManager_1 = __webpack_require__(9860);
+var VisualizersTouchManager_1 = __webpack_require__(3377);
+var ContextToolboxHandler_1 = __webpack_require__(7942);
+var browser_1 = __webpack_require__(8424);
+var key_1 = __webpack_require__(6537);
 var EventManager = (function () {
     function EventManager(control) {
         this.onMouseOperation = new Utils_1.EventDispatcher();
@@ -11890,23 +12054,23 @@ var EventManager = (function () {
 exports.EventManager = EventManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5689:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 779
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandler = void 0;
-var MouseHandlerDefaultState_1 = __webpack_require__(3250);
-var Event_1 = __webpack_require__(6031);
-var point_1 = __webpack_require__(8900);
-var ModelUtils_1 = __webpack_require__(4867);
-var MouseHandlerDefaultReadOnlyTouchState_1 = __webpack_require__(8032);
-var MouseHandlerDefaultReadOnlyState_1 = __webpack_require__(7286);
-var MouseHandlerDefaultTouchState_1 = __webpack_require__(8502);
-var key_1 = __webpack_require__(2153);
-var Utils_1 = __webpack_require__(8675);
+var MouseHandlerDefaultState_1 = __webpack_require__(7011);
+var Event_1 = __webpack_require__(5428);
+var point_1 = __webpack_require__(5327);
+var ModelUtils_1 = __webpack_require__(1922);
+var MouseHandlerDefaultReadOnlyTouchState_1 = __webpack_require__(9782);
+var MouseHandlerDefaultReadOnlyState_1 = __webpack_require__(9157);
+var MouseHandlerDefaultTouchState_1 = __webpack_require__(6696);
+var key_1 = __webpack_require__(6537);
+var Utils_1 = __webpack_require__(41);
 var MouseHandler = (function () {
     function MouseHandler(history, selection, model, eventManager, readOnly, view, visualizerManager, contextToolboxHandler, shapeDescriptionManager, settings, permissionsProvider) {
         this.history = history;
@@ -12263,20 +12427,22 @@ var MouseHandler = (function () {
 exports.MouseHandler = MouseHandler;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5627:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4237
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12284,16 +12450,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerCreateConnectorState = void 0;
-var Connector_1 = __webpack_require__(7959);
-var AddConnectionHistoryItem_1 = __webpack_require__(3477);
-var AddConnectorHistoryItem_1 = __webpack_require__(9603);
-var DiagramItem_1 = __webpack_require__(3742);
-var MouseHandlerMoveConnectorPointStateBase_1 = __webpack_require__(7060);
-var SetSelectionHistoryItem_1 = __webpack_require__(4297);
-var AddShapeHistoryItem_1 = __webpack_require__(4145);
-var ModelUtils_1 = __webpack_require__(4867);
-var DeleteConnectionHistoryItem_1 = __webpack_require__(8930);
-var DeleteConnectorHistoryItem_1 = __webpack_require__(9143);
+var Connector_1 = __webpack_require__(6320);
+var AddConnectionHistoryItem_1 = __webpack_require__(4139);
+var AddConnectorHistoryItem_1 = __webpack_require__(4048);
+var DiagramItem_1 = __webpack_require__(4824);
+var MouseHandlerMoveConnectorPointStateBase_1 = __webpack_require__(8619);
+var SetSelectionHistoryItem_1 = __webpack_require__(6512);
+var AddShapeHistoryItem_1 = __webpack_require__(8214);
+var ModelUtils_1 = __webpack_require__(1922);
+var DeleteConnectionHistoryItem_1 = __webpack_require__(6155);
+var DeleteConnectorHistoryItem_1 = __webpack_require__(7392);
 var MouseHandlerCreateConnectorState = (function (_super) {
     __extends(MouseHandlerCreateConnectorState, _super);
     function MouseHandlerCreateConnectorState(handler, history, model, visualizerManager, shapeDescriptionManager, selection, connectionPointIndex) {
@@ -12458,20 +12624,22 @@ var MouseHandlerCreateConnectorState = (function (_super) {
 exports.MouseHandlerCreateConnectorState = MouseHandlerCreateConnectorState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7286:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9157
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12479,7 +12647,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDefaultReadOnlyState = void 0;
-var MouseHandlerDefaultStateBase_1 = __webpack_require__(8213);
+var MouseHandlerDefaultStateBase_1 = __webpack_require__(9550);
 var MouseHandlerDefaultReadOnlyState = (function (_super) {
     __extends(MouseHandlerDefaultReadOnlyState, _super);
     function MouseHandlerDefaultReadOnlyState() {
@@ -12507,20 +12675,22 @@ var MouseHandlerDefaultReadOnlyState = (function (_super) {
 exports.MouseHandlerDefaultReadOnlyState = MouseHandlerDefaultReadOnlyState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8032:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9782
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12528,7 +12698,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDefaultReadOnlyTouchState = void 0;
-var MouseHandlerDefaultReadOnlyState_1 = __webpack_require__(7286);
+var MouseHandlerDefaultReadOnlyState_1 = __webpack_require__(9157);
 var MouseHandlerDefaultReadOnlyTouchState = (function (_super) {
     __extends(MouseHandlerDefaultReadOnlyTouchState, _super);
     function MouseHandlerDefaultReadOnlyTouchState() {
@@ -12554,20 +12724,22 @@ var MouseHandlerDefaultReadOnlyTouchState = (function (_super) {
 exports.MouseHandlerDefaultReadOnlyTouchState = MouseHandlerDefaultReadOnlyTouchState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3250:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7011
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12575,19 +12747,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDefaultState = void 0;
-var Event_1 = __webpack_require__(6031);
-var MouseHandlerMoveConnectorPointState_1 = __webpack_require__(4402);
-var MouseHandlerResizeShapeState_1 = __webpack_require__(5609);
-var MouseHandlerMoveConnectorSideState_1 = __webpack_require__(481);
-var MouseHandlerDragParameterPointState_1 = __webpack_require__(4908);
-var MouseHandlerCreateConnectorState_1 = __webpack_require__(5627);
-var MouseHandlerMoveConnectorOrthogonalSideState_1 = __webpack_require__(5209);
-var MouseHandlerToolboxDraggingState_1 = __webpack_require__(6918);
-var MouseHandlerMoveConnectorTextState_1 = __webpack_require__(5391);
-var MouseHandlerDefaultStateBase_1 = __webpack_require__(8213);
-var MouseHandlerMoveShapeState_1 = __webpack_require__(9979);
-var Connector_1 = __webpack_require__(7959);
-var MouseHandlerMoveConnectorState_1 = __webpack_require__(5168);
+var Event_1 = __webpack_require__(5428);
+var MouseHandlerMoveConnectorPointState_1 = __webpack_require__(3894);
+var MouseHandlerResizeShapeState_1 = __webpack_require__(5355);
+var MouseHandlerMoveConnectorSideState_1 = __webpack_require__(401);
+var MouseHandlerDragParameterPointState_1 = __webpack_require__(8503);
+var MouseHandlerCreateConnectorState_1 = __webpack_require__(4237);
+var MouseHandlerMoveConnectorOrthogonalSideState_1 = __webpack_require__(1988);
+var MouseHandlerToolboxDraggingState_1 = __webpack_require__(18);
+var MouseHandlerMoveConnectorTextState_1 = __webpack_require__(2037);
+var MouseHandlerDefaultStateBase_1 = __webpack_require__(9550);
+var MouseHandlerMoveShapeState_1 = __webpack_require__(78);
+var Connector_1 = __webpack_require__(6320);
+var MouseHandlerMoveConnectorState_1 = __webpack_require__(1616);
 var MouseHandlerDefaultState = (function (_super) {
     __extends(MouseHandlerDefaultState, _super);
     function MouseHandlerDefaultState() {
@@ -12673,20 +12845,22 @@ var MouseHandlerDefaultState = (function (_super) {
 exports.MouseHandlerDefaultState = MouseHandlerDefaultState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8213:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9550
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12694,14 +12868,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDefaultStateBase = void 0;
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var Event_1 = __webpack_require__(6031);
-var MouseHandlerToggleShapeExpandedState_1 = __webpack_require__(5752);
-var MouseHandlerSelectionState_1 = __webpack_require__(4869);
-var MouseHandlerZoomOnWheelState_1 = __webpack_require__(7189);
-var MouseHandlerScrollingState_1 = __webpack_require__(9582);
-var unit_converter_1 = __webpack_require__(9291);
-var MouseHandlerZoomOnPinchState_1 = __webpack_require__(8461);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var Event_1 = __webpack_require__(5428);
+var MouseHandlerToggleShapeExpandedState_1 = __webpack_require__(868);
+var MouseHandlerSelectionState_1 = __webpack_require__(5094);
+var MouseHandlerZoomOnWheelState_1 = __webpack_require__(5715);
+var MouseHandlerScrollingState_1 = __webpack_require__(2325);
+var unit_converter_1 = __webpack_require__(9500);
+var MouseHandlerZoomOnPinchState_1 = __webpack_require__(2270);
 var MouseHandlerDefaultStateBase = (function (_super) {
     __extends(MouseHandlerDefaultStateBase, _super);
     function MouseHandlerDefaultStateBase(handler, history, selection, model, view, visualizerManager, shapeDescriptionManager, settings) {
@@ -12842,20 +13016,22 @@ var MouseHandlerDefaultStateBase = (function (_super) {
 exports.MouseHandlerDefaultStateBase = MouseHandlerDefaultStateBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8502:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6696
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12863,7 +13039,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDefaultTouchState = void 0;
-var MouseHandlerDefaultState_1 = __webpack_require__(3250);
+var MouseHandlerDefaultState_1 = __webpack_require__(7011);
 var MouseHandlerDefaultTouchState = (function (_super) {
     __extends(MouseHandlerDefaultTouchState, _super);
     function MouseHandlerDefaultTouchState() {
@@ -12891,20 +13067,22 @@ var MouseHandlerDefaultTouchState = (function (_super) {
 exports.MouseHandlerDefaultTouchState = MouseHandlerDefaultTouchState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9993
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -12912,11 +13090,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDragDiagramItemStateBase = exports.DraggingConnector = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var Event_1 = __webpack_require__(6031);
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var DragHelper_1 = __webpack_require__(4742);
+var ModelUtils_1 = __webpack_require__(1922);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var Event_1 = __webpack_require__(5428);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var DragHelper_1 = __webpack_require__(1416);
 var DraggingConnector = (function () {
     function DraggingConnector(connector) {
         this.connector = connector;
@@ -13060,20 +13238,22 @@ var MouseHandlerDragDiagramItemStateBase = (function (_super) {
 exports.MouseHandlerDragDiagramItemStateBase = MouseHandlerDragDiagramItemStateBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4908:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8503
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13081,8 +13261,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDragParameterPointState = void 0;
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var ChangeShapeParametersHistoryItem_1 = __webpack_require__(329);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var ChangeShapeParametersHistoryItem_1 = __webpack_require__(7489);
 var MouseHandlerDragParameterPointState = (function (_super) {
     __extends(MouseHandlerDragParameterPointState, _super);
     function MouseHandlerDragParameterPointState(handler, history, model) {
@@ -13113,20 +13293,22 @@ var MouseHandlerDragParameterPointState = (function (_super) {
 exports.MouseHandlerDragParameterPointState = MouseHandlerDragParameterPointState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8816:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2815
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13134,9 +13316,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerDraggingState = void 0;
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var Event_1 = __webpack_require__(6031);
-var unit_converter_1 = __webpack_require__(9291);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var Event_1 = __webpack_require__(5428);
+var unit_converter_1 = __webpack_require__(9500);
 var MouseHandlerDraggingState = (function (_super) {
     __extends(MouseHandlerDraggingState, _super);
     function MouseHandlerDraggingState(handler, history) {
@@ -13227,20 +13409,22 @@ var MouseHandlerDraggingState = (function (_super) {
 exports.MouseHandlerDraggingState = MouseHandlerDraggingState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5209:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1988
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13248,12 +13432,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorOrthogonalSideState = void 0;
-var point_1 = __webpack_require__(8900);
-var Connector_1 = __webpack_require__(7959);
-var DiagramItem_1 = __webpack_require__(3742);
-var ModelUtils_1 = __webpack_require__(4867);
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var Utils_1 = __webpack_require__(8675);
+var point_1 = __webpack_require__(5327);
+var Connector_1 = __webpack_require__(6320);
+var DiagramItem_1 = __webpack_require__(4824);
+var ModelUtils_1 = __webpack_require__(1922);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var Utils_1 = __webpack_require__(41);
 var MouseHandlerMoveConnectorOrthogonalSideState = (function (_super) {
     __extends(MouseHandlerMoveConnectorOrthogonalSideState, _super);
     function MouseHandlerMoveConnectorOrthogonalSideState(handler, history, model) {
@@ -13393,20 +13577,22 @@ var MouseHandlerMoveConnectorOrthogonalSideState = (function (_super) {
 exports.MouseHandlerMoveConnectorOrthogonalSideState = MouseHandlerMoveConnectorOrthogonalSideState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4402:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3894
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13414,11 +13600,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorPointState = void 0;
-var point_1 = __webpack_require__(8900);
-var MouseHandlerMoveConnectorPointStateBase_1 = __webpack_require__(7060);
-var Connector_1 = __webpack_require__(7959);
-var ModelUtils_1 = __webpack_require__(4867);
-var ConnectorProperties_1 = __webpack_require__(4612);
+var point_1 = __webpack_require__(5327);
+var MouseHandlerMoveConnectorPointStateBase_1 = __webpack_require__(8619);
+var Connector_1 = __webpack_require__(6320);
+var ModelUtils_1 = __webpack_require__(1922);
+var ConnectorProperties_1 = __webpack_require__(4385);
 var MouseHandlerMoveConnectorPointState = (function (_super) {
     __extends(MouseHandlerMoveConnectorPointState, _super);
     function MouseHandlerMoveConnectorPointState() {
@@ -13460,20 +13646,22 @@ var MouseHandlerMoveConnectorPointState = (function (_super) {
 exports.MouseHandlerMoveConnectorPointState = MouseHandlerMoveConnectorPointState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7060:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8619
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13481,12 +13669,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorPointStateBase = void 0;
-var Connector_1 = __webpack_require__(7959);
-var Event_1 = __webpack_require__(6031);
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var DeleteConnectionHistoryItem_1 = __webpack_require__(8930);
-var AddConnectionHistoryItem_1 = __webpack_require__(3477);
-var ModelUtils_1 = __webpack_require__(4867);
+var Connector_1 = __webpack_require__(6320);
+var Event_1 = __webpack_require__(5428);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var DeleteConnectionHistoryItem_1 = __webpack_require__(6155);
+var AddConnectionHistoryItem_1 = __webpack_require__(4139);
+var ModelUtils_1 = __webpack_require__(1922);
 var MouseHandlerMoveConnectorPointStateBase = (function (_super) {
     __extends(MouseHandlerMoveConnectorPointStateBase, _super);
     function MouseHandlerMoveConnectorPointStateBase(handler, history, model, visualizerManager) {
@@ -13611,20 +13799,22 @@ var MouseHandlerMoveConnectorPointStateBase = (function (_super) {
 exports.MouseHandlerMoveConnectorPointStateBase = MouseHandlerMoveConnectorPointStateBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 481:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 401
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13632,8 +13822,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorSideState = void 0;
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var ModelUtils_1 = __webpack_require__(4867);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var ModelUtils_1 = __webpack_require__(1922);
 var MouseHandlerMoveConnectorSideState = (function (_super) {
     __extends(MouseHandlerMoveConnectorSideState, _super);
     function MouseHandlerMoveConnectorSideState(handler, history, model) {
@@ -13673,20 +13863,22 @@ var MouseHandlerMoveConnectorSideState = (function (_super) {
 exports.MouseHandlerMoveConnectorSideState = MouseHandlerMoveConnectorSideState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5168:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1616
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13694,8 +13886,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorState = void 0;
-var ModelUtils_1 = __webpack_require__(4867);
-var MouseHandlerDragDiagramItemStateBase_1 = __webpack_require__(1717);
+var ModelUtils_1 = __webpack_require__(1922);
+var MouseHandlerDragDiagramItemStateBase_1 = __webpack_require__(9993);
 var MouseHandlerMoveConnectorState = (function (_super) {
     __extends(MouseHandlerMoveConnectorState, _super);
     function MouseHandlerMoveConnectorState(handler, history, model, selection, visualizerManager) {
@@ -13731,20 +13923,22 @@ var MouseHandlerMoveConnectorState = (function (_super) {
 exports.MouseHandlerMoveConnectorState = MouseHandlerMoveConnectorState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5391:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2037
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13752,9 +13946,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveConnectorTextState = void 0;
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var ChangeConnectorTextPositionHistoryItem_1 = __webpack_require__(45);
-var ChangeConnectorTextHistoryItem_1 = __webpack_require__(5144);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var ChangeConnectorTextPositionHistoryItem_1 = __webpack_require__(2771);
+var ChangeConnectorTextHistoryItem_1 = __webpack_require__(1914);
 var MouseHandlerMoveConnectorTextState = (function (_super) {
     __extends(MouseHandlerMoveConnectorTextState, _super);
     function MouseHandlerMoveConnectorTextState(handler, history, model) {
@@ -13793,20 +13987,22 @@ var MouseHandlerMoveConnectorTextState = (function (_super) {
 exports.MouseHandlerMoveConnectorTextState = MouseHandlerMoveConnectorTextState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9979:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 78
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13814,7 +14010,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerMoveShapeState = void 0;
-var MouseHandlerDragDiagramItemStateBase_1 = __webpack_require__(1717);
+var MouseHandlerDragDiagramItemStateBase_1 = __webpack_require__(9993);
 var MouseHandlerMoveShapeState = (function (_super) {
     __extends(MouseHandlerMoveShapeState, _super);
     function MouseHandlerMoveShapeState(handler, history, model, selection, visualizerManager) {
@@ -13843,20 +14039,22 @@ var MouseHandlerMoveShapeState = (function (_super) {
 exports.MouseHandlerMoveShapeState = MouseHandlerMoveShapeState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5609:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5355
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -13864,13 +14062,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerResizeShapeState = void 0;
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var Event_1 = __webpack_require__(6031);
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var ModelUtils_1 = __webpack_require__(4867);
-var ShapeDescription_1 = __webpack_require__(6794);
-var ModelOperationSettings_1 = __webpack_require__(6879);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var Event_1 = __webpack_require__(5428);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var ModelUtils_1 = __webpack_require__(1922);
+var ShapeDescription_1 = __webpack_require__(1280);
+var ModelOperationSettings_1 = __webpack_require__(5225);
 var MouseHandlerResizeShapeState = (function (_super) {
     __extends(MouseHandlerResizeShapeState, _super);
     function MouseHandlerResizeShapeState(handler, history, model, selection, visualizerManager, settings) {
@@ -14042,20 +14240,22 @@ var MouseHandlerResizeShapeState = (function (_super) {
 exports.MouseHandlerResizeShapeState = MouseHandlerResizeShapeState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9582:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2325
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14063,9 +14263,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerScrollingState = void 0;
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var Event_1 = __webpack_require__(6031);
-var point_1 = __webpack_require__(8900);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var Event_1 = __webpack_require__(5428);
+var point_1 = __webpack_require__(5327);
 var MouseHandlerScrollingState = (function (_super) {
     __extends(MouseHandlerScrollingState, _super);
     function MouseHandlerScrollingState(handler, view, selection) {
@@ -14116,20 +14316,22 @@ var MouseHandlerScrollingState = (function (_super) {
 exports.MouseHandlerScrollingState = MouseHandlerScrollingState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4869:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5094
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14137,9 +14339,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerSelectionState = void 0;
-var Event_1 = __webpack_require__(6031);
-var rectangle_1 = __webpack_require__(8011);
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
+var Event_1 = __webpack_require__(5428);
+var rectangle_1 = __webpack_require__(4412);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
 var MouseHandlerSelectionState = (function (_super) {
     __extends(MouseHandlerSelectionState, _super);
     function MouseHandlerSelectionState(handler, selection, visualizerManager) {
@@ -14180,20 +14382,22 @@ var MouseHandlerSelectionState = (function (_super) {
 exports.MouseHandlerSelectionState = MouseHandlerSelectionState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5434:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9589
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14201,7 +14405,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerCancellableState = exports.MouseHandlerStateBase = void 0;
-var key_1 = __webpack_require__(2153);
+var key_1 = __webpack_require__(6537);
 var MouseHandlerStateBase = (function () {
     function MouseHandlerStateBase(handler) {
         this.handler = handler;
@@ -14244,20 +14448,22 @@ var MouseHandlerCancellableState = (function (_super) {
 exports.MouseHandlerCancellableState = MouseHandlerCancellableState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5752:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 868
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14265,9 +14471,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerToggleShapeExpandedState = void 0;
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var ToggleShapeExpandedHistoryItem_1 = __webpack_require__(442);
-var ModelUtils_1 = __webpack_require__(4867);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var ToggleShapeExpandedHistoryItem_1 = __webpack_require__(946);
+var ModelUtils_1 = __webpack_require__(1922);
 var MouseHandlerToggleShapeExpandedState = (function (_super) {
     __extends(MouseHandlerToggleShapeExpandedState, _super);
     function MouseHandlerToggleShapeExpandedState(handler, history, model, selection) {
@@ -14296,20 +14502,22 @@ var MouseHandlerToggleShapeExpandedState = (function (_super) {
 exports.MouseHandlerToggleShapeExpandedState = MouseHandlerToggleShapeExpandedState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6918:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 18
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14317,15 +14525,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerToolboxDraggingState = exports.MouseHandlerBeforeToolboxDraggingState = void 0;
-var Event_1 = __webpack_require__(6031);
-var point_1 = __webpack_require__(8900);
-var AddShapeHistoryItem_1 = __webpack_require__(4145);
-var SetSelectionHistoryItem_1 = __webpack_require__(4297);
-var MouseHandlerDraggingState_1 = __webpack_require__(8816);
-var DeleteShapeHistoryItem_1 = __webpack_require__(1704);
-var ModelUtils_1 = __webpack_require__(4867);
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var ModelOperationSettings_1 = __webpack_require__(6879);
+var Event_1 = __webpack_require__(5428);
+var point_1 = __webpack_require__(5327);
+var AddShapeHistoryItem_1 = __webpack_require__(8214);
+var SetSelectionHistoryItem_1 = __webpack_require__(6512);
+var MouseHandlerDraggingState_1 = __webpack_require__(2815);
+var DeleteShapeHistoryItem_1 = __webpack_require__(1785);
+var ModelUtils_1 = __webpack_require__(1922);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var ModelOperationSettings_1 = __webpack_require__(5225);
 var NON_DOCUMENT_TIMER = 500;
 var LOCK_UPDATEPAGESIZE_TIMER = 300;
 var MouseHandlerBeforeToolboxDraggingState = (function (_super) {
@@ -14524,20 +14732,22 @@ var MouseHandlerToolboxDraggingState = (function (_super) {
 exports.MouseHandlerToolboxDraggingState = MouseHandlerToolboxDraggingState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8461:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2270
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14545,10 +14755,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerZoomOnPinchState = void 0;
-var Settings_1 = __webpack_require__(240);
-var point_1 = __webpack_require__(8900);
-var MouseHandlerScrollingState_1 = __webpack_require__(9582);
-var metrics_1 = __webpack_require__(5596);
+var Settings_1 = __webpack_require__(9307);
+var point_1 = __webpack_require__(5327);
+var MouseHandlerScrollingState_1 = __webpack_require__(2325);
+var metrics_1 = __webpack_require__(4496);
 var PINCH_CHANGE_DISTANCE = 1;
 var MouseHandlerZoomOnPinchState = (function (_super) {
     __extends(MouseHandlerZoomOnPinchState, _super);
@@ -14617,20 +14827,22 @@ var MouseHandlerZoomOnPinchState = (function (_super) {
 exports.MouseHandlerZoomOnPinchState = MouseHandlerZoomOnPinchState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7189:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5715
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14638,9 +14850,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MouseHandlerZoomOnWheelState = void 0;
-var MouseHandlerStateBase_1 = __webpack_require__(5434);
-var Event_1 = __webpack_require__(6031);
-var Settings_1 = __webpack_require__(240);
+var MouseHandlerStateBase_1 = __webpack_require__(9589);
+var Event_1 = __webpack_require__(5428);
+var Settings_1 = __webpack_require__(9307);
 var MouseHandlerZoomOnWheelState = (function (_super) {
     __extends(MouseHandlerZoomOnWheelState, _super);
     function MouseHandlerZoomOnWheelState(handler, settings, view) {
@@ -14692,20 +14904,20 @@ var MouseHandlerZoomOnWheelState = (function (_super) {
 exports.MouseHandlerZoomOnWheelState = MouseHandlerZoomOnWheelState;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8376:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 113
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextInputHandler = void 0;
-var ChangeShapeTextHistoryItem_1 = __webpack_require__(6516);
-var Event_1 = __webpack_require__(6031);
-var key_1 = __webpack_require__(2153);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var ChangeConnectorTextHistoryItem_1 = __webpack_require__(5144);
+var ChangeShapeTextHistoryItem_1 = __webpack_require__(6476);
+var Event_1 = __webpack_require__(5428);
+var key_1 = __webpack_require__(6537);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var ChangeConnectorTextHistoryItem_1 = __webpack_require__(1914);
 var TextInputHandler = (function () {
     function TextInputHandler(control) {
         this.control = control;
@@ -14830,10 +15042,10 @@ var TextInputHandler = (function () {
 exports.TextInputHandler = TextInputHandler;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3541:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5719
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -14893,20 +15105,22 @@ var ConnectionPointsVisualizer = (function () {
 exports.ConnectionPointsVisualizer = ConnectionPointsVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3702:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7873
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14914,7 +15128,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectionTargetVisualizer = exports.ConnectionTargetInfo = void 0;
-var TargetVisualizerBase_1 = __webpack_require__(3785);
+var TargetVisualizerBase_1 = __webpack_require__(2016);
 var ConnectionTargetInfo = (function () {
     function ConnectionTargetInfo(rect, strokeWidth) {
         this.rect = rect;
@@ -14942,20 +15156,22 @@ var ConnectionTargetVisualizer = (function (_super) {
 exports.ConnectionTargetVisualizer = ConnectionTargetVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9198:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5148
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -14963,7 +15179,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContainerTargetVisualizer = exports.ContainerTargetInfo = void 0;
-var TargetVisualizerBase_1 = __webpack_require__(3785);
+var TargetVisualizerBase_1 = __webpack_require__(2016);
 var ContainerTargetInfo = (function () {
     function ContainerTargetInfo(rect, strokeWidth) {
         this.rect = rect;
@@ -14990,10 +15206,10 @@ var ContainerTargetVisualizer = (function (_super) {
 exports.ContainerTargetVisualizer = ContainerTargetVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 371:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3788
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -15078,10 +15294,10 @@ var ExtensionLinesVisualizer = (function () {
 exports.ExtensionLinesVisualizer = ExtensionLinesVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6569:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8426
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -15114,10 +15330,10 @@ var ResizeInfoVisualizer = (function () {
 exports.ResizeInfoVisualizer = ResizeInfoVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4753:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5978
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -15146,10 +15362,10 @@ var SelectionRectVisualizer = (function () {
 exports.SelectionRectVisualizer = SelectionRectVisualizer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3785:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 2016
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -15182,20 +15398,22 @@ var TargetVisualizerBase = (function () {
 exports.TargetVisualizerBase = TargetVisualizerBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7733:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9860
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15203,21 +15421,21 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VisualizerManager = void 0;
-var ConnectionTargetVisualizer_1 = __webpack_require__(3702);
-var ContainerTargetVisualizer_1 = __webpack_require__(9198);
-var ExtensionLinesVisualizer_1 = __webpack_require__(371);
-var Event_1 = __webpack_require__(6031);
-var ConnectionPointsVisualizer_1 = __webpack_require__(3541);
-var Shape_1 = __webpack_require__(5503);
-var Utils_1 = __webpack_require__(8675);
-var segment_1 = __webpack_require__(1335);
-var point_1 = __webpack_require__(8900);
-var CanvasSelectionManager_1 = __webpack_require__(4000);
-var ModelUtils_1 = __webpack_require__(4867);
-var ResizeInfoVisualizer_1 = __webpack_require__(6569);
-var SelectionRectVisualizer_1 = __webpack_require__(4753);
-var batch_updatable_1 = __webpack_require__(1772);
-var LocalizationService_1 = __webpack_require__(6224);
+var ConnectionTargetVisualizer_1 = __webpack_require__(7873);
+var ContainerTargetVisualizer_1 = __webpack_require__(5148);
+var ExtensionLinesVisualizer_1 = __webpack_require__(3788);
+var Event_1 = __webpack_require__(5428);
+var ConnectionPointsVisualizer_1 = __webpack_require__(5719);
+var Shape_1 = __webpack_require__(8408);
+var Utils_1 = __webpack_require__(41);
+var segment_1 = __webpack_require__(476);
+var point_1 = __webpack_require__(5327);
+var CanvasSelectionManager_1 = __webpack_require__(9700);
+var ModelUtils_1 = __webpack_require__(1922);
+var ResizeInfoVisualizer_1 = __webpack_require__(8426);
+var SelectionRectVisualizer_1 = __webpack_require__(5978);
+var batch_updatable_1 = __webpack_require__(815);
+var LocalizationService_1 = __webpack_require__(820);
 var VisualizerManager = (function (_super) {
     __extends(VisualizerManager, _super);
     function VisualizerManager(selection, model, eventManager, settings, readOnly) {
@@ -15485,20 +15703,22 @@ var VisualizerManager = (function (_super) {
 exports.VisualizerManager = VisualizerManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7459:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3377
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15506,8 +15726,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VisualizerTouchManager = void 0;
-var VisualizersManager_1 = __webpack_require__(7733);
-var Event_1 = __webpack_require__(6031);
+var VisualizersManager_1 = __webpack_require__(9860);
+var Event_1 = __webpack_require__(5428);
 var SELECTION_CHANGED_EVENT = 1;
 var VisualizerTouchManager = (function (_super) {
     __extends(VisualizerTouchManager, _super);
@@ -15571,20 +15791,22 @@ var VisualizerTouchManager = (function (_super) {
 exports.VisualizerTouchManager = VisualizerTouchManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3477:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4139
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15592,8 +15814,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SetConnectionPointIndexHistoryItem = exports.AddConnectionHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Connector_1 = __webpack_require__(7959);
+var HistoryItem_1 = __webpack_require__(2616);
+var Connector_1 = __webpack_require__(6320);
 var AddConnectionHistoryItem = (function (_super) {
     __extends(AddConnectionHistoryItem, _super);
     function AddConnectionHistoryItem(connector, item, connectionPointIndex, position) {
@@ -15639,20 +15861,22 @@ var SetConnectionPointIndexHistoryItem = (function (_super) {
 exports.SetConnectionPointIndexHistoryItem = SetConnectionPointIndexHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9603:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4048
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15660,8 +15884,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddConnectorHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Connector_1 = __webpack_require__(7959);
+var HistoryItem_1 = __webpack_require__(2616);
+var Connector_1 = __webpack_require__(6320);
 var AddConnectorHistoryItem = (function (_super) {
     __extends(AddConnectorHistoryItem, _super);
     function AddConnectorHistoryItem(points, dataKey, renderPointsContext) {
@@ -15689,20 +15913,22 @@ var AddConnectorHistoryItem = (function (_super) {
 exports.AddConnectorHistoryItem = AddConnectorHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4430:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8226
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15710,7 +15936,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddConnectorPointHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var AddConnectorPointHistoryItem = (function (_super) {
     __extends(AddConnectorPointHistoryItem, _super);
     function AddConnectorPointHistoryItem(connectorKey, pointIndex, point) {
@@ -15742,20 +15968,22 @@ var AddConnectorPointHistoryItem = (function (_super) {
 exports.AddConnectorPointHistoryItem = AddConnectorPointHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4145:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8214
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15763,8 +15991,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddShapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Shape_1 = __webpack_require__(5503);
+var HistoryItem_1 = __webpack_require__(2616);
+var Shape_1 = __webpack_require__(8408);
 var AddShapeHistoryItem = (function (_super) {
     __extends(AddShapeHistoryItem, _super);
     function AddShapeHistoryItem(shapeDescription, position, text, dataKey) {
@@ -15792,20 +16020,22 @@ var AddShapeHistoryItem = (function (_super) {
 exports.AddShapeHistoryItem = AddShapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 58:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8818
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15813,7 +16043,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReplaceConnectorPointsHistoryItem = exports.ChangeConnectorPointsHistoryItem = exports.UpdateConnectorPointsHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var UpdateConnectorPointsHistoryItem = (function (_super) {
     __extends(UpdateConnectorPointsHistoryItem, _super);
     function UpdateConnectorPointsHistoryItem(connectorKey, newPoints) {
@@ -15874,20 +16104,22 @@ var ReplaceConnectorPointsHistoryItem = (function (_super) {
 exports.ReplaceConnectorPointsHistoryItem = ReplaceConnectorPointsHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 329:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7489
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15895,7 +16127,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShapeParametersHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeShapeParametersHistoryItem = (function (_super) {
     __extends(ChangeShapeParametersHistoryItem, _super);
     function ChangeShapeParametersHistoryItem(shapeKey, parameters) {
@@ -15918,20 +16150,22 @@ var ChangeShapeParametersHistoryItem = (function (_super) {
 exports.ChangeShapeParametersHistoryItem = ChangeShapeParametersHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 56:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2389
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15939,8 +16173,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShapeTypeHistoryItem = void 0;
-var ShapeParameters_1 = __webpack_require__(6629);
-var HistoryItem_1 = __webpack_require__(4412);
+var ShapeParameters_1 = __webpack_require__(4636);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeShapeTypeHistoryItem = (function (_super) {
     __extends(ChangeShapeTypeHistoryItem, _super);
     function ChangeShapeTypeHistoryItem(shape, newType) {
@@ -15964,20 +16198,22 @@ var ChangeShapeTypeHistoryItem = (function (_super) {
 exports.ChangeShapeTypeHistoryItem = ChangeShapeTypeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8930:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6155
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -15985,8 +16221,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteConnectionHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Connector_1 = __webpack_require__(7959);
+var HistoryItem_1 = __webpack_require__(2616);
+var Connector_1 = __webpack_require__(6320);
 var DeleteConnectionHistoryItem = (function (_super) {
     __extends(DeleteConnectionHistoryItem, _super);
     function DeleteConnectionHistoryItem(connector, position) {
@@ -16011,20 +16247,22 @@ var DeleteConnectionHistoryItem = (function (_super) {
 exports.DeleteConnectionHistoryItem = DeleteConnectionHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9143:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7392
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16032,7 +16270,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteConnectorHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var DeleteConnectorHistoryItem = (function (_super) {
     __extends(DeleteConnectorHistoryItem, _super);
     function DeleteConnectorHistoryItem(connectorKey) {
@@ -16053,20 +16291,22 @@ var DeleteConnectorHistoryItem = (function (_super) {
 exports.DeleteConnectorHistoryItem = DeleteConnectorHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1704:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1785
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16074,7 +16314,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteShapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var DeleteShapeHistoryItem = (function (_super) {
     __extends(DeleteShapeHistoryItem, _super);
     function DeleteShapeHistoryItem(shapeKey, allowed) {
@@ -16097,20 +16337,22 @@ var DeleteShapeHistoryItem = (function (_super) {
 exports.DeleteShapeHistoryItem = DeleteShapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3849:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 506
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16118,7 +16360,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImportConnectorHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ImportConnectorHistoryItem = (function (_super) {
     __extends(ImportConnectorHistoryItem, _super);
     function ImportConnectorHistoryItem(connector) {
@@ -16139,20 +16381,22 @@ var ImportConnectorHistoryItem = (function (_super) {
 exports.ImportConnectorHistoryItem = ImportConnectorHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4383:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7672
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16160,7 +16404,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImportShapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ImportShapeHistoryItem = (function (_super) {
     __extends(ImportShapeHistoryItem, _super);
     function ImportShapeHistoryItem(shape) {
@@ -16180,20 +16424,22 @@ var ImportShapeHistoryItem = (function (_super) {
 exports.ImportShapeHistoryItem = ImportShapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9310:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5323
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16201,7 +16447,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InsertToContainerHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var InsertToContainerHistoryItem = (function (_super) {
     __extends(InsertToContainerHistoryItem, _super);
     function InsertToContainerHistoryItem(item, container) {
@@ -16224,20 +16470,22 @@ var InsertToContainerHistoryItem = (function (_super) {
 exports.InsertToContainerHistoryItem = InsertToContainerHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8338:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6904
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16245,8 +16493,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MoveConnectorRightAnglePointsHistoryItem = exports.MoveConnectorPointHistoryItem = void 0;
-var point_1 = __webpack_require__(8900);
-var HistoryItem_1 = __webpack_require__(4412);
+var point_1 = __webpack_require__(5327);
+var HistoryItem_1 = __webpack_require__(2616);
 var MoveConnectorPointHistoryItem = (function (_super) {
     __extends(MoveConnectorPointHistoryItem, _super);
     function MoveConnectorPointHistoryItem(connectorKey, pointIndex, newPoint) {
@@ -16318,20 +16566,22 @@ var MoveConnectorRightAnglePointsHistoryItem = (function (_super) {
 exports.MoveConnectorRightAnglePointsHistoryItem = MoveConnectorRightAnglePointsHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4160:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3312
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16339,7 +16589,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MoveShapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var MoveShapeHistoryItem = (function (_super) {
     __extends(MoveShapeHistoryItem, _super);
     function MoveShapeHistoryItem(shapeKey, position) {
@@ -16362,20 +16612,22 @@ var MoveShapeHistoryItem = (function (_super) {
 exports.MoveShapeHistoryItem = MoveShapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9753:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7271
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16383,7 +16635,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RemoveFromContainerHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var RemoveFromContainerHistoryItem = (function (_super) {
     __extends(RemoveFromContainerHistoryItem, _super);
     function RemoveFromContainerHistoryItem(item) {
@@ -16406,20 +16658,22 @@ var RemoveFromContainerHistoryItem = (function (_super) {
 exports.RemoveFromContainerHistoryItem = RemoveFromContainerHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4629:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5685
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16427,7 +16681,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ResizeShapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ResizeShapeHistoryItem = (function (_super) {
     __extends(ResizeShapeHistoryItem, _super);
     function ResizeShapeHistoryItem(shapeKey, position, size) {
@@ -16452,20 +16706,22 @@ var ResizeShapeHistoryItem = (function (_super) {
 exports.ResizeShapeHistoryItem = ResizeShapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7626:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4044
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16473,7 +16729,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ScrollIntoViewOnUndoHistoryItem = exports.ScrollIntoViewOnRedoHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ScrollIntoViewOnRedoHistoryItem = (function (_super) {
     __extends(ScrollIntoViewOnRedoHistoryItem, _super);
     function ScrollIntoViewOnRedoHistoryItem(view, rectangle) {
@@ -16510,20 +16766,22 @@ var ScrollIntoViewOnUndoHistoryItem = (function (_super) {
 exports.ScrollIntoViewOnUndoHistoryItem = ScrollIntoViewOnUndoHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4297:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6512
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16531,7 +16789,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SetSelectionHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var SetSelectionHistoryItem = (function (_super) {
     __extends(SetSelectionHistoryItem, _super);
     function SetSelectionHistoryItem(selection, selectedKeys, forceChange) {
@@ -16553,16 +16811,16 @@ var SetSelectionHistoryItem = (function (_super) {
 exports.SetSelectionHistoryItem = SetSelectionHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1864:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7059
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.History = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Utils_1 = __webpack_require__(8675);
+var HistoryItem_1 = __webpack_require__(2616);
+var Utils_1 = __webpack_require__(41);
 var History = (function () {
     function History(modelManipulator, diagram) {
         this.modelManipulator = modelManipulator;
@@ -16726,20 +16984,22 @@ var History = (function () {
 exports.History = History;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4412:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ 2616
+(__unused_webpack_module, exports) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16798,20 +17058,22 @@ var CompositionHistoryItem = (function (_super) {
 exports.CompositionHistoryItem = CompositionHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7195:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3158
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16819,7 +17081,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageColorHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangePageColorHistoryItem = (function (_super) {
     __extends(ChangePageColorHistoryItem, _super);
     function ChangePageColorHistoryItem(value) {
@@ -16839,20 +17101,22 @@ var ChangePageColorHistoryItem = (function (_super) {
 exports.ChangePageColorHistoryItem = ChangePageColorHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1380:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8912
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16860,7 +17124,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageLandscapeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangePageLandscapeHistoryItem = (function (_super) {
     __extends(ChangePageLandscapeHistoryItem, _super);
     function ChangePageLandscapeHistoryItem(value) {
@@ -16880,20 +17144,22 @@ var ChangePageLandscapeHistoryItem = (function (_super) {
 exports.ChangePageLandscapeHistoryItem = ChangePageLandscapeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1044:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9066
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16901,7 +17167,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangePageSizeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangePageSizeHistoryItem = (function (_super) {
     __extends(ChangePageSizeHistoryItem, _super);
     function ChangePageSizeHistoryItem(size) {
@@ -16921,20 +17187,22 @@ var ChangePageSizeHistoryItem = (function (_super) {
 exports.ChangePageSizeHistoryItem = ChangePageSizeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7479:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8437
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16942,7 +17210,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeUnitsHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeUnitsHistoryItem = (function (_super) {
     __extends(ChangeUnitsHistoryItem, _super);
     function ChangeUnitsHistoryItem(units) {
@@ -16962,20 +17230,22 @@ var ChangeUnitsHistoryItem = (function (_super) {
 exports.ChangeUnitsHistoryItem = ChangeUnitsHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1729:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6035
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -16983,9 +17253,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ModelResizeHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var offsets_1 = __webpack_require__(4125);
-var size_1 = __webpack_require__(6353);
+var HistoryItem_1 = __webpack_require__(2616);
+var offsets_1 = __webpack_require__(8601);
+var size_1 = __webpack_require__(3844);
 var ModelResizeHistoryItem = (function (_super) {
     __extends(ModelResizeHistoryItem, _super);
     function ModelResizeHistoryItem(offset) {
@@ -17008,20 +17278,22 @@ var ModelResizeHistoryItem = (function (_super) {
 exports.ModelResizeHistoryItem = ModelResizeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4518:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4715
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17029,9 +17301,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdatePositionsOnPageResizeHistoryItem = void 0;
-var Connector_1 = __webpack_require__(7959);
-var Shape_1 = __webpack_require__(5503);
-var HistoryItem_1 = __webpack_require__(4412);
+var Connector_1 = __webpack_require__(6320);
+var Shape_1 = __webpack_require__(8408);
+var HistoryItem_1 = __webpack_require__(2616);
 var UpdatePositionsOnPageResizeHistoryItem = (function (_super) {
     __extends(UpdatePositionsOnPageResizeHistoryItem, _super);
     function UpdatePositionsOnPageResizeHistoryItem(offset) {
@@ -17065,20 +17337,22 @@ var UpdatePositionsOnPageResizeHistoryItem = (function (_super) {
 exports.UpdatePositionsOnPageResizeHistoryItem = UpdatePositionsOnPageResizeHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8236:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2448
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17086,7 +17360,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorPropertyHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeConnectorPropertyHistoryItem = (function (_super) {
     __extends(ChangeConnectorPropertyHistoryItem, _super);
     function ChangeConnectorPropertyHistoryItem(connectorKey, propertyName, value) {
@@ -17110,20 +17384,22 @@ var ChangeConnectorPropertyHistoryItem = (function (_super) {
 exports.ChangeConnectorPropertyHistoryItem = ChangeConnectorPropertyHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5144:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1914
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17131,7 +17407,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorTextHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeConnectorTextHistoryItem = (function (_super) {
     __extends(ChangeConnectorTextHistoryItem, _super);
     function ChangeConnectorTextHistoryItem(connector, position, text) {
@@ -17155,20 +17431,22 @@ var ChangeConnectorTextHistoryItem = (function (_super) {
 exports.ChangeConnectorTextHistoryItem = ChangeConnectorTextHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 45:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2771
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17176,7 +17454,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorTextPositionHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeConnectorTextPositionHistoryItem = (function (_super) {
     __extends(ChangeConnectorTextPositionHistoryItem, _super);
     function ChangeConnectorTextPositionHistoryItem(connector, position, newPosition) {
@@ -17199,20 +17477,22 @@ var ChangeConnectorTextPositionHistoryItem = (function (_super) {
 exports.ChangeConnectorTextPositionHistoryItem = ChangeConnectorTextPositionHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9559:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9735
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17220,8 +17500,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeCustomDataHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var Utils_1 = __webpack_require__(8675);
+var HistoryItem_1 = __webpack_require__(2616);
+var Utils_1 = __webpack_require__(41);
 var ChangeCustomDataHistoryItem = (function (_super) {
     __extends(ChangeCustomDataHistoryItem, _super);
     function ChangeCustomDataHistoryItem(itemKey, customData) {
@@ -17244,20 +17524,22 @@ var ChangeCustomDataHistoryItem = (function (_super) {
 exports.ChangeCustomDataHistoryItem = ChangeCustomDataHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7443:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1684
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17265,7 +17547,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeLockedHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeLockedHistoryItem = (function (_super) {
     __extends(ChangeLockedHistoryItem, _super);
     function ChangeLockedHistoryItem(item, locked) {
@@ -17288,20 +17570,22 @@ var ChangeLockedHistoryItem = (function (_super) {
 exports.ChangeLockedHistoryItem = ChangeLockedHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8210:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 472
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17309,8 +17593,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShapeImageHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
-var ImageInfo_1 = __webpack_require__(6617);
+var HistoryItem_1 = __webpack_require__(2616);
+var ImageInfo_1 = __webpack_require__(9406);
 var ChangeShapeImageHistoryItem = (function (_super) {
     __extends(ChangeShapeImageHistoryItem, _super);
     function ChangeShapeImageHistoryItem(item, imageUrl) {
@@ -17333,20 +17617,22 @@ var ChangeShapeImageHistoryItem = (function (_super) {
 exports.ChangeShapeImageHistoryItem = ChangeShapeImageHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6516:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6476
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17354,7 +17640,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShapeTextHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeShapeTextHistoryItem = (function (_super) {
     __extends(ChangeShapeTextHistoryItem, _super);
     function ChangeShapeTextHistoryItem(item, text) {
@@ -17377,20 +17663,22 @@ var ChangeShapeTextHistoryItem = (function (_super) {
 exports.ChangeShapeTextHistoryItem = ChangeShapeTextHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5982:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 672
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17398,7 +17686,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeZindexHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeZindexHistoryItem = (function (_super) {
     __extends(ChangeZindexHistoryItem, _super);
     function ChangeZindexHistoryItem(item, zIndex) {
@@ -17421,20 +17709,22 @@ var ChangeZindexHistoryItem = (function (_super) {
 exports.ChangeZindexHistoryItem = ChangeZindexHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 442:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 946
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17442,7 +17732,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToggleShapeExpandedHistoryItem = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ToggleShapeExpandedHistoryItem = (function (_super) {
     __extends(ToggleShapeExpandedHistoryItem, _super);
     function ToggleShapeExpandedHistoryItem(shape) {
@@ -17464,20 +17754,22 @@ var ToggleShapeExpandedHistoryItem = (function (_super) {
 exports.ToggleShapeExpandedHistoryItem = ToggleShapeExpandedHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4634:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3550
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17485,7 +17777,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStyleHistoryItem = void 0;
-var ChangeStyleHistoryItemBase_1 = __webpack_require__(3259);
+var ChangeStyleHistoryItemBase_1 = __webpack_require__(8371);
 var ChangeStyleHistoryItem = (function (_super) {
     __extends(ChangeStyleHistoryItem, _super);
     function ChangeStyleHistoryItem(itemKey, styleProperty, styleValue) {
@@ -17505,20 +17797,22 @@ var ChangeStyleHistoryItem = (function (_super) {
 exports.ChangeStyleHistoryItem = ChangeStyleHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3259:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8371
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17526,7 +17820,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStyleHistoryItemBase = void 0;
-var HistoryItem_1 = __webpack_require__(4412);
+var HistoryItem_1 = __webpack_require__(2616);
 var ChangeStyleHistoryItemBase = (function (_super) {
     __extends(ChangeStyleHistoryItemBase, _super);
     function ChangeStyleHistoryItemBase(itemKey, styleProperty, styleValue) {
@@ -17550,20 +17844,22 @@ var ChangeStyleHistoryItemBase = (function (_super) {
 exports.ChangeStyleHistoryItemBase = ChangeStyleHistoryItemBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 926:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5755
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17571,7 +17867,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeStyleTextHistoryItem = void 0;
-var ChangeStyleHistoryItemBase_1 = __webpack_require__(3259);
+var ChangeStyleHistoryItemBase_1 = __webpack_require__(8371);
 var ChangeStyleTextHistoryItem = (function (_super) {
     __extends(ChangeStyleTextHistoryItem, _super);
     function ChangeStyleTextHistoryItem(itemKey, styleProperty, styleValue) {
@@ -17591,17 +17887,17 @@ var ChangeStyleTextHistoryItem = (function (_super) {
 exports.ChangeStyleTextHistoryItem = ChangeStyleTextHistoryItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7176:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4062
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImageCache = exports.CacheImageInfo = void 0;
-var base64_1 = __webpack_require__(6477);
-var ImageInfo_1 = __webpack_require__(6617);
-var Utils_1 = __webpack_require__(8675);
+var base64_1 = __webpack_require__(807);
+var ImageInfo_1 = __webpack_require__(9406);
+var Utils_1 = __webpack_require__(41);
 var CacheImageInfo = (function () {
     function CacheImageInfo(base64, actualId, imageUrl, referenceInfo, isLoaded) {
         this._base64 = base64 !== undefined ? base64_1.Base64Utils.normalizeToDataUrl(base64, "image/png") : undefined;
@@ -17763,15 +18059,15 @@ var ImageCache = (function () {
 exports.ImageCache = ImageCache;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6617:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9406
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImageInfo = void 0;
-var base64_1 = __webpack_require__(6477);
+var base64_1 = __webpack_require__(807);
 var ImageInfo = (function () {
     function ImageInfo(imageUrlOrBase64) {
         this.url = undefined;
@@ -17831,15 +18127,15 @@ var ImageInfo = (function () {
 exports.ImageInfo = ImageInfo;
 
 
-/***/ }),
+/***/ },
 
-/***/ 590:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7841
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImageLoader = void 0;
-var ImageCache_1 = __webpack_require__(7176);
+var ImageCache_1 = __webpack_require__(4062);
 var ImageLoader = (function () {
     function ImageLoader(loadedCallback) {
         this.loadedCallback = loadedCallback;
@@ -17901,20 +18197,22 @@ var ImageLoader = (function () {
 exports.ImageLoader = ImageLoader;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5941:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6056
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -17922,10 +18220,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BPMNNode = exports.BPMNImporter = void 0;
-var Graph_1 = __webpack_require__(213);
-var ShapeTypes_1 = __webpack_require__(2259);
-var Structures_1 = __webpack_require__(8217);
-var ImportUtils_1 = __webpack_require__(6572);
+var Graph_1 = __webpack_require__(9071);
+var ShapeTypes_1 = __webpack_require__(3255);
+var Structures_1 = __webpack_require__(8573);
+var ImportUtils_1 = __webpack_require__(9933);
 var BPMNImporter = (function () {
     function BPMNImporter(xml) {
         this.doc = ImportUtils_1.ImportUtils.createDocument(xml);
@@ -18057,17 +18355,17 @@ var BPMNEdge = (function (_super) {
 }(Structures_1.Edge));
 
 
-/***/ }),
+/***/ },
 
-/***/ 5885:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8762
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Exporter = void 0;
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var Utils_1 = __webpack_require__(8675);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var Utils_1 = __webpack_require__(41);
 var Exporter = (function () {
     function Exporter() {
     }
@@ -18187,10 +18485,10 @@ var Exporter = (function () {
 exports.Exporter = Exporter;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6572:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9933
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -18217,20 +18515,22 @@ var ImportUtils = (function () {
 exports.ImportUtils = ImportUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2406:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7857
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -18238,17 +18538,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Importer = void 0;
-var Shape_1 = __webpack_require__(5503);
-var Utils_1 = __webpack_require__(8675);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var ShapeDescriptionManager_1 = __webpack_require__(8397);
-var Connector_1 = __webpack_require__(7959);
-var ImageInfo_1 = __webpack_require__(6617);
-var ImporterBase_1 = __webpack_require__(8577);
-var ImportUtils_1 = __webpack_require__(6572);
-var color_1 = __webpack_require__(13);
-var ConnectorRenderPointsContext_1 = __webpack_require__(1510);
+var Shape_1 = __webpack_require__(8408);
+var Utils_1 = __webpack_require__(41);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var ShapeDescriptionManager_1 = __webpack_require__(281);
+var Connector_1 = __webpack_require__(6320);
+var ImageInfo_1 = __webpack_require__(9406);
+var ImporterBase_1 = __webpack_require__(5596);
+var ImportUtils_1 = __webpack_require__(9933);
+var color_1 = __webpack_require__(9553);
+var ConnectorRenderPointsContext_1 = __webpack_require__(5359);
 var Importer = (function (_super) {
     __extends(Importer, _super);
     function Importer(shapeDescriptionManager, json) {
@@ -18378,16 +18678,16 @@ var Importer = (function (_super) {
 exports.Importer = Importer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8577:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5596
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImporterBase = void 0;
-var Model_1 = __webpack_require__(6613);
-var Shape_1 = __webpack_require__(5503);
+var Model_1 = __webpack_require__(455);
+var Shape_1 = __webpack_require__(8408);
 var ImporterBase = (function () {
     function ImporterBase(shapeDescriptionManager) {
         this.shapeDescriptionManager = shapeDescriptionManager;
@@ -18576,20 +18876,22 @@ var ImporterBase = (function () {
 exports.ImporterBase = ImporterBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 780:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7892
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -18597,16 +18899,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.XmlImporter = void 0;
-var Connector_1 = __webpack_require__(7959);
-var Shape_1 = __webpack_require__(5503);
-var ImporterBase_1 = __webpack_require__(8577);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ShapeDescriptionManager_1 = __webpack_require__(8397);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var ImportUtils_1 = __webpack_require__(6572);
-var color_1 = __webpack_require__(13);
-var unit_converter_1 = __webpack_require__(9291);
+var Connector_1 = __webpack_require__(6320);
+var Shape_1 = __webpack_require__(8408);
+var ImporterBase_1 = __webpack_require__(5596);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ShapeDescriptionManager_1 = __webpack_require__(281);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var ImportUtils_1 = __webpack_require__(9933);
+var color_1 = __webpack_require__(9553);
+var unit_converter_1 = __webpack_require__(9500);
 var XmlImporter = (function (_super) {
     __extends(XmlImporter, _super);
     function XmlImporter(shapeDescriptionManager, xml) {
@@ -18827,15 +19129,15 @@ var XmlImporter = (function (_super) {
 exports.XmlImporter = XmlImporter;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5227:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8464
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LayoutBuilder = void 0;
-var LayoutSettings_1 = __webpack_require__(8710);
+var LayoutSettings_1 = __webpack_require__(9212);
 var LayoutBuilder = (function () {
     function LayoutBuilder(settings, graph) {
         this.settings = settings;
@@ -18873,20 +19175,22 @@ var LayoutBuilder = (function () {
 exports.LayoutBuilder = LayoutBuilder;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1256:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2626
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -18894,17 +19198,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EdgeOnLayer = exports.NodeOnLayer = exports.SugiyamaNodesOrderer = exports.SugiyamaLayerDistributor = exports.SugiyamaLayoutBuilder = void 0;
-var BaseBuilder_1 = __webpack_require__(5227);
-var Graph_1 = __webpack_require__(213);
-var NodeLayout_1 = __webpack_require__(617);
-var Structures_1 = __webpack_require__(8217);
-var ListUtils_1 = __webpack_require__(701);
-var search_1 = __webpack_require__(2400);
-var point_1 = __webpack_require__(8900);
-var LayoutSettings_1 = __webpack_require__(8710);
-var GraphLayout_1 = __webpack_require__(8119);
-var Connector_1 = __webpack_require__(7959);
-var CycleRemover_1 = __webpack_require__(7309);
+var BaseBuilder_1 = __webpack_require__(8464);
+var Graph_1 = __webpack_require__(9071);
+var NodeLayout_1 = __webpack_require__(8501);
+var Structures_1 = __webpack_require__(8573);
+var ListUtils_1 = __webpack_require__(6961);
+var search_1 = __webpack_require__(124);
+var point_1 = __webpack_require__(5327);
+var LayoutSettings_1 = __webpack_require__(9212);
+var GraphLayout_1 = __webpack_require__(1441);
+var Connector_1 = __webpack_require__(6320);
+var CycleRemover_1 = __webpack_require__(1114);
 var SugiyamaLayoutBuilder = (function (_super) {
     __extends(SugiyamaLayoutBuilder, _super);
     function SugiyamaLayoutBuilder() {
@@ -19498,20 +19802,22 @@ function trunc(val) {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ 9533:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8533
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -19519,16 +19825,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TreeLayoutBuilder = void 0;
-var GraphLayout_1 = __webpack_require__(8119);
-var Tree_1 = __webpack_require__(5148);
-var NodeLayout_1 = __webpack_require__(617);
-var Utils_1 = __webpack_require__(8675);
-var point_1 = __webpack_require__(8900);
-var BaseBuilder_1 = __webpack_require__(5227);
-var Structures_1 = __webpack_require__(8217);
-var DiagramItem_1 = __webpack_require__(3742);
-var LayoutSettings_1 = __webpack_require__(8710);
-var Graph_1 = __webpack_require__(213);
+var GraphLayout_1 = __webpack_require__(1441);
+var Tree_1 = __webpack_require__(5483);
+var NodeLayout_1 = __webpack_require__(8501);
+var Utils_1 = __webpack_require__(41);
+var point_1 = __webpack_require__(5327);
+var BaseBuilder_1 = __webpack_require__(8464);
+var Structures_1 = __webpack_require__(8573);
+var DiagramItem_1 = __webpack_require__(4824);
+var LayoutSettings_1 = __webpack_require__(9212);
+var Graph_1 = __webpack_require__(9071);
 var TreeLayoutBuilder = (function (_super) {
     __extends(TreeLayoutBuilder, _super);
     function TreeLayoutBuilder() {
@@ -19677,20 +19983,22 @@ var TreeLayoutBuilder = (function (_super) {
 exports.TreeLayoutBuilder = TreeLayoutBuilder;
 
 
-/***/ }),
+/***/ },
 
-/***/ 213:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9071
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -19698,10 +20006,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GraphIterator = exports.FastGraph = exports.Graph = void 0;
-var Structures_1 = __webpack_require__(8217);
-var Shape_1 = __webpack_require__(5503);
-var search_1 = __webpack_require__(2400);
-var ListUtils_1 = __webpack_require__(701);
+var Structures_1 = __webpack_require__(8573);
+var Shape_1 = __webpack_require__(8408);
+var search_1 = __webpack_require__(124);
+var ListUtils_1 = __webpack_require__(6961);
 var GraphBase = (function () {
     function GraphBase(nodes, edges) {
         this.nodeMap = {};
@@ -19915,15 +20223,15 @@ var GraphIterator = (function () {
 exports.GraphIterator = GraphIterator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7819:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3903
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GraphInfo = void 0;
-var LayoutUtils_1 = __webpack_require__(1755);
+var LayoutUtils_1 = __webpack_require__(8060);
 var GraphInfo = (function () {
     function GraphInfo(container, sourceGraph) {
         this.container = container;
@@ -19964,16 +20272,16 @@ var GraphInfo = (function () {
 exports.GraphInfo = GraphInfo;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8119:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1441
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GraphLayout = void 0;
-var Utils_1 = __webpack_require__(8675);
-var NodeLayout_1 = __webpack_require__(617);
+var Utils_1 = __webpack_require__(41);
+var NodeLayout_1 = __webpack_require__(8501);
 var GraphLayout = (function () {
     function GraphLayout() {
         this.nodeKeys = [];
@@ -20036,20 +20344,22 @@ var GraphLayout = (function () {
 exports.GraphLayout = GraphLayout;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8710:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9212
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -20057,7 +20367,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Alignment = exports.DataLayoutOrientation = exports.LogicalDirectionKind = exports.TreeLayoutSettings = exports.LayoutSettings = void 0;
-var Connector_1 = __webpack_require__(7959);
+var Connector_1 = __webpack_require__(6320);
 var LayoutSettings = (function () {
     function LayoutSettings(gridSize) {
         this.orientation = DataLayoutOrientation.Vertical;
@@ -20099,15 +20409,15 @@ var Alignment;
 })(Alignment = exports.Alignment || (exports.Alignment = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 1755:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8060
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LayoutUtils = void 0;
-var NodeLayout_1 = __webpack_require__(617);
+var NodeLayout_1 = __webpack_require__(8501);
 var LayoutUtils = (function () {
     function LayoutUtils() {
     }
@@ -20130,15 +20440,15 @@ var LayoutUtils = (function () {
 exports.LayoutUtils = LayoutUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 617:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8501
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Margin = exports.EdgeLayout = exports.NodeLayout = exports.NodeInfo = void 0;
-var rectangle_1 = __webpack_require__(8011);
+var rectangle_1 = __webpack_require__(4412);
 var NodeInfo = (function () {
     function NodeInfo(key, margin, size, connectionPoints) {
         if (connectionPoints === void 0) { connectionPoints = []; }
@@ -20197,14 +20507,14 @@ var Margin = (function () {
 exports.Margin = Margin;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8217:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8573
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ConnectionMode = exports.PositionInfo = exports.Edge = void 0;
+exports.ConnectionMode = exports.Edge = void 0;
 var Edge = (function () {
     function Edge(key, from, to, weight) {
         if (weight === void 0) { weight = 1; }
@@ -20222,14 +20532,6 @@ var Edge = (function () {
     return Edge;
 }());
 exports.Edge = Edge;
-var PositionInfo = (function () {
-    function PositionInfo(item, position) {
-        this.item = item;
-        this.position = position;
-    }
-    return PositionInfo;
-}());
-exports.PositionInfo = PositionInfo;
 var ConnectionMode;
 (function (ConnectionMode) {
     ConnectionMode[ConnectionMode["Outgoing"] = 1] = "Outgoing";
@@ -20238,15 +20540,15 @@ var ConnectionMode;
 })(ConnectionMode = exports.ConnectionMode || (exports.ConnectionMode = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 5148:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5483
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Tree = void 0;
-var Structures_1 = __webpack_require__(8217);
+var Structures_1 = __webpack_require__(8573);
 var Tree = (function () {
     function Tree(root, parentToChildren) {
         var _this = this;
@@ -20307,17 +20609,17 @@ var Tree = (function () {
 exports.Tree = Tree;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7309:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1114
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CycleRemover = void 0;
-var Graph_1 = __webpack_require__(213);
-var Structures_1 = __webpack_require__(8217);
-var ListUtils_1 = __webpack_require__(701);
+var Graph_1 = __webpack_require__(9071);
+var Structures_1 = __webpack_require__(8573);
+var ListUtils_1 = __webpack_require__(6961);
 var CycleRemover = (function () {
     function CycleRemover() {
     }
@@ -20471,20 +20773,22 @@ var CycleRemover = (function () {
 exports.CycleRemover = CycleRemover;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1057:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3858
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -20492,7 +20796,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RTree = void 0;
-var rectangle_1 = __webpack_require__(8011);
+var rectangle_1 = __webpack_require__(4412);
 var RTree = (function () {
     function RTree(maxWidth) {
         if (maxWidth === void 0) { maxWidth = 6; }
@@ -20735,19 +21039,19 @@ function expandRect(rect, other) {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ 701:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 6961
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HashSet = void 0;
 var HashSet = (function () {
     function HashSet(list, getHashCode) {
-        var _this = this;
         if (list === void 0) { list = []; }
         if (getHashCode === void 0) { getHashCode = function (item) { return item.toString(); }; }
+        var _this = this;
         this.items = [];
         this.map = {};
         this.getHashCode = getHashCode;
@@ -20801,16 +21105,16 @@ var HashSet = (function () {
 exports.HashSet = HashSet;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6224:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 820
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramLocalizationService = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var Enums_1 = __webpack_require__(5383);
+var ShapeTypes_1 = __webpack_require__(3255);
+var Enums_1 = __webpack_require__(9254);
 var DiagramLocalizationService = (function () {
     function DiagramLocalizationService() {
     }
@@ -20870,175 +21174,22 @@ DiagramLocalizationService.shapeTexts[ShapeTypes_1.ShapeTypes.CardWithImageOnTop
 DiagramLocalizationService.shapeTexts[ShapeTypes_1.ShapeTypes.CardWithImageOnRight] = "Card with Image on the Right";
 
 
-/***/ }),
+/***/ },
 
-/***/ 6879:
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DiagramModelOperation = exports.ModelOperationSettings = void 0;
-var ModelOperationSettings = (function () {
-    function ModelOperationSettings() {
-        this._addShape = true;
-        this._addShapeFromToolbox = true;
-        this._deleteShape = true;
-        this._deleteConnector = true;
-        this._changeConnection = true;
-        this._changeConnectorPoints = true;
-        this._changeShapeText = true;
-        this._changeConnectorText = true;
-        this._resizeShape = true;
-        this._moveShape = true;
-    }
-    Object.defineProperty(ModelOperationSettings.prototype, "addShape", {
-        get: function () { return this._addShape; },
-        set: function (value) {
-            if (value !== this._addShape)
-                this._addShape = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "addShapeFromToolbox", {
-        get: function () { return this._addShapeFromToolbox; },
-        set: function (value) {
-            if (value !== this._addShapeFromToolbox)
-                this._addShapeFromToolbox = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "deleteShape", {
-        get: function () { return this._deleteShape; },
-        set: function (value) {
-            if (value !== this._deleteShape)
-                this._deleteShape = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "deleteConnector", {
-        get: function () { return this._deleteConnector; },
-        set: function (value) {
-            if (value !== this._deleteConnector)
-                this._deleteConnector = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "changeConnection", {
-        get: function () { return this._changeConnection; },
-        set: function (value) {
-            if (value !== this._changeConnection)
-                this._changeConnection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "changeConnectorPoints", {
-        get: function () { return this._changeConnectorPoints; },
-        set: function (value) {
-            if (value !== this._changeConnectorPoints)
-                this._changeConnectorPoints = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "changeShapeText", {
-        get: function () { return this._changeShapeText; },
-        set: function (value) {
-            if (value !== this._changeShapeText)
-                this._changeShapeText = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "changeConnectorText", {
-        get: function () { return this._changeConnectorText; },
-        set: function (value) {
-            if (value !== this._changeConnectorText)
-                this._changeConnectorText = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "resizeShape", {
-        get: function () { return this._resizeShape; },
-        set: function (value) {
-            if (value !== this._resizeShape)
-                this._resizeShape = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ModelOperationSettings.prototype, "moveShape", {
-        get: function () { return this._moveShape; },
-        set: function (value) {
-            if (value !== this._moveShape)
-                this._moveShape = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ModelOperationSettings.prototype.applySettings = function (settings) {
-        if (!settings)
-            return;
-        if (typeof settings.addShape === "boolean")
-            this.addShape = settings.addShape;
-        if (typeof settings.addShapeFromToolbox === "boolean")
-            this.addShapeFromToolbox = settings.addShapeFromToolbox;
-        if (typeof settings.deleteShape === "boolean")
-            this.deleteShape = settings.deleteShape;
-        if (typeof settings.deleteConnector === "boolean")
-            this.deleteConnector = settings.deleteConnector;
-        if (typeof settings.changeConnection === "boolean")
-            this.changeConnection = settings.changeConnection;
-        if (typeof settings.changeConnectorPoints === "boolean")
-            this.changeConnectorPoints = settings.changeConnectorPoints;
-        if (typeof settings.changeShapeText === "boolean")
-            this.changeShapeText = settings.changeShapeText;
-        if (typeof settings.changeConnectorText === "boolean")
-            this.changeConnectorText = settings.changeConnectorText;
-        if (typeof settings.resizeShape === "boolean")
-            this.resizeShape = settings.resizeShape;
-        if (typeof settings.moveShape === "boolean")
-            this.moveShape = settings.moveShape;
-    };
-    return ModelOperationSettings;
-}());
-exports.ModelOperationSettings = ModelOperationSettings;
-var DiagramModelOperation;
-(function (DiagramModelOperation) {
-    DiagramModelOperation[DiagramModelOperation["AddShape"] = 0] = "AddShape";
-    DiagramModelOperation[DiagramModelOperation["AddShapeFromToolbox"] = 1] = "AddShapeFromToolbox";
-    DiagramModelOperation[DiagramModelOperation["DeleteShape"] = 2] = "DeleteShape";
-    DiagramModelOperation[DiagramModelOperation["DeleteConnector"] = 3] = "DeleteConnector";
-    DiagramModelOperation[DiagramModelOperation["ChangeConnection"] = 4] = "ChangeConnection";
-    DiagramModelOperation[DiagramModelOperation["ChangeConnectorPoints"] = 5] = "ChangeConnectorPoints";
-    DiagramModelOperation[DiagramModelOperation["BeforeChangeShapeText"] = 6] = "BeforeChangeShapeText";
-    DiagramModelOperation[DiagramModelOperation["ChangeShapeText"] = 7] = "ChangeShapeText";
-    DiagramModelOperation[DiagramModelOperation["BeforeChangeConnectorText"] = 8] = "BeforeChangeConnectorText";
-    DiagramModelOperation[DiagramModelOperation["ChangeConnectorText"] = 9] = "ChangeConnectorText";
-    DiagramModelOperation[DiagramModelOperation["ResizeShape"] = 10] = "ResizeShape";
-    DiagramModelOperation[DiagramModelOperation["MoveShape"] = 11] = "MoveShape";
-})(DiagramModelOperation = exports.DiagramModelOperation || (exports.DiagramModelOperation = {}));
-
-
-/***/ }),
-
-/***/ 7228:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4856
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21046,8 +21197,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectionPoint = void 0;
-var point_1 = __webpack_require__(8900);
-var DiagramItem_1 = __webpack_require__(3742);
+var point_1 = __webpack_require__(5327);
+var DiagramItem_1 = __webpack_require__(4824);
 var ConnectionPoint = (function (_super) {
     __extends(ConnectionPoint, _super);
     function ConnectionPoint(x, y, side) {
@@ -21073,20 +21224,22 @@ var ConnectionPoint = (function (_super) {
 exports.ConnectionPoint = ConnectionPoint;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5800:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3105
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21094,8 +21247,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsCalculator = void 0;
-var ConnectorPointsCalculatorBase_1 = __webpack_require__(7595);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var ConnectorPointsCalculatorBase_1 = __webpack_require__(1532);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsCalculator = (function (_super) {
     __extends(ConnectorPointsCalculator, _super);
     function ConnectorPointsCalculator() {
@@ -21109,10 +21262,10 @@ var ConnectorPointsCalculator = (function (_super) {
 exports.ConnectorPointsCalculator = ConnectorPointsCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7595:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 1532
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -21126,20 +21279,22 @@ var ConnectorPointsCalculatorBase = (function () {
 exports.ConnectorPointsCalculatorBase = ConnectorPointsCalculatorBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2342:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3918
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21147,16 +21302,16 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalCalculator = void 0;
-var rectangle_1 = __webpack_require__(8011);
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectorPointsCalculatorBase_1 = __webpack_require__(7595);
-var ConnectorPointsOrthogonalUndefinedSideCalculator_1 = __webpack_require__(1686);
-var ConnectorPointsOrthogonalSouthSideCalculator_1 = __webpack_require__(1774);
-var ConnectorPointsOrthogonalNorthSideCalculator_1 = __webpack_require__(993);
-var ConnectorPointsOrthogonalEastSideCalculator_1 = __webpack_require__(2290);
-var ConnectorPointsOrthogonalWestSideCalculator_1 = __webpack_require__(7369);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
-var ModelUtils_1 = __webpack_require__(4867);
+var rectangle_1 = __webpack_require__(4412);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectorPointsCalculatorBase_1 = __webpack_require__(1532);
+var ConnectorPointsOrthogonalUndefinedSideCalculator_1 = __webpack_require__(8535);
+var ConnectorPointsOrthogonalSouthSideCalculator_1 = __webpack_require__(5442);
+var ConnectorPointsOrthogonalNorthSideCalculator_1 = __webpack_require__(2564);
+var ConnectorPointsOrthogonalEastSideCalculator_1 = __webpack_require__(6568);
+var ConnectorPointsOrthogonalWestSideCalculator_1 = __webpack_require__(522);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
+var ModelUtils_1 = __webpack_require__(1922);
 var ConnectorPointsOrthogonalCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalCalculator, _super);
     function ConnectorPointsOrthogonalCalculator(connector) {
@@ -21314,20 +21469,22 @@ var ConnectorPointsOrthogonalCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalCalculator = ConnectorPointsOrthogonalCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2290:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6568
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21335,9 +21492,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalEastSideCalculator = void 0;
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(1816);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(3976);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsOrthogonalEastSideCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalEastSideCalculator, _super);
     function ConnectorPointsOrthogonalEastSideCalculator(parent) {
@@ -21509,20 +21666,22 @@ var ConnectorPointsOrthogonalEastSideCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalEastSideCalculator = ConnectorPointsOrthogonalEastSideCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 993:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2564
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21530,9 +21689,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalNorthSideCalculator = void 0;
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(1816);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(3976);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsOrthogonalNorthSideCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalNorthSideCalculator, _super);
     function ConnectorPointsOrthogonalNorthSideCalculator(parent) {
@@ -21704,17 +21863,17 @@ var ConnectorPointsOrthogonalNorthSideCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalNorthSideCalculator = ConnectorPointsOrthogonalNorthSideCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1816:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3976
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalSideCalculatorBase = void 0;
-var rectangle_1 = __webpack_require__(8011);
-var DiagramItem_1 = __webpack_require__(3742);
-var Connector_1 = __webpack_require__(7959);
+var rectangle_1 = __webpack_require__(4412);
+var DiagramItem_1 = __webpack_require__(4824);
+var Connector_1 = __webpack_require__(6320);
 var ConnectorPointsOrthogonalSideCalculatorBase = (function () {
     function ConnectorPointsOrthogonalSideCalculatorBase(parent) {
         this.parent = parent;
@@ -21808,20 +21967,22 @@ var ConnectorPointsOrthogonalSideCalculatorBase = (function () {
 exports.ConnectorPointsOrthogonalSideCalculatorBase = ConnectorPointsOrthogonalSideCalculatorBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1774:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5442
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -21829,9 +21990,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalSouthSideCalculator = void 0;
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(1816);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(3976);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsOrthogonalSouthSideCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalSouthSideCalculator, _super);
     function ConnectorPointsOrthogonalSouthSideCalculator(parent) {
@@ -22003,20 +22164,22 @@ var ConnectorPointsOrthogonalSouthSideCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalSouthSideCalculator = ConnectorPointsOrthogonalSouthSideCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1686:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8535
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -22024,8 +22187,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalUndefinedSideCalculator = void 0;
-var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(1816);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(3976);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsOrthogonalUndefinedSideCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalUndefinedSideCalculator, _super);
     function ConnectorPointsOrthogonalUndefinedSideCalculator(parent) {
@@ -22092,20 +22255,22 @@ var ConnectorPointsOrthogonalUndefinedSideCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalUndefinedSideCalculator = ConnectorPointsOrthogonalUndefinedSideCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7369:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 522
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -22113,9 +22278,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorPointsOrthogonalWestSideCalculator = void 0;
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(1816);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectorPointsOrthogonalSideCalculatorBase_1 = __webpack_require__(3976);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorPointsOrthogonalWestSideCalculator = (function (_super) {
     __extends(ConnectorPointsOrthogonalWestSideCalculator, _super);
     function ConnectorPointsOrthogonalWestSideCalculator(parent) {
@@ -22287,20 +22452,22 @@ var ConnectorPointsOrthogonalWestSideCalculator = (function (_super) {
 exports.ConnectorPointsOrthogonalWestSideCalculator = ConnectorPointsOrthogonalWestSideCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7959:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6320
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -22308,27 +22475,27 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Connector = exports.CONNECTOR_DEFAULT_TEXT_POSITION = exports.ConnectorPosition = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var rectangle_1 = __webpack_require__(8011);
-var segment_1 = __webpack_require__(1335);
-var size_1 = __webpack_require__(6353);
-var CanvasManagerBase_1 = __webpack_require__(7716);
-var NativeItem_1 = __webpack_require__(7185);
-var Event_1 = __webpack_require__(6031);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var PathPrimitive_1 = __webpack_require__(7724);
-var TextPrimitive_1 = __webpack_require__(9416);
-var Utils_1 = __webpack_require__(3500);
-var Settings_1 = __webpack_require__(240);
-var Utils_2 = __webpack_require__(8675);
-var DiagramItem_1 = __webpack_require__(3742);
-var ModelUtils_1 = __webpack_require__(4867);
-var ConnectorPointsCalculator_1 = __webpack_require__(5800);
-var ConnectorPointsOrthogonalCalculator_1 = __webpack_require__(2342);
-var ConnectorLineEndingStrategies_1 = __webpack_require__(5454);
-var ConnectorProperties_1 = __webpack_require__(4612);
-var ConnectorTexts_1 = __webpack_require__(4351);
-var ConnectorRenderPointsContext_1 = __webpack_require__(1510);
+var unit_converter_1 = __webpack_require__(9500);
+var rectangle_1 = __webpack_require__(4412);
+var segment_1 = __webpack_require__(476);
+var size_1 = __webpack_require__(3844);
+var CanvasManagerBase_1 = __webpack_require__(5707);
+var NativeItem_1 = __webpack_require__(4235);
+var Event_1 = __webpack_require__(5428);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var PathPrimitive_1 = __webpack_require__(6208);
+var TextPrimitive_1 = __webpack_require__(128);
+var Utils_1 = __webpack_require__(2136);
+var Settings_1 = __webpack_require__(9307);
+var Utils_2 = __webpack_require__(41);
+var DiagramItem_1 = __webpack_require__(4824);
+var ModelUtils_1 = __webpack_require__(1922);
+var ConnectorPointsCalculator_1 = __webpack_require__(3105);
+var ConnectorPointsOrthogonalCalculator_1 = __webpack_require__(3918);
+var ConnectorLineEndingStrategies_1 = __webpack_require__(1960);
+var ConnectorProperties_1 = __webpack_require__(4385);
+var ConnectorTexts_1 = __webpack_require__(8514);
+var ConnectorRenderPointsContext_1 = __webpack_require__(5359);
 var ConnectorPosition;
 (function (ConnectorPosition) {
     ConnectorPosition[ConnectorPosition["Begin"] = 0] = "Begin";
@@ -22696,20 +22863,22 @@ var Connector = (function (_super) {
 exports.Connector = Connector;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5454:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1960
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -22717,8 +22886,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorLineEndingFilledTriangleStrategy = exports.ConnectorLineEndingOutlinedTriangleStrategy = exports.ConnectorLineEndingArrowStrategy = exports.ConnectorLineEndingNoneStrategy = exports.ConnectorLineEndingStrategy = void 0;
-var Utils_1 = __webpack_require__(8675);
-var PathPrimitive_1 = __webpack_require__(7724);
+var Utils_1 = __webpack_require__(41);
+var PathPrimitive_1 = __webpack_require__(6208);
 var ConnectorLineEndingStrategy = (function () {
     function ConnectorLineEndingStrategy(style) {
         this.style = style;
@@ -22847,10 +23016,10 @@ var ConnectorLineEndingFilledTriangleStrategy = (function (_super) {
 exports.ConnectorLineEndingFilledTriangleStrategy = ConnectorLineEndingFilledTriangleStrategy;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4612:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4385
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -22918,20 +23087,22 @@ var ConnectorProperties = (function () {
 exports.ConnectorProperties = ConnectorProperties;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9956
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -22939,7 +23110,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorRenderPoint = void 0;
-var point_1 = __webpack_require__(8900);
+var point_1 = __webpack_require__(5327);
 var ConnectorRenderPoint = (function (_super) {
     __extends(ConnectorRenderPoint, _super);
     function ConnectorRenderPoint(x, y, pointIndex, skipped) {
@@ -22982,10 +23153,10 @@ var ConnectorRenderPoint = (function (_super) {
 exports.ConnectorRenderPoint = ConnectorRenderPoint;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4351:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 8514
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -23051,10 +23222,10 @@ var ConnectorTexts = (function () {
 exports.ConnectorTexts = ConnectorTexts;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3975:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 1188
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -23092,20 +23263,22 @@ var AStarCalculator = (function () {
 exports.AStarCalculator = AStarCalculator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2180:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4045
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -23113,12 +23286,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AStarContext = exports.AStarContextBase = void 0;
-var SortedQueues_1 = __webpack_require__(3225);
-var UniqueAStarNodePositions_1 = __webpack_require__(1039);
-var AStarNode_1 = __webpack_require__(684);
-var segment_1 = __webpack_require__(1335);
-var RightAngleConnectorRoutingMathOperations_1 = __webpack_require__(5074);
-var Utils_1 = __webpack_require__(8675);
+var SortedQueues_1 = __webpack_require__(6210);
+var UniqueAStarNodePositions_1 = __webpack_require__(2721);
+var AStarNode_1 = __webpack_require__(2740);
+var segment_1 = __webpack_require__(476);
+var RightAngleConnectorRoutingMathOperations_1 = __webpack_require__(618);
+var Utils_1 = __webpack_require__(41);
 var AStarContextBase = (function () {
     function AStarContextBase(startPosition, targetPosition, maxStepsCount) {
         this.startPosition = startPosition;
@@ -23247,16 +23420,16 @@ var AStarContext = (function (_super) {
 exports.AStarContext = AStarContext;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9927:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8671
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IntersectedShapeZone = exports.AStarMetrics = exports.IntersectedShapesMetrics = exports.TurnDirectionMetrics = exports.IntersectedShapeMetrics = exports.RightAngleTurnDirection = void 0;
-var point_1 = __webpack_require__(8900);
-var metrics_1 = __webpack_require__(5596);
+var point_1 = __webpack_require__(5327);
+var metrics_1 = __webpack_require__(4496);
 var RightAngleTurnDirection;
 (function (RightAngleTurnDirection) {
     RightAngleTurnDirection[RightAngleTurnDirection["Straight"] = 0] = "Straight";
@@ -23401,10 +23574,10 @@ var IntersectedShapeZone;
 })(IntersectedShapeZone = exports.IntersectedShapeZone || (exports.IntersectedShapeZone = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 684:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 2740
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -23434,15 +23607,15 @@ var AStarNode = (function () {
 exports.AStarNode = AStarNode;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3225:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6210
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SortedQueues = void 0;
-var search_1 = __webpack_require__(2400);
+var search_1 = __webpack_require__(124);
 var SortedQueues = (function () {
     function SortedQueues(getKey) {
         this.getKey = getKey;
@@ -23509,10 +23682,10 @@ var SortedQueues = (function () {
 exports.SortedQueues = SortedQueues;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1039:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 2721
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -23552,10 +23725,10 @@ var UniqueAStarNodePositions = (function () {
 exports.UniqueAStarNodePositions = UniqueAStarNodePositions;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1768:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9049
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -23583,15 +23756,15 @@ var ConnectorProhibitedSegments = (function () {
 exports.ConnectorProhibitedSegments = ConnectorProhibitedSegments;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1510:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5359
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorRenderPointsContext = void 0;
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
 var ConnectorRenderPointsContext = (function () {
     function ConnectorRenderPointsContext(renderPoints, lockCreateRenderPoints, actualRoutingMode) {
         this.renderPoints = renderPoints;
@@ -23613,16 +23786,16 @@ var ConnectorRenderPointsContext = (function () {
 exports.ConnectorRenderPointsContext = ConnectorRenderPointsContext;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2868:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6824
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorRenderSegment = void 0;
-var segment_1 = __webpack_require__(1335);
-var ConnectorProhibitedSegments_1 = __webpack_require__(1768);
+var segment_1 = __webpack_require__(476);
+var ConnectorProhibitedSegments_1 = __webpack_require__(9049);
 var ConnectorRenderSegment = (function () {
     function ConnectorRenderSegment(startInfo, endInfo, startPointIndex, previousCustomSegment) {
         this.startInfo = startInfo;
@@ -23698,19 +23871,19 @@ var ConnectorRenderSegment = (function () {
 exports.ConnectorRenderSegment = ConnectorRenderSegment;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5714:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5130
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorRoutingModel = exports.ConnectorRoutingPenaltyDescription = void 0;
-var Settings_1 = __webpack_require__(240);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var ConnectorProperties_1 = __webpack_require__(4612);
-var RightAngleConnectorRoutingStrategy_1 = __webpack_require__(3597);
+var Settings_1 = __webpack_require__(9307);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var ConnectorProperties_1 = __webpack_require__(4385);
+var RightAngleConnectorRoutingStrategy_1 = __webpack_require__(7003);
 var ConnectorRoutingPenaltyDescription = (function () {
     function ConnectorRoutingPenaltyDescription() {
         this.shape = 20.0;
@@ -23754,15 +23927,15 @@ var ConnectorRoutingModel = (function () {
 exports.ConnectorRoutingModel = ConnectorRoutingModel;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1254:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7804
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoutingGrid = void 0;
-var search_1 = __webpack_require__(2400);
+var search_1 = __webpack_require__(124);
 var RoutingGrid = (function () {
     function RoutingGrid(verticalGridLines, horizontalGridLines, createPoint) {
         this.verticalGridLines = verticalGridLines;
@@ -23830,27 +24003,27 @@ var RoutingGrid = (function () {
 exports.RoutingGrid = RoutingGrid;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1794:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4863
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RightAngleConnectorRoutingContext = exports.IntersectingItemsByPointsContext = exports.CuttingItemsContext = void 0;
-var point_1 = __webpack_require__(8900);
-var segment_1 = __webpack_require__(1335);
-var vector_1 = __webpack_require__(9716);
-var DiagramItem_1 = __webpack_require__(3742);
-var RightAngleConnectorRoutingMathOperations_1 = __webpack_require__(5074);
-var ConnectorRenderSegment_1 = __webpack_require__(2868);
-var RoutingGrid_1 = __webpack_require__(1254);
-var ModelUtils_1 = __webpack_require__(4867);
-var AStarMetrics_1 = __webpack_require__(9927);
-var AStarContext_1 = __webpack_require__(2180);
-var AStarCalculator_1 = __webpack_require__(3975);
-var Utils_1 = __webpack_require__(8675);
-var RTree_1 = __webpack_require__(1057);
+var point_1 = __webpack_require__(5327);
+var segment_1 = __webpack_require__(476);
+var vector_1 = __webpack_require__(4166);
+var DiagramItem_1 = __webpack_require__(4824);
+var RightAngleConnectorRoutingMathOperations_1 = __webpack_require__(618);
+var ConnectorRenderSegment_1 = __webpack_require__(6824);
+var RoutingGrid_1 = __webpack_require__(7804);
+var ModelUtils_1 = __webpack_require__(1922);
+var AStarMetrics_1 = __webpack_require__(8671);
+var AStarContext_1 = __webpack_require__(4045);
+var AStarCalculator_1 = __webpack_require__(1188);
+var Utils_1 = __webpack_require__(41);
+var RTree_1 = __webpack_require__(3858);
 var CuttingItemsContext = (function () {
     function CuttingItemsContext() {
         this.cuttingItemKeys = [];
@@ -24243,19 +24416,19 @@ var RightAngleConnectorRoutingContext = (function () {
 exports.RightAngleConnectorRoutingContext = RightAngleConnectorRoutingContext;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5074:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 618
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RightAngleConnectorRoutingMathOperations = void 0;
-var segment_1 = __webpack_require__(1335);
-var math_1 = __webpack_require__(8679);
-var AStarMetrics_1 = __webpack_require__(9927);
-var Utils_1 = __webpack_require__(8675);
-var DiagramItem_1 = __webpack_require__(3742);
+var segment_1 = __webpack_require__(476);
+var math_1 = __webpack_require__(594);
+var AStarMetrics_1 = __webpack_require__(8671);
+var Utils_1 = __webpack_require__(41);
+var DiagramItem_1 = __webpack_require__(4824);
 var RightAngleConnectorRoutingMathOperations = (function () {
     function RightAngleConnectorRoutingMathOperations() {
     }
@@ -24341,18 +24514,18 @@ var RightAngleConnectorRoutingMathOperations = (function () {
 exports.RightAngleConnectorRoutingMathOperations = RightAngleConnectorRoutingMathOperations;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3597:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7003
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RightAngleConnectorRoutingStrategy = void 0;
-var segment_1 = __webpack_require__(1335);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
-var RightAngleConnectorRoutingContext_1 = __webpack_require__(1794);
-var ModelUtils_1 = __webpack_require__(4867);
+var segment_1 = __webpack_require__(476);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
+var RightAngleConnectorRoutingContext_1 = __webpack_require__(4863);
+var ModelUtils_1 = __webpack_require__(1922);
 var RightAngleConnectorRoutingStrategy = (function () {
     function RightAngleConnectorRoutingStrategy(model) {
         this.model = model;
@@ -24515,18 +24688,18 @@ var RightAngleConnectorRoutingStrategy = (function () {
 exports.RightAngleConnectorRoutingStrategy = RightAngleConnectorRoutingStrategy;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3742:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4824
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramItem = exports.DEFAULT_ZINDEX = exports.ConnectionPointSide = void 0;
-var rectangle_1 = __webpack_require__(8011);
-var metrics_1 = __webpack_require__(5596);
-var Utils_1 = __webpack_require__(8675);
-var Style_1 = __webpack_require__(1552);
+var rectangle_1 = __webpack_require__(4412);
+var metrics_1 = __webpack_require__(4496);
+var Utils_1 = __webpack_require__(41);
+var Style_1 = __webpack_require__(5059);
 var ConnectionPointSide;
 (function (ConnectionPointSide) {
     ConnectionPointSide[ConnectionPointSide["Undefined"] = -1] = "Undefined";
@@ -24649,20 +24822,20 @@ var DiagramItem = (function () {
 exports.DiagramItem = DiagramItem;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4742:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1416
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DraggingConnector = exports.SelectionDragHelper = void 0;
-var vector_1 = __webpack_require__(9716);
-var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(58);
-var ConnectorRenderPointsContext_1 = __webpack_require__(1510);
-var ModelUtils_1 = __webpack_require__(4867);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
-var ModelOperationSettings_1 = __webpack_require__(6879);
+var vector_1 = __webpack_require__(4166);
+var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(8818);
+var ConnectorRenderPointsContext_1 = __webpack_require__(5359);
+var ModelUtils_1 = __webpack_require__(1922);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
+var ModelOperationSettings_1 = __webpack_require__(5225);
 var SelectionDragHelper = (function () {
     function SelectionDragHelper(history, model, permissionsProvider, startPoint, selectedItems) {
         var _this = this;
@@ -24824,24 +24997,24 @@ var DraggingShape = (function () {
 }());
 
 
-/***/ }),
+/***/ },
 
-/***/ 6613:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 455
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramModel = void 0;
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var ImageCache_1 = __webpack_require__(7176);
-var color_1 = __webpack_require__(13);
-var Enums_1 = __webpack_require__(5383);
-var ModelUtils_1 = __webpack_require__(4867);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var ImageCache_1 = __webpack_require__(4062);
+var color_1 = __webpack_require__(9553);
+var Enums_1 = __webpack_require__(9254);
+var ModelUtils_1 = __webpack_require__(1922);
 var DiagramModel = (function () {
     function DiagramModel(pageSize) {
         if (pageSize === void 0) { pageSize = new size_1.Size(8400, 11910); }
@@ -25103,10 +25276,10 @@ var DiagramModel = (function () {
 exports.DiagramModel = DiagramModel;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2004:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3427
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -25137,24 +25310,24 @@ var ItemChange = (function () {
 exports.ItemChange = ItemChange;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1118:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2703
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ModelManipulator = void 0;
-var offsets_1 = __webpack_require__(4125);
-var size_1 = __webpack_require__(6353);
-var Diagnostics_1 = __webpack_require__(9463);
-var ImageCache_1 = __webpack_require__(7176);
-var ImageLoader_1 = __webpack_require__(590);
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var Utils_1 = __webpack_require__(8675);
-var Connector_1 = __webpack_require__(7959);
-var ModelChange_1 = __webpack_require__(2004);
-var ModelUtils_1 = __webpack_require__(4867);
+var offsets_1 = __webpack_require__(8601);
+var size_1 = __webpack_require__(3844);
+var Diagnostics_1 = __webpack_require__(9196);
+var ImageCache_1 = __webpack_require__(4062);
+var ImageLoader_1 = __webpack_require__(7841);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var Utils_1 = __webpack_require__(41);
+var Connector_1 = __webpack_require__(6320);
+var ModelChange_1 = __webpack_require__(3427);
+var ModelUtils_1 = __webpack_require__(1922);
 var ModelManipulator = (function () {
     function ModelManipulator(model, routingModel, permissionsProvider, descriptionManager) {
         this.onModelChanged = new Utils_1.EventDispatcher();
@@ -25574,55 +25747,55 @@ var ModelManipulator = (function () {
 exports.ModelManipulator = ModelManipulator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4867:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1922
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ModelUtils = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var metrics_1 = __webpack_require__(5596);
-var point_1 = __webpack_require__(8900);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var vector_1 = __webpack_require__(9716);
-var math_1 = __webpack_require__(8679);
-var Enums_1 = __webpack_require__(5383);
-var AddConnectionHistoryItem_1 = __webpack_require__(3477);
-var AddConnectorHistoryItem_1 = __webpack_require__(9603);
-var AddConnectorPointHistoryItem_1 = __webpack_require__(4430);
-var AddShapeHistoryItem_1 = __webpack_require__(4145);
-var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(58);
-var ChangeShapeParametersHistoryItem_1 = __webpack_require__(329);
-var DeleteConnectionHistoryItem_1 = __webpack_require__(8930);
-var DeleteConnectorHistoryItem_1 = __webpack_require__(9143);
-var DeleteShapeHistoryItem_1 = __webpack_require__(1704);
-var InsertToContainerHistoryItem_1 = __webpack_require__(9310);
-var MoveConnectorPointHistoryItem_1 = __webpack_require__(8338);
-var MoveShapeHistoryItem_1 = __webpack_require__(4160);
-var RemoveFromContainerHistoryItem_1 = __webpack_require__(9753);
-var ResizeShapeHistoryItem_1 = __webpack_require__(4629);
-var SetSelectionHistoryItem_1 = __webpack_require__(4297);
-var ModelResizeHistoryItem_1 = __webpack_require__(1729);
-var UpdatePositionsOnPageResizeHistoryItem_1 = __webpack_require__(4518);
-var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(8236);
-var ChangeConnectorTextHistoryItem_1 = __webpack_require__(5144);
-var ChangeCustomDataHistoryItem_1 = __webpack_require__(9559);
-var ChangeLockedHistoryItem_1 = __webpack_require__(7443);
-var ChangeStyleHistoryItem_1 = __webpack_require__(4634);
-var ChangeStyleTextHistoryItem_1 = __webpack_require__(926);
-var Graph_1 = __webpack_require__(213);
-var GraphInfo_1 = __webpack_require__(7819);
-var Structures_1 = __webpack_require__(8217);
-var Utils_1 = __webpack_require__(8675);
-var Connector_1 = __webpack_require__(7959);
-var ConnectorProperties_1 = __webpack_require__(4612);
-var ConnectorRenderPoint_1 = __webpack_require__(4717);
-var ConnectorRenderPointsContext_1 = __webpack_require__(1510);
-var Shape_1 = __webpack_require__(5503);
-var ChangeShapeTypeHistoryItem_1 = __webpack_require__(56);
+var unit_converter_1 = __webpack_require__(9500);
+var metrics_1 = __webpack_require__(4496);
+var point_1 = __webpack_require__(5327);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var vector_1 = __webpack_require__(4166);
+var math_1 = __webpack_require__(594);
+var Enums_1 = __webpack_require__(9254);
+var AddConnectionHistoryItem_1 = __webpack_require__(4139);
+var AddConnectorHistoryItem_1 = __webpack_require__(4048);
+var AddConnectorPointHistoryItem_1 = __webpack_require__(8226);
+var AddShapeHistoryItem_1 = __webpack_require__(8214);
+var ChangeConnectorPointsHistoryItem_1 = __webpack_require__(8818);
+var ChangeShapeParametersHistoryItem_1 = __webpack_require__(7489);
+var DeleteConnectionHistoryItem_1 = __webpack_require__(6155);
+var DeleteConnectorHistoryItem_1 = __webpack_require__(7392);
+var DeleteShapeHistoryItem_1 = __webpack_require__(1785);
+var InsertToContainerHistoryItem_1 = __webpack_require__(5323);
+var MoveConnectorPointHistoryItem_1 = __webpack_require__(6904);
+var MoveShapeHistoryItem_1 = __webpack_require__(3312);
+var RemoveFromContainerHistoryItem_1 = __webpack_require__(7271);
+var ResizeShapeHistoryItem_1 = __webpack_require__(5685);
+var SetSelectionHistoryItem_1 = __webpack_require__(6512);
+var ModelResizeHistoryItem_1 = __webpack_require__(6035);
+var UpdatePositionsOnPageResizeHistoryItem_1 = __webpack_require__(4715);
+var ChangeConnectorPropertyHistoryItem_1 = __webpack_require__(2448);
+var ChangeConnectorTextHistoryItem_1 = __webpack_require__(1914);
+var ChangeCustomDataHistoryItem_1 = __webpack_require__(9735);
+var ChangeLockedHistoryItem_1 = __webpack_require__(1684);
+var ChangeStyleHistoryItem_1 = __webpack_require__(3550);
+var ChangeStyleTextHistoryItem_1 = __webpack_require__(5755);
+var Graph_1 = __webpack_require__(9071);
+var GraphInfo_1 = __webpack_require__(3903);
+var Structures_1 = __webpack_require__(8573);
+var Utils_1 = __webpack_require__(41);
+var Connector_1 = __webpack_require__(6320);
+var ConnectorProperties_1 = __webpack_require__(4385);
+var ConnectorRenderPoint_1 = __webpack_require__(9956);
+var ConnectorRenderPointsContext_1 = __webpack_require__(5359);
+var Shape_1 = __webpack_require__(8408);
+var ChangeShapeTypeHistoryItem_1 = __webpack_require__(2389);
 var ModelUtils = (function () {
     function ModelUtils() {
     }
@@ -26561,20 +26734,22 @@ var ModelUtils = (function () {
 exports.ModelUtils = ModelUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6469:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1425
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26582,8 +26757,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddShapeEventArgs = exports.AddShapeRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var AddShapeRequestedEntity = (function (_super) {
     __extends(AddShapeRequestedEntity, _super);
     function AddShapeRequestedEntity(apiController, shape) {
@@ -26636,20 +26811,22 @@ var AddShapeEventArgs = (function (_super) {
 exports.AddShapeEventArgs = AddShapeEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1110:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5678
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26657,8 +26834,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AddShapeFromToolboxEventArgs = exports.AddShapeFromToolboxRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var AddShapeFromToolboxRequestedEntity = (function (_super) {
     __extends(AddShapeFromToolboxRequestedEntity, _super);
     function AddShapeFromToolboxRequestedEntity(apiController, shapeType) {
@@ -26710,20 +26887,22 @@ var AddShapeFromToolboxEventArgs = (function (_super) {
 exports.AddShapeFromToolboxEventArgs = AddShapeFromToolboxEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4829:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 564
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26731,8 +26910,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BeforeChangeConnectorTextEventArgs = exports.BeforeChangeConnectorTextRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var BeforeChangeConnectorTextRequestedEntity = (function (_super) {
     __extends(BeforeChangeConnectorTextRequestedEntity, _super);
     function BeforeChangeConnectorTextRequestedEntity(apiController, connector, position) {
@@ -26787,20 +26966,22 @@ var BeforeChangeConnectorTextEventArgs = (function (_super) {
 exports.BeforeChangeConnectorTextEventArgs = BeforeChangeConnectorTextEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2345:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3490
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26808,8 +26989,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BeforeChangeShapeTextEventArgs = exports.BeforeChangeShapeTextRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var BeforeChangeShapeTextRequestedEntity = (function (_super) {
     __extends(BeforeChangeShapeTextRequestedEntity, _super);
     function BeforeChangeShapeTextRequestedEntity(apiController, shape) {
@@ -26861,20 +27042,22 @@ var BeforeChangeShapeTextEventArgs = (function (_super) {
 exports.BeforeChangeShapeTextEventArgs = BeforeChangeShapeTextEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6466:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1245
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26882,8 +27065,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectionEventArgs = exports.ChangeConnectionRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var ChangeConnectionRequestedEntity = (function (_super) {
     __extends(ChangeConnectionRequestedEntity, _super);
     function ChangeConnectionRequestedEntity(apiController, connector, shape, oldShape, position, connectionPointIndex) {
@@ -26947,20 +27130,22 @@ var ChangeConnectionEventArgs = (function (_super) {
 exports.ChangeConnectionEventArgs = ChangeConnectionEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6354:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5261
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -26968,9 +27153,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorPointsEventArgs = exports.ChangeConnectorPointsRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
-var Utils_1 = __webpack_require__(8675);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
+var Utils_1 = __webpack_require__(41);
 var ChangeConnectorPointsRequestedEntity = (function (_super) {
     __extends(ChangeConnectorPointsRequestedEntity, _super);
     function ChangeConnectorPointsRequestedEntity(apiController, connector, oldPoints, points) {
@@ -27029,20 +27214,22 @@ var ChangeConnectorPointsEventArgs = (function (_super) {
 exports.ChangeConnectorPointsEventArgs = ChangeConnectorPointsEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2249:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6547
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27050,8 +27237,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeConnectorTextEventArgs = exports.ChangeConnectorTextRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var ChangeConnectorTextRequestedEntity = (function (_super) {
     __extends(ChangeConnectorTextRequestedEntity, _super);
     function ChangeConnectorTextRequestedEntity(apiController, connector, position, text) {
@@ -27108,20 +27295,22 @@ var ChangeConnectorTextEventArgs = (function (_super) {
 exports.ChangeConnectorTextEventArgs = ChangeConnectorTextEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5560:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1675
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27129,8 +27318,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChangeShapeTextEventArgs = exports.ChangeShapeTextRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var ChangeShapeTextRequestedEntity = (function (_super) {
     __extends(ChangeShapeTextRequestedEntity, _super);
     function ChangeShapeTextRequestedEntity(apiController, shape, text) {
@@ -27184,20 +27373,22 @@ var ChangeShapeTextEventArgs = (function (_super) {
 exports.ChangeShapeTextEventArgs = ChangeShapeTextEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6580:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1891
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27205,8 +27396,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteConnectorEventArgs = exports.DeleteConnectorRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var DeleteConnectorRequestedEntity = (function (_super) {
     __extends(DeleteConnectorRequestedEntity, _super);
     function DeleteConnectorRequestedEntity(apiController, connector) {
@@ -27258,20 +27449,22 @@ var DeleteConnectorEventArgs = (function (_super) {
 exports.DeleteConnectorEventArgs = DeleteConnectorEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8825:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3505
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27279,8 +27472,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DeleteShapeEventArgs = exports.DeleteShapeRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var DeleteShapeRequestedEntity = (function (_super) {
     __extends(DeleteShapeRequestedEntity, _super);
     function DeleteShapeRequestedEntity(apiController, shape) {
@@ -27332,20 +27525,22 @@ var DeleteShapeEventArgs = (function (_super) {
 exports.DeleteShapeEventArgs = DeleteShapeEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4864:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 131
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27353,8 +27548,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MoveShapeEventArgs = exports.MoveShapeRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var MoveShapeRequestedEntity = (function (_super) {
     __extends(MoveShapeRequestedEntity, _super);
     function MoveShapeRequestedEntity(apiController, shape, oldPosition, position) {
@@ -27410,10 +27605,10 @@ var MoveShapeEventArgs = (function (_super) {
 exports.MoveShapeEventArgs = MoveShapeEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8532:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5102
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -27458,20 +27653,22 @@ var PermissionRequestEventArgs = (function () {
 exports.PermissionRequestEventArgs = PermissionRequestEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3214:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8128
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27479,8 +27676,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ResizeShapeEventArgs = exports.ResizeShapeRequestedEntity = void 0;
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var RequestedEntity_1 = __webpack_require__(8532);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var RequestedEntity_1 = __webpack_require__(5102);
 var ResizeShapeRequestedEntity = (function (_super) {
     __extends(ResizeShapeRequestedEntity, _super);
     function ResizeShapeRequestedEntity(apiController, shape, oldSize, size) {
@@ -27536,31 +27733,31 @@ var ResizeShapeEventArgs = (function (_super) {
 exports.ResizeShapeEventArgs = ResizeShapeEventArgs;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2883:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1040
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PermissionsProvider = void 0;
-var Shape_1 = __webpack_require__(5503);
-var Utils_1 = __webpack_require__(8675);
-var ModelOperationSettings_1 = __webpack_require__(6879);
-var Connector_1 = __webpack_require__(7959);
-var AddShape_1 = __webpack_require__(6469);
-var DeleteShape_1 = __webpack_require__(8825);
-var DeleteConnector_1 = __webpack_require__(6580);
-var AddShapeFromToolbox_1 = __webpack_require__(1110);
-var ChangeConnection_1 = __webpack_require__(6466);
-var ChangeConnectorPoints_1 = __webpack_require__(6354);
-var BeforeChangeShapeText_1 = __webpack_require__(2345);
-var BeforeChangeConnectorText_1 = __webpack_require__(4829);
-var ChangeShapeText_1 = __webpack_require__(5560);
-var ChangeConnectorText_1 = __webpack_require__(2249);
-var PermissionsProviderStorage_1 = __webpack_require__(9187);
-var ResizeShape_1 = __webpack_require__(3214);
-var MoveShape_1 = __webpack_require__(4864);
+var Shape_1 = __webpack_require__(8408);
+var Utils_1 = __webpack_require__(41);
+var ModelOperationSettings_1 = __webpack_require__(5225);
+var Connector_1 = __webpack_require__(6320);
+var AddShape_1 = __webpack_require__(1425);
+var DeleteShape_1 = __webpack_require__(3505);
+var DeleteConnector_1 = __webpack_require__(1891);
+var AddShapeFromToolbox_1 = __webpack_require__(5678);
+var ChangeConnection_1 = __webpack_require__(1245);
+var ChangeConnectorPoints_1 = __webpack_require__(5261);
+var BeforeChangeShapeText_1 = __webpack_require__(3490);
+var BeforeChangeConnectorText_1 = __webpack_require__(564);
+var ChangeShapeText_1 = __webpack_require__(1675);
+var ChangeConnectorText_1 = __webpack_require__(6547);
+var PermissionsProviderStorage_1 = __webpack_require__(1387);
+var ResizeShape_1 = __webpack_require__(8128);
+var MoveShape_1 = __webpack_require__(131);
 var PermissionsProvider = (function () {
     function PermissionsProvider(apiController) {
         this.onRequestOperation = new Utils_1.EventDispatcher();
@@ -27732,16 +27929,16 @@ var PermissionsProvider = (function () {
 exports.PermissionsProvider = PermissionsProvider;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9187:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1387
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PermissionsProviderStorage = void 0;
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
 var PermissionsProviderStorage = (function () {
     function PermissionsProviderStorage() {
         this.interactingItems = {};
@@ -27790,20 +27987,22 @@ var PermissionsProviderStorage = (function () {
 exports.PermissionsProviderStorage = PermissionsProviderStorage;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7255:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6687
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27811,17 +28010,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ContainerDescription = exports.CONTAINER_EXPAND_BUTTON_SIGN_RATIO = exports.CONTAINER_EXPAND_BUTTON_RECT_RATIO = exports.CONTAINER_HEADER_TOOLBOX_SIZE_RATIO = exports.CONTAINER_HEADER_SIZE = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var ShapeTypes_1 = __webpack_require__(2259);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var PathPrimitive_1 = __webpack_require__(7724);
-var Utils_1 = __webpack_require__(3500);
-var Event_1 = __webpack_require__(6031);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var DiagramItem_1 = __webpack_require__(3742);
-var LocalizationService_1 = __webpack_require__(6224);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var ShapeTypes_1 = __webpack_require__(3255);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var PathPrimitive_1 = __webpack_require__(6208);
+var Utils_1 = __webpack_require__(2136);
+var Event_1 = __webpack_require__(5428);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var DiagramItem_1 = __webpack_require__(4824);
+var LocalizationService_1 = __webpack_require__(820);
 exports.CONTAINER_HEADER_SIZE = 360;
 exports.CONTAINER_HEADER_TOOLBOX_SIZE_RATIO = 0.2;
 exports.CONTAINER_EXPAND_BUTTON_RECT_RATIO = 0.5;
@@ -27904,20 +28103,22 @@ var ContainerDescription = (function (_super) {
 exports.ContainerDescription = ContainerDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 944:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6283
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -27925,14 +28126,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HorizontalContainerDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ContainerDescription_1 = __webpack_require__(7255);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var TextPrimitive_1 = __webpack_require__(9416);
+var ShapeDescription_1 = __webpack_require__(1280);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ContainerDescription_1 = __webpack_require__(6687);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var TextPrimitive_1 = __webpack_require__(128);
 var HorizontalContainerDescription = (function (_super) {
     __extends(HorizontalContainerDescription, _super);
     function HorizontalContainerDescription() {
@@ -27995,20 +28196,22 @@ var HorizontalContainerDescription = (function (_super) {
 exports.HorizontalContainerDescription = HorizontalContainerDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5759:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6621
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28016,13 +28219,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.VerticalContainerDescription = void 0;
-var point_1 = __webpack_require__(8900);
-var size_1 = __webpack_require__(6353);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var rectangle_1 = __webpack_require__(8011);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ShapeDescription_1 = __webpack_require__(6794);
-var ContainerDescription_1 = __webpack_require__(7255);
+var point_1 = __webpack_require__(5327);
+var size_1 = __webpack_require__(3844);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var rectangle_1 = __webpack_require__(4412);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ShapeDescription_1 = __webpack_require__(1280);
+var ContainerDescription_1 = __webpack_require__(6687);
 var VerticalContainerDescription = (function (_super) {
     __extends(VerticalContainerDescription, _super);
     function VerticalContainerDescription() {
@@ -28077,20 +28280,22 @@ var VerticalContainerDescription = (function (_super) {
 exports.VerticalContainerDescription = VerticalContainerDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6688:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2567
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28098,18 +28303,18 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CustomShapeDescription = void 0;
-var ImagePrimitive_1 = __webpack_require__(1995);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var DiagramItem_1 = __webpack_require__(3742);
-var ShapeWithImageDescription_1 = __webpack_require__(4083);
-var ShapeDescription_1 = __webpack_require__(6794);
-var ImageInfo_1 = __webpack_require__(6617);
-var ImageCache_1 = __webpack_require__(7176);
-var ImageLoader_1 = __webpack_require__(590);
-var SvgElementPrimitive_1 = __webpack_require__(1248);
+var ImagePrimitive_1 = __webpack_require__(4);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var DiagramItem_1 = __webpack_require__(4824);
+var ShapeWithImageDescription_1 = __webpack_require__(7185);
+var ShapeDescription_1 = __webpack_require__(1280);
+var ImageInfo_1 = __webpack_require__(9406);
+var ImageCache_1 = __webpack_require__(4062);
+var ImageLoader_1 = __webpack_require__(7841);
+var SvgElementPrimitive_1 = __webpack_require__(9551);
 var CustomShapeDescription = (function (_super) {
     __extends(CustomShapeDescription, _super);
     function CustomShapeDescription(properties, baseDescription) {
@@ -28377,20 +28582,22 @@ var CustomShapeDescription = (function (_super) {
 exports.CustomShapeDescription = CustomShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7552:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5656
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28398,10 +28605,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
-var EllipseShapeDescription_1 = __webpack_require__(7768);
+var ShapeTypes_1 = __webpack_require__(3255);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
+var EllipseShapeDescription_1 = __webpack_require__(9829);
 var ConnectorShapeDescription = (function (_super) {
     __extends(ConnectorShapeDescription, _super);
     function ConnectorShapeDescription() {
@@ -28424,20 +28631,22 @@ var ConnectorShapeDescription = (function (_super) {
 exports.ConnectorShapeDescription = ConnectorShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4941:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3489
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28445,11 +28654,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DataShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DiagramItem_1 = __webpack_require__(3742);
-var ShapeDescription_1 = __webpack_require__(6794);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DiagramItem_1 = __webpack_require__(4824);
+var ShapeDescription_1 = __webpack_require__(1280);
 var DataShapeDescription = (function (_super) {
     __extends(DataShapeDescription, _super);
     function DataShapeDescription() {
@@ -28498,20 +28707,22 @@ var DataShapeDescription = (function (_super) {
 exports.DataShapeDescription = DataShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1034:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9968
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28519,10 +28730,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DatabaseShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var EllipsePrimitive_1 = __webpack_require__(418);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var EllipsePrimitive_1 = __webpack_require__(7345);
 var DatabaseShapeDescription = (function (_super) {
     __extends(DatabaseShapeDescription, _super);
     function DatabaseShapeDescription() {
@@ -28566,20 +28777,22 @@ var DatabaseShapeDescription = (function (_super) {
 exports.DatabaseShapeDescription = DatabaseShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6825:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9415
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28587,10 +28800,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DecisionShapeDescription = void 0;
-var DiamondShapeDescription_1 = __webpack_require__(5303);
-var ShapeTypes_1 = __webpack_require__(2259);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
+var DiamondShapeDescription_1 = __webpack_require__(7763);
+var ShapeTypes_1 = __webpack_require__(3255);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
 var DecisionShapeDescription = (function (_super) {
     __extends(DecisionShapeDescription, _super);
     function DecisionShapeDescription() {
@@ -28606,20 +28819,22 @@ var DecisionShapeDescription = (function (_super) {
 exports.DecisionShapeDescription = DecisionShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9229:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9904
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28627,12 +28842,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DelayShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var Utils_1 = __webpack_require__(8675);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var Utils_1 = __webpack_require__(41);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var DelayShapeDescription = (function (_super) {
     __extends(DelayShapeDescription, _super);
     function DelayShapeDescription() {
@@ -28682,20 +28897,22 @@ var DelayShapeDescription = (function (_super) {
 exports.DelayShapeDescription = DelayShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2650:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8321
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28703,10 +28920,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DisplayShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeDescription_1 = __webpack_require__(6794);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeDescription_1 = __webpack_require__(1280);
 var DisplayShapeDescription = (function (_super) {
     __extends(DisplayShapeDescription, _super);
     function DisplayShapeDescription() {
@@ -28752,20 +28969,22 @@ var DisplayShapeDescription = (function (_super) {
 exports.DisplayShapeDescription = DisplayShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3525:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 268
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28773,10 +28992,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DiagramItem_1 = __webpack_require__(3742);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DiagramItem_1 = __webpack_require__(4824);
 var DocumentShapeDescription = (function (_super) {
     __extends(DocumentShapeDescription, _super);
     function DocumentShapeDescription() {
@@ -28826,20 +29045,22 @@ var DocumentShapeDescription = (function (_super) {
 exports.DocumentShapeDescription = DocumentShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1314:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2781
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28847,12 +29068,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HardDiskShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var EllipsePrimitive_1 = __webpack_require__(418);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var EllipsePrimitive_1 = __webpack_require__(7345);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var HardDiskShapeDescription = (function (_super) {
     __extends(HardDiskShapeDescription, _super);
     function HardDiskShapeDescription() {
@@ -28900,20 +29121,22 @@ var HardDiskShapeDescription = (function (_super) {
 exports.HardDiskShapeDescription = HardDiskShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2751:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9613
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28921,12 +29144,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InternalStorageShapeDescription = exports.InternalStorageVerticalEdgeParameterName = exports.InternalStorageHorizontalEdgeParameterName = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ShapeParameters_1 = __webpack_require__(6629);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var PathPrimitive_1 = __webpack_require__(7724);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ShapeParameters_1 = __webpack_require__(4636);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var PathPrimitive_1 = __webpack_require__(6208);
 exports.InternalStorageHorizontalEdgeParameterName = "he";
 exports.InternalStorageVerticalEdgeParameterName = "ve";
 var InternalStorageShapeDescription = (function (_super) {
@@ -28990,20 +29213,22 @@ var InternalStorageShapeDescription = (function (_super) {
 exports.InternalStorageShapeDescription = InternalStorageShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9144:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5005
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29011,11 +29236,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ManualInputShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DiagramItem_1 = __webpack_require__(3742);
-var ShapeDescription_1 = __webpack_require__(6794);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DiagramItem_1 = __webpack_require__(4824);
+var ShapeDescription_1 = __webpack_require__(1280);
 var ManualInputShapeDescription = (function (_super) {
     __extends(ManualInputShapeDescription, _super);
     function ManualInputShapeDescription() {
@@ -29062,20 +29287,22 @@ var ManualInputShapeDescription = (function (_super) {
 exports.ManualInputShapeDescription = ManualInputShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1643:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2392
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29083,11 +29310,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ManualOperationShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DiagramItem_1 = __webpack_require__(3742);
-var ShapeDescription_1 = __webpack_require__(6794);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DiagramItem_1 = __webpack_require__(4824);
+var ShapeDescription_1 = __webpack_require__(1280);
 var ManualOperationShapeDescription = (function (_super) {
     __extends(ManualOperationShapeDescription, _super);
     function ManualOperationShapeDescription() {
@@ -29141,20 +29368,22 @@ var ManualOperationShapeDescription = (function (_super) {
 exports.ManualOperationShapeDescription = ManualOperationShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3046:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5803
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29162,12 +29391,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MergeShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var rectangle_1 = __webpack_require__(8011);
-var TriangleShapeDescription_1 = __webpack_require__(2117);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var ShapeTypes_1 = __webpack_require__(3255);
+var rectangle_1 = __webpack_require__(4412);
+var TriangleShapeDescription_1 = __webpack_require__(1833);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var MergeShapeDescription = (function (_super) {
     __extends(MergeShapeDescription, _super);
     function MergeShapeDescription() {
@@ -29204,20 +29433,22 @@ var MergeShapeDescription = (function (_super) {
 exports.MergeShapeDescription = MergeShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2850:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9901
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29225,13 +29456,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MultipleDocumentsShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DocumentShapeDescription_1 = __webpack_require__(3525);
-var ClipPathPrimitive_1 = __webpack_require__(4593);
-var Utils_1 = __webpack_require__(3500);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DocumentShapeDescription_1 = __webpack_require__(268);
+var ClipPathPrimitive_1 = __webpack_require__(5654);
+var Utils_1 = __webpack_require__(2136);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var MultipleDocumentsShapeDescription = (function (_super) {
     __extends(MultipleDocumentsShapeDescription, _super);
     function MultipleDocumentsShapeDescription() {
@@ -29313,20 +29544,22 @@ var MultipleDocumentsShapeDescription = (function (_super) {
 exports.MultipleDocumentsShapeDescription = MultipleDocumentsShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2019:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2092
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29334,11 +29567,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
-var EllipseShapeDescription_1 = __webpack_require__(7768);
-var PathPrimitive_1 = __webpack_require__(7724);
+var ShapeTypes_1 = __webpack_require__(3255);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
+var EllipseShapeDescription_1 = __webpack_require__(9829);
+var PathPrimitive_1 = __webpack_require__(6208);
 var OrShapeDescription = (function (_super) {
     __extends(OrShapeDescription, _super);
     function OrShapeDescription() {
@@ -29382,20 +29615,22 @@ var OrShapeDescription = (function (_super) {
 exports.OrShapeDescription = OrShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8110:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1381
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29403,12 +29638,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PaperTapeShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var DiagramItem_1 = __webpack_require__(3742);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var DiagramItem_1 = __webpack_require__(4824);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var PaperTapeShapeDescription = (function (_super) {
     __extends(PaperTapeShapeDescription, _super);
     function PaperTapeShapeDescription() {
@@ -29464,20 +29699,22 @@ var PaperTapeShapeDescription = (function (_super) {
 exports.PaperTapeShapeDescription = PaperTapeShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6508:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 156
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29485,12 +29722,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PredefinedProcessShapeDescription = exports.PredefinedProcessEdgeParameterName = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ShapeParameters_1 = __webpack_require__(6629);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var PathPrimitive_1 = __webpack_require__(7724);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ShapeParameters_1 = __webpack_require__(4636);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var PathPrimitive_1 = __webpack_require__(6208);
 exports.PredefinedProcessEdgeParameterName = "e";
 var PredefinedProcessShapeDescription = (function (_super) {
     __extends(PredefinedProcessShapeDescription, _super);
@@ -29548,20 +29785,22 @@ var PredefinedProcessShapeDescription = (function (_super) {
 exports.PredefinedProcessShapeDescription = PredefinedProcessShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4112:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7450
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29569,10 +29808,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PreparationShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
-var HexagonShapeDescription_1 = __webpack_require__(2953);
+var ShapeTypes_1 = __webpack_require__(3255);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
+var HexagonShapeDescription_1 = __webpack_require__(9543);
 var PreparationShapeDescription = (function (_super) {
     __extends(PreparationShapeDescription, _super);
     function PreparationShapeDescription() {
@@ -29590,20 +29829,22 @@ var PreparationShapeDescription = (function (_super) {
 exports.PreparationShapeDescription = PreparationShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5331:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5290
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29611,8 +29852,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProcessShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
 var ProcessShapeDescription = (function (_super) {
     __extends(ProcessShapeDescription, _super);
     function ProcessShapeDescription() {
@@ -29633,20 +29874,22 @@ var ProcessShapeDescription = (function (_super) {
 exports.ProcessShapeDescription = ProcessShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4810:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9758
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29654,11 +29897,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StoredDataShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
 var StoredDataShapeDescription = (function (_super) {
     __extends(StoredDataShapeDescription, _super);
     function StoredDataShapeDescription() {
@@ -29705,20 +29948,22 @@ var StoredDataShapeDescription = (function (_super) {
 exports.StoredDataShapeDescription = StoredDataShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6182:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1493
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29726,11 +29971,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SummingJunctionShapeDescription = void 0;
-var ShapeTypes_1 = __webpack_require__(2259);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
-var EllipseShapeDescription_1 = __webpack_require__(7768);
-var PathPrimitive_1 = __webpack_require__(7724);
+var ShapeTypes_1 = __webpack_require__(3255);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
+var EllipseShapeDescription_1 = __webpack_require__(9829);
+var PathPrimitive_1 = __webpack_require__(6208);
 var SummingJunctionShapeDescription = (function (_super) {
     __extends(SummingJunctionShapeDescription, _super);
     function SummingJunctionShapeDescription() {
@@ -29779,20 +30024,22 @@ var SummingJunctionShapeDescription = (function (_super) {
 exports.SummingJunctionShapeDescription = SummingJunctionShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6242:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7368
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29800,13 +30047,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TerminatorShapeDescription = void 0;
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PathPrimitive_1 = __webpack_require__(7724);
-var size_1 = __webpack_require__(6353);
-var ShapeDescription_1 = __webpack_require__(6794);
-var rectangle_1 = __webpack_require__(8011);
-var Utils_1 = __webpack_require__(8675);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PathPrimitive_1 = __webpack_require__(6208);
+var size_1 = __webpack_require__(3844);
+var ShapeDescription_1 = __webpack_require__(1280);
+var rectangle_1 = __webpack_require__(4412);
+var Utils_1 = __webpack_require__(41);
 var TerminatorShapeDescription = (function (_super) {
     __extends(TerminatorShapeDescription, _super);
     function TerminatorShapeDescription() {
@@ -29854,20 +30101,22 @@ var TerminatorShapeDescription = (function (_super) {
 exports.TerminatorShapeDescription = TerminatorShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4958:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 166
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29875,12 +30124,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowDownShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ArrowVerticalShapeDescription_1 = __webpack_require__(731);
-var ShapeTypes_1 = __webpack_require__(2259);
-var DiagramItem_1 = __webpack_require__(3742);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ArrowVerticalShapeDescription_1 = __webpack_require__(7436);
+var ShapeTypes_1 = __webpack_require__(3255);
+var DiagramItem_1 = __webpack_require__(4824);
 var ArrowDownShapeDescription = (function (_super) {
     __extends(ArrowDownShapeDescription, _super);
     function ArrowDownShapeDescription() {
@@ -29942,20 +30191,22 @@ var ArrowDownShapeDescription = (function (_super) {
 exports.ArrowDownShapeDescription = ArrowDownShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4493:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9090
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -29963,10 +30214,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowHorizontalShapeDescription = exports.ArrowVerticalLineHeightParameterName = exports.ArrowVerticalTriangleWidthParameterName = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var ShapeParameters_1 = __webpack_require__(6629);
-var DiagramItem_1 = __webpack_require__(3742);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var ShapeParameters_1 = __webpack_require__(4636);
+var DiagramItem_1 = __webpack_require__(4824);
 exports.ArrowVerticalTriangleWidthParameterName = "tw";
 exports.ArrowVerticalLineHeightParameterName = "lh";
 var ArrowHorizontalShapeDescription = (function (_super) {
@@ -30008,20 +30259,22 @@ var ArrowHorizontalShapeDescription = (function (_super) {
 exports.ArrowHorizontalShapeDescription = ArrowHorizontalShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8800:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3475
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30029,11 +30282,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowLeftRightShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ArrowHorizontalShapeDescription_1 = __webpack_require__(4493);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ShapeTypes_1 = __webpack_require__(2259);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ArrowHorizontalShapeDescription_1 = __webpack_require__(9090);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ShapeTypes_1 = __webpack_require__(3255);
 var ArrowLeftRightShapeDescription = (function (_super) {
     __extends(ArrowLeftRightShapeDescription, _super);
     function ArrowLeftRightShapeDescription() {
@@ -30089,20 +30342,22 @@ var ArrowLeftRightShapeDescription = (function (_super) {
 exports.ArrowLeftRightShapeDescription = ArrowLeftRightShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6023:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5455
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30110,12 +30365,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowLeftShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ArrowHorizontalShapeDescription_1 = __webpack_require__(4493);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ShapeTypes_1 = __webpack_require__(2259);
-var DiagramItem_1 = __webpack_require__(3742);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ArrowHorizontalShapeDescription_1 = __webpack_require__(9090);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ShapeTypes_1 = __webpack_require__(3255);
+var DiagramItem_1 = __webpack_require__(4824);
 var ArrowLeftShapeDescription = (function (_super) {
     __extends(ArrowLeftShapeDescription, _super);
     function ArrowLeftShapeDescription() {
@@ -30177,20 +30432,22 @@ var ArrowLeftShapeDescription = (function (_super) {
 exports.ArrowLeftShapeDescription = ArrowLeftShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6599:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2444
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30198,12 +30455,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowRightShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ArrowHorizontalShapeDescription_1 = __webpack_require__(4493);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ShapeTypes_1 = __webpack_require__(2259);
-var DiagramItem_1 = __webpack_require__(3742);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ArrowHorizontalShapeDescription_1 = __webpack_require__(9090);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ShapeTypes_1 = __webpack_require__(3255);
+var DiagramItem_1 = __webpack_require__(4824);
 var ArrowRightShapeDescription = (function (_super) {
     __extends(ArrowRightShapeDescription, _super);
     function ArrowRightShapeDescription() {
@@ -30265,20 +30522,22 @@ var ArrowRightShapeDescription = (function (_super) {
 exports.ArrowRightShapeDescription = ArrowRightShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9089:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7443
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30286,11 +30545,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowUpDownShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ArrowVerticalShapeDescription_1 = __webpack_require__(731);
-var ShapeTypes_1 = __webpack_require__(2259);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ArrowVerticalShapeDescription_1 = __webpack_require__(7436);
+var ShapeTypes_1 = __webpack_require__(3255);
 var ArrowUpDownShapeDescription = (function (_super) {
     __extends(ArrowUpDownShapeDescription, _super);
     function ArrowUpDownShapeDescription() {
@@ -30346,20 +30605,22 @@ var ArrowUpDownShapeDescription = (function (_super) {
 exports.ArrowUpDownShapeDescription = ArrowUpDownShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8327:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6855
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30367,12 +30628,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowUpShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var ArrowVerticalShapeDescription_1 = __webpack_require__(731);
-var ShapeTypes_1 = __webpack_require__(2259);
-var DiagramItem_1 = __webpack_require__(3742);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var ArrowVerticalShapeDescription_1 = __webpack_require__(7436);
+var ShapeTypes_1 = __webpack_require__(3255);
+var DiagramItem_1 = __webpack_require__(4824);
 var ArrowUpShapeDescription = (function (_super) {
     __extends(ArrowUpShapeDescription, _super);
     function ArrowUpShapeDescription() {
@@ -30434,20 +30695,22 @@ var ArrowUpShapeDescription = (function (_super) {
 exports.ArrowUpShapeDescription = ArrowUpShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 731:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7436
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30455,10 +30718,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ArrowVerticalShapeDescription = exports.ArrowVerticalLineWidthParameterName = exports.ArrowVerticalTriangleHeightParameterName = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var ShapeParameters_1 = __webpack_require__(6629);
-var DiagramItem_1 = __webpack_require__(3742);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var ShapeParameters_1 = __webpack_require__(4636);
+var DiagramItem_1 = __webpack_require__(4824);
 exports.ArrowVerticalTriangleHeightParameterName = "th";
 exports.ArrowVerticalLineWidthParameterName = "lw";
 var ArrowVerticalShapeDescription = (function (_super) {
@@ -30500,20 +30763,22 @@ var ArrowVerticalShapeDescription = (function (_super) {
 exports.ArrowVerticalShapeDescription = ArrowVerticalShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2281:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3415
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30521,12 +30786,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CrossShapeDescription = exports.CrossVerticalWidthParameterName = exports.CrossHorizontalWidthParameterName = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var point_1 = __webpack_require__(8900);
-var ShapeParameters_1 = __webpack_require__(6629);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
+var ShapeDescription_1 = __webpack_require__(1280);
+var point_1 = __webpack_require__(5327);
+var ShapeParameters_1 = __webpack_require__(4636);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
 exports.CrossHorizontalWidthParameterName = "chw";
 exports.CrossVerticalWidthParameterName = "cvw";
 var CrossShapeDescription = (function (_super) {
@@ -30602,20 +30867,22 @@ var CrossShapeDescription = (function (_super) {
 exports.CrossShapeDescription = CrossShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5303:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7763
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30623,9 +30890,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiamondShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
+var ShapeDescription_1 = __webpack_require__(1280);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
 var DiamondShapeDescription = (function (_super) {
     __extends(DiamondShapeDescription, _super);
     function DiamondShapeDescription(defaultSize, hasDefaultText) {
@@ -30667,20 +30934,22 @@ var DiamondShapeDescription = (function (_super) {
 exports.DiamondShapeDescription = DiamondShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7768:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9829
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30688,12 +30957,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EllipseShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var EllipsePrimitive_1 = __webpack_require__(418);
-var ShapeTypes_1 = __webpack_require__(2259);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var EllipsePrimitive_1 = __webpack_require__(7345);
+var ShapeTypes_1 = __webpack_require__(3255);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
 var EllipseShapeDescription = (function (_super) {
     __extends(EllipseShapeDescription, _super);
     function EllipseShapeDescription(hasDefaultText) {
@@ -30729,20 +30998,22 @@ var EllipseShapeDescription = (function (_super) {
 exports.EllipseShapeDescription = EllipseShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8628:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7727
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30750,11 +31021,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HeartShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var DiagramItem_1 = __webpack_require__(3742);
+var ShapeDescription_1 = __webpack_require__(1280);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var DiagramItem_1 = __webpack_require__(4824);
 var HeartShapeDescription = (function (_super) {
     __extends(HeartShapeDescription, _super);
     function HeartShapeDescription() {
@@ -30807,20 +31078,22 @@ var HeartShapeDescription = (function (_super) {
 exports.HeartShapeDescription = HeartShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2953:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9543
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30828,11 +31101,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HexagonShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PolygonShapeDescription_1 = __webpack_require__(7314);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PolygonShapeDescription_1 = __webpack_require__(4717);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
 var HexagonShapeDescription = (function (_super) {
     __extends(HexagonShapeDescription, _super);
     function HexagonShapeDescription() {
@@ -30885,20 +31158,22 @@ var HexagonShapeDescription = (function (_super) {
 exports.HexagonShapeDescription = HexagonShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1412:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9496
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30906,11 +31181,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OctagonShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PolygonShapeDescription_1 = __webpack_require__(7314);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PolygonShapeDescription_1 = __webpack_require__(4717);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
 var OctagonShapeDescription = (function (_super) {
     __extends(OctagonShapeDescription, _super);
     function OctagonShapeDescription() {
@@ -30965,20 +31240,22 @@ var OctagonShapeDescription = (function (_super) {
 exports.OctagonShapeDescription = OctagonShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8761:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3165
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -30986,12 +31263,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PentagonShapeDescription = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PolygonShapeDescription_1 = __webpack_require__(7314);
-var DiagramItem_1 = __webpack_require__(3742);
-var Utils_1 = __webpack_require__(8675);
-var rectangle_1 = __webpack_require__(8011);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PolygonShapeDescription_1 = __webpack_require__(4717);
+var DiagramItem_1 = __webpack_require__(4824);
+var Utils_1 = __webpack_require__(41);
+var rectangle_1 = __webpack_require__(4412);
 var PentagonShapeDescription = (function (_super) {
     __extends(PentagonShapeDescription, _super);
     function PentagonShapeDescription(hasDefaultText) {
@@ -31065,20 +31342,22 @@ var PentagonShapeDescription = (function (_super) {
 exports.PentagonShapeDescription = PentagonShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7314:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4717
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31086,7 +31365,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PolygonShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
+var ShapeDescription_1 = __webpack_require__(1280);
 var PolygonShapeDescription = (function (_super) {
     __extends(PolygonShapeDescription, _super);
     function PolygonShapeDescription(hasDefaultText) {
@@ -31111,20 +31390,22 @@ var PolygonShapeDescription = (function (_super) {
 exports.PolygonShapeDescription = PolygonShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1561:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3190
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31132,10 +31413,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RectangleShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var ShapeTypes_1 = __webpack_require__(2259);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var ShapeTypes_1 = __webpack_require__(3255);
 var RectangleShapeDescription = (function (_super) {
     __extends(RectangleShapeDescription, _super);
     function RectangleShapeDescription(defaultSize, hasDefaultText) {
@@ -31169,20 +31450,22 @@ var RectangleShapeDescription = (function (_super) {
 exports.RectangleShapeDescription = RectangleShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8772:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8005
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31190,13 +31473,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StarShapeDescription = exports.StarConvexParameterName = void 0;
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var PentagonShapeDescription_1 = __webpack_require__(8761);
-var ShapeParameters_1 = __webpack_require__(6629);
-var ShapeParameterPoint_1 = __webpack_require__(1852);
-var point_1 = __webpack_require__(8900);
-var DiagramItem_1 = __webpack_require__(3742);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var PentagonShapeDescription_1 = __webpack_require__(3165);
+var ShapeParameters_1 = __webpack_require__(4636);
+var ShapeParameterPoint_1 = __webpack_require__(9763);
+var point_1 = __webpack_require__(5327);
+var DiagramItem_1 = __webpack_require__(4824);
 exports.StarConvexParameterName = "sc";
 var StarShapeDescription = (function (_super) {
     __extends(StarShapeDescription, _super);
@@ -31325,20 +31608,22 @@ var StarShapeDescription = (function (_super) {
 exports.StarShapeDescription = StarShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1669:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8278
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31346,12 +31631,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ClipPathPrimitive_1 = __webpack_require__(4593);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var Utils_1 = __webpack_require__(3500);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ClipPathPrimitive_1 = __webpack_require__(5654);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var Utils_1 = __webpack_require__(2136);
 var TextShapeDescription = (function (_super) {
     __extends(TextShapeDescription, _super);
     function TextShapeDescription() {
@@ -31397,20 +31682,22 @@ var TextShapeDescription = (function (_super) {
 exports.TextShapeDescription = TextShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2117:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1833
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31418,13 +31705,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TriangleShapeDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var PathPrimitive_1 = __webpack_require__(7724);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var DiagramItem_1 = __webpack_require__(3742);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
+var ShapeDescription_1 = __webpack_require__(1280);
+var PathPrimitive_1 = __webpack_require__(6208);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var DiagramItem_1 = __webpack_require__(4824);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
 var TriangleShapeDescription = (function (_super) {
     __extends(TriangleShapeDescription, _super);
     function TriangleShapeDescription(hasDefaultText) {
@@ -31477,20 +31764,22 @@ var TriangleShapeDescription = (function (_super) {
 exports.TriangleShapeDescription = TriangleShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3233:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5311
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31498,18 +31787,18 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CardBaseDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var ShapeWithImageDescription_1 = __webpack_require__(4083);
-var RoundedRectanglePrimitive_1 = __webpack_require__(4538);
-var PathPrimitive_1 = __webpack_require__(7724);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var ShapeImageIndicator_1 = __webpack_require__(6411);
-var ShapeTypes_1 = __webpack_require__(2259);
-var LocalizationService_1 = __webpack_require__(6224);
-var unit_converter_1 = __webpack_require__(9291);
-var point_1 = __webpack_require__(8900);
+var ShapeDescription_1 = __webpack_require__(1280);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var ShapeWithImageDescription_1 = __webpack_require__(7185);
+var RoundedRectanglePrimitive_1 = __webpack_require__(3763);
+var PathPrimitive_1 = __webpack_require__(6208);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var ShapeImageIndicator_1 = __webpack_require__(6018);
+var ShapeTypes_1 = __webpack_require__(3255);
+var LocalizationService_1 = __webpack_require__(820);
+var unit_converter_1 = __webpack_require__(9500);
+var point_1 = __webpack_require__(5327);
 var CardBaseDescription = (function (_super) {
     __extends(CardBaseDescription, _super);
     function CardBaseDescription(defaultSize) {
@@ -31624,20 +31913,22 @@ var CardBaseDescription = (function (_super) {
 exports.CardBaseDescription = CardBaseDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3107:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 321
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31645,10 +31936,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CardWithImageOnRightDescription = exports.CardWithImageOnLeftDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var ShapeTypes_1 = __webpack_require__(2259);
-var CardBaseDescription_1 = __webpack_require__(3233);
-var size_1 = __webpack_require__(6353);
+var ShapeDescription_1 = __webpack_require__(1280);
+var ShapeTypes_1 = __webpack_require__(3255);
+var CardBaseDescription_1 = __webpack_require__(5311);
+var size_1 = __webpack_require__(3844);
 var CardWithHorizontalImageDescription = (function (_super) {
     __extends(CardWithHorizontalImageDescription, _super);
     function CardWithHorizontalImageDescription() {
@@ -31702,20 +31993,22 @@ var CardWithImageOnRightDescription = (function (_super) {
 exports.CardWithImageOnRightDescription = CardWithImageOnRightDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2816:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7837
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -31723,11 +32016,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CardWithImageOnTopDescription = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var size_1 = __webpack_require__(6353);
-var ShapeTypes_1 = __webpack_require__(2259);
-var CardBaseDescription_1 = __webpack_require__(3233);
-var unit_converter_1 = __webpack_require__(9291);
+var ShapeDescription_1 = __webpack_require__(1280);
+var size_1 = __webpack_require__(3844);
+var ShapeTypes_1 = __webpack_require__(3255);
+var CardBaseDescription_1 = __webpack_require__(5311);
+var unit_converter_1 = __webpack_require__(9500);
 var CardWithImageOnTopDescription = (function (_super) {
     __extends(CardWithImageOnTopDescription, _super);
     function CardWithImageOnTopDescription() {
@@ -31757,23 +32050,23 @@ var CardWithImageOnTopDescription = (function (_super) {
 exports.CardWithImageOnTopDescription = CardWithImageOnTopDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6794:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1280
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShapeDescription = exports.ShapeTextPadding = exports.ShapeDefaultSize = exports.ShapeMinDimension = exports.ShapeDefaultDimension = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var size_1 = __webpack_require__(6353);
-var LocalizationService_1 = __webpack_require__(6224);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var TextPrimitive_1 = __webpack_require__(9416);
-var Utils_1 = __webpack_require__(8675);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var DiagramItem_1 = __webpack_require__(3742);
+var unit_converter_1 = __webpack_require__(9500);
+var size_1 = __webpack_require__(3844);
+var LocalizationService_1 = __webpack_require__(820);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var TextPrimitive_1 = __webpack_require__(128);
+var Utils_1 = __webpack_require__(41);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var DiagramItem_1 = __webpack_require__(4824);
 exports.ShapeDefaultDimension = 1440;
 exports.ShapeMinDimension = 360;
 exports.ShapeDefaultSize = new size_1.Size(exports.ShapeDefaultDimension, exports.ShapeDefaultDimension);
@@ -31956,59 +32249,59 @@ var ShapeDescription = (function () {
 exports.ShapeDescription = ShapeDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8397:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 281
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShapeDescriptionManager = void 0;
-var ProcessShapeDescription_1 = __webpack_require__(5331);
-var DecisionShapeDescription_1 = __webpack_require__(6825);
-var ManualInputShapeDescription_1 = __webpack_require__(9144);
-var DataShapeDescription_1 = __webpack_require__(4941);
-var TerminatorShapeDescription_1 = __webpack_require__(6242);
-var PredefinedProcessShapeDescription_1 = __webpack_require__(6508);
-var ArrowUpDownShapeDescription_1 = __webpack_require__(9089);
-var ArrowRightShapeDescription_1 = __webpack_require__(6599);
-var ArrowUpShapeDescription_1 = __webpack_require__(8327);
-var CrossShapeDescription_1 = __webpack_require__(2281);
-var DiamondShapeDescription_1 = __webpack_require__(5303);
-var EllipseShapeDescription_1 = __webpack_require__(7768);
-var HeartShapeDescription_1 = __webpack_require__(8628);
-var RectangleShapeDescription_1 = __webpack_require__(1561);
-var TextShapeDescription_1 = __webpack_require__(1669);
-var PentagonShapeDescription_1 = __webpack_require__(8761);
-var HexagonShapeDescription_1 = __webpack_require__(2953);
-var OctagonShapeDescription_1 = __webpack_require__(1412);
-var StarShapeDescription_1 = __webpack_require__(8772);
-var ArrowDownShapeDescription_1 = __webpack_require__(4958);
-var ArrowLeftRightShapeDescription_1 = __webpack_require__(8800);
-var ArrowLeftShapeDescription_1 = __webpack_require__(6023);
-var TriangleShapeDescription_1 = __webpack_require__(2117);
-var DocumentShapeDescription_1 = __webpack_require__(3525);
-var MultipleDocumentsShapeDescription_1 = __webpack_require__(2850);
-var PreparationShapeDescription_1 = __webpack_require__(4112);
-var HardDiskShapeDescription_1 = __webpack_require__(1314);
-var DatabaseShapeDescription_1 = __webpack_require__(1034);
-var InternalStorageShapeDescription_1 = __webpack_require__(2751);
-var PaperTapeShapeDescription_1 = __webpack_require__(8110);
-var ManualOperationShapeDescription_1 = __webpack_require__(1643);
-var DelayShapeDescription_1 = __webpack_require__(9229);
-var StoredDataShapeDescription_1 = __webpack_require__(4810);
-var MergeShapeDescription_1 = __webpack_require__(3046);
-var DisplayShapeDescription_1 = __webpack_require__(2650);
-var OrShapeDescription_1 = __webpack_require__(2019);
-var SummingJunctionShapeDescription_1 = __webpack_require__(6182);
-var CustomShapeDescription_1 = __webpack_require__(6688);
-var VerticalContainerDescription_1 = __webpack_require__(5759);
-var HorizontalContainerDescription_1 = __webpack_require__(944);
-var CardWithImageOnTopDescription_1 = __webpack_require__(2816);
-var ShapeTypes_1 = __webpack_require__(2259);
-var ConnectorShapeDescription_1 = __webpack_require__(7552);
-var Utils_1 = __webpack_require__(8675);
-var CardWithHorizontalImageDescription_1 = __webpack_require__(3107);
+var ProcessShapeDescription_1 = __webpack_require__(5290);
+var DecisionShapeDescription_1 = __webpack_require__(9415);
+var ManualInputShapeDescription_1 = __webpack_require__(5005);
+var DataShapeDescription_1 = __webpack_require__(3489);
+var TerminatorShapeDescription_1 = __webpack_require__(7368);
+var PredefinedProcessShapeDescription_1 = __webpack_require__(156);
+var ArrowUpDownShapeDescription_1 = __webpack_require__(7443);
+var ArrowRightShapeDescription_1 = __webpack_require__(2444);
+var ArrowUpShapeDescription_1 = __webpack_require__(6855);
+var CrossShapeDescription_1 = __webpack_require__(3415);
+var DiamondShapeDescription_1 = __webpack_require__(7763);
+var EllipseShapeDescription_1 = __webpack_require__(9829);
+var HeartShapeDescription_1 = __webpack_require__(7727);
+var RectangleShapeDescription_1 = __webpack_require__(3190);
+var TextShapeDescription_1 = __webpack_require__(8278);
+var PentagonShapeDescription_1 = __webpack_require__(3165);
+var HexagonShapeDescription_1 = __webpack_require__(9543);
+var OctagonShapeDescription_1 = __webpack_require__(9496);
+var StarShapeDescription_1 = __webpack_require__(8005);
+var ArrowDownShapeDescription_1 = __webpack_require__(166);
+var ArrowLeftRightShapeDescription_1 = __webpack_require__(3475);
+var ArrowLeftShapeDescription_1 = __webpack_require__(5455);
+var TriangleShapeDescription_1 = __webpack_require__(1833);
+var DocumentShapeDescription_1 = __webpack_require__(268);
+var MultipleDocumentsShapeDescription_1 = __webpack_require__(9901);
+var PreparationShapeDescription_1 = __webpack_require__(7450);
+var HardDiskShapeDescription_1 = __webpack_require__(2781);
+var DatabaseShapeDescription_1 = __webpack_require__(9968);
+var InternalStorageShapeDescription_1 = __webpack_require__(9613);
+var PaperTapeShapeDescription_1 = __webpack_require__(1381);
+var ManualOperationShapeDescription_1 = __webpack_require__(2392);
+var DelayShapeDescription_1 = __webpack_require__(9904);
+var StoredDataShapeDescription_1 = __webpack_require__(9758);
+var MergeShapeDescription_1 = __webpack_require__(5803);
+var DisplayShapeDescription_1 = __webpack_require__(8321);
+var OrShapeDescription_1 = __webpack_require__(2092);
+var SummingJunctionShapeDescription_1 = __webpack_require__(1493);
+var CustomShapeDescription_1 = __webpack_require__(2567);
+var VerticalContainerDescription_1 = __webpack_require__(6621);
+var HorizontalContainerDescription_1 = __webpack_require__(6283);
+var CardWithImageOnTopDescription_1 = __webpack_require__(7837);
+var ShapeTypes_1 = __webpack_require__(3255);
+var ConnectorShapeDescription_1 = __webpack_require__(5656);
+var Utils_1 = __webpack_require__(41);
+var CardWithHorizontalImageDescription_1 = __webpack_require__(321);
 var ShapeDescriptionManager = (function () {
     function ShapeDescriptionManager() {
         this.descriptions = {};
@@ -32137,20 +32430,22 @@ var ShapeDescriptionManager = (function () {
 exports.ShapeDescriptionManager = ShapeDescriptionManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4083:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7185
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -32158,17 +32453,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShapeWithImageDescription = exports.SHAPE_IMAGE_CLASSNAMES = exports.ShapeDefaultSize = exports.ShapeDefaultDimension = void 0;
-var ShapeDescription_1 = __webpack_require__(6794);
-var rectangle_1 = __webpack_require__(8011);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var unit_converter_1 = __webpack_require__(9291);
-var ImagePrimitive_1 = __webpack_require__(1995);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var Utils_1 = __webpack_require__(3500);
-var ClipPathPrimitive_1 = __webpack_require__(4593);
-var ShapeImageIndicator_1 = __webpack_require__(6411);
+var ShapeDescription_1 = __webpack_require__(1280);
+var rectangle_1 = __webpack_require__(4412);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var unit_converter_1 = __webpack_require__(9500);
+var ImagePrimitive_1 = __webpack_require__(4);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var Utils_1 = __webpack_require__(2136);
+var ClipPathPrimitive_1 = __webpack_require__(5654);
+var ShapeImageIndicator_1 = __webpack_require__(6018);
 exports.ShapeDefaultDimension = 1440;
 exports.ShapeDefaultSize = new size_1.Size(exports.ShapeDefaultDimension, exports.ShapeDefaultDimension);
 exports.SHAPE_IMAGE_CLASSNAMES = {
@@ -32260,20 +32555,22 @@ var ShapeWithImageDescription = (function (_super) {
 exports.ShapeWithImageDescription = ShapeWithImageDescription;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5503:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8408
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -32281,13 +32578,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Shape = void 0;
-var rectangle_1 = __webpack_require__(8011);
-var ShapeDescription_1 = __webpack_require__(6794);
-var ShapeParameters_1 = __webpack_require__(6629);
-var DiagramItem_1 = __webpack_require__(3742);
-var ConnectionPoint_1 = __webpack_require__(7228);
-var ImageInfo_1 = __webpack_require__(6617);
-var NativeItem_1 = __webpack_require__(7185);
+var rectangle_1 = __webpack_require__(4412);
+var ShapeDescription_1 = __webpack_require__(1280);
+var ShapeParameters_1 = __webpack_require__(4636);
+var DiagramItem_1 = __webpack_require__(4824);
+var ConnectionPoint_1 = __webpack_require__(4856);
+var ImageInfo_1 = __webpack_require__(9406);
+var NativeItem_1 = __webpack_require__(4235);
 var Shape = (function (_super) {
     __extends(Shape, _super);
     function Shape(description, position, forToolbox) {
@@ -32491,10 +32788,10 @@ var Shape = (function (_super) {
 exports.Shape = Shape;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1852:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 9763
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -32509,10 +32806,10 @@ var ShapeParameterPoint = (function () {
 exports.ShapeParameterPoint = ShapeParameterPoint;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6629:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 4636
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -32575,10 +32872,10 @@ var ShapeParameters = (function () {
 exports.ShapeParameters = ShapeParameters;
 
 
-/***/ }),
+/***/ },
 
-/***/ 2259:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 3255
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -32693,20 +32990,22 @@ var ShapeType;
 })(ShapeType = exports.ShapeType || (exports.ShapeType = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 1552:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5059
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -32714,9 +33013,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EmptyStyle = exports.StrokeStyle = exports.TextAlignment = exports.TextStyle = exports.Style = exports.DEFAULT_STROKE_DASHARRAY = exports.DEFAULT_STROKE_WIDTH = exports.StyleBase = void 0;
-var color_1 = __webpack_require__(13);
-var Svg_1 = __webpack_require__(8396);
-var unit_converter_1 = __webpack_require__(9291);
+var color_1 = __webpack_require__(9553);
+var Svg_1 = __webpack_require__(7768);
+var unit_converter_1 = __webpack_require__(9500);
 var StyleBase = (function () {
     function StyleBase() {
         this.createDefaultProperties();
@@ -32773,7 +33072,7 @@ var StyleBase = (function () {
     StyleBase.prototype.fromObject = function (obj) {
         for (var key in obj)
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                var value = Svg_1.isColorProperty(key) ? color_1.ColorUtils.stringToHash(obj[key]) : obj[key];
+                var value = (0, Svg_1.isColorProperty)(key) ? color_1.ColorUtils.stringToHash(obj[key]) : obj[key];
                 this[key] = value;
             }
     };
@@ -32914,10 +33213,165 @@ var EmptyStyle = (function (_super) {
 exports.EmptyStyle = EmptyStyle;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6214:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5225
+(__unused_webpack_module, exports) {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DiagramModelOperation = exports.ModelOperationSettings = void 0;
+var ModelOperationSettings = (function () {
+    function ModelOperationSettings() {
+        this._addShape = true;
+        this._addShapeFromToolbox = true;
+        this._deleteShape = true;
+        this._deleteConnector = true;
+        this._changeConnection = true;
+        this._changeConnectorPoints = true;
+        this._changeShapeText = true;
+        this._changeConnectorText = true;
+        this._resizeShape = true;
+        this._moveShape = true;
+    }
+    Object.defineProperty(ModelOperationSettings.prototype, "addShape", {
+        get: function () { return this._addShape; },
+        set: function (value) {
+            if (value !== this._addShape)
+                this._addShape = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "addShapeFromToolbox", {
+        get: function () { return this._addShapeFromToolbox; },
+        set: function (value) {
+            if (value !== this._addShapeFromToolbox)
+                this._addShapeFromToolbox = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "deleteShape", {
+        get: function () { return this._deleteShape; },
+        set: function (value) {
+            if (value !== this._deleteShape)
+                this._deleteShape = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "deleteConnector", {
+        get: function () { return this._deleteConnector; },
+        set: function (value) {
+            if (value !== this._deleteConnector)
+                this._deleteConnector = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "changeConnection", {
+        get: function () { return this._changeConnection; },
+        set: function (value) {
+            if (value !== this._changeConnection)
+                this._changeConnection = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "changeConnectorPoints", {
+        get: function () { return this._changeConnectorPoints; },
+        set: function (value) {
+            if (value !== this._changeConnectorPoints)
+                this._changeConnectorPoints = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "changeShapeText", {
+        get: function () { return this._changeShapeText; },
+        set: function (value) {
+            if (value !== this._changeShapeText)
+                this._changeShapeText = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "changeConnectorText", {
+        get: function () { return this._changeConnectorText; },
+        set: function (value) {
+            if (value !== this._changeConnectorText)
+                this._changeConnectorText = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "resizeShape", {
+        get: function () { return this._resizeShape; },
+        set: function (value) {
+            if (value !== this._resizeShape)
+                this._resizeShape = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModelOperationSettings.prototype, "moveShape", {
+        get: function () { return this._moveShape; },
+        set: function (value) {
+            if (value !== this._moveShape)
+                this._moveShape = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    ModelOperationSettings.prototype.applySettings = function (settings) {
+        if (!settings)
+            return;
+        if (typeof settings.addShape === "boolean")
+            this.addShape = settings.addShape;
+        if (typeof settings.addShapeFromToolbox === "boolean")
+            this.addShapeFromToolbox = settings.addShapeFromToolbox;
+        if (typeof settings.deleteShape === "boolean")
+            this.deleteShape = settings.deleteShape;
+        if (typeof settings.deleteConnector === "boolean")
+            this.deleteConnector = settings.deleteConnector;
+        if (typeof settings.changeConnection === "boolean")
+            this.changeConnection = settings.changeConnection;
+        if (typeof settings.changeConnectorPoints === "boolean")
+            this.changeConnectorPoints = settings.changeConnectorPoints;
+        if (typeof settings.changeShapeText === "boolean")
+            this.changeShapeText = settings.changeShapeText;
+        if (typeof settings.changeConnectorText === "boolean")
+            this.changeConnectorText = settings.changeConnectorText;
+        if (typeof settings.resizeShape === "boolean")
+            this.resizeShape = settings.resizeShape;
+        if (typeof settings.moveShape === "boolean")
+            this.moveShape = settings.moveShape;
+    };
+    return ModelOperationSettings;
+}());
+exports.ModelOperationSettings = ModelOperationSettings;
+var DiagramModelOperation;
+(function (DiagramModelOperation) {
+    DiagramModelOperation[DiagramModelOperation["AddShape"] = 0] = "AddShape";
+    DiagramModelOperation[DiagramModelOperation["AddShapeFromToolbox"] = 1] = "AddShapeFromToolbox";
+    DiagramModelOperation[DiagramModelOperation["DeleteShape"] = 2] = "DeleteShape";
+    DiagramModelOperation[DiagramModelOperation["DeleteConnector"] = 3] = "DeleteConnector";
+    DiagramModelOperation[DiagramModelOperation["ChangeConnection"] = 4] = "ChangeConnection";
+    DiagramModelOperation[DiagramModelOperation["ChangeConnectorPoints"] = 5] = "ChangeConnectorPoints";
+    DiagramModelOperation[DiagramModelOperation["BeforeChangeShapeText"] = 6] = "BeforeChangeShapeText";
+    DiagramModelOperation[DiagramModelOperation["ChangeShapeText"] = 7] = "ChangeShapeText";
+    DiagramModelOperation[DiagramModelOperation["BeforeChangeConnectorText"] = 8] = "BeforeChangeConnectorText";
+    DiagramModelOperation[DiagramModelOperation["ChangeConnectorText"] = 9] = "ChangeConnectorText";
+    DiagramModelOperation[DiagramModelOperation["ResizeShape"] = 10] = "ResizeShape";
+    DiagramModelOperation[DiagramModelOperation["MoveShape"] = 11] = "MoveShape";
+})(DiagramModelOperation = exports.DiagramModelOperation || (exports.DiagramModelOperation = {}));
+
+
+/***/ },
+
+/***/ 5718
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -32970,18 +33424,18 @@ var ReloadContentParameters = (function () {
 exports.ReloadContentParameters = ReloadContentParameters;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6557:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7611
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AutoScrollController = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var dom_1 = __webpack_require__(6907);
-var size_1 = __webpack_require__(6353);
-var Utils_1 = __webpack_require__(8675);
+var RenderHelper_1 = __webpack_require__(8509);
+var dom_1 = __webpack_require__(750);
+var size_1 = __webpack_require__(3844);
+var Utils_1 = __webpack_require__(41);
 var SCROLL_EDGE = 40;
 var SCROLL_RATIO = 5;
 var SCROLL_MAXOFFSET = 5;
@@ -33104,20 +33558,22 @@ var AutoScrollController = (function () {
 exports.AutoScrollController = AutoScrollController;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3872:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8236
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -33138,7 +33594,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -33161,13 +33617,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasExportManager = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var browser_1 = __webpack_require__(9279);
-var Utils_1 = __webpack_require__(3500);
-var CanvasManagerBase_1 = __webpack_require__(7716);
-var RenderHelper_1 = __webpack_require__(1114);
-var DOMManipulator_1 = __webpack_require__(6078);
-var color_1 = __webpack_require__(13);
+var unit_converter_1 = __webpack_require__(9500);
+var browser_1 = __webpack_require__(8424);
+var Utils_1 = __webpack_require__(2136);
+var CanvasManagerBase_1 = __webpack_require__(5707);
+var RenderHelper_1 = __webpack_require__(8509);
+var DOMManipulator_1 = __webpack_require__(6873);
+var color_1 = __webpack_require__(9553);
 var EXPORT_IMAGE_QUALITY = 1;
 var CanvasExportManager = (function (_super) {
     __extends(CanvasExportManager, _super);
@@ -33346,20 +33802,22 @@ var CanvasExportManager = (function (_super) {
 exports.CanvasExportManager = CanvasExportManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8693:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9922
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -33367,15 +33825,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasItemsManager = exports.CONNECTOR_CAN_MOVE = exports.NOT_VALID_CSSCLASS = void 0;
-var ModelChange_1 = __webpack_require__(2004);
-var Event_1 = __webpack_require__(6031);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var Utils_1 = __webpack_require__(3500);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var dom_1 = __webpack_require__(6907);
-var CanvasManager_1 = __webpack_require__(916);
-var ModelUtils_1 = __webpack_require__(4867);
+var ModelChange_1 = __webpack_require__(3427);
+var Event_1 = __webpack_require__(5428);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var Utils_1 = __webpack_require__(2136);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var dom_1 = __webpack_require__(750);
+var CanvasManager_1 = __webpack_require__(5318);
+var ModelUtils_1 = __webpack_require__(1922);
 exports.NOT_VALID_CSSCLASS = "not-valid";
 exports.CONNECTOR_CAN_MOVE = "can-move";
 var CanvasItemsManager = (function (_super) {
@@ -33713,20 +34171,22 @@ var CanvasItemsManager = (function (_super) {
 exports.CanvasItemsManager = CanvasItemsManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 916:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5318
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -33734,8 +34194,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasManager = void 0;
-var ModelChange_1 = __webpack_require__(2004);
-var CanvasManagerBase_1 = __webpack_require__(7716);
+var ModelChange_1 = __webpack_require__(3427);
+var CanvasManagerBase_1 = __webpack_require__(5707);
 var CanvasManager = (function (_super) {
     __extends(CanvasManager, _super);
     function CanvasManager() {
@@ -33826,16 +34286,16 @@ var CanvasManager = (function (_super) {
 exports.CanvasManager = CanvasManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7716:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5707
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasManagerBase = exports.PAGE_BG_TEXTFLOOR_FILTER_IDPREFIX = void 0;
-var TextFilterPrimitive_1 = __webpack_require__(3360);
-var unit_converter_1 = __webpack_require__(9291);
+var TextFilterPrimitive_1 = __webpack_require__(1118);
+var unit_converter_1 = __webpack_require__(9500);
 exports.PAGE_BG_TEXTFLOOR_FILTER_IDPREFIX = "page-text-flood";
 var CanvasManagerBase = (function () {
     function CanvasManagerBase(actualZoom, dom, instanceId) {
@@ -33879,20 +34339,22 @@ var CanvasManagerBase = (function () {
 exports.CanvasManagerBase = CanvasManagerBase;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6043:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3283
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -33900,17 +34362,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasPageManager = void 0;
-var Style_1 = __webpack_require__(1552);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var PathPrimitive_1 = __webpack_require__(7724);
-var PatternPrimitive_1 = __webpack_require__(1932);
-var ClipPathPrimitive_1 = __webpack_require__(4593);
-var CanvasManagerBase_1 = __webpack_require__(7716);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var Utils_1 = __webpack_require__(3500);
-var color_1 = __webpack_require__(13);
-var unit_converter_1 = __webpack_require__(9291);
+var Style_1 = __webpack_require__(5059);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var PathPrimitive_1 = __webpack_require__(6208);
+var PatternPrimitive_1 = __webpack_require__(7301);
+var ClipPathPrimitive_1 = __webpack_require__(5654);
+var CanvasManagerBase_1 = __webpack_require__(5707);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var Utils_1 = __webpack_require__(2136);
+var color_1 = __webpack_require__(9553);
+var unit_converter_1 = __webpack_require__(9500);
 var GRID_PAGES_LINEWIDTH = 2;
 var CanvasPageManager = (function (_super) {
     __extends(CanvasPageManager, _super);
@@ -34080,20 +34542,22 @@ var CanvasPageManager = (function (_super) {
 exports.CanvasPageManager = CanvasPageManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4000:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9700
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -34101,31 +34565,31 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasSelectionManager = exports.ACTIVE_SELECTION_CSSCLASS = exports.SELECTION_ELEMENT_CLASSNAMES = void 0;
-var CanvasManagerBase_1 = __webpack_require__(7716);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var Utils_1 = __webpack_require__(3500);
-var Event_1 = __webpack_require__(6031);
-var DiagramItem_1 = __webpack_require__(3742);
-var Utils_2 = __webpack_require__(8675);
-var point_1 = __webpack_require__(8900);
-var ExtensionLinesVisualizer_1 = __webpack_require__(371);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var ConnectorProperties_1 = __webpack_require__(4612);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var PathPrimitive_1 = __webpack_require__(7724);
-var TextPrimitive_1 = __webpack_require__(9416);
-var EllipsePrimitive_1 = __webpack_require__(418);
-var Style_1 = __webpack_require__(1552);
-var unit_converter_1 = __webpack_require__(9291);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var browser_1 = __webpack_require__(9279);
-var dom_1 = __webpack_require__(6907);
-var CanvasItemsManager_1 = __webpack_require__(8693);
-var CanvasManager_1 = __webpack_require__(916);
-var metrics_1 = __webpack_require__(5596);
-var math_1 = __webpack_require__(8679);
-var ModelUtils_1 = __webpack_require__(4867);
+var CanvasManagerBase_1 = __webpack_require__(5707);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var Utils_1 = __webpack_require__(2136);
+var Event_1 = __webpack_require__(5428);
+var DiagramItem_1 = __webpack_require__(4824);
+var Utils_2 = __webpack_require__(41);
+var point_1 = __webpack_require__(5327);
+var ExtensionLinesVisualizer_1 = __webpack_require__(3788);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var ConnectorProperties_1 = __webpack_require__(4385);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var PathPrimitive_1 = __webpack_require__(6208);
+var TextPrimitive_1 = __webpack_require__(128);
+var EllipsePrimitive_1 = __webpack_require__(7345);
+var Style_1 = __webpack_require__(5059);
+var unit_converter_1 = __webpack_require__(9500);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var browser_1 = __webpack_require__(8424);
+var dom_1 = __webpack_require__(750);
+var CanvasItemsManager_1 = __webpack_require__(9922);
+var CanvasManager_1 = __webpack_require__(5318);
+var metrics_1 = __webpack_require__(4496);
+var math_1 = __webpack_require__(594);
+var ModelUtils_1 = __webpack_require__(1922);
 var MULTIPLE_SELECTION_KEY = "-1";
 exports.SELECTION_ELEMENT_CLASSNAMES = {
     SELECTION_RECTANGLE: "selection-rect",
@@ -35011,20 +35475,22 @@ var ConnectorSelectionElement = (function (_super) {
 }(ItemSelectionElement));
 
 
-/***/ }),
+/***/ },
 
-/***/ 9757:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1377
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -35032,20 +35498,20 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CanvasViewManager = exports.CROP_OFFSET = exports.CANVAS_SCROLL_PADDING = exports.CANVAS_MIN_PADDING = void 0;
-var CanvasManagerBase_1 = __webpack_require__(7716);
-var Settings_1 = __webpack_require__(240);
-var Utils_1 = __webpack_require__(8675);
-var offsets_1 = __webpack_require__(4125);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var ClipPathPrimitive_1 = __webpack_require__(4593);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var Utils_2 = __webpack_require__(3500);
-var ShadowFilterPrimitive_1 = __webpack_require__(3281);
-var Style_1 = __webpack_require__(1552);
-var dom_1 = __webpack_require__(6907);
-var unit_converter_1 = __webpack_require__(9291);
+var CanvasManagerBase_1 = __webpack_require__(5707);
+var Settings_1 = __webpack_require__(9307);
+var Utils_1 = __webpack_require__(41);
+var offsets_1 = __webpack_require__(8601);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var ClipPathPrimitive_1 = __webpack_require__(5654);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var Utils_2 = __webpack_require__(2136);
+var ShadowFilterPrimitive_1 = __webpack_require__(9299);
+var Style_1 = __webpack_require__(5059);
+var dom_1 = __webpack_require__(750);
+var unit_converter_1 = __webpack_require__(9500);
 exports.CANVAS_MIN_PADDING = 8;
 exports.CANVAS_SCROLL_PADDING = 18;
 exports.CROP_OFFSET = 40;
@@ -35313,7 +35779,7 @@ var CanvasViewManager = (function (_super) {
     };
     CanvasViewManager.prototype.updateCanvasElement = function (translate) {
         this.canvasElement = this.getOrCreateElement("dxdi-main", new GroupPrimitive_1.GroupPrimitive([], "dxdi-main", null, null, function (el) {
-            el.setAttribute("transform", "translate(" + Math.round(translate.x) + ", " + Math.round(translate.y) + ")");
+            el.setAttribute("transform", "translate(".concat(Math.round(translate.x), ", ").concat(Math.round(translate.y), ")"));
         }), this.svgElement);
     };
     CanvasViewManager.prototype.updatePageElement = function (modelAbsSize, translate, simpleView) {
@@ -35333,7 +35799,7 @@ var CanvasViewManager = (function (_super) {
     };
     CanvasViewManager.prototype.updatePageElementCore = function (groupClipPathId, translateX, translateY, modelAbsWidth, modelAbsHeight) {
         this.pageElement = this.getOrCreateElement("page", new GroupPrimitive_1.GroupPrimitive([], "dxdi-page", null, groupClipPathId, function (el) {
-            el.setAttribute("transform", "translate(" + translateX + ", " + translateY + ")");
+            el.setAttribute("transform", "translate(".concat(translateX, ", ").concat(translateY, ")"));
         }), this.svgElement);
         this.getOrCreateElement("pageClip", this.createPageClipPathPrimitive(modelAbsWidth, modelAbsHeight), this.svgElement);
     };
@@ -35556,20 +36022,22 @@ var CanvasViewManager = (function (_super) {
 exports.CanvasViewManager = CanvasViewManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6078:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6873
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -35577,7 +36045,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ExportDOMManipulator = exports.DOMManipulator = void 0;
-var Diagnostics_1 = __webpack_require__(9463);
+var Diagnostics_1 = __webpack_require__(9196);
 var RAF_CHANGES_LIMIT = 2000;
 var DOMManipulator = (function () {
     function DOMManipulator(measurer) {
@@ -35658,27 +36126,27 @@ var ExportDOMManipulator = (function (_super) {
 exports.ExportDOMManipulator = ExportDOMManipulator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 741:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7169
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputManager = void 0;
-var key_1 = __webpack_require__(2153);
-var dom_1 = __webpack_require__(6907);
-var Utils_1 = __webpack_require__(3500);
-var Event_1 = __webpack_require__(6031);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var evt_1 = __webpack_require__(3714);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var browser_1 = __webpack_require__(9279);
-var unit_converter_1 = __webpack_require__(9291);
-var RenderHelper_1 = __webpack_require__(1114);
-var TextUtils_1 = __webpack_require__(3490);
-var Utils_2 = __webpack_require__(8675);
+var key_1 = __webpack_require__(6537);
+var dom_1 = __webpack_require__(750);
+var Utils_1 = __webpack_require__(2136);
+var Event_1 = __webpack_require__(5428);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var evt_1 = __webpack_require__(8451);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var browser_1 = __webpack_require__(8424);
+var unit_converter_1 = __webpack_require__(9500);
+var RenderHelper_1 = __webpack_require__(8509);
+var TextUtils_1 = __webpack_require__(1842);
+var Utils_2 = __webpack_require__(41);
 var TEXT_INPUT_CSSCLASS = "dxdi-text-input";
 var InputManager = (function () {
     function InputManager(mainElement, layoutPointResolver, eventManager, textMeasurer, actualZoom, focusElementsParent) {
@@ -35864,12 +36332,12 @@ var InputManager = (function () {
         var text = this.textInputElement.value;
         if (!this.savedTextInputSize) {
             var measureResults = this.textMeasurer.measureWords(" ", this.savedTextInputStyle, ITextMeasurer_1.TextOwner.Connector);
-            var textHeight = TextUtils_1.getLineHeight(measureResults) * ((TextUtils_1.textToParagraphs(text).length || 1) + 1);
+            var textHeight = (0, TextUtils_1.getLineHeight)(measureResults) * (((0, TextUtils_1.textToParagraphs)(text).length || 1) + 1);
             this.textInputElement.style.height = Math.ceil(textHeight) + "px";
         }
         else {
             var measureResults = this.textMeasurer.measureWords(text, this.savedTextInputStyle, ITextMeasurer_1.TextOwner.Shape);
-            var textHeight = TextUtils_1.getTextHeight(text, this.savedTextInputSize.width, measureResults, true);
+            var textHeight = (0, TextUtils_1.getTextHeight)(text, this.savedTextInputSize.width, measureResults, true);
             var top_1 = Math.max(0, (this.savedTextInputSize.height - textHeight) * 0.5);
             this.textInputElement.style.paddingTop = Math.ceil(top_1) + "px";
             this.textInputElement.style.height = Math.floor(this.savedTextInputSize.height) + "px";
@@ -35878,16 +36346,16 @@ var InputManager = (function () {
     InputManager.prototype.onInputBlur = function (evt) {
         var _this = this;
         this.blurControl();
-        Utils_1.raiseEvent(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onBlur(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onBlur(e); });
     };
     InputManager.prototype.onInputFocus = function (evt) {
         var _this = this;
         this.focusControl();
-        Utils_1.raiseEvent(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onFocus(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onFocus(e); });
     };
     InputManager.prototype.onInputKeyDown = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onKeyDown(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onKeyDown(e); });
     };
     InputManager.prototype.onInputKeyPress = function (evt) {
         if (evt.preventDefault && !(browser_1.Browser.Safari && evt.code === "KeyV"))
@@ -35895,13 +36363,13 @@ var InputManager = (function () {
     };
     InputManager.prototype.onInputKeyUp = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onKeyUp(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onKeyUp(e); });
     };
     InputManager.prototype.onTextInputBlur = function (evt) {
         var _this = this;
         if (this.eventManager.canFinishTextEditing()) {
             this.blurControl();
-            Utils_1.raiseEvent(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onTextInputBlur(e); });
+            (0, Utils_1.raiseEvent)(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onTextInputBlur(e); });
         }
         else {
             var srcElement = evt_1.EvtUtils.getEventSource(evt);
@@ -35912,11 +36380,11 @@ var InputManager = (function () {
     InputManager.prototype.onTextInputFocus = function (evt) {
         var _this = this;
         this.focusControl();
-        Utils_1.raiseEvent(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onTextInputFocus(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramFocusEvent(evt), function (e) { return _this.eventManager.onTextInputFocus(e); });
     };
     InputManager.prototype.onTextInputKeyDown = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onTextInputKeyDown(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramKeyboardEvent(evt), function (e) { return _this.eventManager.onTextInputKeyDown(e); });
     };
     InputManager.prototype.onTextInputKeyUp = function (evt) {
         this.updateTextInputPadding();
@@ -35926,7 +36394,7 @@ var InputManager = (function () {
     };
     InputManager.prototype.onPaste = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.getDiagramClipboardEvent(evt), function (e) { return _this.eventManager.onPaste(e); });
+        (0, Utils_1.raiseEvent)(evt, this.getDiagramClipboardEvent(evt), function (e) { return _this.eventManager.onPaste(e); });
     };
     InputManager.prototype.onTextInputMouseWheel = function (evt) {
         this.mouseWheelHandler && this.mouseWheelHandler(evt);
@@ -35989,10 +36457,10 @@ var InputManager = (function () {
 exports.InputManager = InputManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4246:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5650
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -36006,21 +36474,21 @@ var TextOwner;
 })(TextOwner = exports.TextOwner || (exports.TextOwner = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 1733:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6727
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextMeasurer = void 0;
-var size_1 = __webpack_require__(6353);
-var Utils_1 = __webpack_require__(3500);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var ITextMeasurer_1 = __webpack_require__(4246);
-var RenderHelper_1 = __webpack_require__(1114);
-var TextUtils_1 = __webpack_require__(3490);
+var size_1 = __webpack_require__(3844);
+var Utils_1 = __webpack_require__(2136);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var ITextMeasurer_1 = __webpack_require__(5650);
+var RenderHelper_1 = __webpack_require__(8509);
+var TextUtils_1 = __webpack_require__(1842);
 var TextMeasurer = (function () {
     function TextMeasurer(parent) {
         this.cache = {};
@@ -36047,7 +36515,7 @@ var TextMeasurer = (function () {
     };
     TextMeasurer.prototype.measureTextLine = function (textLine, style, owner) {
         var results = this.measureWords(textLine, style, owner);
-        return TextUtils_1.getTextLineSize(textLine, results);
+        return (0, TextUtils_1.getTextLineSize)(textLine, results);
     };
     TextMeasurer.prototype.onNewModel = function (items, dom) {
         var _this = this;
@@ -36178,7 +36646,7 @@ var TextMeasurer = (function () {
         return element;
     };
     TextMeasurer.prototype.splitToWords = function (text, includeWhitespace) {
-        var words = TextUtils_1.textToWords(text);
+        var words = (0, TextUtils_1.textToWords)(text);
         includeWhitespace && words.push(" ");
         return words;
     };
@@ -36211,20 +36679,22 @@ var TextMeasurer = (function () {
 exports.TextMeasurer = TextMeasurer;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4593:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 5654
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36232,8 +36702,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ClipPathPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var ClipPathPrimitive = (function (_super) {
     __extends(ClipPathPrimitive, _super);
     function ClipPathPrimitive(id, children) {
@@ -36257,20 +36727,22 @@ var ClipPathPrimitive = (function (_super) {
 exports.ClipPathPrimitive = ClipPathPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 418:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7345
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36278,8 +36750,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EllipsePrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var EllipsePrimitive = (function (_super) {
     __extends(EllipsePrimitive, _super);
     function EllipsePrimitive(cx, cy, rx, ry, style, className, onApplyProperties) {
@@ -36306,20 +36778,22 @@ var EllipsePrimitive = (function (_super) {
 exports.EllipsePrimitive = EllipsePrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4628:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9707
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36327,8 +36801,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FilterPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var FilterPrimitive = (function (_super) {
     __extends(FilterPrimitive, _super);
     function FilterPrimitive(id, x, y, width, height) {
@@ -36360,20 +36834,22 @@ var FilterPrimitive = (function (_super) {
 exports.FilterPrimitive = FilterPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5329:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6709
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36381,8 +36857,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GroupPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var GroupPrimitive = (function (_super) {
     __extends(GroupPrimitive, _super);
     function GroupPrimitive(children, className, zIndex, clipPathId, onApplyProperties, onBeforeDispose) {
@@ -36410,20 +36886,22 @@ var GroupPrimitive = (function (_super) {
 exports.GroupPrimitive = GroupPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1995:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 4
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36431,8 +36909,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ImagePrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var ImagePrimitive = (function (_super) {
     __extends(ImagePrimitive, _super);
     function ImagePrimitive(x, y, width, height, url, preserveAspectRatio, style, className) {
@@ -36464,20 +36942,22 @@ var ImagePrimitive = (function (_super) {
 exports.ImagePrimitive = ImagePrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 7724:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6208
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36485,9 +36965,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PathPrimitiveClosePathCommand = exports.PathPrimitiveArcToCommand = exports.PathPrimitiveQuadraticCurveToCommand = exports.PathPrimitiveCubicCurveToCommand = exports.PathPrimitiveLineToCommand = exports.PathPrimitiveMoveToCommand = exports.PathPrimitiveCommand = exports.PathPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
-var PrimitiveObject_1 = __webpack_require__(9886);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
+var PrimitiveObject_1 = __webpack_require__(4762);
 var PathPrimitive = (function (_super) {
     __extends(PathPrimitive, _super);
     function PathPrimitive(commands, style, className, clipPathId, onApplyProperties) {
@@ -36623,20 +37103,22 @@ var PathPrimitiveClosePathCommand = (function (_super) {
 exports.PathPrimitiveClosePathCommand = PathPrimitiveClosePathCommand;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1932:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 7301
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36644,8 +37126,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PatternPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var PatternPrimitive = (function (_super) {
     __extends(PatternPrimitive, _super);
     function PatternPrimitive(id, children, x, y, width, height, style) {
@@ -36677,20 +37159,22 @@ var PatternPrimitive = (function (_super) {
 exports.PatternPrimitive = PatternPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4178:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 8309
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36698,8 +37182,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SvgPrimitive = void 0;
-var Utils_1 = __webpack_require__(3500);
-var PrimitiveObject_1 = __webpack_require__(9886);
+var Utils_1 = __webpack_require__(2136);
+var PrimitiveObject_1 = __webpack_require__(4762);
 var SvgPrimitive = (function (_super) {
     __extends(SvgPrimitive, _super);
     function SvgPrimitive(style, className, clipPathId, onApplyProperties) {
@@ -36759,15 +37243,15 @@ var SvgPrimitive = (function (_super) {
 exports.SvgPrimitive = SvgPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9886:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4762
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PrimitiveObject = void 0;
-var unit_converter_1 = __webpack_require__(9291);
+var unit_converter_1 = __webpack_require__(9500);
 var PrimitiveObject = (function () {
     function PrimitiveObject(style) {
         this.style = style;
@@ -36803,20 +37287,22 @@ var PrimitiveObject = (function () {
 exports.PrimitiveObject = PrimitiveObject;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4716:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 94
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36824,8 +37310,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RectanglePrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var RectanglePrimitive = (function (_super) {
     __extends(RectanglePrimitive, _super);
     function RectanglePrimitive(x, y, width, height, style, className, clipPathId, onApplyProperties) {
@@ -36852,20 +37338,22 @@ var RectanglePrimitive = (function (_super) {
 exports.RectanglePrimitive = RectanglePrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4538:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 3763
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36873,8 +37361,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RoundedRectanglePrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var RectaglePrimitive_1 = __webpack_require__(4716);
+var RenderHelper_1 = __webpack_require__(8509);
+var RectaglePrimitive_1 = __webpack_require__(94);
 var RoundedRectanglePrimitive = (function (_super) {
     __extends(RoundedRectanglePrimitive, _super);
     function RoundedRectanglePrimitive(x, y, width, height, rx, ry, style, className, clipPathId, onApplyProperties) {
@@ -36902,20 +37390,22 @@ var RoundedRectanglePrimitive = (function (_super) {
 exports.RoundedRectanglePrimitive = RoundedRectanglePrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3281:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9299
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36923,8 +37413,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShadowFilterPrimitive = void 0;
-var FilterPrimitive_1 = __webpack_require__(4628);
-var RenderHelper_1 = __webpack_require__(1114);
+var FilterPrimitive_1 = __webpack_require__(9707);
+var RenderHelper_1 = __webpack_require__(8509);
 var ShadowFilterPrimitive = (function (_super) {
     __extends(ShadowFilterPrimitive, _super);
     function ShadowFilterPrimitive() {
@@ -36952,20 +37442,22 @@ var ShadowFilterPrimitive = (function (_super) {
 exports.ShadowFilterPrimitive = ShadowFilterPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1248:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 9551
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -36973,8 +37465,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SvgElementPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
 var SvgElementPrimitive = (function (_super) {
     __extends(SvgElementPrimitive, _super);
     function SvgElementPrimitive(x, y, width, height, createContent, destroyContent, data, className, onApplyProperties) {
@@ -37012,20 +37504,22 @@ var SvgElementPrimitive = (function (_super) {
 exports.SvgElementPrimitive = SvgElementPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3360:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 1118
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -37033,10 +37527,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextFloodFilterPrimitive = exports.TextFilterPrimitive = void 0;
-var RenderHelper_1 = __webpack_require__(1114);
-var FilterPrimitive_1 = __webpack_require__(4628);
-var Model_1 = __webpack_require__(6613);
-var color_1 = __webpack_require__(13);
+var RenderHelper_1 = __webpack_require__(8509);
+var FilterPrimitive_1 = __webpack_require__(9707);
+var Model_1 = __webpack_require__(455);
+var color_1 = __webpack_require__(9553);
 var TextFilterPrimitive = (function (_super) {
     __extends(TextFilterPrimitive, _super);
     function TextFilterPrimitive(id, x, y, width, height) {
@@ -37100,20 +37594,22 @@ var TextFloodFilterPrimitive = (function (_super) {
 exports.TextFloodFilterPrimitive = TextFloodFilterPrimitive;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9416:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 128
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -37121,11 +37617,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextPrimitive270degRenderHelper = exports.TextPrimitive180degRenderHelper = exports.TextPrimitive90degRenderHelper = exports.TextPrimitiveRenderHelper = exports.TextPrimitive = exports.TextAngle = void 0;
-var unit_converter_1 = __webpack_require__(9291);
-var RenderHelper_1 = __webpack_require__(1114);
-var Primitive_1 = __webpack_require__(4178);
-var Utils_1 = __webpack_require__(3500);
-var TextUtils_1 = __webpack_require__(3490);
+var unit_converter_1 = __webpack_require__(9500);
+var RenderHelper_1 = __webpack_require__(8509);
+var Primitive_1 = __webpack_require__(8309);
+var Utils_1 = __webpack_require__(2136);
+var TextUtils_1 = __webpack_require__(1842);
 var TextAngle;
 (function (TextAngle) {
     TextAngle[TextAngle["Angle0deg"] = 0] = "Angle0deg";
@@ -37147,7 +37643,7 @@ var TextPrimitive = (function (_super) {
         _this.reverseTextAhchor = reverseTextAhchor;
         _this.angle = angle;
         _this.filterId = filterId;
-        _this.textSegmens = TextUtils_1.textToParagraphs(_this.text);
+        _this.textSegmens = (0, TextUtils_1.textToParagraphs)(_this.text);
         _this.renderHelper = _this.createRenderHelper();
         if (_this.textWidth !== undefined && _this.textWidth !== undefined) {
             _this.x = _this.renderHelper.getTextX(_this.x);
@@ -37182,8 +37678,8 @@ var TextPrimitive = (function (_super) {
                 span.textContent = " ";
             }
             else if (_this.fitToSize) {
-                var words_1 = TextUtils_1.textToWords(txt);
-                var lines = TextUtils_1.wordsByLines(unit_converter_1.UnitConverter.twipsToPixels(_this.fitToSize), words_1, function () { return measurer.measureWords(words_1, _this.style, _this.owner); });
+                var words_1 = (0, TextUtils_1.textToWords)(txt);
+                var lines = (0, TextUtils_1.wordsByLines)(unit_converter_1.UnitConverter.twipsToPixels(_this.fitToSize), words_1, function () { return measurer.measureWords(words_1, _this.style, _this.owner); });
                 lines.forEach(function (line) {
                     var span = _this.createTSpanElement(element);
                     span.textContent = line;
@@ -37403,15 +37899,15 @@ var TextPrimitive270degRenderHelper = (function (_super) {
 exports.TextPrimitive270degRenderHelper = TextPrimitive270degRenderHelper;
 
 
-/***/ }),
+/***/ },
 
-/***/ 1114:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8509
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RenderHelper = exports.svgNS = void 0;
-var Diagnostics_1 = __webpack_require__(9463);
+var Diagnostics_1 = __webpack_require__(9196);
 exports.svgNS = "http://www.w3.org/2000/svg";
 var RenderHelper = (function () {
     function RenderHelper() {
@@ -37443,33 +37939,33 @@ var RenderHelper = (function () {
 exports.RenderHelper = RenderHelper;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8098:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 4306
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RenderManager = exports.DBL_CLICK_TIMEOUT = exports.LONG_TOUCH_TIMEOUT = void 0;
-var Event_1 = __webpack_require__(6031);
-var evt_1 = __webpack_require__(3714);
-var dom_1 = __webpack_require__(6907);
-var point_1 = __webpack_require__(8900);
-var key_1 = __webpack_require__(2153);
-var browser_1 = __webpack_require__(9279);
-var Utils_1 = __webpack_require__(3500);
-var CanvasItemsManager_1 = __webpack_require__(8693);
-var ScrollView_1 = __webpack_require__(7376);
-var Settings_1 = __webpack_require__(240);
-var InputManager_1 = __webpack_require__(741);
-var CanvasPageManager_1 = __webpack_require__(6043);
-var CanvasViewManager_1 = __webpack_require__(9757);
-var CanvasSelectionManager_1 = __webpack_require__(4000);
-var AutoScrollController_1 = __webpack_require__(6557);
-var TextMeasurer_1 = __webpack_require__(1733);
-var RenderHelper_1 = __webpack_require__(1114);
-var DOMManipulator_1 = __webpack_require__(6078);
-var Utils_2 = __webpack_require__(8675);
+var Event_1 = __webpack_require__(5428);
+var evt_1 = __webpack_require__(8451);
+var dom_1 = __webpack_require__(750);
+var point_1 = __webpack_require__(5327);
+var key_1 = __webpack_require__(6537);
+var browser_1 = __webpack_require__(8424);
+var Utils_1 = __webpack_require__(2136);
+var CanvasItemsManager_1 = __webpack_require__(9922);
+var ScrollView_1 = __webpack_require__(7281);
+var Settings_1 = __webpack_require__(9307);
+var InputManager_1 = __webpack_require__(7169);
+var CanvasPageManager_1 = __webpack_require__(3283);
+var CanvasViewManager_1 = __webpack_require__(1377);
+var CanvasSelectionManager_1 = __webpack_require__(9700);
+var AutoScrollController_1 = __webpack_require__(7611);
+var TextMeasurer_1 = __webpack_require__(6727);
+var RenderHelper_1 = __webpack_require__(8509);
+var DOMManipulator_1 = __webpack_require__(6873);
+var Utils_2 = __webpack_require__(41);
 var READONLY_CSSCLASS = "dxdi-read-only";
 var TOUCH_ACTION_CSSCLASS = "dxdi-touch-action";
 exports.LONG_TOUCH_TIMEOUT = 500;
@@ -37540,6 +38036,8 @@ var RenderManager = (function () {
     RenderManager.prototype.attachPointerEvents = function (svgElement) {
         dom_1.DomUtils.addClassName(svgElement, TOUCH_ACTION_CSSCLASS);
         RenderHelper_1.RenderHelper.addEventListener(svgElement, "pointerdown", this.onPointerDownHandler);
+        RenderHelper_1.RenderHelper.addEventListener(svgElement, "mousedown", this.onSvgMouseDownHandler);
+        RenderHelper_1.RenderHelper.addEventListener(svgElement, "mousemove", this.onSvgMouseMoveHandler);
         RenderHelper_1.RenderHelper.addEventListener(browser_1.Browser.TouchUI ? svgElement : document, "pointerup", this.onPointerUpHandler);
         RenderHelper_1.RenderHelper.addEventListener(browser_1.Browser.TouchUI ? svgElement : document, "pointermove", this.onPointerMoveHandler);
         RenderHelper_1.RenderHelper.addEventListener(svgElement, "pointercancel", this.onPointerCancelHandler);
@@ -37547,49 +38045,29 @@ var RenderManager = (function () {
     };
     RenderManager.prototype.detachPointerEvents = function (svgElement) {
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "pointerdown", this.onPointerDownHandler);
+        RenderHelper_1.RenderHelper.removeEventListener(svgElement, "mousedown", this.onSvgMouseDownHandler);
+        RenderHelper_1.RenderHelper.removeEventListener(svgElement, "mousemove", this.onSvgMouseMoveHandler);
         RenderHelper_1.RenderHelper.removeEventListener(browser_1.Browser.TouchUI ? svgElement : document, "pointerup", this.onPointerUpHandler);
         RenderHelper_1.RenderHelper.removeEventListener(browser_1.Browser.TouchUI ? svgElement : document, "pointermove", this.onPointerMoveHandler);
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "pointercancel", this.onPointerCancelHandler);
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "pointerleave", this.onPointerLeaveHandler);
         dom_1.DomUtils.removeClassName(svgElement, TOUCH_ACTION_CSSCLASS);
     };
-    RenderManager.prototype.attachMouseTouchEvents = function (svgElement) {
-        RenderHelper_1.RenderHelper.addEventListener(svgElement, this.mouseDownEventName, this.onMouseDownHandler);
-        RenderHelper_1.RenderHelper.addEventListener(document, this.mouseMoveEventName, this.onMouseMoveHandler);
-        RenderHelper_1.RenderHelper.addEventListener(document, this.mouseUpEventName, this.onMouseUpHandler);
-    };
-    RenderManager.prototype.detachMouseTouchEvents = function (svgElement) {
-        RenderHelper_1.RenderHelper.removeEventListener(svgElement, this.mouseDownEventName, this.onMouseDownHandler);
-        RenderHelper_1.RenderHelper.removeEventListener(document, this.mouseMoveEventName, this.onMouseMoveHandler);
-        RenderHelper_1.RenderHelper.removeEventListener(document, this.mouseUpEventName, this.onMouseUpHandler);
-    };
     RenderManager.prototype.attachEvents = function (svgElement) {
-        this.mouseDownEventName = browser_1.Browser.TouchUI ? "touchstart" : "mousedown";
-        this.mouseMoveEventName = browser_1.Browser.TouchUI ? "touchmove" : "mousemove";
-        this.mouseUpEventName = browser_1.Browser.TouchUI ? "touchend" : "mouseup";
         this.onPointerDownHandler = this.onPointerDown.bind(this);
         this.onPointerUpHandler = this.onPointerUp.bind(this);
         this.onPointerMoveHandler = this.onPointerMove.bind(this);
         this.onPointerCancelHandler = this.onPointerCancel.bind(this);
         this.onPointerLeaveHandler = this.onPointerLeave.bind(this);
-        this.onMouseDownHandler = this.onMouseDown.bind(this);
-        this.onMouseEnterHandler = this.onMouseEnter.bind(this);
-        this.onMouseLeaveHandler = this.onMouseLeave.bind(this);
+        this.onSvgMouseDownHandler = this.onSvgMouseDown.bind(this);
+        this.onSvgMouseMoveHandler = this.onSvgMouseMove.bind(this);
         this.onMouseWheelHandler = this.onMouseWheel.bind(this);
         this.onMouseDblClickHandler = this.onMouseDblClick.bind(this);
         this.onContextMenuHandler = this.onContextMenu.bind(this);
-        this.onMouseMoveHandler = this.onMouseMove.bind(this);
-        this.onMouseUpHandler = this.onMouseUp.bind(this);
         this.onWindowResizelHandler = this.onWindowResize.bind(this);
         this.onOrientationChangeHandler = this.onOrientationChange.bind(this);
         this.onMouseClickHandler = this.onMouseClick.bind(this);
-        if (Utils_2.EventUtils.isPointerEvents())
-            this.attachPointerEvents(svgElement);
-        else {
-            this.attachMouseTouchEvents(svgElement);
-            RenderHelper_1.RenderHelper.addEventListener(svgElement, "mouseenter", this.onMouseEnterHandler);
-            RenderHelper_1.RenderHelper.addEventListener(svgElement, "mouseleave", this.onMouseLeaveHandler);
-        }
+        this.attachPointerEvents(svgElement);
         RenderHelper_1.RenderHelper.addEventListener(svgElement, "wheel", this.onMouseWheelHandler);
         RenderHelper_1.RenderHelper.addEventListener(svgElement, "dblclick", this.onMouseDblClickHandler);
         RenderHelper_1.RenderHelper.addEventListener(svgElement, "click", this.onMouseClickHandler);
@@ -37599,13 +38077,7 @@ var RenderManager = (function () {
         this.input.mouseWheelHandler = this.onMouseWheelHandler;
     };
     RenderManager.prototype.detachEvents = function (svgElement) {
-        if (Utils_2.EventUtils.isPointerEvents())
-            this.detachPointerEvents(svgElement);
-        else {
-            this.detachMouseTouchEvents(svgElement);
-            RenderHelper_1.RenderHelper.removeEventListener(svgElement, "mouseenter", this.onMouseEnterHandler);
-            RenderHelper_1.RenderHelper.removeEventListener(svgElement, "mouseleave", this.onMouseLeaveHandler);
-        }
+        this.detachPointerEvents(svgElement);
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "wheel", this.onMouseWheelHandler);
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "dblclick", this.onMouseDblClickHandler);
         RenderHelper_1.RenderHelper.removeEventListener(svgElement, "contextmenu", this.onContextMenuHandler);
@@ -37622,12 +38094,6 @@ var RenderManager = (function () {
     RenderManager.prototype.clearPointerPosition = function (evt) {
         delete this.pointers[evt.pointerId];
     };
-    RenderManager.prototype.onPointerDown = function (evt) {
-        this.setPointerPosition(evt);
-        if (this.getPointerCount() > 2)
-            this.pointers = {};
-        this.onMouseDown(evt);
-    };
     RenderManager.prototype.onPointerUp = function (evt) {
         this.clearPointerPosition(evt);
         this.onMouseUp(evt);
@@ -37635,7 +38101,7 @@ var RenderManager = (function () {
     RenderManager.prototype.onPointerMove = function (evt) {
         if ((browser_1.Browser.TouchUI && !Utils_2.EventUtils.isMousePointer(evt)) || Utils_2.EventUtils.isLeftButtonPressed(evt))
             this.setPointerPosition(evt);
-        this.onMouseMove(evt);
+        this.onDocumentMouseMove(evt);
     };
     RenderManager.prototype.onPointerCancel = function (evt) {
         this.clearPointerPosition(evt);
@@ -37645,21 +38111,25 @@ var RenderManager = (function () {
             this.onMouseLeave(evt);
         this.clearPointerPosition(evt);
     };
-    RenderManager.prototype.onMouseDown = function (evt) {
+    RenderManager.prototype.onPointerDown = function (evt) {
         var _this = this;
+        this.setPointerPosition(evt);
+        if (this.getPointerCount() > 2)
+            this.pointers = {};
         this.lockMouseMove();
         this.input.lockFocus();
         this.autoScroll.onMouseDown(evt);
         this.lastDownMouseEvent = this.createDiagramMouseEvent(evt);
-        Utils_1.raiseEvent(evt, this.lastDownMouseEvent, function (e) { return _this.events.onMouseDown(e); });
+        (0, Utils_1.raiseEvent)(evt, this.lastDownMouseEvent, function (e) { return _this.events.onMouseDown(e); });
         if (this.events.canFinishTextEditing())
             this.input.captureFocus();
         if (Utils_2.EventUtils.isTouchEvent(evt))
             this.processTouchDown(evt);
-        evt_1.EvtUtils.preventEventAndBubble(evt);
-        return false;
     };
-    RenderManager.prototype.onMouseMove = function (evt) {
+    RenderManager.prototype.onSvgMouseDown = function (evt) {
+        evt_1.EvtUtils.preventEvent(evt);
+    };
+    RenderManager.prototype.onDocumentMouseMove = function (evt) {
         var _this = this;
         if (this.moveLocked)
             return;
@@ -37669,15 +38139,18 @@ var RenderManager = (function () {
         if (Utils_2.EventUtils.isTouchEvent(evt))
             this.processTouchMove(evt);
     };
+    RenderManager.prototype.onSvgMouseMove = function (evt) {
+        evt_1.EvtUtils.preventEventAndBubble(evt);
+    };
     RenderManager.prototype.onMouseMoveCore = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseMove(e); });
+        (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseMove(e); });
     };
     RenderManager.prototype.onMouseUp = function (evt) {
         var _this = this;
         this.lockMouseMove();
         var mouseEvent = this.createDiagramMouseEvent(evt);
-        Utils_1.raiseEvent(evt, mouseEvent, function (e) { return _this.events.onMouseUp(e); });
+        (0, Utils_1.raiseEvent)(evt, mouseEvent, function (e) { return _this.events.onMouseUp(e); });
         this.autoScroll.onMouseUp(evt);
         if (mouseEvent.source.type !== Event_1.MouseEventElementType.Undefined)
             this.input.captureFocus(true);
@@ -37687,20 +38160,20 @@ var RenderManager = (function () {
     RenderManager.prototype.onMouseEnter = function (evt) {
         var _this = this;
         this.autoScroll.onMouseEnter(evt);
-        Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseEnter(e); });
+        (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseEnter(e); });
     };
     RenderManager.prototype.onMouseLeave = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseLeave(e); });
+        (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onMouseLeave(e); });
     };
     RenderManager.prototype.onMouseDblClick = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onDblClick(e); });
+        (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onDblClick(e); });
     };
     RenderManager.prototype.onMouseClick = function (evt) {
         var _this = this;
         if (!Utils_2.EventUtils.isTouchEvent(evt))
-            Utils_1.raiseEvent(evt, this.createActualMouseClickEvent(evt), function (e) { return _this.events.onClick(e); });
+            (0, Utils_1.raiseEvent)(evt, this.createActualMouseClickEvent(evt), function (e) { return _this.events.onClick(e); });
         else if (!Utils_2.EventUtils.isMousePointer(evt))
             this.input.captureFocus();
     };
@@ -37714,7 +38187,7 @@ var RenderManager = (function () {
         if (!this.contextMenuEnabled)
             return;
         if (evt.buttons !== 1)
-            Utils_1.raiseEvent(evt, this.createDiagramContextMenuEvent(evt), function (e) { return _this.events.onContextMenu(e); });
+            (0, Utils_1.raiseEvent)(evt, this.createDiagramContextMenuEvent(evt), function (e) { return _this.events.onContextMenu(e); });
         this.input.captureFocus();
         return evt_1.EvtUtils.preventEventAndBubble(evt);
     };
@@ -37723,7 +38196,7 @@ var RenderManager = (function () {
         this.touchDownPoint = this.getTouchPointFromEvent(evt);
         this.resetLongTouch();
         this.longTouchTimer = setTimeout(function () {
-            Utils_1.raiseEvent(evt, _this.createDiagramMouseEvent(evt), function (e) { return _this.events.onLongTouch(e); });
+            (0, Utils_1.raiseEvent)(evt, _this.createDiagramMouseEvent(evt), function (e) { return _this.events.onLongTouch(e); });
             _this.resetLongTouch();
             _this.resetDblClick();
         }, exports.LONG_TOUCH_TIMEOUT);
@@ -37758,10 +38231,10 @@ var RenderManager = (function () {
     RenderManager.prototype.processTouchUp = function (evt) {
         var _this = this;
         if (this.longTouchTimer !== undefined) {
-            Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onClick(e); });
+            (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onClick(e); });
             var element = evt_1.EvtUtils.getEventSource(evt);
             if (this.dblTouchTimer !== undefined && this.lastClickElement === element) {
-                Utils_1.raiseEvent(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onDblClick(e); });
+                (0, Utils_1.raiseEvent)(evt, this.createDiagramMouseEvent(evt), function (e) { return _this.events.onDblClick(e); });
                 this.resetDblClick();
             }
             else {
@@ -37802,7 +38275,7 @@ var RenderManager = (function () {
     };
     RenderManager.prototype.onMouseWheel = function (evt) {
         var _this = this;
-        Utils_1.raiseEvent(evt, this.createDiagramWheelEvent(evt), function (e) { return _this.events.onMouseWheel(e); });
+        (0, Utils_1.raiseEvent)(evt, this.createDiagramWheelEvent(evt), function (e) { return _this.events.onMouseWheel(e); });
     };
     RenderManager.prototype.notifyModelSizeChanged = function (size, offset) {
         this.view.notifyModelSizeChanged(size, offset);
@@ -37813,8 +38286,8 @@ var RenderManager = (function () {
     RenderManager.prototype.notifyReadOnlyChanged = function (readOnly) {
         dom_1.DomUtils.toggleClassName(this.mainElement, READONLY_CSSCLASS, readOnly);
     };
-    RenderManager.prototype.notifyDragStart = function (itemKeys) { };
-    RenderManager.prototype.notifyDragEnd = function (itemKeys) { };
+    RenderManager.prototype.notifyDragStart = function (_itemKeys) { };
+    RenderManager.prototype.notifyDragEnd = function (_itemKeys) { };
     RenderManager.prototype.notifyDragScrollStart = function () {
         this.autoScroll.onDragScrollStart();
     };
@@ -37829,7 +38302,7 @@ var RenderManager = (function () {
             this.onMouseUp(evt);
     };
     RenderManager.prototype.notifyToolboxDraggingMouseMove = function (evt) {
-        this.onMouseMove(evt);
+        this.onDocumentMouseMove(evt);
     };
     RenderManager.prototype.createDiagramMouseEvent = function (evt) {
         var modifiers = key_1.KeyUtils.getKeyModifiers(evt);
@@ -37955,19 +38428,19 @@ function isLeftButtonPressed(evt) {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ 7376:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 7281
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NativeScrollView = void 0;
-var Utils_1 = __webpack_require__(8675);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var dom_1 = __webpack_require__(6907);
-var RenderHelper_1 = __webpack_require__(1114);
+var Utils_1 = __webpack_require__(41);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var dom_1 = __webpack_require__(750);
+var RenderHelper_1 = __webpack_require__(8509);
 var NativeScrollView = (function () {
     function NativeScrollView(mainElement) {
         this.onScroll = new Utils_1.EventDispatcher();
@@ -38017,20 +38490,20 @@ var NativeScrollView = (function () {
 exports.NativeScrollView = NativeScrollView;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6411:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 6018
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ShapeImageIndicator = void 0;
-var EllipsePrimitive_1 = __webpack_require__(418);
-var PathPrimitive_1 = __webpack_require__(7724);
-var GroupPrimitive_1 = __webpack_require__(5329);
-var browser_1 = __webpack_require__(9279);
-var RectaglePrimitive_1 = __webpack_require__(4716);
-var unit_converter_1 = __webpack_require__(9291);
+var EllipsePrimitive_1 = __webpack_require__(7345);
+var PathPrimitive_1 = __webpack_require__(6208);
+var GroupPrimitive_1 = __webpack_require__(6709);
+var browser_1 = __webpack_require__(8424);
+var RectaglePrimitive_1 = __webpack_require__(94);
+var unit_converter_1 = __webpack_require__(9500);
 var ShapeImageIndicator = (function () {
     function ShapeImageIndicator(x, y, size, borderThickness, className) {
         this.x = x;
@@ -38127,20 +38600,22 @@ var ShapeImageIndicator = (function () {
 exports.ShapeImageIndicator = ShapeImageIndicator;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4724:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 481
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -38148,15 +38623,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IconToolbox = void 0;
-var Toolbox_1 = __webpack_require__(4602);
-var RenderHelper_1 = __webpack_require__(1114);
-var Shape_1 = __webpack_require__(5503);
-var unit_converter_1 = __webpack_require__(9291);
-var point_1 = __webpack_require__(8900);
-var TextShapeDescription_1 = __webpack_require__(1669);
-var Style_1 = __webpack_require__(1552);
-var CustomShapeDescription_1 = __webpack_require__(6688);
-var RectaglePrimitive_1 = __webpack_require__(4716);
+var Toolbox_1 = __webpack_require__(5037);
+var RenderHelper_1 = __webpack_require__(8509);
+var Shape_1 = __webpack_require__(8408);
+var unit_converter_1 = __webpack_require__(9500);
+var point_1 = __webpack_require__(5327);
+var TextShapeDescription_1 = __webpack_require__(8278);
+var Style_1 = __webpack_require__(5059);
+var CustomShapeDescription_1 = __webpack_require__(2567);
+var RectaglePrimitive_1 = __webpack_require__(94);
 var DEFAULT_SHAPE_ICON_SIZE = 32;
 var SHRINK_TEXT_SHAPE_ICON_SIZE = 26;
 var SHRINKED_TEXT = "T";
@@ -38299,20 +38774,22 @@ var IconToolbox = (function (_super) {
 exports.IconToolbox = IconToolbox;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5947:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 2651
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -38320,7 +38797,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TextToolbox = void 0;
-var Toolbox_1 = __webpack_require__(4602);
+var Toolbox_1 = __webpack_require__(5037);
 var TextToolbox = (function (_super) {
     __extends(TextToolbox, _super);
     function TextToolbox(parent, readOnly, allowDragging, shapeDescriptionManager, shapeTypes, getAllowedShapeTypes) {
@@ -38350,22 +38827,22 @@ var TextToolbox = (function (_super) {
 exports.TextToolbox = TextToolbox;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4602:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5037
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramDraggingEvent = exports.ToolboxDraggingObject = exports.Toolbox = void 0;
-var Utils_1 = __webpack_require__(8675);
-var point_1 = __webpack_require__(8900);
-var evt_1 = __webpack_require__(3714);
-var Data_1 = __webpack_require__(4914);
-var dom_1 = __webpack_require__(6907);
-var browser_1 = __webpack_require__(9279);
-var RenderHelper_1 = __webpack_require__(1114);
-var CanvasItemsManager_1 = __webpack_require__(8693);
+var Utils_1 = __webpack_require__(41);
+var point_1 = __webpack_require__(5327);
+var evt_1 = __webpack_require__(8451);
+var Data_1 = __webpack_require__(2620);
+var dom_1 = __webpack_require__(750);
+var browser_1 = __webpack_require__(8424);
+var RenderHelper_1 = __webpack_require__(8509);
+var CanvasItemsManager_1 = __webpack_require__(9922);
 var TOOLBOX_CSSCLASS = "dxdi-toolbox";
 var DRAG_CAPTURED_CSSCLASS = "dxdi-tb-drag-captured";
 var START_DRAG_CSSCLASS = "dxdi-tb-start-drag-flag";
@@ -38409,6 +38886,7 @@ var Toolbox = (function () {
         this.onMouseDownHandler = this.onMouseDown.bind(this);
         this.onMouseMoveHandler = this.onMouseMove.bind(this);
         this.onMouseUpHandler = this.onMouseUp.bind(this);
+        this.onContextMenuHandler = this.onContextMenu.bind(this);
         this.onDragStartHandler = this.onDragStart.bind(this);
         this.onTouchMoveHandler = this.onTouchMove.bind(this);
         if (!this.emulateDragEvents)
@@ -38429,6 +38907,7 @@ var Toolbox = (function () {
         RenderHelper_1.RenderHelper.addEventListener(element, this.mouseDownEventName, this.onMouseDownHandler);
         RenderHelper_1.RenderHelper.addEventListener(document, this.mouseMoveEventName, this.onMouseMoveHandler);
         RenderHelper_1.RenderHelper.addEventListener(document, this.mouseUpEventName, this.onMouseUpHandler);
+        RenderHelper_1.RenderHelper.addEventListener(element, "contextmenu", this.onContextMenuHandler);
     };
     Toolbox.prototype.detachHandlers = function (element) {
         if (!this.emulateDragEvents)
@@ -38439,6 +38918,7 @@ var Toolbox = (function () {
         RenderHelper_1.RenderHelper.removeEventListener(element, this.mouseDownEventName, this.onMouseDownHandler);
         RenderHelper_1.RenderHelper.removeEventListener(document, this.mouseMoveEventName, this.onMouseMoveHandler);
         RenderHelper_1.RenderHelper.removeEventListener(document, this.mouseUpEventName, this.onMouseUpHandler);
+        RenderHelper_1.RenderHelper.removeEventListener(element, "contextmenu", this.onContextMenuHandler);
     };
     Toolbox.prototype.render = function (filter) {
         if (this.mainElement.childNodes)
@@ -38502,11 +38982,19 @@ var Toolbox = (function () {
         return evt_1.EvtUtils.isLeftButtonPressed(evt) ||
             (evt.type === "pointermove" && browser_1.Browser.TouchUI && browser_1.Browser.MacOSMobilePlatform && Utils_1.EventUtils.isMousePointer(evt));
     };
+    Toolbox.prototype.onContextMenu = function (evt) {
+        if (this.dragState !== DragState.None)
+            evt.preventDefault();
+    };
     Toolbox.prototype.onMouseMove = function (evt) {
         if (browser_1.Browser.TouchUI && browser_1.Browser.MacOSMobilePlatform) {
             var currentTouchPoint = this.getTouchPointFromEvent(evt);
             if (this.touchDownPoint && currentTouchPoint && this.touchDownPoint.x === currentTouchPoint.x && this.touchDownPoint.y === currentTouchPoint.y)
                 return;
+        }
+        if (this.dragState === DragState.Prepare && Utils_1.EventUtils.isTouchEvent(evt)) {
+            this.setDragState(DragState.Start, evt);
+            return;
         }
         this.setDragState(this.isLeftButtonPressed(evt) ? DragState.Dragging : DragState.None, evt);
         if (Utils_1.EventUtils.isPointerEvents())
@@ -38519,8 +39007,8 @@ var Toolbox = (function () {
         var element = this.draggingObject.element;
         var xPos = evtX - element.offsetWidth / 2;
         var yPos = evtY - element.offsetHeight / 2;
-        Data_1.SetAbsoluteX(element, xPos);
-        Data_1.SetAbsoluteY(element, yPos);
+        (0, Data_1.SetAbsoluteX)(element, xPos);
+        (0, Data_1.SetAbsoluteY)(element, yPos);
     };
     Toolbox.prototype.setDragState = function (newState, evt) {
         if (this.readOnly || !this.allowDragging)
@@ -38648,18 +39136,18 @@ var DiagramDraggingEvent = (function () {
 exports.DiagramDraggingEvent = DiagramDraggingEvent;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3298:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1659
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ToolboxManager = void 0;
-var TextToolbox_1 = __webpack_require__(5947);
-var IconToolbox_1 = __webpack_require__(4724);
-var TextMeasurer_1 = __webpack_require__(1733);
-var math_1 = __webpack_require__(8679);
+var TextToolbox_1 = __webpack_require__(2651);
+var IconToolbox_1 = __webpack_require__(481);
+var TextMeasurer_1 = __webpack_require__(6727);
+var math_1 = __webpack_require__(594);
 var ToolboxManager = (function () {
     function ToolboxManager(shapeDescriptionManager) {
         this.shapeDescriptionManager = shapeDescriptionManager;
@@ -38728,16 +39216,16 @@ var ToolboxManager = (function () {
 exports.ToolboxManager = ToolboxManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3500:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2136
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.raiseEvent = exports.RenderUtils = void 0;
-var Event_1 = __webpack_require__(6031);
-var math_1 = __webpack_require__(8679);
+var Event_1 = __webpack_require__(5428);
+var math_1 = __webpack_require__(594);
 var RenderUtils = (function () {
     function RenderUtils() {
     }
@@ -38839,16 +39327,16 @@ function raiseEvent(evt, _evt, raiseFunc) {
 exports.raiseEvent = raiseEvent;
 
 
-/***/ }),
+/***/ },
 
-/***/ 5401:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1530
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputPosition = void 0;
-var InputPositionProperties_1 = __webpack_require__(6823);
-var Data_1 = __webpack_require__(4914);
+var InputPositionProperties_1 = __webpack_require__(5075);
+var Data_1 = __webpack_require__(2620);
 var InputPosition = (function () {
     function InputPosition(selection) {
         this.selection = selection;
@@ -38936,16 +39424,16 @@ var InputPosition = (function () {
 exports.InputPosition = InputPosition;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6823:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 5075
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputPositionProperties = void 0;
-var ConnectorProperties_1 = __webpack_require__(4612);
-var Style_1 = __webpack_require__(1552);
+var ConnectorProperties_1 = __webpack_require__(4385);
+var Style_1 = __webpack_require__(5059);
 var InputPositionProperties = (function () {
     function InputPositionProperties(selection, baseProperties, disableMergingStyles) {
         this.selection = selection;
@@ -39036,19 +39524,19 @@ var InputPositionProperties = (function () {
 exports.InputPositionProperties = InputPositionProperties;
 
 
-/***/ }),
+/***/ },
 
-/***/ 9021:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3099
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Selection = void 0;
-var Utils_1 = __webpack_require__(8675);
-var InputPosition_1 = __webpack_require__(5401);
-var Shape_1 = __webpack_require__(5503);
-var Connector_1 = __webpack_require__(7959);
-var Data_1 = __webpack_require__(4914);
+var Utils_1 = __webpack_require__(41);
+var InputPosition_1 = __webpack_require__(1530);
+var Shape_1 = __webpack_require__(8408);
+var Connector_1 = __webpack_require__(6320);
+var Data_1 = __webpack_require__(2620);
 var Selection = (function () {
     function Selection(model) {
         this.onChanged = new Utils_1.EventDispatcher();
@@ -39161,18 +39649,18 @@ var Selection = (function () {
 exports.Selection = Selection;
 
 
-/***/ }),
+/***/ },
 
-/***/ 240:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9307
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ConnectorRoutingMode = exports.AutoZoomMode = exports.DiagramSettings = void 0;
-var Utils_1 = __webpack_require__(8675);
-var size_1 = __webpack_require__(6353);
-var Enums_1 = __webpack_require__(5383);
-var ModelUtils_1 = __webpack_require__(4867);
+var Utils_1 = __webpack_require__(41);
+var size_1 = __webpack_require__(3844);
+var Enums_1 = __webpack_require__(9254);
+var ModelUtils_1 = __webpack_require__(1922);
 var DiagramSettings = (function () {
     function DiagramSettings() {
         this.onZoomChanged = new Utils_1.EventDispatcher();
@@ -39426,20 +39914,22 @@ var ConnectorRoutingMode;
 })(ConnectorRoutingMode = exports.ConnectorRoutingMode || (exports.ConnectorRoutingMode = {}));
 
 
-/***/ }),
+/***/ },
 
-/***/ 2230:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ 6695
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -39447,7 +39937,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BarManager = void 0;
-var batch_updatable_1 = __webpack_require__(1772);
+var batch_updatable_1 = __webpack_require__(815);
 var BarManager = (function (_super) {
     __extends(BarManager, _super);
     function BarManager(control) {
@@ -39536,26 +40026,26 @@ var BarManager = (function (_super) {
 exports.BarManager = BarManager;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8675:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 41
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EventUtils = exports.HtmlFocusUtils = exports.ObjectUtils = exports.GeometryUtils = exports.Utils = exports.EventDispatcher = exports.Range = exports.LineEquation = void 0;
-__webpack_require__(7097);
-var size_1 = __webpack_require__(6353);
-var point_1 = __webpack_require__(8900);
-var rectangle_1 = __webpack_require__(8011);
-var search_1 = __webpack_require__(2400);
-var metrics_1 = __webpack_require__(5596);
-var math_1 = __webpack_require__(8679);
-var vector_1 = __webpack_require__(9716);
-var segment_1 = __webpack_require__(1335);
-var Style_1 = __webpack_require__(1552);
-var browser_1 = __webpack_require__(9279);
-var evt_1 = __webpack_require__(3714);
+__webpack_require__(4092);
+var size_1 = __webpack_require__(3844);
+var point_1 = __webpack_require__(5327);
+var rectangle_1 = __webpack_require__(4412);
+var search_1 = __webpack_require__(124);
+var metrics_1 = __webpack_require__(4496);
+var math_1 = __webpack_require__(594);
+var vector_1 = __webpack_require__(4166);
+var segment_1 = __webpack_require__(476);
+var Style_1 = __webpack_require__(5059);
+var browser_1 = __webpack_require__(8424);
+var evt_1 = __webpack_require__(8451);
 var LineEquation = (function () {
     function LineEquation(aParam, bParam, cParam) {
         this.aParam = aParam;
@@ -40322,16 +40812,16 @@ var EventUtils = (function () {
 exports.EventUtils = EventUtils;
 
 
-/***/ }),
+/***/ },
 
-/***/ 4914:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 2620
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Data = exports.SetAbsoluteY = exports.SetAbsoluteX = void 0;
-var dom_1 = __webpack_require__(6907);
-var common_1 = __webpack_require__(2491);
+var dom_1 = __webpack_require__(750);
+var common_1 = __webpack_require__(961);
 function IsNumber(str) {
     return !isNaN(parseFloat(str)) && isFinite(str);
 }
@@ -40509,9 +40999,9 @@ var Data = (function () {
     Data.ArrayBinarySearch = function (array, value, binarySearchComparer, startIndex, length) {
         if (!binarySearchComparer)
             binarySearchComparer = Data.defaultBinarySearchComparer;
-        if (!common_1.isDefined(startIndex))
+        if (!(0, common_1.isDefined)(startIndex))
             startIndex = 0;
-        if (!common_1.isDefined(length))
+        if (!(0, common_1.isDefined)(length))
             length = array.length - startIndex;
         var endIndex = (startIndex + length) - 1;
         while (startIndex <= endIndex) {
@@ -40623,10 +41113,10 @@ var Data = (function () {
 exports.Data = Data;
 
 
-/***/ }),
+/***/ },
 
-/***/ 8396:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 7768
+(__unused_webpack_module, exports) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -40638,17 +41128,17 @@ function isColorProperty(propName) {
 exports.isColorProperty = isColorProperty;
 
 
-/***/ }),
+/***/ },
 
-/***/ 3490:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 1842
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLineHeight = exports.getTextHeight = exports.getTextLineSize = exports.getOptimalTextRectangle = exports.TEXTRECT_RATIO_EPS = exports.textToParagraphs = exports.textToWords = exports.wordsByLines = exports.LINE_HEIGHT = void 0;
-var Utils_1 = __webpack_require__(8675);
-var size_1 = __webpack_require__(6353);
-var Data_1 = __webpack_require__(4914);
+var Utils_1 = __webpack_require__(41);
+var size_1 = __webpack_require__(3844);
+var Data_1 = __webpack_require__(2620);
 var WHITESPACES = /\s/gm;
 exports.LINE_HEIGHT = 1.05;
 function wordsByLines(absLineWidth, words, measureWords) {
@@ -40795,15 +41285,15 @@ function getLineHeight(measureResult) {
 exports.getLineHeight = getLineHeight;
 
 
-/***/ }),
+/***/ },
 
-/***/ 6734:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 3659
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ViewController = void 0;
-var CommandManager_1 = __webpack_require__(7156);
+var CommandManager_1 = __webpack_require__(5031);
 var LOG_MIN_ZOOM = Math.log(0.05);
 var LOG_MAX_ZOOM = Math.log(3);
 var ZOOM_STEPS = 40;
@@ -40875,67 +41365,67 @@ function getStepByZoom(zoom) {
 }
 
 
-/***/ }),
+/***/ },
 
-/***/ 3607:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 8156
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DiagramModelOperation = exports.Diagnostics = exports.RenderHelper = exports.DiagramLocalizationService = exports.NativeConnector = exports.NativeShape = exports.ShapeType = exports.ColorUtils = exports.PageOrientation = exports.ConnectorPosition = exports.ConnectorLineOption = exports.ConnectorLineEnding = exports.AutoZoomMode = exports.Browser = exports.UnitConverter = exports.EventDispatcher = exports.DataLayoutOrientation = exports.DataLayoutType = exports.ShapeCategories = exports.ShapeTypes = exports.DiagramUnit = exports["default"] = exports.DiagramControl = exports.DiagramCommand = exports.Point = exports.Size = void 0;
-var CommandManager_1 = __webpack_require__(7156);
+var CommandManager_1 = __webpack_require__(5031);
 Object.defineProperty(exports, "DiagramCommand", ({ enumerable: true, get: function () { return CommandManager_1.DiagramCommand; } }));
-var Diagram_1 = __webpack_require__(2106);
+var Diagram_1 = __webpack_require__(701);
 Object.defineProperty(exports, "DiagramControl", ({ enumerable: true, get: function () { return Diagram_1.DiagramControl; } }));
 Object.defineProperty(exports, "default", ({ enumerable: true, get: function () { return Diagram_1.DiagramControl; } }));
-var size_1 = __webpack_require__(6353);
+var size_1 = __webpack_require__(3844);
 Object.defineProperty(exports, "Size", ({ enumerable: true, get: function () { return size_1.Size; } }));
-var point_1 = __webpack_require__(8900);
+var point_1 = __webpack_require__(5327);
 Object.defineProperty(exports, "Point", ({ enumerable: true, get: function () { return point_1.Point; } }));
-var Utils_1 = __webpack_require__(8675);
+var Utils_1 = __webpack_require__(41);
 Object.defineProperty(exports, "EventDispatcher", ({ enumerable: true, get: function () { return Utils_1.EventDispatcher; } }));
-var ShapeTypes_1 = __webpack_require__(2259);
+var ShapeTypes_1 = __webpack_require__(3255);
 Object.defineProperty(exports, "ShapeTypes", ({ enumerable: true, get: function () { return ShapeTypes_1.ShapeTypes; } }));
 Object.defineProperty(exports, "ShapeCategories", ({ enumerable: true, get: function () { return ShapeTypes_1.ShapeCategories; } }));
 Object.defineProperty(exports, "ShapeType", ({ enumerable: true, get: function () { return ShapeTypes_1.ShapeType; } }));
-var unit_converter_1 = __webpack_require__(9291);
+var unit_converter_1 = __webpack_require__(9500);
 Object.defineProperty(exports, "UnitConverter", ({ enumerable: true, get: function () { return unit_converter_1.UnitConverter; } }));
-var browser_1 = __webpack_require__(9279);
+var browser_1 = __webpack_require__(8424);
 Object.defineProperty(exports, "Browser", ({ enumerable: true, get: function () { return browser_1.Browser; } }));
-var Settings_1 = __webpack_require__(240);
+var Settings_1 = __webpack_require__(9307);
 Object.defineProperty(exports, "AutoZoomMode", ({ enumerable: true, get: function () { return Settings_1.AutoZoomMode; } }));
-var DataLayoutParameters_1 = __webpack_require__(3503);
+var DataLayoutParameters_1 = __webpack_require__(2175);
 Object.defineProperty(exports, "DataLayoutType", ({ enumerable: true, get: function () { return DataLayoutParameters_1.DataLayoutType; } }));
-var LayoutSettings_1 = __webpack_require__(8710);
+var LayoutSettings_1 = __webpack_require__(9212);
 Object.defineProperty(exports, "DataLayoutOrientation", ({ enumerable: true, get: function () { return LayoutSettings_1.DataLayoutOrientation; } }));
-__webpack_require__(8721);
-var ConnectorProperties_1 = __webpack_require__(4612);
+__webpack_require__(540);
+var ConnectorProperties_1 = __webpack_require__(4385);
 Object.defineProperty(exports, "ConnectorLineEnding", ({ enumerable: true, get: function () { return ConnectorProperties_1.ConnectorLineEnding; } }));
 Object.defineProperty(exports, "ConnectorLineOption", ({ enumerable: true, get: function () { return ConnectorProperties_1.ConnectorLineOption; } }));
-var color_1 = __webpack_require__(13);
+var color_1 = __webpack_require__(9553);
 Object.defineProperty(exports, "ColorUtils", ({ enumerable: true, get: function () { return color_1.ColorUtils; } }));
-var Diagnostics_1 = __webpack_require__(9463);
+var Diagnostics_1 = __webpack_require__(9196);
 Object.defineProperty(exports, "Diagnostics", ({ enumerable: true, get: function () { return Diagnostics_1.Diagnostics; } }));
-var NativeItem_1 = __webpack_require__(7185);
+var NativeItem_1 = __webpack_require__(4235);
 Object.defineProperty(exports, "NativeShape", ({ enumerable: true, get: function () { return NativeItem_1.NativeShape; } }));
 Object.defineProperty(exports, "NativeConnector", ({ enumerable: true, get: function () { return NativeItem_1.NativeConnector; } }));
-var LocalizationService_1 = __webpack_require__(6224);
+var LocalizationService_1 = __webpack_require__(820);
 Object.defineProperty(exports, "DiagramLocalizationService", ({ enumerable: true, get: function () { return LocalizationService_1.DiagramLocalizationService; } }));
-var RenderHelper_1 = __webpack_require__(1114);
+var RenderHelper_1 = __webpack_require__(8509);
 Object.defineProperty(exports, "RenderHelper", ({ enumerable: true, get: function () { return RenderHelper_1.RenderHelper; } }));
-var Enums_1 = __webpack_require__(5383);
+var Enums_1 = __webpack_require__(9254);
 Object.defineProperty(exports, "DiagramUnit", ({ enumerable: true, get: function () { return Enums_1.DiagramUnit; } }));
 Object.defineProperty(exports, "PageOrientation", ({ enumerable: true, get: function () { return Enums_1.PageOrientation; } }));
-var ModelOperationSettings_1 = __webpack_require__(6879);
+var ModelOperationSettings_1 = __webpack_require__(5225);
 Object.defineProperty(exports, "DiagramModelOperation", ({ enumerable: true, get: function () { return ModelOperationSettings_1.DiagramModelOperation; } }));
-var Connector_1 = __webpack_require__(7959);
+var Connector_1 = __webpack_require__(6320);
 Object.defineProperty(exports, "ConnectorPosition", ({ enumerable: true, get: function () { return Connector_1.ConnectorPosition; } }));
 
 
-/***/ }),
+/***/ },
 
-/***/ 655:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ 5215
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -41205,7 +41695,7 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
 }
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -41267,7 +41757,7 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(3607);
+/******/ 	var __webpack_exports__ = __webpack_require__(8156);
 /******/ 	
 /******/ 	return __webpack_exports__;
 /******/ })()
