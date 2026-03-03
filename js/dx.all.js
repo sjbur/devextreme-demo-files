@@ -129966,7 +129966,7 @@ const subscribes = {
     const groups = this.getViewOption('groups');
     console.log('getResizableAppointmentArea', options);
     if (groups !== null && groups !== void 0 && groups.length) {
-      if (allDay && !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
+      if (allDay || !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
         console.log('allDay and not vertical view');
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
