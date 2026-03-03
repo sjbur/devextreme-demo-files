@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.js)
 * Version: 26.1.0
-* Build date: Thu Feb 26 2026
+* Build date: Tue Mar 03 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -8668,8 +8668,89 @@ exports.initMobileViewport = initMobileViewport;
 
 /***/ },
 
-/***/ 93967
+/***/ 22692
 (__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.base64ToBytes = base64ToBytes;
+exports.bytesToHex = bytesToHex;
+exports.bytesToWords = bytesToWords;
+exports.concatBytes = concatBytes;
+exports.hexToBytes = hexToBytes;
+exports.leftRotate = leftRotate;
+exports.stringToBytes = stringToBytes;
+exports.wordsToBytes = wordsToBytes;
+exports.wordsToHex = wordsToHex;
+/* eslint-disable no-bitwise */
+function base64ToBytes(base64) {
+  return new Uint8Array(atob(base64).split('').map(s => s.charCodeAt(0)));
+}
+function hexToBytes(string) {
+  var _string$match;
+  return new Uint8Array(((_string$match = string.match(/.{1,2}/g)) === null || _string$match === void 0 ? void 0 : _string$match.map(byte => parseInt(byte, 16))) ?? []);
+}
+function stringToBytes(string) {
+  const bytes = new Uint8Array(string.length);
+  for (let k = 0; k < string.length; k += 1) {
+    bytes[k] = string.charCodeAt(k) & 0xFF;
+  }
+  return bytes;
+}
+function wordsToBytes(words) {
+  const bytes = new Uint8Array(words.length * 4);
+  for (let k = 0; k < bytes.length; k += 1) {
+    bytes[k] = words[k >> 2] >>> 8 * (3 - k % 4);
+  }
+  return bytes;
+}
+function bytesToWords(bytes) {
+  const words = new Uint32Array((bytes.length - 1 >> 2) + 1);
+  for (let k = 0; k < bytes.length; k += 1) {
+    words[k >> 2] |= bytes[k] << 8 * (3 - k % 4);
+  }
+  return words;
+}
+function wordsToHex(words) {
+  return [...words].map(w => w.toString(16).padStart(8, '0')).join('');
+}
+function bytesToHex(bytes) {
+  return [...bytes].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function leftRotate(x, n) {
+  return (x << n | x >>> 32 - n) >>> 0;
+}
+function concatBytes(a, b) {
+  const result = new Uint8Array(a.length + b.length);
+  result.set(a, 0);
+  result.set(b, a.length);
+  return result;
+}
+
+/***/ },
+
+/***/ 78157
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.PUBLIC_KEY = exports.INTERNAL_USAGE_ID = void 0;
+const PUBLIC_KEY = exports.PUBLIC_KEY = {
+  e: 65537,
+  n: new Uint8Array([200, 219, 153, 203, 140, 7, 228, 253, 193, 243, 62, 137, 139, 60, 68, 242, 48, 142, 113, 88, 185, 235, 253, 105, 80, 74, 32, 170, 96, 74, 111, 250, 7, 205, 154, 3, 146, 115, 153, 53, 45, 132, 123, 56, 61, 208, 184, 201, 63, 24, 109, 223, 0, 179, 169, 102, 139, 224, 73, 233, 45, 173, 138, 66, 98, 88, 69, 76, 177, 111, 113, 218, 192, 33, 101, 152, 25, 134, 34, 173, 32, 82, 230, 44, 247, 200, 253, 170, 192, 246, 30, 12, 96, 205, 100, 249, 181, 93, 0, 231])
+};
+const INTERNAL_USAGE_ID = exports.INTERNAL_USAGE_ID = 'V2QpQmJVXWy6Nexkq9Xk9o';
+
+/***/ },
+
+/***/ 93391
+(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
@@ -8681,15 +8762,368 @@ exports.parseLicenseKey = parseLicenseKey;
 exports.peekValidationPerformed = peekValidationPerformed;
 exports.setLicenseCheckSkipCondition = setLicenseCheckSkipCondition;
 exports.validateLicense = validateLicense;
-// @ts-expect-error - only for internal usage
-function parseLicenseKey(encodedKey) {}
-function validateLicense(licenseKey, version) {}
-// @ts-expect-error - only for internal usage
-function peekValidationPerformed() {}
-function setLicenseCheckSkipCondition() {}
+var _config = _interopRequireDefault(__webpack_require__(66636));
+var _errors = _interopRequireDefault(__webpack_require__(87129));
+var _version = __webpack_require__(1956);
+var _version2 = __webpack_require__(20258);
+var _byte_utils = __webpack_require__(22692);
+var _key = __webpack_require__(78157);
+var _pkcs = __webpack_require__(1012);
+var _rsa_bigint = __webpack_require__(42752);
+var _sha = __webpack_require__(94281);
+var _trial_panel = __webpack_require__(99671);
+var _types = __webpack_require__(13407);
+const _excluded = ["customerId", "maxVersionAllowed", "format", "internalUsageId"];
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
+const FORMAT = 1;
+const RTM_MIN_PATCH_VERSION = 3;
+const KEY_SPLITTER = '.';
+const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
+const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
+const NBSP = '\u00A0';
+const SUBSCRIPTION_NAMES = `Universal, DXperience, ASP.NET${NBSP}and${NBSP}Blazor, DevExtreme${NBSP}Complete`;
+const GENERAL_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'general'
+};
+const VERIFICATION_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'verification'
+};
+const DECODING_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'decoding'
+};
+const DESERIALIZATION_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'deserialization'
+};
+const PAYLOAD_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'payload'
+};
+const VERSION_ERROR = {
+  kind: _types.TokenKind.corrupted,
+  error: 'version'
+};
+let validationPerformed = false;
+// verifies RSASSA-PKCS1-v1.5 signature
+function verifySignature(_ref) {
+  let {
+    text,
+    signature: encodedSignature
+  } = _ref;
+  return (0, _rsa_bigint.compareSignatures)({
+    key: _key.PUBLIC_KEY,
+    signature: (0, _byte_utils.base64ToBytes)(encodedSignature),
+    actual: (0, _pkcs.pad)((0, _sha.sha1)(text))
+  });
+}
+function parseLicenseKey(encodedKey) {
+  if (encodedKey === undefined) {
+    return GENERAL_ERROR;
+  }
+  const parts = encodedKey.split(KEY_SPLITTER);
+  if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
+    return GENERAL_ERROR;
+  }
+  if (!verifySignature({
+    text: parts[0],
+    signature: parts[1]
+  })) {
+    return VERIFICATION_ERROR;
+  }
+  let decodedPayload = '';
+  try {
+    decodedPayload = atob(parts[0]);
+  } catch {
+    return DECODING_ERROR;
+  }
+  let payload = {};
+  try {
+    payload = JSON.parse(decodedPayload);
+  } catch {
+    return DESERIALIZATION_ERROR;
+  }
+  const {
+      customerId,
+      maxVersionAllowed,
+      format,
+      internalUsageId
+    } = payload,
+    rest = _objectWithoutPropertiesLoose(payload, _excluded);
+  if (internalUsageId !== undefined) {
+    return {
+      kind: _types.TokenKind.internal,
+      internalUsageId
+    };
+  }
+  if (customerId === undefined || maxVersionAllowed === undefined || format === undefined) {
+    return PAYLOAD_ERROR;
+  }
+  if (format !== FORMAT) {
+    return VERSION_ERROR;
+  }
+  return {
+    kind: _types.TokenKind.verified,
+    payload: Object.assign({
+      customerId,
+      maxVersionAllowed
+    }, rest)
+  };
+}
+function isPreview(patch) {
+  return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+}
+function isDevExpressLicenseKey(licenseKey) {
+  return licenseKey.startsWith('LCX') || licenseKey.startsWith('LCP');
+}
+function getLicenseCheckParams(_ref2) {
+  let {
+    licenseKey,
+    version
+  } = _ref2;
+  let preview = false;
+  try {
+    preview = isPreview(version.patch);
+    const {
+      major,
+      minor
+    } = preview ? (0, _version2.getPreviousMajorVersion)(version) : version;
+    if (!licenseKey) {
+      return {
+        preview,
+        error: 'W0019'
+      };
+    }
+    if (isDevExpressLicenseKey(licenseKey)) {
+      return {
+        preview,
+        error: 'W0024'
+      };
+    }
+    const license = parseLicenseKey(licenseKey);
+    if (license.kind === _types.TokenKind.corrupted) {
+      return {
+        preview,
+        error: 'W0021'
+      };
+    }
+    if (license.kind === _types.TokenKind.internal) {
+      return {
+        preview,
+        internal: true,
+        error: license.internalUsageId === _key.INTERNAL_USAGE_ID ? undefined : 'W0020'
+      };
+    }
+    if (!(major && minor)) {
+      return {
+        preview,
+        error: 'W0021'
+      };
+    }
+    if (major * 10 + minor > license.payload.maxVersionAllowed) {
+      return {
+        preview,
+        error: 'W0020'
+      };
+    }
+    return {
+      preview,
+      error: undefined
+    };
+  } catch {
+    return {
+      preview,
+      error: 'W0021'
+    };
+  }
+}
+function validateLicense(licenseKey) {
+  let versionStr = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _version.fullVersion;
+  if (validationPerformed) {
+    return;
+  }
+  validationPerformed = true;
+  const version = (0, _version2.parseVersion)(versionStr);
+  const versionsCompatible = (0, _version2.assertedVersionsCompatible)(version);
+  const {
+    internal,
+    error
+  } = getLicenseCheckParams({
+    licenseKey,
+    version
+  });
+  if (!versionsCompatible && internal) {
+    return;
+  }
+  if (error && !internal) {
+    const buyNowLink = (0, _config.default)().buyNowLink ?? BUY_NOW_LINK;
+    const licensingDocLink = (0, _config.default)().licensingDocLink ?? LICENSING_DOC_LINK;
+    (0, _trial_panel.showTrialPanel)(buyNowLink, licensingDocLink, _version.fullVersion, SUBSCRIPTION_NAMES);
+  }
+  const preview = isPreview(version.patch);
+  if (error) {
+    _errors.default.log(preview ? 'W0022' : error);
+    return;
+  }
+  if (preview && !internal) {
+    _errors.default.log('W0022');
+  }
+}
+function peekValidationPerformed() {
+  return validationPerformed;
+}
+function setLicenseCheckSkipCondition() {
+  let value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+}
+// NOTE: We need this default export
+// to allow QUnit mock the validateLicense function
 var _default = exports["default"] = {
   validateLicense
 };
+
+/***/ },
+
+/***/ 1012
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.pad = pad;
+var _byte_utils = __webpack_require__(22692);
+var _key = __webpack_require__(78157);
+// see https://datatracker.ietf.org/doc/html/rfc8017#page-47
+const ASN1_SHA1 = '3021300906052b0e03021a05000414';
+// PKCS #1 v1.5
+// 0x00 0x01 P 0x00 A H
+// P - padding string (0xff...0xff)
+// A - ASN.1 encoding of the hash algorithm used
+// H - hash value
+function pad(hash) {
+  const dataLength = (_key.PUBLIC_KEY.n.length * 8 + 6) / 8;
+  const data = (0, _byte_utils.concatBytes)((0, _byte_utils.hexToBytes)(ASN1_SHA1), hash);
+  if (data.length + 10 > dataLength) {
+    throw Error('Key is too short for SHA1 signing algorithm');
+  }
+  const padding = new Uint8Array(dataLength - data.length);
+  padding.fill(0xff, 0, padding.length - 1);
+  padding[0] = 0;
+  padding[1] = 1;
+  padding[padding.length - 1] = 0;
+  return (0, _byte_utils.concatBytes)(padding, data);
+}
+
+/***/ },
+
+/***/ 42752
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.compareSignatures = compareSignatures;
+function compareSignatures(args) {
+  try {
+    const zero = BigInt(0);
+    const one = BigInt(1);
+    const eight = BigInt(8);
+    const modExp = (base, exponent, modulus) => {
+      let result = one;
+      let b = base;
+      let e = exponent;
+      while (e) {
+        if (e & one) {
+          // eslint-disable-line no-bitwise
+          result = result * b % modulus;
+        }
+        b = b * b % modulus;
+        e >>= one; // eslint-disable-line no-bitwise
+      }
+      return result;
+    };
+    const bigIntFromBytes = bytes => bytes.reduce((acc, cur) => (acc << eight) + BigInt(cur),
+    // eslint-disable-line no-bitwise
+    zero);
+    const actual = bigIntFromBytes(args.actual);
+    const signature = bigIntFromBytes(args.signature);
+    const exponent = BigInt(args.key.e);
+    const modulus = bigIntFromBytes(args.key.n);
+    const expected = modExp(signature, exponent, modulus);
+    return expected === actual;
+  } catch {
+    return true;
+  }
+}
+
+/***/ },
+
+/***/ 94281
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.preprocess = preprocess;
+exports.sha1 = sha1;
+var _byte_utils = __webpack_require__(22692);
+/* eslint-disable no-bitwise */
+
+function preprocess(text) {
+  const bytes = new Uint8Array(text.length + 1);
+  bytes.set((0, _byte_utils.stringToBytes)(text));
+  bytes[bytes.length - 1] = 0x80;
+  const words = (0, _byte_utils.bytesToWords)(new Uint8Array(bytes));
+  const result = new Uint32Array(Math.ceil((words.length + 2) / 16) * 16);
+  result.set(words, 0);
+  result[result.length - 1] = (bytes.length - 1) * 8;
+  return result;
+}
+function sha1(text) {
+  const message = preprocess(text);
+  const h = new Uint32Array([0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0]);
+  for (let i = 0; i < message.length; i += 16) {
+    const w = new Uint32Array(80);
+    for (let j = 0; j < 16; j += 1) {
+      w[j] = message[i + j];
+    }
+    for (let j = 16; j < 80; j += 1) {
+      const n = w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16];
+      w[j] = n << 1 | n >>> 31;
+    }
+    let a = h[0];
+    let b = h[1];
+    let c = h[2];
+    let d = h[3];
+    let e = h[4];
+    for (let j = 0; j < 80; j += 1) {
+      const [f, k] = j < 20 ? [b & c | ~b & d, 0x5A827999] // eslint-disable-line no-nested-ternary,@stylistic/max-len
+      : j < 40 ? [b ^ c ^ d, 0x6ED9EBA1] // eslint-disable-line no-nested-ternary, @stylistic/max-len
+      : j < 60 ? [b & c | b & d | c & d, 0x8F1BBCDC] // eslint-disable-line @stylistic/max-len
+      : [b ^ c ^ d, 0xCA62C1D6];
+      const temp = (0, _byte_utils.leftRotate)(a, 5) + f + e + k + w[j];
+      e = d;
+      d = c;
+      c = (0, _byte_utils.leftRotate)(b, 30);
+      b = a;
+      a = temp;
+    }
+    h[0] += a;
+    h[1] += b;
+    h[2] += c;
+    h[3] += d;
+    h[4] += e;
+  }
+  return (0, _byte_utils.wordsToBytes)(h);
+}
 
 /***/ },
 
@@ -8972,6 +9406,24 @@ function registerTrialPanelComponents(customStyles) {
     (0, _trial_panel.registerCustomComponents)(customStyles);
   }
 }
+
+/***/ },
+
+/***/ 13407
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.TokenKind = void 0;
+var TokenKind;
+(function (TokenKind) {
+  TokenKind["corrupted"] = "corrupted";
+  TokenKind["verified"] = "verified";
+  TokenKind["internal"] = "internal";
+})(TokenKind || (exports.TokenKind = TokenKind = {}));
 
 /***/ },
 
@@ -34136,7 +34588,7 @@ var _resize_callbacks = _interopRequireDefault(__webpack_require__(63283));
 var _shadow_dom = __webpack_require__(93631);
 var _type = __webpack_require__(11528);
 var _window = __webpack_require__(3104);
-var _license_validation = _interopRequireWildcard(__webpack_require__(93967));
+var _license_validation = _interopRequireWildcard(__webpack_require__(93391));
 var _m_template_manager = _interopRequireDefault(__webpack_require__(66298));
 var _m_common = __webpack_require__(39315);
 var _component = __webpack_require__(65020);
@@ -102207,7 +102659,7 @@ Object.defineProperty(exports, "defaultOptions", ({
 }));
 var _controller = __webpack_require__(37868);
 var _options = __webpack_require__(63684);
-var _public_methods = __webpack_require__(42752);
+var _public_methods = __webpack_require__(20371);
 
 /***/ },
 
@@ -102232,7 +102684,7 @@ const defaultOptions = exports.defaultOptions = {
 
 /***/ },
 
-/***/ 42752
+/***/ 20371
 (__unused_webpack_module, exports) {
 
 
@@ -129512,8 +129964,10 @@ const subscribes = {
       allDay
     } = options;
     const groups = this.getViewOption('groups');
+    console.log('getResizableAppointmentArea', options);
     if (groups !== null && groups !== void 0 && groups.length) {
-      if (allDay || this.currentView.type === 'month') {
+      if (allDay && !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
+        console.log('allDay and not vertical view');
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
