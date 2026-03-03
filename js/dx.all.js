@@ -129247,7 +129247,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       },
       onShowAllDayPanel: value => this.option('showAllDayPanel', value),
       getHeaderHeight: () => _m_utils.utils.DOM.getHeaderHeight(this._header),
-      onScrollEnd: () => this._appointments.updateResizableArea(),
+      // onScrollEnd: () => this._appointments.updateResizableArea(),
       // TODO: SSR does not work correctly with renovated render
       renovateRender: this._isRenovatedRender(isVirtualScrolling)
     }, currentViewOptions);
@@ -129964,7 +129964,7 @@ const subscribes = {
       allDay
     } = options;
     const groups = this.getViewOption('groups');
-    console.log('getResizableAppointmentArea', options);
+    console.log('getResizableAppointmentArea1', options);
     if (groups !== null && groups !== void 0 && groups.length) {
       if (allDay || !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
         console.log('allDay and not vertical view');
