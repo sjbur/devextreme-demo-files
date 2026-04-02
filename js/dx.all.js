@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.js)
 * Version: 26.1.0
-* Build date: Fri Mar 27 2026
+* Build date: Thu Apr 02 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -56462,15 +56462,12 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
   _isPercentWidth(width) {
     return (0, _type.isString)(width) && width.endsWith('%');
   }
-  _isColumnHidden(column) {
-    return this._hiddenColumns.filter(hiddenColumn => hiddenColumn.index === column.index).length > 0;
-  }
   _getAverageColumnsWidth(containerWidth, columns, columnsCanFit) {
     const that = this;
     let fixedColumnsWidth = 0;
     let columnsWithoutFixedWidthCount = 0;
     columns.forEach(column => {
-      if (!that._isColumnHidden(column)) {
+      if (!that.isColumnHidden(column)) {
         const {
           width
         } = column;
@@ -56619,8 +56616,6 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
   }
   _showHiddenColumns() {
     for (let i = 0; i < COLUMN_VIEWS.length; i++) {
-      // TODO getView
-      // @ts-expect-error
       const view = this.getView(COLUMN_VIEWS[i]);
       if (view && view.isVisible() && view.element()) {
         const viewName = view.name;
@@ -56665,8 +56660,6 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
     } = _ref2;
     const that = this;
     COLUMN_VIEWS.forEach(viewName => {
-      // TODO: getView
-      // @ts-expect-error
       const view = that.getView(viewName);
       view && that._hideVisibleColumnInView({
         view,
@@ -56939,6 +56932,9 @@ class AdaptiveColumnsController extends _m_modules.default.ViewController {
     if ($adaptiveCommand.length) {
       this.setAria('label', _message.default.format(labelName), $adaptiveCommand);
     }
+  }
+  isColumnHidden(column) {
+    return this._hiddenColumns.filter(hiddenColumn => hiddenColumn.index === column.index).length > 0;
   }
 }
 exports.AdaptiveColumnsController = AdaptiveColumnsController;
@@ -57288,17 +57284,39 @@ const editorFactory = Base => class AdaptivityEditorFactoryExtender extends Base
   }
 };
 const columns = Base => class AdaptivityColumnsExtender extends Base {
+  init(isApplyingUserState) {
+    super.init(isApplyingUserState);
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+  }
   _isColumnVisible(column) {
     return super._isColumnVisible(column) && !column.adaptiveHidden;
   }
   getVisibleDataColumnsByBandColumn(bandColumnIndex) {
     return super.getVisibleDataColumnsByBandColumn(bandColumnIndex).filter(column => column.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
+  isAdaptiveHiddenColumn(column) {
+    return super.isAdaptiveHiddenColumn(column) || this._adaptiveColumnsController.isColumnHidden(column);
+  }
 };
 const resizing = Base => class AdaptivityResizingControllerExtender extends Base {
   dispose() {
     super.dispose.apply(this, arguments);
     clearTimeout(this._updateScrollableTimeoutID);
+  }
+  isHiddenColumnsChanged(oldHiddenColumns, hiddenColumns) {
+    if (oldHiddenColumns.length !== hiddenColumns.length) {
+      return true;
+    }
+    const oldIndices = new Set(oldHiddenColumns.map(col => col.index));
+    return hiddenColumns.some(col => !oldIndices.has(col.index));
+  }
+  updateColumnViewsFirstCellClasses() {
+    COLUMN_VIEWS.forEach(viewName => {
+      const view = this.getView(viewName);
+      if (view !== null && view !== void 0 && view.isVisible()) {
+        view.updateFirstCellClasses();
+      }
+    });
   }
   _needBestFit() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -57310,12 +57328,16 @@ const resizing = Base => class AdaptivityResizingControllerExtender extends Base
     const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
     adaptiveController.hideRedundantColumns(resultWidths, visibleColumns, hidingColumnsQueue);
     const hiddenColumns = adaptiveController.getHiddenColumns();
-    if (adaptiveController.hasAdaptiveDetailRowExpanded()) {
-      if (oldHiddenColumns.length !== hiddenColumns.length) {
-        adaptiveController.updateForm(hiddenColumns);
-      }
+    const isHiddenColumnsChanged = this.isHiddenColumnsChanged(oldHiddenColumns, hiddenColumns);
+    if (isHiddenColumnsChanged && adaptiveController.hasAdaptiveDetailRowExpanded()) {
+      adaptiveController.updateForm(hiddenColumns);
     }
-    !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
+    if (isHiddenColumnsChanged) {
+      this.updateColumnViewsFirstCellClasses();
+    }
+    if (!hiddenColumns.length) {
+      adaptiveController.collapseAdaptiveDetailRow();
+    }
     return super._correctColumnWidths.apply(this, arguments);
   }
   _toggleBestFitMode(isBestFit) {
@@ -60414,7 +60436,16 @@ class ColumnHeadersView extends (0, _m_column_context_menu_mixin.ColumnContextMe
     } = options;
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
-    column.rowspan > 1 && options.rowType === 'header' && $cellElement.attr('rowSpan', column.rowspan);
+    if (options.rowType !== 'header') {
+      return $cellElement;
+    }
+    const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
+    if (isBandColumnsUsed) {
+      this.toggleFirstCellClass($cellElement, this._columnsController.isFirstColumn(column, options.rowIndex));
+    }
+    if (column.rowspan > 1) {
+      $cellElement.attr('rowSpan', column.rowspan);
+    }
     return $cellElement;
   }
   /**
@@ -60593,6 +60624,13 @@ class ColumnHeadersView extends (0, _m_column_context_menu_mixin.ColumnContextMe
   getColumnCount() {
     const $columnElements = this.getColumnElements();
     return $columnElements ? $columnElements.length : 0;
+  }
+  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+    if ((0, _type.isString)(columnIdentifier)) {
+      const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
+      return this._columnsController.getVisibleIndex(columnIndex, rowIndex);
+    }
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
   /**
    * @extended: filter_row
@@ -62463,6 +62501,17 @@ class ColumnsController extends _m_modules.default.Controller {
   getColumnOptionNameByFullName(fullName) {
     return fullName.replace(_const3.COLUMN_OPTION_REGEXP, '');
   }
+  getFirstColumn(rowIndex) {
+    const visibleColumns = this.getVisibleColumns(rowIndex);
+    return visibleColumns.find(column => this.isFirstColumn(column, rowIndex));
+  }
+  /**
+   * @extended: m_adaptivity
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isAdaptiveHiddenColumn(column) {
+    return false;
+  }
 }
 exports.ColumnsController = ColumnsController;
 const columnsControllerModule = exports.columnsControllerModule = {
@@ -62523,12 +62572,11 @@ var _position = __webpack_require__(41639);
 var _type = __webpack_require__(11528);
 var _variable_wrapper = _interopRequireDefault(__webpack_require__(40216));
 var _ui = _interopRequireDefault(__webpack_require__(35185));
-var _const = __webpack_require__(26854);
-var _const2 = __webpack_require__(92806);
+var _const = __webpack_require__(92806);
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
-var _const3 = __webpack_require__(87396);
+var _const2 = __webpack_require__(87396);
 var _utils = __webpack_require__(24378);
-var _const4 = __webpack_require__(48795);
+var _const3 = __webpack_require__(48795);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable prefer-destructuring */
 
@@ -62539,7 +62587,7 @@ const warnFixedInChildColumnsOnce = (controller, childColumns) => {
   for (const column of childColumns) {
     if (unsupportedProperty) break;
     if (!column || typeof column !== 'object' || column === null) continue;
-    for (const property of _const4.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+    for (const property of _const3.UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
       if (property in column) {
         unsupportedProperty = property;
         break;
@@ -62581,7 +62629,7 @@ const createColumn = function (that, columnOptions, userStateColumnOptions, band
           headerId: `dx-col-${globalColumnId++}`
         };
       }
-      result = (0, _object.deepExtendArraySafe)(result, _const4.DEFAULT_COLUMN_OPTIONS, false, true);
+      result = (0, _object.deepExtendArraySafe)(result, _const3.DEFAULT_COLUMN_OPTIONS, false, true);
       (0, _object.deepExtendArraySafe)(result, commonColumnOptions, false, true);
       (0, _object.deepExtendArraySafe)(result, calculatedColumnOptions, false, true);
       (0, _object.deepExtendArraySafe)(result, columnOptions, false, true);
@@ -62879,9 +62927,9 @@ const updateColumnVisibleIndexes = function (that, currentColumn) {
 exports.updateColumnVisibleIndexes = updateColumnVisibleIndexes;
 function getColumnsByLocation(that, location, rowIndex) {
   switch (location) {
-    case _const4.GROUP_LOCATION:
+    case _const3.GROUP_LOCATION:
       return that.getGroupColumns();
-    case _const4.COLUMN_CHOOSER_LOCATION:
+    case _const3.COLUMN_CHOOSER_LOCATION:
       return that.getChooserColumns();
     default:
       return that.getVisibleColumns(rowIndex);
@@ -62895,10 +62943,10 @@ function getColumnByVisibleIndex(that, visibleIndex, location) {
   const columns = getColumnsByLocation(that, location, rowIndex);
   const correctedVisibleIndex = correctVisibleIndex(that, visibleIndex);
   const column = columns[correctedVisibleIndex];
-  if ((column === null || column === void 0 ? void 0 : column.type) === _const4.GROUP_COMMAND_COLUMN_NAME) {
+  if ((column === null || column === void 0 ? void 0 : column.type) === _const3.GROUP_COMMAND_COLUMN_NAME) {
     return that._columns.filter(col => column.type === col.type)[0] || column;
   }
-  if (that.isVirtualMode() && (!column || column.command === _const4.VIRTUAL_COMMAND_COLUMN_NAME)) {
+  if (that.isVirtualMode() && (!column || column.command === _const3.VIRTUAL_COMMAND_COLUMN_NAME)) {
     const columnIndexOffset = that.getColumnIndexOffset();
     return that.getVisibleColumns(rowIndex, true)[correctedVisibleIndex + columnIndexOffset];
   }
@@ -62942,12 +62990,12 @@ const applyUserState = function (that) {
   let i;
   function applyFieldsState(column, userStateColumn) {
     if (!userStateColumn) return;
-    for (let index = 0; index < _const4.USER_STATE_FIELD_NAMES.length; index++) {
-      const fieldName = _const4.USER_STATE_FIELD_NAMES[index];
+    for (let index = 0; index < _const3.USER_STATE_FIELD_NAMES.length; index++) {
+      const fieldName = _const3.USER_STATE_FIELD_NAMES[index];
       if (ignoreColumnOptionNames.includes(fieldName)) continue;
       if (fieldName === 'dataType') {
         column[fieldName] = column[fieldName] || userStateColumn[fieldName];
-      } else if (_const4.USER_STATE_FIELD_NAMES_15_1.includes(fieldName)) {
+      } else if (_const3.USER_STATE_FIELD_NAMES_15_1.includes(fieldName)) {
         if (fieldName in userStateColumn) {
           column[fieldName] = userStateColumn[fieldName];
         }
@@ -63128,7 +63176,7 @@ const fireOptionChanged = function (that, options) {
     fullOptionName
   } = options;
   const fullOptionPath = `${fullOptionName}.${optionName}`;
-  if (!_const4.IGNORE_COLUMN_OPTION_NAMES[optionName] && that._skipProcessingColumnsChange !== fullOptionPath) {
+  if (!_const3.IGNORE_COLUMN_OPTION_NAMES[optionName] && that._skipProcessingColumnsChange !== fullOptionPath) {
     that._skipProcessingColumnsChange = fullOptionPath;
     that.component._notifyOptionChanged(fullOptionPath, value, prevValue);
     that._skipProcessingColumnsChange = false;
@@ -63170,7 +63218,7 @@ const columnOptionCore = function (that, column, optionName, value, notFireEvent
       functionsAsIs: true
     });
     const fullOptionName = getColumnFullPath(that, column);
-    if (_const4.COLUMN_INDEX_OPTIONS[optionName]) {
+    if (_const3.COLUMN_INDEX_OPTIONS[optionName]) {
       updateIndexes(that, column);
       // @ts-expect-error
       value = optionGetter(column);
@@ -63183,7 +63231,7 @@ const columnOptionCore = function (that, column, optionName, value, notFireEvent
     }
     if (!notFireEvent) {
       // T346972
-      if (!_const4.USER_STATE_FIELD_NAMES.includes(optionName) && optionName !== 'visibleWidth') {
+      if (!_const3.USER_STATE_FIELD_NAMES.includes(optionName) && optionName !== 'visibleWidth') {
         columns = that.option('columns');
         initialColumn = that.getColumnByPath(fullOptionName, columns);
         if ((0, _type.isString)(initialColumn)) {
@@ -63208,7 +63256,7 @@ const columnOptionCore = function (that, column, optionName, value, notFireEvent
       value,
       prevValue
     });
-    if (column.type === _const2.AI_COLUMN_NAME) {
+    if (column.type === _const.AI_COLUMN_NAME) {
       that.aiColumnOptionChanged.fire(column, optionName, value);
     }
   }
@@ -63242,7 +63290,7 @@ const getDataColumns = function (columns, rowIndex, bandColumnID) {
   const result = [];
   rowIndex = rowIndex || 0;
   columns[rowIndex] && (0, _iterator.each)(columns[rowIndex], (_, column) => {
-    if (column.ownerBand === bandColumnID || column.type === _const4.GROUP_COMMAND_COLUMN_NAME) {
+    if (column.ownerBand === bandColumnID || column.type === _const3.GROUP_COMMAND_COLUMN_NAME) {
       if (!column.isBand || !column.colspan) {
         if (!column.command || rowIndex < 1) {
           result.push(column);
@@ -63314,7 +63362,7 @@ const mergeColumns = (that, columns, commandColumns, needToExtend) => {
     fixed: isColumnFixing
   }, column));
   const getCommandColumnIndex = column => commandColumns.reduce((result, commandColumn, index) => {
-    const columnType = needToExtend && column.type === _const4.GROUP_COMMAND_COLUMN_NAME ? 'expand' : column.type;
+    const columnType = needToExtend && column.type === _const3.GROUP_COMMAND_COLUMN_NAME ? 'expand' : column.type;
     return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
   }, -1);
   const callbackFilter = commandColumn => commandColumn.command !== commandColumns[commandColumnIndex].command;
@@ -63329,7 +63377,7 @@ const mergeColumns = (that, columns, commandColumns, needToExtend) => {
           calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue,
           cssClass: [commandColumns[commandColumnIndex].cssClass ?? '', column.cssClass ?? ''].join(' ').trim()
         });
-        if (column.type !== _const4.GROUP_COMMAND_COLUMN_NAME) {
+        if (column.type !== _const3.GROUP_COMMAND_COLUMN_NAME) {
           defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
         }
       } else {
@@ -63341,7 +63389,7 @@ const mergeColumns = (that, columns, commandColumns, needToExtend) => {
           allowReordering: column.groupIndex === 0,
           groupIndex: column.groupIndex
         };
-        result[i] = (0, _extend.extend)({}, column, commandColumns[commandColumnIndex], column.type === _const4.GROUP_COMMAND_COLUMN_NAME && columnOptions);
+        result[i] = (0, _extend.extend)({}, column, commandColumns[commandColumnIndex], column.type === _const3.GROUP_COMMAND_COLUMN_NAME && columnOptions);
       }
     }
   }
@@ -63352,9 +63400,9 @@ const mergeColumns = (that, columns, commandColumns, needToExtend) => {
 };
 exports.mergeColumns = mergeColumns;
 const isColumnFixed = (that, column) => {
-  const isFixedCommandColumn = column.type && column.type !== _const2.AI_COLUMN_NAME;
+  const isFixedCommandColumn = column.type && column.type !== _const.AI_COLUMN_NAME;
   if (!isFixedCommandColumn) {
-    return column.fixed && column.fixedPosition !== _const3.StickyPosition.Sticky;
+    return column.fixed && column.fixedPosition !== _const2.StickyPosition.Sticky;
   }
   return that._isColumnFixing();
 };
@@ -63426,7 +63474,7 @@ const isFirstOrLastColumnCore = function (that, column, rowIndex) {
   let fixedPosition = arguments.length > 5 ? arguments[5] : undefined;
   const getColumns = index => that.getVisibleColumns(index).filter(col => {
     let res = true;
-    if (col.visibleWidth === _const.HIDDEN_COLUMNS_WIDTH) {
+    if (that.isAdaptiveHiddenColumn(col)) {
       return false;
     }
     if (onlyWithinBandColumn && column) {
@@ -63458,7 +63506,7 @@ const isColumnNameRequired = function (_ref) {
   let {
     type = ''
   } = _ref;
-  return _const4.COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
+  return _const3.COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
 };
 exports.isColumnNameRequired = isColumnNameRequired;
 const getColumnHeaderCellSelector = visibleIndex => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;
@@ -71257,7 +71305,7 @@ const rowsView = Base => class RowsViewEditingFormBasedExtender extends Base {
       const column = this._columnsController.columnOption(columnIdentifier);
       return this._getEditFormEditorVisibleIndex($cells, column);
     }
-    return super._getVisibleColumnIndex.apply(this, arguments);
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
   _getEditFormEditorVisibleIndex($cells, column) {
     let visibleIndex = -1;
@@ -73374,35 +73422,8 @@ const columnsResizer = Base => class FilterRowColumnsResizerExtender extends Bas
     if (this.isResizing()) {
       // @ts-expect-error
       const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
-      if (!overlayInstance || !this._targetPoint) {
-        return;
-      }
-      const cellIndex = overlayInstance.$element().closest('td').index();
-      const {
-        columnIndex: resizingColumnIndex
-      } = this._targetPoint;
-      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
-        overlayInstance.$content().hide();
-      }
+      overlayInstance === null || overlayInstance === void 0 || overlayInstance.hide();
     }
-  }
-  _endResizing() {
-    const that = this;
-    let $cell;
-    if (that.isResizing()) {
-      // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
-      if (overlayInstance) {
-        $cell = overlayInstance.$element().closest('td');
-        // @ts-expect-error
-        that._columnHeadersView._updateFilterRangeOverlay({
-          width: (0, _size.getOuterWidth)($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH
-        });
-        overlayInstance.$content().show();
-      }
-    }
-    // @ts-expect-error
-    super._endResizing.apply(that, arguments);
   }
 };
 const editing = Base => class FilterRowEditingController extends Base {
@@ -83474,7 +83495,6 @@ const CLASSES = exports.CLASSES = {
   stickyColumnBorderRight: 'sticky-column-border-right',
   stickyColumnBorderLeft: 'sticky-column-border-left',
   stickyColumns: 'sticky-columns',
-  firstHeader: 'first-header',
   columnNoBorder: 'column-no-border',
   groupRowContainer: 'group-row-container',
   focusedFixedElement: 'dx-focused-fixed-element',
@@ -83516,9 +83536,6 @@ const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix) => {
     default:
       $cell.addClass(addWidgetPrefix(_const.CLASSES.stickyColumnLeft));
   }
-};
-const toggleFirstHeaderClass = ($cell, value, addWidgetPrefix) => {
-  $cell.toggleClass(addWidgetPrefix(_const.CLASSES.firstHeader), value);
 };
 const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix) => {
   $cell.toggleClass(addWidgetPrefix(_const.CLASSES.columnNoBorder), value);
@@ -83692,7 +83709,6 @@ const getNextHeaderCell = function ($cell) {
   return $nextCell;
 };
 const GridCoreStickyColumnsDom = exports.GridCoreStickyColumnsDom = {
-  toggleFirstHeaderClass,
   toggleColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,
@@ -83756,15 +83772,13 @@ const baseStickyColumns = Base => class BaseStickyColumnsExtender extends Base {
       _dom.GridCoreStickyColumnsDom.addStickyColumnBorderRightClass($cell, this.addWidgetPrefix.bind(this));
     }
   }
-  updateBorderCellClasses($cell, column, rowIndex) {
+  toggleColumnNoBorderClass($cell, column, rowIndex) {
     const columnsController = this._columnsController;
     const isRowsView = this.name === 'rowsView';
     const needToRemoveBorder = (0, _utils2.needToRemoveColumnBorder)(columnsController, column, rowIndex, isRowsView);
-    const isFirstColumn = columnsController === null || columnsController === void 0 ? void 0 : columnsController.isFirstColumn(column, rowIndex);
     _dom.GridCoreStickyColumnsDom.toggleColumnNoBorderClass($cell, needToRemoveBorder, this.addWidgetPrefix.bind(this));
-    _dom.GridCoreStickyColumnsDom.toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
   }
-  _updateBorderClasses() {
+  updateColumnNoBorderClasses() {
     const isColumnHeadersView = this.name === 'columnHeadersView';
     const $rows = this._getRowElementsCore().not(`.${_const2.CLASSES.detailRow}`).toArray();
     $rows.forEach((row, index) => {
@@ -83776,7 +83790,7 @@ const baseStickyColumns = Base => class BaseStickyColumnsExtender extends Base {
         const $cell = (0, _renderer.default)(cell);
         const column = columns[cellIndex];
         if (column.visibleWidth !== _const.HIDDEN_COLUMNS_WIDTH) {
-          this.updateBorderCellClasses($cell, column, rowIndex);
+          this.toggleColumnNoBorderClass($cell, column, rowIndex);
         }
       });
     });
@@ -83806,7 +83820,7 @@ const baseStickyColumns = Base => class BaseStickyColumnsExtender extends Base {
     const isSummary = rowType === 'groupFooter' || rowType === 'totalFooter' || rowType === 'group';
     const isExpandColumn = column.command && column.command === 'expand';
     if (hasStickyColumns && !(0, _utils2.needToDisableStickyColumn)(this._columnsController, column)) {
-      this.updateBorderCellClasses($cell, column, rowIndex);
+      this.toggleColumnNoBorderClass($cell, column, rowIndex);
       if (column.fixed) {
         const fixedPosition = (0, _utils2.getColumnFixedPosition)(this._columnsController, column);
         _dom.GridCoreStickyColumnsDom.addStickyColumnClass($cell, fixedPosition, this.addWidgetPrefix.bind(this));
@@ -83866,15 +83880,16 @@ const baseStickyColumns = Base => class BaseStickyColumnsExtender extends Base {
     }
   }
   _resizeCore() {
+    var _this$_adaptiveColumn;
     const hasStickyColumns = this.hasStickyColumns();
-    const adaptiveColumns = this.getController('adaptiveColumns');
-    const hidingColumnsQueue = adaptiveColumns === null || adaptiveColumns === void 0 ? void 0 : adaptiveColumns.getHidingColumnsQueue();
-    super._resizeCore.apply(this, arguments);
-    if (hasStickyColumns) {
-      this.setStickyOffsets();
-      if (hidingColumnsQueue !== null && hidingColumnsQueue !== void 0 && hidingColumnsQueue.length) {
-        this._updateBorderClasses();
-      }
+    const hasHidingColumnsQueue = !!((_this$_adaptiveColumn = this._adaptiveColumnsController) !== null && _this$_adaptiveColumn !== void 0 && (_this$_adaptiveColumn = _this$_adaptiveColumn.getHidingColumnsQueue()) !== null && _this$_adaptiveColumn !== void 0 && _this$_adaptiveColumn.length);
+    super._resizeCore.apply(this);
+    if (!hasStickyColumns) {
+      return;
+    }
+    this.setStickyOffsets();
+    if (hasHidingColumnsQueue) {
+      this.updateColumnNoBorderClasses();
     }
   }
   // TODO: Need to rename this method to hasFixedColumns after removing old fixed columns implementation
@@ -86223,6 +86238,21 @@ exports.A11yStatusContainerComponent = A11yStatusContainerComponent;
 
 /***/ },
 
+/***/ 95125
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.CLASSES = void 0;
+const CLASSES = exports.CLASSES = {
+  firstCell: 'first-cell'
+};
+
+/***/ },
+
 /***/ 48921
 (__unused_webpack_module, exports, __webpack_require__) {
 
@@ -86256,6 +86286,7 @@ var _m_support = _interopRequireDefault(__webpack_require__(85991));
 var _m_column_state_mixin = __webpack_require__(96790);
 var _m_modules = _interopRequireDefault(__webpack_require__(74854));
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
+var _const = __webpack_require__(95125);
 function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -86275,7 +86306,6 @@ const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
-const GROUP_ROW_CONTAINER = 'group-row-container';
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 const CELL_HINT_VISIBLE = 'dxCellHintVisible';
 const FORM_FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
@@ -86806,6 +86836,14 @@ class ColumnsView extends (0, _m_column_state_mixin.ColumnStateMixin)(_m_modules
       container: $table
     });
   }
+  removeFirstCellClasses() {
+    var _this$_tableElement;
+    const firstCellClass = this.addWidgetPrefix(_const.CLASSES.firstCell);
+    (_this$_tableElement = this._tableElement) === null || _this$_tableElement === void 0 || _this$_tableElement.find(`.${firstCellClass}`).removeClass(firstCellClass);
+  }
+  toggleFirstCellClass($cell, isFirstValue) {
+    $cell === null || $cell === void 0 || $cell.toggleClass(this.addWidgetPrefix(_const.CLASSES.firstCell), isFirstValue);
+  }
   /**
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
@@ -87114,8 +87152,8 @@ class ColumnsView extends (0, _m_column_state_mixin.ColumnStateMixin)(_m_modules
    * @extended: column_fixing
    */
   getContent(isFixedTableRendering) {
-    var _this$_tableElement;
-    return (_this$_tableElement = this._tableElement) === null || _this$_tableElement === void 0 ? void 0 : _this$_tableElement.parent();
+    var _this$_tableElement2;
+    return (_this$_tableElement2 = this._tableElement) === null || _this$_tableElement2 === void 0 ? void 0 : _this$_tableElement2.parent();
   }
   _removeContent(isFixedTableRendering) {
     const $scrollContainer = this.getContent(isFixedTableRendering);
@@ -87300,7 +87338,7 @@ class ColumnsView extends (0, _m_column_state_mixin.ColumnStateMixin)(_m_modules
    * @extended: adaptivity
    */
   _getCellElement(rowIndex, columnIdentifier) {
-    const $cells = this.getCellElements(rowIndex);
+    const $cells = this.getCellElements(rowIndex) ?? (0, _renderer.default)();
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
     if (!($cells !== null && $cells !== void 0 && $cells.length) || columnVisibleIndex < 0) {
       return undefined;
@@ -87341,7 +87379,7 @@ class ColumnsView extends (0, _m_column_state_mixin.ColumnStateMixin)(_m_modules
     return elements;
   }
   /**
-   * @extended: editing_form_based
+   * @extended: editing_form_based, column_headers
    */
   _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if ((0, _type.isString)(columnIdentifier)) {
@@ -87425,6 +87463,21 @@ class ColumnsView extends (0, _m_column_state_mixin.ColumnStateMixin)(_m_modules
   }
   renderDragCellContent($dragContainer, column) {
     $dragContainer.text(column.caption ?? '');
+  }
+  // NOTE: We cannot use modern CSS selectors (e.g. nth-child(index of <selector>))
+  // to style the first cell because our current SCSS toolchain does not support them.
+  // Instead, we manually toggle a CSS class on the first cell.
+  updateFirstCellClasses() {
+    const rows = this._getRows();
+    this.removeFirstCellClasses();
+    rows.forEach((row, index) => {
+      const rowIndex = row.rowType === 'header' ? index : null;
+      const firstColumn = this._columnsController.getFirstColumn(rowIndex);
+      if (firstColumn) {
+        const $cell = this._getCellElement(index, `index:${firstColumn.index}`);
+        this.toggleFirstCellClass($cell, true);
+      }
+    });
   }
 }
 exports.ColumnsView = ColumnsView;
@@ -89257,15 +89310,14 @@ class RowsView extends _m_columns_view.ColumnsView {
    * @extended: column_fixing, filter_row, row_dragging, vitrual_columns, virtual_scrolling
    */
   _resizeCore() {
-    const that = this;
-    that._fireColumnResizedCallbacks();
-    that._updateRowHeight();
+    this._fireColumnResizedCallbacks();
+    this._updateRowHeight();
     (0, _common.deferRender)(() => {
-      that._renderScrollable();
-      that.renderNoDataText();
-      that.updateFreeSpaceRowHeight();
+      this._renderScrollable();
+      this.renderNoDataText();
+      this.updateFreeSpaceRowHeight();
       (0, _common.deferUpdate)(() => {
-        that._updateScrollable();
+        this._updateScrollable();
       });
     });
   }
@@ -100217,6 +100269,7 @@ var _index = __webpack_require__(74636);
 var _columns_controller = __webpack_require__(88195);
 var _data_controller = __webpack_require__(22893);
 var _index2 = __webpack_require__(61519);
+var _utils = __webpack_require__(15819);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class ItemsController {
   constructor(dataController, columnsController, searchController) {
@@ -100225,11 +100278,14 @@ class ItemsController {
     this.searchController = searchController;
     this.selectedCardKeys = (0, _index.signal)([]);
     this.additionalItems = (0, _index.signal)([]);
+    this.visibleColumnsLayout = (0, _index.computed)(() => JSON.stringify(this.columnsController.visibleColumns.value.map(_utils.getColumnLayoutKey)));
     this.items = (0, _index.computed)(() => {
       // NOTE: We should trigger computed by search options change,
       // But all work with these options encapsulated in SearchHighlightTextProcessor
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.searchController.highlightTextOptions.value;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.visibleColumnsLayout.value;
       return this.dataController.items.value.map((item, itemIndex) => this.createCardInfo(item, this.columnsController.visibleColumns.peek(), itemIndex, this.selectedCardKeys.value)).concat(this.additionalItems.value);
     });
   }
@@ -100284,6 +100340,31 @@ class ItemsController {
 }
 exports.ItemsController = ItemsController;
 ItemsController.dependencies = [_data_controller.DataController, _columns_controller.ColumnsController, _index2.SearchController];
+
+/***/ },
+
+/***/ 15819
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getColumnLayoutKey = void 0;
+// NOTE: Column properties that are excluded from the layout key because they
+// don't directly affect card rendering. Data changes caused by sort/filter
+// arrive separately via dataController.items, so tracking these properties
+// in visibleColumnsLayout would cause redundant re-renders (T1306983, T1309423).
+const NON_LAYOUT_COLUMN_KEYS = new Set(['sortOrder', 'sortIndex', 'filterValues', 'filterType']);
+const getColumnLayoutKey = column => {
+  const entries = Object.entries(column).filter(_ref => {
+    let [key] = _ref;
+    return !NON_LAYOUT_COLUMN_KEYS.has(key);
+  });
+  return JSON.stringify(entries);
+};
+exports.getColumnLayoutKey = getColumnLayoutKey;
 
 /***/ },
 
@@ -107934,14 +108015,7 @@ class FieldChooserBase extends mixinWidget {
         const {
           targetGroup
         } = e;
-        e.cancel = false;
-        if (field.isMeasure === true) {
-          if (targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter') {
-            e.cancel = true;
-          }
-        } else if (field.isMeasure === false && targetGroup === 'data') {
-          e.cancel = true;
-        }
+        e.cancel = (0, _utils.shouldCancelDragging)(field, targetGroup);
       },
       useIndicator: true,
       onChanged(e) {
@@ -108113,10 +108187,23 @@ var _default = exports["default"] = {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.reverseSortOrder = void 0;
+exports.shouldCancelDragging = exports.reverseSortOrder = void 0;
 var _const = __webpack_require__(73944);
 const reverseSortOrder = sortOrder => sortOrder === _const.SORT_ORDER.descending ? _const.SORT_ORDER.ascending : _const.SORT_ORDER.descending;
 exports.reverseSortOrder = reverseSortOrder;
+const shouldCancelDragging = (field, targetGroup) => {
+  if (!field) {
+    return false;
+  }
+  if (field.isMeasure === true) {
+    return targetGroup === 'column' || targetGroup === 'row' || targetGroup === 'filter';
+  }
+  if (field.isMeasure === false && targetGroup === 'data') {
+    return true;
+  }
+  return false;
+};
+exports.shouldCancelDragging = shouldCancelDragging;
 
 /***/ },
 
@@ -125978,6 +126065,844 @@ exports.getViewModelDiff = getViewModelDiff;
 
 /***/ },
 
+/***/ 61954
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AgendaAppointmentView = void 0;
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _const = __webpack_require__(91167);
+var _base_appointment = __webpack_require__(82359);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class AgendaAppointmentView extends _base_appointment.BaseAppointmentView {
+  applyElementClasses() {
+    super.applyElementClasses();
+    this.$element().toggleClass(_const.AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().modifiers.isLastInGroup);
+  }
+  resize() {
+    this.$element().css({
+      height: this.option().geometry.height,
+      width: this.option().geometry.width
+    });
+  }
+  defaultAppointmentContent($container) {
+    this.renderMarker($container);
+    this.renderInfo($container);
+    return $container;
+  }
+  renderMarker($container) {
+    const $leftContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-agenda-appointment-left-layout').appendTo($container);
+    const $marker = (0, _renderer.default)('<div>').addClass(_const.AGENDA_APPOINTMENT_CLASSES.MARKER).appendTo($leftContainer);
+    // eslint-disable-next-line no-void
+    void this.option().getResourceColor().then(color => {
+      if (color) {
+        $marker.css('backgroundColor', color);
+      }
+    });
+    if (this.isRecurring()) {
+      (0, _renderer.default)('<span>').addClass(`${_const.APPOINTMENT_CLASSES.RECURRENCE_ICON} dx-icon-repeat`).attr('aria-label', _const.RECURRING_LABEL).appendTo($marker);
+    }
+  }
+  renderInfo($container) {
+    const $rightContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-agenda-appointment-right-layout').appendTo($container);
+    (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.TITLE).text(this.getTitleText()).appendTo($rightContainer);
+    const $contentDetails = (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.DETAILS).appendTo($rightContainer);
+    (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.DATE).text(this.getDateText()).appendTo($contentDetails);
+    if (this.isAllDay()) {
+      (0, _renderer.default)('<div>').text(_const.ALL_DAY_TEXT).addClass(_const.APPOINTMENT_CLASSES.ALL_DAY_TEXT).prependTo($contentDetails);
+    }
+    this.renderResourceList($contentDetails);
+  }
+  renderResourceList($contentDetails) {
+    // eslint-disable-next-line no-void
+    void this.option().getResourcesValues(this.appointmentData).then(resources => {
+      const container = (0, _renderer.default)('<div>').addClass(_const.AGENDA_APPOINTMENT_CLASSES.RESOURCE_LIST).appendTo($contentDetails);
+      resources.forEach(resource => {
+        const itemContainer = (0, _renderer.default)('<div>').addClass(_const.AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM).appendTo(container);
+        (0, _renderer.default)('<div>').text(`${resource.label}:`).appendTo(itemContainer);
+        (0, _renderer.default)('<div>').addClass(_const.AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM_VALUE).text(resource.values.join(', ')).appendTo(itemContainer);
+      });
+    });
+  }
+}
+exports.AgendaAppointmentView = AgendaAppointmentView;
+
+/***/ },
+
+/***/ 82359
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.BaseAppointmentView = void 0;
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _deferred = __webpack_require__(87739);
+var _m_element = __webpack_require__(93630);
+var _m_empty_template = __webpack_require__(11768);
+var _m_function_template = __webpack_require__(88969);
+var _dom_component = _interopRequireDefault(__webpack_require__(22331));
+var _const = __webpack_require__(91167);
+var _get_date_text = __webpack_require__(4995);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class BaseAppointmentView extends _dom_component.default {
+  get targetedAppointmentData() {
+    return this.option().targetedAppointmentData;
+  }
+  get appointmentData() {
+    return this.option().appointmentData;
+  }
+  _init() {
+    super._init();
+    this.defaultAppointmentTemplate = new _m_function_template.FunctionTemplate(options => {
+      this.defaultAppointmentContent((0, _renderer.default)(options.container));
+    });
+  }
+  _initMarkup() {
+    super._initMarkup();
+    this.resize();
+    this.applyElementClasses();
+    this.applyAria();
+    this.renderContentTemplate();
+  }
+  resize() {}
+  applyElementClasses() {
+    this.$element().addClass(_const.APPOINTMENT_CLASSES.CONTAINER).toggleClass(_const.APPOINTMENT_TYPE_CLASSES.RECURRING, this.isRecurring()).toggleClass(_const.APPOINTMENT_TYPE_CLASSES.ALL_DAY, this.isAllDay());
+  }
+  applyAria() {
+    this.$element().attr('role', 'button');
+  }
+  getTitleText() {
+    const dataAccessor = this.option().getDataAccessor();
+    const titleText = dataAccessor.get('text', this.targetedAppointmentData);
+    if (!titleText) {
+      return _message.default.format('dxScheduler-noSubject');
+    }
+    return titleText;
+  }
+  getDateText() {
+    const dateText = (0, _get_date_text.getDateTextFromTargetAppointment)(this.targetedAppointmentData, this.isAllDay() ? _get_date_text.DateFormatType.DATE : _get_date_text.DateFormatType.TIME);
+    return dateText;
+  }
+  isRecurring() {
+    const dataAccessor = this.option().getDataAccessor();
+    const recurrenceRule = dataAccessor.get('recurrenceRule', this.targetedAppointmentData);
+    return Boolean(recurrenceRule);
+  }
+  isAllDay() {
+    const dataAccessor = this.option().getDataAccessor();
+    const allDay = dataAccessor.get('allDay', this.targetedAppointmentData);
+    return Boolean(allDay);
+  }
+  renderContentTemplate() {
+    const $content = (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.CONTENT).appendTo(this.$element());
+    const template = this.option().appointmentTemplate instanceof _m_empty_template.EmptyTemplate ? this.defaultAppointmentTemplate : this.option().appointmentTemplate;
+    const $renderPromise = template.render({
+      container: (0, _m_element.getPublicElement)($content),
+      model: {
+        appointmentData: this.appointmentData,
+        targetedAppointmentData: this.targetedAppointmentData
+      }
+    });
+    (0, _deferred.when)($renderPromise).done(() => {
+      this.option().onAppointmentRendered({
+        element: (0, _m_element.getPublicElement)(this.$element()),
+        appointmentData: this.appointmentData,
+        targetedAppointmentData: this.targetedAppointmentData
+      });
+    });
+  }
+  defaultAppointmentContent($container) {
+    return $container;
+  }
+}
+// TODO<Appointments>: rename to dxSchedulerAppointment when old impl is removed
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+exports.BaseAppointmentView = BaseAppointmentView;
+(0, _component_registrator.default)('dxSchedulerNewAppointment', BaseAppointmentView);
+
+/***/ },
+
+/***/ 3902
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.GridAppointmentView = void 0;
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _const = __webpack_require__(91167);
+var _base_appointment = __webpack_require__(82359);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class GridAppointmentView extends _base_appointment.BaseAppointmentView {
+  _initMarkup() {
+    super._initMarkup();
+    // eslint-disable-next-line no-void
+    void this.applyElementColor();
+  }
+  resize() {
+    const {
+      geometry
+    } = this.option();
+    this.$element().css({
+      height: geometry.height,
+      width: geometry.width,
+      top: geometry.top,
+      left: geometry.left
+    });
+  }
+  applyElementClasses() {
+    super.applyElementClasses();
+    this.$element().toggleClass(_const.APPOINTMENT_TYPE_CLASSES.EMPTY, this.option().modifiers.empty);
+  }
+  defaultAppointmentContent($container) {
+    (0, _renderer.default)('<div>').text(this.getTitleText()).addClass(_const.APPOINTMENT_CLASSES.TITLE).appendTo($container);
+    if (this.isRecurring()) {
+      (0, _renderer.default)('<span>').addClass(`${_const.APPOINTMENT_CLASSES.RECURRENCE_ICON} dx-icon-repeat`).attr('aria-label', _const.RECURRING_LABEL).attr('role', 'img').appendTo($container);
+    }
+    const $contentDetails = (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.DETAILS).appendTo($container);
+    (0, _renderer.default)('<div>').addClass(_const.APPOINTMENT_CLASSES.DATE).text(this.getDateText()).appendTo($contentDetails);
+    if (this.isAllDay()) {
+      (0, _renderer.default)('<div>').text(_const.ALL_DAY_TEXT).addClass(_const.APPOINTMENT_CLASSES.ALL_DAY_TEXT).prependTo($contentDetails);
+    }
+    return $container;
+  }
+  async applyElementColor() {
+    const color = await this.option().getResourceColor();
+    if (color) {
+      this.$element().css('backgroundColor', color);
+    }
+  }
+}
+exports.GridAppointmentView = GridAppointmentView;
+
+/***/ },
+
+/***/ 82241
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.AppointmentCollector = void 0;
+var _date = _interopRequireDefault(__webpack_require__(38662));
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _empty_template = __webpack_require__(48650);
+var _button = _interopRequireDefault(__webpack_require__(64973));
+var _m_function_template = __webpack_require__(88969);
+var _dom_component = _interopRequireDefault(__webpack_require__(22331));
+var _const = __webpack_require__(91167);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class AppointmentCollector extends _dom_component.default {
+  _init() {
+    super._init();
+    this.defaultAppointmentCollectorTemplate = new _m_function_template.FunctionTemplate(options => {
+      this.defaultAppointmentCollectorContent((0, _renderer.default)(options.container));
+    });
+  }
+  _initMarkup() {
+    super._initMarkup();
+    this.applyElementClasses();
+    this.applyElementAria();
+    this.resize();
+    this.renderContentTemplate();
+  }
+  resize() {
+    var _this$buttonInstance;
+    this.$element().css({
+      top: this.option().geometry.top,
+      left: this.option().geometry.left
+    });
+    (_this$buttonInstance = this.buttonInstance) === null || _this$buttonInstance === void 0 || _this$buttonInstance.option({
+      width: this.option().geometry.width,
+      height: this.option().geometry.height
+    });
+  }
+  applyElementClasses() {
+    this.$element().addClass(_const.APPOINTMENT_COLLECTOR_CLASSES.CONTAINER).toggleClass(_const.APPOINTMENT_COLLECTOR_CLASSES.COMPACT, this.option().isCompact);
+  }
+  applyElementAria() {
+    const localizeDate = date =>
+    // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+    `${_date.default.format(date, 'monthAndDay')}, ${_date.default.format(date, 'year')}`;
+    const {
+      targetedAppointmentData
+    } = this.option();
+    const startDateText = localizeDate(targetedAppointmentData.displayStartDate);
+    const endDateText = localizeDate(targetedAppointmentData.displayEndDate);
+    const dateText = startDateText === endDateText ? startDateText : `${startDateText} - ${endDateText}`;
+    this.$element().attr('aria-roledescription', dateText);
+  }
+  renderContentTemplate() {
+    const template = this.option().appointmentCollectorTemplate instanceof _empty_template.EmptyTemplate ? this.defaultAppointmentCollectorTemplate : this.option().appointmentCollectorTemplate;
+    this.buttonInstance = this._createComponent(this.$element(), _button.default, {
+      type: 'default',
+      width: this.option().geometry.width,
+      height: this.option().geometry.height,
+      template
+    });
+  }
+  defaultAppointmentCollectorContent($container) {
+    const count = this.option().appointmentsCount;
+    const text = this.option().isCompact ? count
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    : _message.default.getFormatter('dxScheduler-moreAppointments')(count);
+    (0, _renderer.default)('<span>').text(text).appendTo($container);
+    $container.addClass(_const.APPOINTMENT_COLLECTOR_CLASSES.CONTENT);
+    return $container;
+  }
+}
+// eslint-disable-next-line
+exports.AppointmentCollector = AppointmentCollector;
+(0, _component_registrator.default)('dxSchedulerNewAppointmentCollector', AppointmentCollector);
+
+/***/ },
+
+/***/ 30820
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Appointments = void 0;
+var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _m_dom_adapter = __webpack_require__(62018);
+var _m_empty_template = __webpack_require__(11768);
+var _dom_component = _interopRequireDefault(__webpack_require__(22331));
+var _agenda_appointment = __webpack_require__(61954);
+var _grid_appointment = __webpack_require__(3902);
+var _appointment_collector = __webpack_require__(82241);
+var _const = __webpack_require__(91167);
+var _get_targeted_appointment = __webpack_require__(63491);
+var _get_view_model_diff = __webpack_require__(21010);
+var _type_helpers = __webpack_require__(52074);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+class Appointments extends _dom_component.default {
+  constructor() {
+    super(...arguments);
+    this.appointmentBySortIndex = {};
+  }
+  get $allDayContainer() {
+    return this.option().$allDayContainer;
+  }
+  get $commonContainer() {
+    return this.$element();
+  }
+  _init() {
+    super._init();
+    this._templateManager.addDefaultTemplates({
+      appointment: new _m_empty_template.EmptyTemplate(),
+      appointmentCollector: new _m_empty_template.EmptyTemplate()
+    });
+  }
+  _initMarkup() {
+    super._initMarkup();
+    this.$element().addClass(_const.APPOINTMENTS_CONTAINER_CLASS);
+  }
+  _getDefaultOptions() {
+    return Object.assign({}, super._getDefaultOptions(), {
+      viewModel: [],
+      $allDayContainer: null,
+      appointmentTemplate: 'appointment',
+      appointmentCollectorTemplate: 'appointmentCollector',
+      onAppointmentRendered: () => {}
+    });
+  }
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'items':
+        {
+          // TODO: legacy compatibility
+          this.option('viewModel', args.value);
+          break;
+        }
+      case 'viewModel':
+        {
+          if (this.option().currentView === 'agenda') {
+            this.renderAgendaAppointments(args.value);
+            break;
+          }
+          const diff = this.getViewModelDiff(args.value ?? [], args.previousValue ?? []);
+          this.renderViewModelDiff(diff);
+          break;
+        }
+      default:
+        break;
+    }
+  }
+  updateResizableArea() {}
+  moveAppointmentBack() {}
+  focus() {}
+  _renderAppointmentTemplate() {}
+  getAppointmentElement(sortedIndex) {
+    return this.appointmentBySortIndex[sortedIndex].$element();
+  }
+  getViewModelDiff(newViewModel, oldViewModel) {
+    const isPreviousAgenda = oldViewModel.length && (0, _type_helpers.isAgendaAppointmentViewModel)(oldViewModel[0]);
+    const normalizedOldViewModel = isPreviousAgenda ? [] : oldViewModel;
+    return (0, _get_view_model_diff.getViewModelDiff)(normalizedOldViewModel, newViewModel, this.option().getAppointmentDataSource());
+  }
+  renderAgendaAppointments(appointments) {
+    var _this$$allDayContaine;
+    (_this$$allDayContaine = this.$allDayContainer) === null || _this$$allDayContaine === void 0 || _this$$allDayContaine.empty();
+    const commonFragment = _m_dom_adapter.domAdapter.createDocumentFragment();
+    this.appointmentBySortIndex = {};
+    this.$commonContainer.empty();
+    appointments.forEach(appointmentViewModel => {
+      const appointment = this.renderAppointment(commonFragment, appointmentViewModel);
+      this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
+    });
+    this.$commonContainer.get(0).appendChild(commonFragment);
+  }
+  renderViewModelDiff(viewModelDiff) {
+    const allDayFragment = _m_dom_adapter.domAdapter.createDocumentFragment();
+    const commonFragment = _m_dom_adapter.domAdapter.createDocumentFragment();
+    const newAppointmentBySortedIndex = {};
+    const isRepaintAll = viewModelDiff.every(item => Boolean(item.needToAdd ?? item.needToRemove));
+    if (isRepaintAll) {
+      var _this$$allDayContaine2;
+      (_this$$allDayContaine2 = this.$allDayContainer) === null || _this$$allDayContaine2 === void 0 || _this$$allDayContaine2.empty();
+      this.$commonContainer.empty();
+    }
+    viewModelDiff.forEach(diffItem => {
+      const {
+        allDay,
+        sortedIndex
+      } = diffItem.item;
+      switch (true) {
+        case diffItem.needToRemove:
+          {
+            if (isRepaintAll) {
+              break;
+            }
+            this.getAppointmentElement(sortedIndex).remove();
+            break;
+          }
+        case diffItem.needToAdd:
+          {
+            const fragment = allDay ? allDayFragment : commonFragment;
+            const appointment = this.renderAppointment(fragment, diffItem.item);
+            newAppointmentBySortedIndex[sortedIndex] = appointment;
+            break;
+          }
+        case diffItem.needToResize:
+          {
+            const appointment = this.appointmentBySortIndex[sortedIndex];
+            appointment.option('geometry', {
+              height: diffItem.item.height,
+              width: diffItem.item.width,
+              top: diffItem.item.top,
+              left: diffItem.item.left
+            });
+            appointment.resize();
+            newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+            break;
+          }
+        default:
+          newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
+      }
+    });
+    this.appointmentBySortIndex = newAppointmentBySortedIndex;
+    if (this.$allDayContainer) {
+      this.$allDayContainer.get(0).appendChild(allDayFragment);
+    }
+    this.$commonContainer.get(0).appendChild(commonFragment);
+  }
+  renderAppointment(fragment, appointmentViewModel) {
+    const $element = (0, _renderer.default)('<div>');
+    fragment.appendChild($element.get(0));
+    const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
+    if ((0, _type_helpers.isCollectorViewModel)(appointmentViewModel)) {
+      return this._createComponent($element, _appointment_collector.AppointmentCollector, {
+        appointmentsCount: appointmentViewModel.items.length,
+        isCompact: appointmentViewModel.isCompact,
+        geometry: {
+          height: appointmentViewModel.height,
+          width: appointmentViewModel.width,
+          top: appointmentViewModel.top,
+          left: appointmentViewModel.left
+        },
+        targetedAppointmentData,
+        appointmentCollectorTemplate: this._getTemplateByOption('appointmentCollectorTemplate')
+      });
+    }
+    const baseConfig = {
+      appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
+      appointmentData: appointmentViewModel.itemData,
+      targetedAppointmentData,
+      getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
+      onAppointmentRendered: this.option().onAppointmentRendered,
+      getDataAccessor: this.option().getDataAccessor
+    };
+    if ((0, _type_helpers.isGridAppointmentViewModel)(appointmentViewModel)) {
+      return this._createComponent($element, _grid_appointment.GridAppointmentView, Object.assign({}, baseConfig, {
+        geometry: {
+          height: appointmentViewModel.height,
+          width: appointmentViewModel.width,
+          top: appointmentViewModel.top,
+          left: appointmentViewModel.left
+        },
+        modifiers: {
+          empty: appointmentViewModel.empty
+        }
+      }));
+    }
+    return this._createComponent($element, _agenda_appointment.AgendaAppointmentView, Object.assign({}, baseConfig, {
+      modifiers: {
+        isLastInGroup: appointmentViewModel.isLastInGroup
+      },
+      geometry: {
+        height: appointmentViewModel.height,
+        width: appointmentViewModel.width
+      },
+      getResourcesValues: this.getResourcesValues.bind(this)
+    }));
+  }
+  getTargetedAppointmentData(appointmentViewModel) {
+    const normalizedAppointmentViewModel = (0, _type_helpers.isCollectorViewModel)(appointmentViewModel) ? appointmentViewModel.items[0] : appointmentViewModel;
+    return (0, _get_targeted_appointment.getTargetedAppointment)(normalizedAppointmentViewModel, this.option().getDataAccessor(), this.option().getResourceManager());
+  }
+  getResourceColor(appointmentViewModel) {
+    const resourceManager = this.option().getResourceManager();
+    return resourceManager.getAppointmentColor({
+      itemData: appointmentViewModel.itemData,
+      groupIndex: appointmentViewModel.groupIndex
+    });
+  }
+  getResourcesValues(appointmentData) {
+    const resourceManager = this.option().getResourceManager();
+    return resourceManager.getAppointmentResourcesValues(appointmentData);
+  }
+}
+// TODO<Appointments>: rename to dxSchedulerAppointments when old impl is removed
+// eslint-disable-next-line
+exports.Appointments = Appointments;
+(0, _component_registrator.default)('dxSchedulerNewAppointments', Appointments);
+
+/***/ },
+
+/***/ 91167
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.RECURRING_LABEL = exports.APPOINTMENT_TYPE_CLASSES = exports.APPOINTMENT_COLLECTOR_CLASSES = exports.APPOINTMENT_CLASSES = exports.APPOINTMENTS_CONTAINER_CLASS = exports.ALL_DAY_TEXT = exports.AGENDA_APPOINTMENT_CLASSES = void 0;
+var _message = _interopRequireDefault(__webpack_require__(4671));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const ALL_DAY_TEXT = exports.ALL_DAY_TEXT = ` ${_message.default.format('dxScheduler-allDay')}: `;
+const RECURRING_LABEL = exports.RECURRING_LABEL = _message.default.format('dxScheduler-appointmentAriaLabel-recurring');
+const APPOINTMENTS_CONTAINER_CLASS = exports.APPOINTMENTS_CONTAINER_CLASS = 'dx-scheduler-scrollable-appointments';
+const APPOINTMENT_COLLECTOR_CLASSES = exports.APPOINTMENT_COLLECTOR_CLASSES = {
+  CONTAINER: 'dx-scheduler-appointment-collector',
+  COMPACT: 'dx-scheduler-appointment-collector-compact',
+  CONTENT: 'dx-scheduler-appointment-collector-content'
+};
+const APPOINTMENT_TYPE_CLASSES = exports.APPOINTMENT_TYPE_CLASSES = {
+  EMPTY: 'dx-scheduler-appointment-empty',
+  ALL_DAY: 'dx-scheduler-all-day-appointment',
+  RECURRING: 'dx-scheduler-appointment-recurrence'
+};
+const APPOINTMENT_CLASSES = exports.APPOINTMENT_CLASSES = {
+  CONTAINER: 'dx-scheduler-appointment',
+  CONTENT: 'dx-scheduler-appointment-content',
+  ARIA_DESCRIPTION: 'dx-scheduler-appointment-aria-description',
+  STRIP: 'dx-scheduler-appointment-strip',
+  TITLE: 'dx-scheduler-appointment-title',
+  RECURRENCE_ICON: 'dx-scheduler-appointment-recurrence-icon',
+  DETAILS: 'dx-scheduler-appointment-content-details',
+  DATE: 'dx-scheduler-appointment-content-date',
+  ALL_DAY_TEXT: 'dx-scheduler-appointment-content-allday'
+};
+const AGENDA_APPOINTMENT_CLASSES = exports.AGENDA_APPOINTMENT_CLASSES = {
+  LAST_IN_DATE: 'dx-scheduler-last-in-date-agenda-appointment',
+  MARKER: 'dx-scheduler-agenda-appointment-marker',
+  RESOURCE_LIST: 'dx-scheduler-appointment-resource-list',
+  RESOURCE_ITEM: 'dx-scheduler-appointment-resource-item',
+  RESOURCE_ITEM_VALUE: 'dx-scheduler-appointment-resource-item-value'
+};
+
+/***/ },
+
+/***/ 4995
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getDateTextFromTargetAppointment = exports.getDateText = exports.getDateFormatType = exports.DateFormatType = void 0;
+var _date = _interopRequireDefault(__webpack_require__(38662));
+var _date2 = _interopRequireDefault(__webpack_require__(41380));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var DateFormatType;
+(function (DateFormatType) {
+  DateFormatType["DATETIME"] = "DATETIME";
+  DateFormatType["TIME"] = "TIME";
+  DateFormatType["DATE"] = "DATE";
+})(DateFormatType || (exports.DateFormatType = DateFormatType = {}));
+const getDateFormatType = (startDate, endDate, isAllDay, viewType) => {
+  if (isAllDay) {
+    return DateFormatType.DATE;
+  }
+  if (viewType !== 'month' && _date2.default.sameDate(startDate, endDate)) {
+    return DateFormatType.TIME;
+  }
+  return DateFormatType.DATETIME;
+};
+exports.getDateFormatType = getDateFormatType;
+const getDateText = (startDate, endDate, formatType) => {
+  const dateFormat = 'monthandday';
+  const timeFormat = 'shorttime';
+  const isSameDate = _date2.default.sameDate(startDate, endDate);
+  switch (formatType) {
+    case DateFormatType.DATETIME:
+      return [_date.default.format(startDate, dateFormat), ' ', _date.default.format(startDate, timeFormat), ' - ', isSameDate ? '' : `${_date.default.format(endDate, dateFormat)} `, _date.default.format(endDate, timeFormat)].join('');
+    case DateFormatType.TIME:
+      return `${_date.default.format(startDate, timeFormat)} - ${_date.default.format(endDate, timeFormat)}`;
+    case DateFormatType.DATE:
+      return `${_date.default.format(startDate, dateFormat)}${isSameDate ? '' : ` - ${_date.default.format(endDate, dateFormat)}`}`;
+    default:
+      return '';
+  }
+};
+exports.getDateText = getDateText;
+const getDateTextFromTargetAppointment = (targetedAppointmentData, format, viewType) => {
+  const {
+    displayStartDate: startDate,
+    displayEndDate: endDate,
+    allDay
+  } = targetedAppointmentData;
+  const formatType = format ?? getDateFormatType(startDate, endDate, allDay, viewType);
+  return getDateText(startDate, endDate, formatType);
+};
+exports.getDateTextFromTargetAppointment = getDateTextFromTargetAppointment;
+
+/***/ },
+
+/***/ 63491
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getTargetedAppointment = void 0;
+var _appointment_groups_utils = __webpack_require__(11649);
+var _group_utils = __webpack_require__(76131);
+const setTargetedAppointmentResources = (targetedAppointment, appointmentViewModel, resourceManager) => {
+  const {
+    groups,
+    resourceById,
+    groupsLeafs
+  } = resourceManager;
+  if (groups.length) {
+    const cellGroups = (0, _group_utils.getLeafGroupValues)(groupsLeafs, appointmentViewModel.groupIndex);
+    (0, _appointment_groups_utils.setAppointmentGroupValues)(targetedAppointment, resourceById, cellGroups);
+  }
+};
+const getTargetedAppointment = (appointmentViewModel, dataAccessor, resourceManager) => {
+  const {
+    info,
+    itemData
+  } = appointmentViewModel;
+  const displayDates = 'partialDates' in info ? info.partialDates : info.appointment;
+  const targetedAppointment = Object.assign({}, itemData, {
+    displayStartDate: new Date(displayDates.startDate),
+    displayEndDate: new Date(displayDates.endDate)
+  });
+  dataAccessor.set('startDate', targetedAppointment, new Date(info.sourceAppointment.startDate));
+  dataAccessor.set('endDate', targetedAppointment, new Date(info.sourceAppointment.endDate));
+  setTargetedAppointmentResources(targetedAppointment, appointmentViewModel, resourceManager);
+  return targetedAppointment;
+};
+exports.getTargetedAppointment = getTargetedAppointment;
+
+/***/ },
+
+/***/ 21010
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getViewModelDiff = void 0;
+var _common = __webpack_require__(17781);
+var _type_helpers = __webpack_require__(52074);
+const getObjectToCompare = (item, includeDimensions) => {
+  const result = (0, _type_helpers.isCollectorViewModel)(item) ? {
+    allDay: item.allDay,
+    groupIndex: item.groupIndex,
+    items: item.items.length
+  } : {
+    allDay: item.allDay,
+    groupIndex: item.groupIndex,
+    direction: item.direction,
+    reduced: item.reduced,
+    partIndex: item.partIndex,
+    partTotalCount: item.partTotalCount,
+    rowIndex: item.rowIndex,
+    columnIndex: item.columnIndex
+  };
+  return includeDimensions ? Object.assign({}, result, {
+    left: item.left,
+    top: item.top,
+    height: item.height,
+    width: item.width
+  }) : result;
+};
+const isAppointmentDataChanged = (appointmentData, appointmentDataSource) => {
+  const updatedAppointmentData = appointmentDataSource.getUpdatedAppointment();
+  if (updatedAppointmentData === appointmentData) {
+    return true;
+  }
+  const updateAppointmentKeys = appointmentDataSource.getUpdatedAppointmentKeys();
+  return updateAppointmentKeys.some(item => appointmentData[item.key] === item.value);
+};
+function getArraysDiff(options) {
+  const {
+    a,
+    b,
+    match,
+    equal,
+    canResize
+  } = options;
+  const n = a.length;
+  const m = b.length;
+  const dp = Array.from({
+    length: n + 1
+  }, () => new Array(m + 1).fill(0));
+  for (let i = 1; i <= n; i += 1) {
+    const ai = a[i - 1];
+    for (let j = 1; j <= m; j += 1) {
+      dp[i][j] = match(ai, b[j - 1]) ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
+  const result = [];
+  let i = n;
+  let j = m;
+  while (i > 0 && j > 0) {
+    const ai = a[i - 1];
+    const bj = b[j - 1];
+    if (match(ai, bj)) {
+      if (equal(ai, bj)) {
+        result.push({
+          item: bj
+        });
+      } else if (canResize(ai, bj)) {
+        result.push({
+          item: bj,
+          needToResize: true
+        });
+      } else {
+        result.push({
+          item: ai,
+          needToRemove: true
+        });
+        result.push({
+          item: bj,
+          needToAdd: true
+        });
+      }
+      i -= 1;
+      j -= 1;
+    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
+      result.push({
+        item: ai,
+        needToRemove: true
+      });
+      i -= 1;
+    } else {
+      result.push({
+        item: bj,
+        needToAdd: true
+      });
+      j -= 1;
+    }
+  }
+  while (i > 0) {
+    result.push({
+      item: a[i - 1],
+      needToRemove: true
+    });
+    i -= 1;
+  }
+  while (j > 0) {
+    result.push({
+      item: b[j - 1],
+      needToAdd: true
+    });
+    j -= 1;
+  }
+  result.reverse();
+  return result;
+}
+const getViewModelDiff = (oldViewModel, newViewModel, appointmentDataSource) => {
+  const match = (a, b) =>
+  // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+  a.itemData === b.itemData && !isAppointmentDataChanged(b.itemData, appointmentDataSource);
+  const equal = (a, b) =>
+  // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+  (0, _common.equalByValue)(getObjectToCompare(a, true), getObjectToCompare(b, true));
+  const canResize = (a, b) =>
+  // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+  (0, _common.equalByValue)(getObjectToCompare(a, false), getObjectToCompare(b, false));
+  const result = getArraysDiff({
+    a: oldViewModel,
+    b: newViewModel,
+    match,
+    equal,
+    canResize
+  });
+  return result;
+};
+exports.getViewModelDiff = getViewModelDiff;
+
+/***/ },
+
+/***/ 52074
+(__unused_webpack_module, exports) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.isGridAppointmentViewModel = exports.isCollectorViewModel = exports.isAgendaAppointmentViewModel = void 0;
+const isAgendaAppointmentViewModel = appointmentViewModel => 'isAgendaModel' in appointmentViewModel;
+exports.isAgendaAppointmentViewModel = isAgendaAppointmentViewModel;
+const isCollectorViewModel = appointmentViewModel => 'isCompact' in appointmentViewModel;
+exports.isCollectorViewModel = isCollectorViewModel;
+const isGridAppointmentViewModel = appointmentViewModel =>
+// eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+!isAgendaAppointmentViewModel(appointmentViewModel) && !isCollectorViewModel(appointmentViewModel);
+exports.isGridAppointmentViewModel = isGridAppointmentViewModel;
+
+/***/ },
+
 /***/ 32060
 (__unused_webpack_module, exports) {
 
@@ -127253,6 +128178,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.VIRTUAL_CELL_CLASS = exports.VERTICAL_GROUP_COUNT_CLASSES = exports.TIME_PANEL_CLASS = exports.REDUCED_APPOINTMENT_PARTS_CLASSES = exports.REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_CLASS = exports.RECURRENCE_APPOINTMENT_CLASS = exports.LAST_GROUP_CELL_CLASS = exports.HEADER_CURRENT_TIME_CELL_CLASS = exports.GROUP_ROW_CLASS = exports.GROUP_HEADER_CONTENT_CLASS = exports.FIXED_CONTAINER_CLASS = exports.FIRST_GROUP_CELL_CLASS = exports.EMPTY_APPOINTMENT_CLASS = exports.DIRECTION_APPOINTMENT_CLASSES = exports.DATE_TABLE_ROW_CLASS = exports.DATE_TABLE_CLASS = exports.APPOINTMENT_ITEM_CLASS = exports.APPOINTMENT_HAS_RESOURCE_COLOR_CLASS = exports.APPOINTMENT_DRAG_SOURCE_CLASS = exports.APPOINTMENT_CONTENT_CLASSES = exports.ALL_DAY_APPOINTMENT_CLASS = exports.AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS = void 0;
+// TODO<Appointments>: delete unused classes when old impl is removed
 const FIXED_CONTAINER_CLASS = exports.FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const REDUCED_APPOINTMENT_CLASS = exports.REDUCED_APPOINTMENT_CLASS = 'dx-scheduler-appointment-reduced';
 const REDUCED_APPOINTMENT_ICON = exports.REDUCED_APPOINTMENT_ICON = 'dx-scheduler-appointment-reduced-icon';
@@ -127319,6 +128245,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
+// TODO<Appointments>: delete this file when old impl is removed
 class CompactAppointmentsHelper {
   constructor(instance) {
     this.elements = [];
@@ -128288,6 +129215,7 @@ var _m_legacy_form = __webpack_require__(98771);
 var _m_legacy_popup = __webpack_require__(24419);
 var _m_popup = __webpack_require__(27483);
 var _m_appointment_collection = _interopRequireDefault(__webpack_require__(5311));
+var _appointments = __webpack_require__(30820);
 var _m_widget_notify_scheduler = _interopRequireDefault(__webpack_require__(32060));
 var _m_header = __webpack_require__(84829);
 var _m_compact_appointments_helper = __webpack_require__(64787);
@@ -128469,18 +129397,28 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.updateOption('header', name, value);
         break;
       case 'currentView':
-        this._appointments.option({
-          items: [],
-          allowDrag: this.allowDragging(),
-          allowResize: this.allowResizing(),
-          itemTemplate: this.getAppointmentTemplate('appointmentTemplate')
-        });
+        if (this.option('_newAppointments')) {
+          this._appointments.option({
+            currentView: value,
+            viewModel: []
+            // TODO<Appointments>: update appointmentTemplate and appointmentCollectorTemplate
+          });
+        } else {
+          this._appointments.option({
+            items: [],
+            allowDrag: this.allowDragging(),
+            allowResize: this.allowResizing(),
+            itemTemplate: this.getAppointmentTemplate('appointmentTemplate')
+          });
+        }
         this.postponeResourceLoading().done(() => {
           var _this$header;
           this.refreshWorkSpace();
           (_this$header = this.header) === null || _this$header === void 0 || _this$header.option(this.headerConfig());
           this.setRemoteFilterIfNeeded();
-          this._appointments.option('allowAllDayResize', value !== 'day');
+          if (!this.option('_newAppointments')) {
+            this._appointments.option('allowAllDayResize', value !== 'day');
+          }
         });
         // NOTE:
         // Calling postponed operations (promises) here, because when we update options with
@@ -128519,7 +129457,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.updateAppointmentDataSource();
         this._appointments.option('items', []);
         this.updateOption('workSpace', name, value);
-        this._appointments.repaint();
+        if (!this.option('_newAppointments')) {
+          // TODO<Appointments>: no need to call repaint on new appointments
+          this._appointments.repaint();
+        }
         this.setRemoteFilterIfNeeded();
         this.postponeDataSourceLoading();
         break;
@@ -128528,7 +129469,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.updateAppointmentDataSource();
         this._appointments.option('items', []);
         this.updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
-        this._appointments.repaint();
+        if (!this.option('_newAppointments')) {
+          // TODO<Appointments>: no need to call repaint on new appointments
+          this._appointments.repaint();
+        }
         this.setRemoteFilterIfNeeded();
         this.postponeDataSourceLoading();
         break;
@@ -128543,7 +129487,11 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.actions[name] = this._createActionByOption(name);
         break;
       case 'onAppointmentRendered':
-        this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
+        if (this.option('_newAppointments')) {
+          this.createAppointmentRenderedAction();
+        } else {
+          this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
+        }
         break;
       case 'onAppointmentClick':
         this._appointments.option('onItemClick', this._createActionByOption(name));
@@ -128870,6 +129818,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this.notifyScheduler = new _m_widget_notify_scheduler.default({
       scheduler: this
     });
+    this.createAppointmentRenderedAction();
+  }
+  createAppointmentRenderedAction() {
+    this.appointmentRenderedAction = this._createActionByOption('onAppointmentRendered');
   }
   createAppointmentDataSource() {
     var _this$appointmentData;
@@ -128901,6 +129853,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     // @ts-expect-error
     super._initTemplates();
   }
+  // TODO<Appointments>: delete this method when old impl is removed
   initAppointmentTemplate() {
     const {
       expr
@@ -129011,6 +129964,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing')
     };
   }
+  // TODO<Appointments>: delete this method when old impl is removed
   getAppointmentRenderedAction() {
     return this._createActionByOption('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly']
@@ -129050,9 +130004,33 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this.renderHeader();
     this.toggleAdaptiveClass();
     this._layoutManager = new _appointments_layout_manager.default(this);
-    // @ts-expect-error
-    this._appointments = this._createComponent('<div>', _m_appointment_collection.default, this.appointmentsConfig());
-    this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
+    if (this.option('_newAppointments')) {
+      // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
+      const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item' ? 'appointment' : this.getViewOption('appointmentTemplate');
+      const appointmentsConfig = {
+        currentView: this.option('currentView'),
+        // TODO<Appointments>: set custom templates
+        appointmentTemplate: appointmentTemplateValue,
+        appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
+        onAppointmentRendered: e => {
+          // @ts-expect-error 'component' property is set by action
+          this.appointmentRenderedAction({
+            appointmentElement: e.element,
+            appointmentData: e.appointmentData,
+            targetedAppointmentData: e.targetedAppointmentData
+          });
+        },
+        getResourceManager: () => this.resourceManager,
+        getAppointmentDataSource: () => this.appointmentDataSource,
+        getDataAccessor: () => this._dataAccessors
+      };
+      // @ts-expect-error
+      this._appointments = this._createComponent('<div>', _appointments.Appointments, appointmentsConfig);
+    } else {
+      // @ts-expect-error
+      this._appointments = this._createComponent('<div>', _m_appointment_collection.default, this.appointmentsConfig());
+      this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
+    }
     this.appointmentTooltip = new (this.option('adaptivityEnabled') ? _m_mobile_tooltip_strategy.MobileTooltipStrategy : _m_desktop_tooltip_strategy.DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
     this.createAppointmentPopupForm();
     // @ts-expect-error
@@ -129177,10 +130155,14 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this.readyToRenderAppointments = (0, _window.hasWindow)();
     this._workSpace && this.cleanWorkspace();
     this.renderWorkSpace();
-    this._appointments.option({
-      fixedContainer: this._workSpace.getFixedContainer(),
-      allDayContainer: this._workSpace.getAllDayContainer()
-    });
+    if (this.option('_newAppointments')) {
+      this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
+    } else {
+      this._appointments.option({
+        fixedContainer: this._workSpace.getFixedContainer(),
+        allDayContainer: this._workSpace.getAllDayContainer()
+      });
+    }
     this.waitAsyncTemplate(() => {
       var _this$workSpaceRecalc2;
       return (_this$workSpaceRecalc2 = this.workSpaceRecalculation) === null || _this$workSpaceRecalc2 === void 0 ? void 0 : _this$workSpaceRecalc2.resolve();
@@ -129424,10 +130406,14 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     delete this._workSpace;
     this.renderWorkSpace();
     if (this.readyToRenderAppointments) {
-      this._appointments.option({
-        fixedContainer: this._workSpace.getFixedContainer(),
-        allDayContainer: this._workSpace.getAllDayContainer()
-      });
+      if (this.option('_newAppointments')) {
+        this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
+      } else {
+        this._appointments.option({
+          fixedContainer: this._workSpace.getFixedContainer(),
+          allDayContainer: this._workSpace.getAllDayContainer()
+        });
+      }
       this.waitAsyncTemplate(() => this.workSpaceRecalculation.resolve());
     }
   }
@@ -129608,6 +130594,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     (0, _appointment_groups_utils.setAppointmentGroupValues)(rawResult, this.resourceManager.resourceById, targetCell.groups);
     return rawResult;
   }
+  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointment(appointment, element) {
     const settings = _m_utils.utils.dataAccessors.getAppointmentSettings(element);
     return (0, _get_targeted_appointment.getTargetedAppointment)(appointment, settings, this._dataAccessors, this.resourceManager);
@@ -129983,8 +130970,8 @@ var _message = _interopRequireDefault(__webpack_require__(4671));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _date = _interopRequireDefault(__webpack_require__(41380));
 var _extend = __webpack_require__(52576);
-var _m_text_utils = __webpack_require__(9680);
 var _get_delta_time = __webpack_require__(334);
+var _get_date_text = __webpack_require__(4995);
 var _constants = __webpack_require__(25307);
 var _m_utils = __webpack_require__(5327);
 var _base = __webpack_require__(44611);
@@ -130076,16 +131063,17 @@ const subscribes = {
     this.checkAndDeleteAppointment(options.data, targetedData);
     this.hideAppointmentTooltip();
   },
+  // TODO<Appointments>: delete this method when old impl is removed
   createFormattedDateText(appointment, targetedAppointmentRaw, format) {
     const targetedAppointment = Object.assign({}, appointment, targetedAppointmentRaw);
     const adapter = new _appointment_adapter.AppointmentAdapter(targetedAppointment, this._dataAccessors);
     // pull out time zone converting from appointment adapter for knockout (T947938)
     const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
     const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
-    const formatType = format ?? (0, _m_text_utils.getFormatType)(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
+    const formatType = format ?? (0, _get_date_text.getDateFormatType)(startDate, endDate, adapter.allDay, this.currentView.type);
     return {
       text: adapter.text || _message.default.format('dxScheduler-noSubject'),
-      formatDate: (0, _m_text_utils.formatDates)(startDate, endDate, formatType)
+      formatDate: (0, _get_date_text.getDateText)(startDate, endDate, formatType)
     };
   },
   getResizableAppointmentArea(options) {
@@ -130160,15 +131148,18 @@ const subscribes = {
     }
     return updatedEndDate;
   },
+  // TODO<Appointments>: delete this method when old impl is removed
   renderCompactAppointments(options) {
     return this._compactAppointmentsHelper.render(options);
   },
+  // TODO<Appointments>: delete this method when old impl is removed
   clearCompactAppointments() {
     this._compactAppointmentsHelper.clear();
   },
   getGroupCount() {
     return this._workSpace._getGroupCount();
   },
+  // TODO<Appointments>: delete this method when old impl is removed
   mapAppointmentFields(config) {
     const {
       itemData,
@@ -130203,6 +131194,7 @@ const subscribes = {
   forceMaxAppointmentPerCell() {
     return this.forceMaxAppointmentPerCell();
   },
+  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointmentData(appointment, element) {
     return this.getTargetedAppointment(appointment, element);
   },
@@ -131387,7 +132379,7 @@ var _index2 = __webpack_require__(17855);
 var _render_utils = __webpack_require__(71312);
 var _index3 = __webpack_require__(34396);
 var _cell = __webpack_require__(85409);
-var _date_header_text = __webpack_require__(63491);
+var _date_header_text = __webpack_require__(85872);
 const DateHeaderCellDefaultProps = exports.DateHeaderCellDefaultProps = Object.assign({}, _cell.CellBaseDefaultProps, {
   today: false,
   colSpan: 1,
@@ -131468,7 +132460,7 @@ DateHeaderCell.defaultProps = DateHeaderCellDefaultProps;
 
 /***/ },
 
-/***/ 63491
+/***/ 85872
 (__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -140191,24 +141183,18 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.snapToCells = void 0;
-const getCellFill = (startDateUTC, endDateUTC, cell) => {
-  const cellDuration = cell.max - cell.min;
-  if (cellDuration <= 0) return 0;
-  const overlapStart = Math.max(startDateUTC, cell.min);
-  const overlapEnd = Math.min(endDateUTC, cell.max);
-  const overlapDuration = Math.max(0, overlapEnd - overlapStart);
-  return overlapDuration / cellDuration;
-};
 const snapToCells = function (entities, cells) {
   let mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'always';
   if (mode === 'never') return entities;
   return entities.map(entity => {
     const startCell = cells[entity.cellIndex];
     const endCell = cells[entity.endCellIndex];
-    const snapStart = mode === 'always' || getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > 0.5;
-    const snapEnd = mode === 'always' || getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > 0.5;
-    const startDateUTC = snapStart ? startCell.min : entity.startDateUTC;
-    const endDateUTC = snapEnd ? endCell.max : entity.endDateUTC;
+    const cellDuration = startCell.max - startCell.min;
+    const appointmentDuration = entity.endDateUTC - entity.startDateUTC;
+    const isLessThanTwoCells = cellDuration > 0 && appointmentDuration / cellDuration < 2;
+    const shouldSnap = mode === 'always' || isLessThanTwoCells;
+    const startDateUTC = shouldSnap ? startCell.min : entity.startDateUTC;
+    const endDateUTC = shouldSnap ? endCell.max : entity.endDateUTC;
     return Object.assign({}, entity, {
       startDateUTC,
       endDateUTC,
@@ -154630,9 +155616,8 @@ const CHAT_TEXTAREA_CLASS = exports.CHAT_TEXTAREA_CLASS = 'dx-chat-textarea';
 const CHAT_TEXT_AREA_TOOLBAR = exports.CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
 const MAX_ATTACHMENTS_COUNT = 10;
 const INFORMER_DELAY = 10000;
-const ERRORS = {
-  // @ts-expect-error format params should be extended
-  fileLimit: _message.default.format('dxChat-fileLimitReachedWarning', MAX_ATTACHMENTS_COUNT)
+const ERROR_MESSAGE_NAME = {
+  fileLimit: 'dxChat-fileLimitReachedWarning'
 };
 const STT_INITIAL_STATE = exports.STT_INITIAL_STATE = {
   stylingMode: 'text',
@@ -154923,6 +155908,9 @@ class ChatTextArea extends _m_text_area.default {
     this._filesToSend = new Map();
   }
   _renderFileUploader() {
+    if (!this._$textEditorContainer) {
+      return;
+    }
     this._$fileUploader = (0, _renderer.default)('<div>').addClass(CHAT_TEXT_AREA_ATTACHMENTS).insertBefore(this._$textEditorContainer);
     this._fileUploader = this._createComponent(this._$fileUploader, _file_uploader.default, this._getFileUploaderOptions());
   }
@@ -155006,7 +155994,9 @@ class ChatTextArea extends _m_text_area.default {
     (_fileUploaderOptions$3 = fileUploaderOptions.onUploaded) === null || _fileUploaderOptions$3 === void 0 || _fileUploaderOptions$3.call(fileUploaderOptions, e);
   }
   _fileUploaderFileLimitReached() {
-    this._showInformer(ERRORS.fileLimit);
+    this._showInformer(_message.default.format(ERROR_MESSAGE_NAME.fileLimit,
+    // @ts-expect-error format params should be extended
+    MAX_ATTACHMENTS_COUNT));
     this._updateInputHeight();
   }
   _fileUploaderFileValidationError(e) {
@@ -160790,6 +161780,9 @@ class ColorBox extends _m_drop_down_editor.default {
   _renderColorPreview() {
     this.$element().wrapInner((0, _renderer.default)('<div>').addClass(COLOR_BOX_INPUT_CONTAINER_CLASS));
     this._$colorBoxInputContainer = this.$element().children().eq(0);
+    if (!this._$textEditorInputContainer) {
+      return;
+    }
     this._$colorResultPreview = (0, _renderer.default)('<div>').addClass(COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS).appendTo(this._$textEditorInputContainer);
     this._updateNoColorIndicator();
   }
@@ -177223,12 +178216,12 @@ class DropDownEditor extends _m_text_box.default {
     return fieldTemplate ? this._$container : this._$textEditorContainer;
   }
   _renderBeforeFieldAddon() {
-    if (!this._$beforeFieldAddon) {
+    if (!this._$beforeFieldAddon && this._$textEditorContainer) {
       this._$beforeFieldAddon = (0, _renderer.default)('<div>').addClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON).insertBefore(this._$textEditorContainer);
     }
   }
   _renderAfterFieldAddon() {
-    if (!this._$afterFieldAddon) {
+    if (!this._$afterFieldAddon && this._$textEditorContainer) {
       this._$afterFieldAddon = (0, _renderer.default)('<div>').addClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON).insertAfter(this._$textEditorContainer);
     }
   }
@@ -177252,12 +178245,13 @@ class DropDownEditor extends _m_text_box.default {
     }
   }
   _renderTemplatedField(fieldTemplate, data) {
+    var _this$_$textEditorCon, _this$_$templateWrapp;
     const isFocused = (0, _m_selectors.focused)(this._input());
     this._detachKeyboardEvents();
     this._detachFocusEvents();
-    this._$textEditorContainer.remove();
+    (_this$_$textEditorCon = this._$textEditorContainer) === null || _this$_$textEditorCon === void 0 || _this$_$textEditorCon.remove();
     const $newTemplateWrapper = createTemplateWrapperElement();
-    this._$templateWrapper.replaceWith($newTemplateWrapper);
+    (_this$_$templateWrapp = this._$templateWrapper) === null || _this$_$templateWrapp === void 0 || _this$_$templateWrapp.replaceWith($newTemplateWrapper);
     this._$templateWrapper = $newTemplateWrapper;
     const currentRenderContext = Symbol('renderContext');
     this._activeRenderContext = currentRenderContext;
@@ -216322,6 +217316,9 @@ class TagBox extends _m_select_box.default {
     return this._getValue().length === 0;
   }
   _updateTagsContainer($element) {
+    if (!$element) {
+      return;
+    }
     this._$tagsContainer = $element.addClass(TAGBOX_TAG_CONTAINER_CLASS);
   }
   // eslint-disable-next-line class-methods-use-this
@@ -217736,9 +218733,10 @@ class TextArea extends _m_text_box.default {
     super._refreshEvents();
   }
   _getHeightDifference($input) {
+    var _this$_$textEditorCon, _this$_$textEditorInp;
     const verticalElementOffset = (0, _size.getVerticalOffsets)(this.$element().get(0), false);
-    const verticalEditorContainerOffset = (0, _size.getVerticalOffsets)(this._$textEditorContainer.get(0), false);
-    const verticalInputContainerOffsets = (0, _size.getVerticalOffsets)(this._$textEditorInputContainer.get(0), true);
+    const verticalEditorContainerOffset = (0, _size.getVerticalOffsets)((_this$_$textEditorCon = this._$textEditorContainer) === null || _this$_$textEditorCon === void 0 ? void 0 : _this$_$textEditorCon.get(0), false);
+    const verticalInputContainerOffsets = (0, _size.getVerticalOffsets)((_this$_$textEditorInp = this._$textEditorInputContainer) === null || _this$_$textEditorInp === void 0 ? void 0 : _this$_$textEditorInp.get(0), true);
     const inputMargin = (0, _size.getElementBoxParams)('height', (0, _window.getWindow)().getComputedStyle($input.get(0))).margin;
     const sum = verticalElementOffset + verticalEditorContainerOffset + verticalInputContainerOffsets + inputMargin;
     return sum;
@@ -227378,6 +228376,7 @@ class Popover extends _m_popup.default {
         visible
       } = this.option();
       const overlayStack = this._overlayStack();
+      // @ts-ignore this
       const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
       if ((0, _utils.normalizeKeyName)(e) === ESC_KEY_NAME && visible && isTopOverlay) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -239706,7 +240705,7 @@ var _default = exports["default"] = ResizeHandle;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = void 0;
+exports["default"] = exports.SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = exports.SPLITTER_ITEM_CLASS = exports.SPLITTER_CLASS = exports.INVISIBLE_STATE_CLASS = void 0;
 var _emitter = __webpack_require__(69331);
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _dom_adapter = _interopRequireDefault(__webpack_require__(64960));
@@ -239729,13 +240728,13 @@ var _layout_default = __webpack_require__(54285);
 var _number_comparison = __webpack_require__(94178);
 var _types = __webpack_require__(49624);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+const SPLITTER_CLASS = exports.SPLITTER_CLASS = 'dx-splitter';
+const SPLITTER_ITEM_CLASS = exports.SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = exports.SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+const INVISIBLE_STATE_CLASS = exports.INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
-const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 const FLEX_PROPERTY = {
   flexGrow: 'flexGrow',
@@ -239752,8 +240751,7 @@ class Splitter extends _collection_widget.default {
   constructor() {
     super(...arguments);
     this._renderQueue = [];
-    this._panesCacheSize = [];
-    this._panesCacheSizeVisible = [];
+    this._initialPaneSizes = [];
     this._itemRestrictions = [];
   }
   _getDefaultOptions() {
@@ -239770,7 +240768,8 @@ class Splitter extends _collection_widget.default {
       _itemAttributes: Object.assign({}, defaultOptions._itemAttributes, {
         role: 'group'
       }),
-      _renderQueue: undefined
+      _renderQueue: undefined,
+      _ignoreSizeConstraints: false
     });
   }
   _itemClass() {
@@ -239802,9 +240801,9 @@ class Splitter extends _collection_widget.default {
   _initMarkup() {
     (0, _renderer.default)(this.element()).addClass(SPLITTER_CLASS);
     this._toggleOrientationClass();
-    super._initMarkup();
     this._panesCacheSize = [];
     this._panesCacheSizeVisible = [];
+    super._initMarkup();
     this._attachResizeObserverSubscription();
   }
   _getItemDimension(element) {
@@ -239828,25 +240827,67 @@ class Splitter extends _collection_widget.default {
     return (0, _layout.isElementVisible)((0, _renderer.default)(this.element())[0]);
   }
   _resizeHandler() {
-    if (this._shouldRecalculateLayout && this._isAttached() && this._isVisible()) {
+    if (!this._isAttached() || !this._isVisible()) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _ignoreSizeConstraints
+    } = this.option();
+    if (this._shouldRecalculateLayout) {
       this._layout = this._getDefaultLayoutBasedOnSize();
+      this._idealLayout = this._layout;
       this._applyStylesFromLayout(this._layout);
+      this._setPanesCacheSize();
       this._updateItemSizes();
       this._shouldRecalculateLayout = false;
+    } else if (!_ignoreSizeConstraints) {
+      this._dimensionChanged();
     }
   }
   _renderItems(items) {
     super._renderItems(items);
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
+    this._initialPaneSizes = items.map(item => item.size);
     if (this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
+      this._idealLayout = this._layout;
       this._applyStylesFromLayout(this._layout);
+      this._setPanesCacheSize();
       this._updateItemSizes();
     } else {
       this._shouldRecalculateLayout = true;
     }
     this._processRenderQueue();
+  }
+  _setPanesCacheSize() {
+    const {
+      items = []
+    } = this.option();
+    items.forEach((item, index) => {
+      const restriction = this._itemRestrictions[index];
+      if (!(0, _type.isDefined)(restriction === null || restriction === void 0 ? void 0 : restriction.size)) {
+        return;
+      }
+      if (item.collapsed === true) {
+        const isLastNonCollapsed = index >= (0, _layout.findLastIndexOfNonCollapsedItem)(items);
+        const isLastVisible = this._isLastVisibleItem(index);
+        const direction = isLastVisible || isLastNonCollapsed ? _types.CollapseExpandDirection.Previous : _types.CollapseExpandDirection.Next;
+        this._panesCacheSize[index] = {
+          size: restriction.size,
+          direction
+        };
+      }
+      if (item.visible === false) {
+        const isLastVisible = index >= (0, _layout.findLastIndexOfVisibleItem)(items);
+        const direction = isLastVisible ? _types.CollapseExpandDirection.Previous : _types.CollapseExpandDirection.Next;
+        this._panesCacheSizeVisible[index] = {
+          size: restriction.size,
+          direction
+        };
+      }
+    });
   }
   _processRenderQueue() {
     if (this._isRenderQueueEmpty()) {
@@ -240052,6 +241093,7 @@ class Splitter extends _collection_widget.default {
         event.offset, currentOrientation, rtlEnabled, this._currentOnePxRatio), this._activeResizeHandleIndex, this._itemRestrictions);
         this._applyStylesFromLayout(newLayout);
         this._layout = newLayout;
+        this._idealLayout = newLayout;
       },
       onResizeEnd: e => {
         var _this$_feedbackDeferr;
@@ -240140,14 +241182,20 @@ class Splitter extends _collection_widget.default {
   _itemOptionChanged(item, property, value, prevValue) {
     switch (property) {
       case 'size':
-        this._layout = this._getDefaultLayoutBasedOnSize(item);
-        this._applyStylesFromLayout(this.getLayout());
-        this._updateItemSizes();
-        break;
+        {
+          this._initialPaneSizes[this._getIndexByItem(item)] = value;
+          this._layout = this._getDefaultLayoutBasedOnSize(item);
+          this._idealLayout = this._layout;
+          this._applyStylesFromLayout(this.getLayout());
+          this._setPanesCacheSize();
+          this._updateItemSizes();
+          break;
+        }
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
         this._layout = this._getDefaultLayoutBasedOnSize();
+        this._idealLayout = this._layout;
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
         break;
@@ -240208,6 +241256,7 @@ class Splitter extends _collection_widget.default {
       newLayout = (0, _layout.getNextLayout)(currentLayout, delta, paneIndex, this._itemRestrictions);
     }
     this._layout = newLayout;
+    this._idealLayout = this._layout;
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
   }
@@ -240451,8 +241500,142 @@ class Splitter extends _collection_widget.default {
     });
   }
   _dimensionChanged() {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _ignoreSizeConstraints
+    } = this.option();
+    if (_ignoreSizeConstraints) {
+      this._updateItemSizes();
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      return;
+    }
+    const idealLayout = this._idealLayout;
+    if (!idealLayout || idealLayout.length === 0) {
+      return;
+    }
+    const {
+      orientation,
+      items = []
+    } = this.option();
+    const elementSize = (0, _layout.getElementSize)(this.$element(), orientation);
+    const handlesSize = this._getResizeHandlesSize();
+    const availableSize = Math.max(0, elementSize - handlesSize);
+    if (availableSize <= 0) {
+      this._layout = idealLayout.map(() => 0);
+      this._applyStylesFromLayout(this._layout);
+      this._updateItemSizes();
+      return;
+    }
+    const idealPixels = idealLayout.map(ratio => ratio / 100 * availableSize);
+    let remaining = 0;
+    const newPixels = idealPixels.map((px, index) => {
+      const item = items[index];
+      if (!item || item.visible === false) {
+        remaining += px;
+        return 0;
+      }
+      if (item.collapsed === true) {
+        const collapsedPx = (0, _layout.tryConvertToNumber)(item.collapsedSize, elementSize) ?? 0;
+        remaining += px - collapsedPx;
+        return collapsedPx;
+      }
+      if (item.resizable === false) {
+        const originalSize = this._initialPaneSizes[index];
+        if ((0, _type.isDefined)(originalSize)) {
+          const fixedPx = (0, _layout.tryConvertToNumber)(originalSize, elementSize) ?? px;
+          remaining += px - fixedPx;
+          return fixedPx;
+        }
+      }
+      const minPx = (0, _layout.tryConvertToNumber)(item.minSize, elementSize) ?? 0;
+      const maxPx = (0, _layout.tryConvertToNumber)(item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(px, minPx, maxPx);
+      remaining += px - clampedPx;
+      return clampedPx;
+    });
+    this._distributeRemainingPixels(newPixels, remaining);
+    this._layout = newPixels.map(px => px / availableSize * 100);
+    this._applyStylesFromLayout(this._layout);
     this._updateItemSizes();
-    this._layout = this._getDefaultLayoutBasedOnSize();
+  }
+  _getEligiblePaneIndices(pixels, remaining) {
+    const {
+      items = [],
+      orientation
+    } = this.option();
+    const elementSize = (0, _layout.getElementSize)(this.$element(), orientation);
+    const indices = [];
+    const direction = remaining > 0 ? 1 : -1;
+    for (let index = 0; index < pixels.length; index += 1) {
+      const item = items[index];
+      if (!item || item.visible === false || item.collapsed === true || item.resizable === false && (0, _type.isDefined)(this._initialPaneSizes[index])) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      const minPx = (0, _layout.tryConvertToNumber)(item.minSize, elementSize) ?? 0;
+      const maxPx = (0, _layout.tryConvertToNumber)(item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(pixels[index] + direction, minPx, maxPx);
+      if ((0, _number_comparison.compareNumbersWithPrecision)(clampedPx, pixels[index]) !== 0) {
+        indices.push(index);
+      }
+    }
+    return indices;
+  }
+  _distributeRemainingPixels(pixels, initialRemaining) {
+    const {
+      items = []
+    } = this.option();
+    let remaining = initialRemaining;
+    while ((0, _number_comparison.compareNumbersWithPrecision)(remaining, 0) !== 0) {
+      const eligiblePaneIndices = this._getEligiblePaneIndices(pixels, remaining);
+      if (eligiblePaneIndices.length === 0) {
+        const fallback = (0, _layout.findLastVisibleExpandedItemIndex)(items);
+        if (fallback !== -1) {
+          pixels[fallback] = Math.max(0, pixels[fallback] + remaining);
+        }
+        break;
+      }
+      const share = remaining / eligiblePaneIndices.length;
+      const result = this._applyPixelShare(pixels, eligiblePaneIndices, share);
+      remaining -= result.applied;
+      if (!result.distributed) {
+        break;
+      }
+    }
+  }
+  _applyPixelShare(pixels, eligiblePaneIndices, share) {
+    const {
+      items = [],
+      orientation
+    } = this.option();
+    const elementSize = (0, _layout.getElementSize)(this.$element(), orientation);
+    let applied = 0;
+    let distributed = false;
+    eligiblePaneIndices.forEach(index => {
+      const item = items[index];
+      const prev = pixels[index];
+      const next = prev + share;
+      const minPx = (0, _layout.tryConvertToNumber)(item === null || item === void 0 ? void 0 : item.minSize, elementSize) ?? 0;
+      const maxPx = (0, _layout.tryConvertToNumber)(item === null || item === void 0 ? void 0 : item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(next, minPx, maxPx);
+      const delta = clampedPx - prev;
+      if ((0, _number_comparison.compareNumbersWithPrecision)(delta, 0) !== 0) {
+        pixels[index] = clampedPx;
+        applied += delta;
+        distributed = true;
+      }
+    });
+    return {
+      applied,
+      distributed
+    };
+  }
+  _getClampedPixelSize(size, minPx, maxPx) {
+    let result = Math.max(size, minPx);
+    if ((0, _type.isDefined)(maxPx)) {
+      result = Math.min(result, maxPx);
+    }
+    return result;
   }
   _optionChanged(args) {
     const {
@@ -240488,6 +241671,7 @@ class Splitter extends _collection_widget.default {
         this._updateNestedSplitterOption(name, value);
         break;
       case '_renderQueue':
+      case '_ignoreSizeConstraints':
         this._invalidate();
         break;
       default:
@@ -243689,17 +244873,16 @@ const TEXTEDITOR_VALID_CLASS = 'dx-valid';
 const EVENTS_LIST = ['KeyDown', 'KeyPress', 'KeyUp', 'Change', 'Cut', 'Copy', 'Paste', 'Input'];
 const CONTROL_KEYS = ['tab', 'enter', 'shift', 'control', 'alt', 'escape', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'upArrow', 'rightArrow', 'downArrow'];
 let TextEditorLabelCreator = _text_editor2.TextEditorLabel;
-function checkButtonsOptionType(buttons) {
+const checkButtonsOptionType = buttons => {
   if ((0, _type.isDefined)(buttons) && !Array.isArray(buttons)) {
     throw _ui.default.Error('E1053');
   }
-}
+};
 class TextEditorBase extends _editor.default {
   ctor(element, options) {
     if (options) {
       checkButtonsOptionType(options.buttons);
     }
-    // @ts-expect-error
     this._buttonCollection = new _index2.default(this, this._getDefaultButtons());
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
@@ -243730,21 +244913,21 @@ class TextEditorBase extends _editor.default {
       hoverStateEnabled: true,
       focusStateEnabled: true,
       text: undefined,
-      displayValueFormatter(value) {
-        // @ts-expect-error ts-error
-        return (0, _type.isDefined)(value) && value !== false ? value : '';
-      },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       stylingMode: (0, _config.default)().editorStylingMode || 'outlined',
       showValidationMark: true,
       label: '',
       labelMode: 'static',
-      labelMark: ''
+      labelMark: '',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      displayValueFormatter(value) {
+        // @ts-expect-error Comparison of boolean and any[], any is not string
+        return (0, _type.isDefined)(value) && value !== false ? value : '';
+      }
     });
   }
   _defaultOptionsRules() {
-    // @ts-expect-error
-    return super._defaultOptionsRules().concat([{
+    const rules = [...super._defaultOptionsRules(), {
       device() {
         const themeName = (0, _themes.current)();
         return (0, _themes.isMaterial)(themeName);
@@ -243762,11 +244945,11 @@ class TextEditorBase extends _editor.default {
       options: {
         labelMode: 'outside'
       }
-    }]);
+    }];
+    return rules;
   }
   // eslint-disable-next-line class-methods-use-this
   _getDefaultButtons() {
-    // @ts-expect-error ts-error
     return [{
       name: 'clear',
       Ctor: _text_editor.default
@@ -243828,6 +245011,9 @@ class TextEditorBase extends _editor.default {
   _renderPendingIndicator() {
     this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
     const $inputContainer = this._getInputContainer();
+    if (!$inputContainer) {
+      return;
+    }
     const $indicatorElement = (0, _renderer.default)('<div>').addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS).appendTo($inputContainer);
     this._pendingIndicator = this._createComponent($indicatorElement, _load_indicator.default, {});
   }
@@ -243842,22 +245028,22 @@ class TextEditorBase extends _editor.default {
   }
   _renderValidationState() {
     super._renderValidationState();
-    // @ts-expect-error ts-error
-    const isPending = this.option('validationStatus') === 'pending';
+    const {
+      validationStatus,
+      showValidationMark
+    } = this.option();
+    const isPending = validationStatus === 'pending';
     if (isPending) {
       if (!this._pendingIndicator) {
         this._renderPendingIndicator();
       }
       this._showValidMark = false;
     } else {
-      // @ts-expect-error ts-error
-      if (this.option('validationStatus') === 'invalid') {
+      if (validationStatus === 'invalid') {
         this._showValidMark = false;
       }
-      // @ts-expect-error ts-error
-      if (!this._showValidMark && this.option('showValidationMark') === true) {
-        // @ts-expect-error ts-error
-        this._showValidMark = this.option('validationStatus') === 'valid' && !!this._pendingIndicator;
+      if (!this._showValidMark && showValidationMark === true) {
+        this._showValidMark = validationStatus === 'valid' && !!this._pendingIndicator;
       }
       this._disposePendingIndicator();
     }
@@ -243871,6 +245057,9 @@ class TextEditorBase extends _editor.default {
       buttons
     } = this.option();
     const $buttonsContainer = this._getButtonsContainer();
+    if (!$buttonsContainer) {
+      return;
+    }
     this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $buttonsContainer);
     this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $buttonsContainer);
   }
@@ -243887,9 +245076,7 @@ class TextEditorBase extends _editor.default {
     super._clean();
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
-    // @ts-expect-error _$textEditorContainer can be null and undefined
     this._$textEditorContainer = null;
-    // @ts-expect-error _$textEditorInputContainer can be null and undefined
     this._$textEditorInputContainer = null;
     this._$placeholder = null;
   }
@@ -243908,8 +245095,8 @@ class TextEditorBase extends _editor.default {
   _applyInputAttributes($input) {
     let customAttributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     const inputAttributes = (0, _extend.extend)(this._getDefaultAttributes(), customAttributes);
-    // @ts-expect-error ts-error
-    $input.attr(inputAttributes).addClass(TEXTEDITOR_INPUT_CLASS);
+    $input.attr(inputAttributes);
+    $input.addClass(TEXTEDITOR_INPUT_CLASS);
     this._setInputMinHeight($input);
   }
   _setInputMinHeight($input) {
@@ -243918,7 +245105,7 @@ class TextEditorBase extends _editor.default {
   _getPlaceholderAttr() {
     const {
       ios,
-      // @ts-expect-error ts-error
+      // @ts-expect-error Property 'mac' does not exist on type 'Device'
       mac
     } = _devices.default.real();
     const {
@@ -243955,28 +245142,33 @@ class TextEditorBase extends _editor.default {
     });
   }
   _renderValue() {
-    const renderInputPromise = this._renderInputValue();
-    // @ts-expect-error ts-error
-    return renderInputPromise.promise();
+    const renderInputDeferred = this._renderInputValue();
+    // @ts-expect-error DeferredObj typification
+    const renderInputPromise = renderInputDeferred.promise();
+    return renderInputPromise;
   }
   _renderInputValue(value) {
-    value = value ?? this.option('value');
     const {
+      value: optionValue,
       text,
       displayValue,
       displayValueFormatter
     } = this.option();
+    const finalValue = value ?? optionValue;
     let textValue = text;
-    if (displayValue !== undefined && value !== null) {
+    if (displayValue !== undefined && finalValue !== null) {
       textValue = displayValueFormatter === null || displayValueFormatter === void 0 ? void 0 : displayValueFormatter(displayValue);
     } else if (!(0, _type.isDefined)(textValue)) {
-      textValue = displayValueFormatter === null || displayValueFormatter === void 0 ? void 0 : displayValueFormatter(value);
+      textValue = displayValueFormatter === null || displayValueFormatter === void 0 ? void 0 : displayValueFormatter(finalValue);
     }
-    this.option('text', textValue);
-    // fallback to empty string is required to support WebKit native date picker in some basic scenarios
-    // can not be covered by QUnit
+    this.option({
+      text: textValue
+    });
     // @ts-expect-error @ts-error
-    if (this._input().val() !== ((0, _type.isDefined)(textValue) ? textValue : '')) {
+    const inputElementValue = this._input().val();
+    // fallback to empty string is required to support WebKit native date picker in some basic
+    // scenarios can not be covered by QUnit
+    if (inputElementValue !== ((0, _type.isDefined)(textValue) ? textValue : '')) {
       this._renderDisplayText(textValue);
     } else {
       this._toggleEmptinessEventHandler();
@@ -243989,12 +245181,12 @@ class TextEditorBase extends _editor.default {
   }
   _isValueValid() {
     if (this._input().length) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error Property 'validity' does not exist on type 'Element'
       const {
         validity
       } = this._input().get(0);
       if (validity) {
-        return validity.valid;
+        return Boolean(validity.valid);
       }
     }
     return true;
@@ -244018,8 +245210,10 @@ class TextEditorBase extends _editor.default {
   }
   _toggleTabIndex() {
     const $input = this._input();
-    const disabled = this.option('disabled');
-    const focusStateEnabled = this.option('focusStateEnabled');
+    const {
+      disabled,
+      focusStateEnabled
+    } = this.option();
     if (disabled || !focusStateEnabled) {
       $input.attr('tabIndex', -1);
     } else {
@@ -244040,8 +245234,7 @@ class TextEditorBase extends _editor.default {
     const {
       spellcheck
     } = this.option();
-    // @ts-expect-error ts-error
-    this._input().prop('spellcheck', spellcheck);
+    this._input().prop('spellcheck', Boolean(spellcheck));
   }
   _unobserveLabelContainerResize() {
     if (this._labelContainerElement) {
@@ -244126,22 +245319,22 @@ class TextEditorBase extends _editor.default {
       this._$placeholder = null;
     }
     const $input = this._input();
+    // There should be no destructuring, because of knockout limitations
     const placeholder = this.option('placeholder');
     const placeholderAttributes = {
       id: placeholder ? `dx-${new _guid.default()}` : undefined,
       'data-dx_placeholder': placeholder
     };
-    const $placeholder = this._$placeholder = (0, _renderer.default)('<div>')
-    // @ts-expect-error ts-error
-    .attr(placeholderAttributes);
-    $placeholder.insertAfter($input);
-    $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
+    // @ts-expect-error attr typification
+    this._$placeholder = (0, _renderer.default)('<div>').attr(placeholderAttributes);
+    this._$placeholder.insertAfter($input);
+    this._$placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
   }
   _attachPlaceholderEvents() {
-    // @ts-expect-error ts-error
+    // @ts-expect-error second argument
     const startEvent = (0, _index.addNamespace)(_pointer.default.up, this.NAME);
     _events_engine.default.on(this._$placeholder, startEvent, () => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       _events_engine.default.trigger(this._input(), 'focus');
     });
     this._toggleEmptinessEventHandler();
@@ -244155,10 +245348,10 @@ class TextEditorBase extends _editor.default {
     this._saveValueChangeEvent(e);
     this._clearValue();
     if (!this._isFocused()) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       _events_engine.default.trigger($input, 'focus');
     }
-    // @ts-expect-error ts-error
+    // @ts-expect-error eventsEngine typification
     _events_engine.default.trigger($input, 'input');
   }
   _clearValue() {
@@ -244166,14 +245359,14 @@ class TextEditorBase extends _editor.default {
   }
   _renderEvents() {
     const $input = this._input();
-    (0, _iterator.each)(EVENTS_LIST, (_, event) => {
-      // @ts-expect-error
-      if (this.hasActionSubscription(`on${event}`)) {
-        // @ts-expect-error
-        const action = this._createActionByOption(`on${event}`, {
+    EVENTS_LIST.forEach(event => {
+      const actionName = `on${event}`;
+      const hasActionSubscription = this.hasActionSubscription(actionName);
+      if (hasActionSubscription) {
+        const action = this._createActionByOption(actionName, {
           excludeValidators: ['readOnly']
         });
-        // @ts-expect-error ts-error
+        // @ts-expect-error eventsEngine typification
         _events_engine.default.on($input, (0, _index.addNamespace)(event.toLowerCase(), this.NAME), e => {
           if (this._disposed) {
             return;
@@ -244187,8 +245380,8 @@ class TextEditorBase extends _editor.default {
   }
   _refreshEvents() {
     const $input = this._input();
-    (0, _iterator.each)(EVENTS_LIST, (_, event) => {
-      // @ts-expect-error ts-error
+    EVENTS_LIST.forEach(event => {
+      // @ts-expect-error second argument && eventsEngine typification
       _events_engine.default.off($input, (0, _index.addNamespace)(event.toLowerCase(), this.NAME));
     });
     this._renderEvents();
@@ -244205,7 +245398,7 @@ class TextEditorBase extends _editor.default {
     } = this.option();
     const isNewValue = $input.val() !== value;
     if (isCtrlEnter && isNewValue) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       _events_engine.default.trigger($input, 'change');
     }
   }
@@ -244214,9 +245407,12 @@ class TextEditorBase extends _editor.default {
     return 'valueChangeEvent';
   }
   _renderValueChangeEvent() {
+    const valueChangeEventOptionName = this._getValueChangeEventOptionName();
+    const {
+      [valueChangeEventOptionName]: actionName
+    } = this.option();
     const keyPressEvent = (0, _index.addNamespace)(this._renderValueEventName(), `${this.NAME}TextChange`);
-    // @ts-expect-error ts-error
-    const valueChangeEvent = (0, _index.addNamespace)(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
+    const valueChangeEvent = (0, _index.addNamespace)(actionName, `${this.NAME}ValueChange`);
     const keyDownEvent = (0, _index.addNamespace)('keydown', `${this.NAME}TextChange`);
     const $input = this._input();
     _events_engine.default.on($input, keyPressEvent, this._keyPressHandler.bind(this));
@@ -244240,9 +245436,8 @@ class TextEditorBase extends _editor.default {
   _focusTarget() {
     return this._input();
   }
-  // @ts-expect-error ts-error
   _focusEventTarget() {
-    return this.element();
+    return this.$element();
   }
   _isInput(element) {
     return element === this._input().get(0);
@@ -244251,7 +245446,6 @@ class TextEditorBase extends _editor.default {
     if (event.isDefaultPrevented()) {
       return true;
     }
-    // @ts-expect-error ts-error
     let shouldPrevent = this._isNestedTarget(event.relatedTarget);
     if (event.type === 'focusin') {
       shouldPrevent = shouldPrevent && this._isNestedTarget(event.target) && !this._isInput(event.target);
@@ -244289,8 +245483,8 @@ class TextEditorBase extends _editor.default {
     _events_engine.default.on($input, 'input blur', this._toggleEmptinessEventHandler.bind(this));
   }
   _toggleEmptinessEventHandler() {
+    // @ts-expect-error dxElementWrapper.val() typification
     const text = this._input().val();
-    // @ts-expect-error ts-error
     const isEmpty = (text === '' || text === null) && this._isValueValid();
     this._toggleEmptiness(isEmpty);
   }
@@ -244332,8 +245526,10 @@ class TextEditorBase extends _editor.default {
     return this._input();
   }
   _hasActiveElement() {
-    // @ts-expect-error ts-error
-    return this._input().is(_dom_adapter.default.getActiveElement(this._input()[0]));
+    const input = this._input()[0];
+    const activeElement = _dom_adapter.default.getActiveElement(input);
+    // @ts-expect-error dxElementWrapper
+    return this._input().is(activeElement);
   }
   _optionChanged(args) {
     const {
@@ -244452,18 +245648,20 @@ class TextEditorBase extends _editor.default {
     }
   }
   _renderInputType() {
+    const {
+      mode
+    } = this.option();
     // B218621, B231875
-    this._setInputType(this.option('mode'));
+    this._setInputType(mode);
   }
   _setInputType(type) {
     const input = this._input();
-    if (type === 'search') {
-      type = 'text';
-    }
+    const defaultType = 'text';
+    const typeValue = type === 'search' ? defaultType : type;
     try {
-      input.prop('type', type);
+      input.prop('type', typeValue ?? defaultType);
     } catch (e) {
-      input.prop('type', 'text');
+      input.prop('type', defaultType);
     }
   }
   getButton(name) {
@@ -244520,11 +245718,17 @@ class TextEditorBase extends _editor.default {
       super.reset();
     }
   }
-  on(eventName, eventHandler) {
+  on(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eventName,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eventHandler) {
     const result = super.on(eventName, eventHandler);
-    const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
-    if (EVENTS_LIST.includes(event)) {
-      this._refreshEvents();
+    if (typeof eventName === 'string') {
+      const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
+      if (EVENTS_LIST.includes(event)) {
+        this._refreshEvents();
+      }
     }
     return result;
   }
