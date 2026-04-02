@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.ai-integration.js)
 * Version: 26.1.0
-* Build date: Tue Mar 03 2026
+* Build date: Fri Mar 27 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -1850,7 +1850,8 @@ var _aiIntegration = __webpack_require__(94977);
 /* global DevExpress */
 /* eslint-disable import/no-commonjs */
 
-module.exports = DevExpress.aiIntegration = _aiIntegration.AIIntegration;
+DevExpress.aiIntegration = {};
+module.exports = DevExpress.aiIntegration.AIIntegration = _aiIntegration.AIIntegration;
 
 /***/ },
 

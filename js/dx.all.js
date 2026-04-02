@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.all.js)
 * Version: 26.1.0
-* Build date: Tue Mar 03 2026
+* Build date: Fri Mar 27 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -7627,6 +7627,9 @@ const getOffsetWithoutScale = function ($startElement) {
 };
 const position = function (what, options) {
   const $what = (0, _renderer.default)(what);
+  if (!$what.length) {
+    return undefined;
+  }
   if (!options) {
     return $what.offset();
   }
@@ -8368,9 +8371,6 @@ const resetPosition = function ($element, finishTransition) {
   $element.css(stylesConfig);
   clearCache($element);
   if (finishTransition) {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $element.get(0).offsetHeight;
     $element.css('transition', originalTransition);
   }
 };
@@ -23653,6 +23653,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.infernoRenderer = void 0;
+var _short = __webpack_require__(42222);
 var _dom_adapter = _interopRequireDefault(__webpack_require__(64960));
 var _element_data = __webpack_require__(74663);
 var _dependency_injector = _interopRequireDefault(__webpack_require__(89656));
@@ -23663,6 +23664,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 /* eslint-disable spellcheck/spell-checker */
 
 const remove = element => {
+  _short.keyboard.disposeProcessorsForSubtree(element);
   const {
     parentNode
   } = element;
@@ -30860,6 +30862,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
 const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
+const ISO_PARTIAL_DATE_PATTERN = /^\d{4,}(-\d{2})?$/;
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
@@ -30875,6 +30878,13 @@ const dateParser = function (text, skipISO8601Parsing) {
 function getTimePart(part) {
   return +part || 0;
 }
+function createLocalDateFromUTCTimestamp(timestamp) {
+  const utc = new Date(timestamp);
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+}
+function isISOPartialDateString(text) {
+  return ISO_PARTIAL_DATE_PATTERN.test(text);
+}
 function parseDate(text) {
   const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
   const parsedValue = !(0, _type.isDate)(text) && Date.parse(text);
@@ -30888,7 +30898,10 @@ function parseDate(text) {
       return newDate;
     }
   }
-  return (0, _type.isNumeric)(parsedValue) ? new Date(parsedValue) : text;
+  if (!(0, _type.isNumeric)(parsedValue)) {
+    return text;
+  }
+  return isISOPartialDateString(text) ? createLocalDateFromUTCTimestamp(parsedValue) : new Date(parsedValue);
 }
 function parseISO8601String(text) {
   let parts = text.match(ISO8601_PATTERN);
@@ -30997,6 +31010,7 @@ const getDateSerializationFormat = function (value) {
   }
 };
 const dateSerialization = exports.dateSerialization = {
+  createLocalDateFromUTCTimestamp,
   dateParser,
   deserializeDate,
   serializeDate,
@@ -43015,6 +43029,44 @@ const keyboard = exports.keyboard = {
       delete keyboardProcessors[listenerId];
     }
   },
+  disposeProcessorsForSubtree(root) {
+    if (!(root !== null && root !== void 0 && root.nodeType)) {
+      return;
+    }
+    const toElements = value => {
+      if (!value) {
+        return [];
+      }
+      if (value instanceof Element) {
+        return [value];
+      }
+      if (Array.isArray(value)) {
+        return value.filter(item => item instanceof Element);
+      }
+      const v = value;
+      if (typeof v.toArray === 'function') {
+        const arr = v.toArray();
+        if (Array.isArray(arr)) {
+          return arr.filter(item => item instanceof Element);
+        }
+      }
+      const first = v[0];
+      return first instanceof Element ? [first] : [];
+    };
+    const touchesRoot = value => {
+      const elements = toElements(value);
+      return elements.some(el => el === root || root.contains(el));
+    };
+    Object.keys(keyboardProcessors).forEach(id => {
+      const keyboardProcessor = keyboardProcessors[id];
+      if (!keyboardProcessor) {
+        return;
+      }
+      if (touchesRoot(keyboardProcessor._element) || touchesRoot(keyboardProcessor._focusTarget)) {
+        keyboard.off(id);
+      }
+    });
+  },
   // NOTE: For tests
   _getProcessor: listenerId => keyboardProcessors[listenerId]
 };
@@ -51601,9 +51653,14 @@ class ExportController extends _m_core.default.ViewController {
   }
   _getSummaryCells(summaryTotalItems, totalAggregates) {
     // @ts-expect-error
-    return this._dataController._calculateSummaryCells(summaryTotalItems, totalAggregates, this._columnsController.getVisibleColumns(null, true),
-    // @ts-expect-error
-    (summaryItem, column) => this._dataController._isDataColumn(column) ? column.index : -1);
+    return this._dataController._calculateSummaryCells({
+      summaryItems: summaryTotalItems,
+      aggregates: totalAggregates,
+      visibleColumns: this._columnsController.getVisibleColumns(null, true),
+      calculateTargetColumnIndex: (summaryItem, column) =>
+      // @ts-expect-error
+      this._dataController._isDataColumn(column) ? column.index : -1
+    });
   }
   _getSelectedItems() {
     if (this.needLoadItemsOnExportingSelectedItems()) {
@@ -55634,10 +55691,8 @@ const data = Base => class SummaryDataControllerExtender extends Base {
     return result;
   }
   _processGroupItem(groupItem, options) {
-    const that = this;
-    if (!options.summaryGroupItems) {
-      options.summaryGroupItems = that.option('summary.groupItems') || [];
-    }
+    options.summaryGroupItems ?? (options.summaryGroupItems = this.option('summary.groupItems') || []);
+    options.summaryColumnMap ?? (options.summaryColumnMap = this._buildColumnLookupMap());
     if (groupItem.rowType === 'group') {
       let groupColumnIndex = -1;
       let afterGroupColumnIndex = -1;
@@ -55650,29 +55705,67 @@ const data = Base => class SummaryDataControllerExtender extends Base {
           afterGroupColumnIndex = this.index;
         }
       });
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => {
-        if (summaryItem.showInGroupFooter) {
-          return -1;
-        }
-        if (summaryItem.alignByColumn && column && !(0, _type.isDefined)(column.groupIndex) && column.index !== afterGroupColumnIndex) {
-          return column.index;
-        }
-        return groupColumnIndex;
-      }, true);
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => {
+          if (summaryItem.showInGroupFooter) {
+            return -1;
+          }
+          if (summaryItem.alignByColumn && column && !(0, _type.isDefined)(column.groupIndex) && column.index !== afterGroupColumnIndex) {
+            return column.index;
+          }
+          return groupColumnIndex;
+        },
+        isGroupRow: true,
+        columnMap: options.summaryColumnMap
+      });
     }
     if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => summaryItem.showInGroupFooter && that._isDataColumn(column) ? column.index : -1);
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => summaryItem.showInGroupFooter && this._isDataColumn(column) ? column.index : -1,
+        isGroupRow: false,
+        columnMap: options.summaryColumnMap
+      });
     }
     return groupItem;
   }
-  _calculateSummaryCells(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow) {
-    const that = this;
+  // The map is built once per _processItems cycle (via options) and discarded after.
+  _buildColumnLookupMap() {
+    const columnMap = new Map();
+    const allColumns = this._columnsController.getColumns();
+    for (const column of allColumns) {
+      const copiedColumn = Object.assign({}, column);
+      // The method registers each column under a few keys: index, name, dataField, and caption.
+      // This is because the developer can specify summaryItem.column (and summaryItem.showInColumn)
+      // in any of these forms — number for column index and string for all the rest.
+      const keys = [column.index, column.name, column.dataField, column.caption].filter(key => key !== undefined && !columnMap.has(key));
+      for (const key of keys) {
+        columnMap.set(key, copiedColumn);
+      }
+    }
+    return columnMap;
+  }
+  _calculateSummaryCells(_ref) {
+    let {
+      summaryItems,
+      aggregates,
+      visibleColumns,
+      calculateTargetColumnIndex,
+      isGroupRow,
+      columnMap
+    } = _ref;
     const summaryCells = [];
     const summaryCellsByColumns = {};
+    const getColumnByKey = key => columnMap ? (0, _utils2.getColumnFromMap)(key, columnMap) : this._columnsController.columnOption(key);
     (0, _iterator.each)(summaryItems, (summaryIndex, summaryItem) => {
-      const column = that._columnsController.columnOption(summaryItem.column);
-      const showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column;
-      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
+      const column = getColumnByKey(summaryItem.column);
+      const showInColumn = summaryItem.showInColumn ? getColumnByKey(summaryItem.showInColumn) : undefined;
+      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn ?? column);
       if (columnIndex >= 0) {
         if (!summaryCellsByColumns[columnIndex]) {
           summaryCellsByColumns[columnIndex] = [];
@@ -55703,9 +55796,13 @@ const data = Base => class SummaryDataControllerExtender extends Base {
     return summaryCells;
   }
   _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const that = this;
-    const columnsController = that._columnsController;
-    return that._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(), (summaryItem, column) => that._isDataColumn(column) ? column.index : -1);
+    const columnsController = this._columnsController;
+    return this._calculateSummaryCells({
+      summaryItems: summaryTotalItems,
+      aggregates: totalAggregates,
+      visibleColumns: columnsController.getVisibleColumns(),
+      calculateTargetColumnIndex: (_, column) => this._isDataColumn(column) ? column.index : -1
+    });
   }
   _updateItemsCore(change) {
     const that = this;
@@ -56073,6 +56170,7 @@ _m_core.default.registerModule('summary', {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.getColumnFromMap = getColumnFromMap;
 exports.getSummaryCellIndex = getSummaryCellIndex;
 var _type = __webpack_require__(11528);
 function getSummaryCellIndex(column, prevColumn) {
@@ -56085,6 +56183,9 @@ function getSummaryCellIndex(column, prevColumn) {
     return (prevColumn === null || prevColumn === void 0 ? void 0 : prevColumn.index) ?? -1;
   }
   return !(0, _type.isDefined)(column.groupIndex) ? cellIndex : -1;
+}
+function getColumnFromMap(identifier, columnMap) {
+  return identifier !== undefined ? columnMap.get(identifier) : undefined;
 }
 
 /***/ },
@@ -58641,7 +58742,8 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
       height: columnChooserOptions.height,
       rtlEnabled: that.option('rtlEnabled'),
       container: columnChooserOptions.container,
-      _loopFocus: true
+      tabFocusLoopEnabled: true,
+      _ignoreCloseOnChildEscape: true
     };
     if (!(0, _type.isDefined)(this._popupContainer)) {
       that._popupContainer = that._createComponent($element, _ui.default, dxPopupOptions);
@@ -58770,20 +58872,8 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
   }
   _prepareSelectModeConfig() {
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-    const updateSelection = (e, nodes) => {
-      nodes.filter(node => node.itemData.allowHiding === false).forEach(node => e.component.selectItem(node.key));
-    };
-    let isUpdatingSelection = false;
     const selectionChangedHandler = e => {
-      if (isUpdatingSelection) {
-        return;
-      }
       const nodes = this._getOrderedFlatNodes(e.component.getNodes());
-      e.component.beginUpdate();
-      isUpdatingSelection = true;
-      updateSelection(e, nodes);
-      e.component.endUpdate();
-      isUpdatingSelection = false;
       this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
       this._updateColumnVisibility(nodes);
@@ -58794,6 +58884,7 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
       selectByClick: selectionOptions.selectByClick,
       selectNodesRecursive: selectionOptions.recursive,
       showCheckBoxesMode: selectionOptions.allowSelectAll ? 'selectAll' : 'normal',
+      disabledNodeSelectionMode: 'never',
       onSelectionChanged: selectionChangedHandler
     };
   }
@@ -58871,10 +58962,6 @@ class ColumnChooserView extends _m_columns_view.ColumnsView {
     const isParentColumnVisible = this._columnsController.isParentColumnVisible(column.index);
     const isColumnHidden = !column.visible && column.allowHiding;
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
-  }
-  allowColumnHeaderDragging(column) {
-    const isDragMode = !this.isSelectMode();
-    return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
   }
   getBoundingRect() {
     var _that$_popupContainer;
@@ -61353,24 +61440,26 @@ class ColumnsController extends _m_modules.default.Controller {
     const positiveIndexedColumns = [];
     const negativeIndexedColumns = [];
     for (let i = 0; i < rowCount; i += 1) {
-      negativeIndexedColumns[i] = [{}];
+      negativeIndexedColumns[i] = {};
       // 0 - fixed columns on the left side
       // 1 - not fixed columns
       // 2 - fixed columns on the right side
       positiveIndexedColumns[i] = [{}, {}, {}];
     }
     columns.forEach(column => {
-      let {
+      const {
         visibleIndex
       } = column;
-      let indexedColumns;
-      const parentBandColumns = (0, _m_columns_controller_utils.getParentBandColumns)(column.index, bandColumnsCache.columnParentByIndex);
       const isVisible = this._isColumnVisible(column);
       const isInGroupPanel = this._isColumnInGroupPanel(column);
       if (isVisible && !isInGroupPanel) {
+        const parentBandColumns = (0, _m_columns_controller_utils.getParentBandColumns)(column.index, bandColumnsCache.columnParentByIndex);
         const rowIndex = parentBandColumns.length;
-        if (visibleIndex < 0) {
-          visibleIndex = -visibleIndex;
+        let targetIndex = visibleIndex ?? 'undefined';
+        // eslint-disable-next-line @typescript-eslint/init-declarations
+        let indexedColumns;
+        if ((0, _type.isDefined)(visibleIndex) && visibleIndex < 0) {
+          targetIndex = -visibleIndex;
           indexedColumns = negativeIndexedColumns[rowIndex];
         } else {
           var _parentBandColumns$, _parentBandColumns$2;
@@ -61388,13 +61477,16 @@ class ColumnsController extends _m_modules.default.Controller {
           }
         }
         if (parentBandColumns.length) {
-          visibleIndex = (0, _m_columns_controller_utils.numberToString)(visibleIndex, columnDigitsCount);
+          targetIndex = (0, _m_columns_controller_utils.numberToString)(targetIndex, columnDigitsCount);
           for (let i = parentBandColumns.length - 1; i >= 0; i -= 1) {
-            visibleIndex = (0, _m_columns_controller_utils.numberToString)(parentBandColumns[i].visibleIndex, columnDigitsCount) + visibleIndex;
+            const {
+              visibleIndex: parentVisibleIndex
+            } = parentBandColumns[i];
+            targetIndex = `${(0, _m_columns_controller_utils.numberToString)(parentVisibleIndex, columnDigitsCount)}${targetIndex}`;
           }
         }
-        indexedColumns[visibleIndex] = indexedColumns[visibleIndex] || [];
-        indexedColumns[visibleIndex].push(column);
+        indexedColumns[targetIndex] = indexedColumns[targetIndex] || [];
+        indexedColumns[targetIndex].push(column);
       }
     });
     return {
@@ -61410,28 +61502,25 @@ class ColumnsController extends _m_modules.default.Controller {
     const result = [];
     const rowCount = this.getRowCount();
     const expandColumns = (0, _m_columns_controller_utils.mergeColumns)(this, this.getExpandColumns(), this._columns);
-    let rowspanGroupColumns = 0;
-    let rowspanExpandColumns = 0;
+    // Process header rows columns
     for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
       result.push([]);
       (0, _object.orderEach)(negativeIndexedColumns[rowIndex], (_, columns) => {
-        result[rowIndex].unshift.apply(result[rowIndex], columns);
+        result[rowIndex].unshift(...columns);
       });
-      const firstPositiveIndexColumn = result[rowIndex].length;
-      const positiveIndexedRowColumns = positiveIndexedColumns[rowIndex];
-      positiveIndexedRowColumns.forEach(columnsByFixing => {
+    }
+    const firstExpandColumnIndex = result[0].length;
+    for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+      positiveIndexedColumns[rowIndex].forEach(columnsByFixing => {
         (0, _object.orderEach)(columnsByFixing, (_, columnsByVisibleIndex) => {
-          result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
+          result[rowIndex].push(...columnsByVisibleIndex);
         });
       });
-      // The order of processing is important
-      if (rowspanExpandColumns <= rowIndex) {
-        rowspanExpandColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const3.DETAIL_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
-      }
-      if (rowspanGroupColumns <= rowIndex) {
-        rowspanGroupColumns += _m_columns_controller_utils.processExpandColumns.call(this, result[rowIndex], expandColumns, _const3.GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
-      }
     }
+    // The order of processing is important
+    (0, _m_columns_controller_utils.processExpandColumns)(result[0], expandColumns, _const3.DETAIL_COMMAND_COLUMN_NAME, firstExpandColumnIndex, rowCount);
+    (0, _m_columns_controller_utils.processExpandColumns)(result[0], expandColumns, _const3.GROUP_COMMAND_COLUMN_NAME, firstExpandColumnIndex, rowCount);
+    // Process table body columns
     result.push((0, _m_columns_controller_utils.getDataColumns)(result));
     return result;
   }
@@ -63190,25 +63279,14 @@ const getFixedPosition = function (that, column) {
   return column.fixedPosition;
 };
 exports.getFixedPosition = getFixedPosition;
-const processExpandColumns = function (columns, expandColumns, type, columnIndex) {
-  let customColumnIndex;
-  const rowCount = this.getRowCount();
-  let rowspan = columns[columnIndex] && columns[columnIndex].rowspan;
-  let expandColumnsByType = expandColumns.filter(column => column.type === type);
-  columns.forEach((column, index) => {
-    if (column.type === type) {
-      customColumnIndex = index;
-      rowspan = columns[index + 1] ? columns[index + 1].rowspan : rowCount;
-    }
-  });
-  if (rowspan > 1) {
-    expandColumnsByType = (0, _iterator.map)(expandColumnsByType, expandColumn => (0, _extend.extend)({}, expandColumn, {
-      rowspan
-    }));
-  }
-  expandColumnsByType.unshift.apply(expandColumnsByType, (0, _type.isDefined)(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
-  columns.splice.apply(columns, expandColumnsByType);
-  return rowspan || 1;
+const processExpandColumns = (columns, expandColumns, commandType, columnIndex, rowspan) => {
+  const expandColumnsByType = expandColumns.filter(column => column.type === commandType).map(column => rowspan > 1 ? Object.assign({}, column, {
+    rowspan
+  }) : column);
+  const customExpandColumnIndex = columns.findIndex(column => column.type === commandType);
+  const targetIndex = customExpandColumnIndex >= 0 ? customExpandColumnIndex : columnIndex;
+  const deleteCount = customExpandColumnIndex >= 0 ? 1 : 0;
+  columns.splice(targetIndex, deleteCount, ...expandColumnsByType);
 };
 exports.processExpandColumns = processExpandColumns;
 const digitsCount = function (number) {
@@ -66256,7 +66334,8 @@ class DataController extends (0, _m_data_helper_mixin.DataHelperMixin)(_m_module
     return changePaging(this, 'pageSize', value);
   }
   isCustomLoading() {
-    return this._isCustomLoading;
+    var _this$_dataSource;
+    return this._isCustomLoading || ((_this$_dataSource = this._dataSource) === null || _this$_dataSource === void 0 ? void 0 : _this$_dataSource.isCustomLoading());
   }
   beginCustomLoading(messageText) {
     this._isCustomLoading = true;
@@ -66360,49 +66439,49 @@ class DataController extends (0, _m_data_helper_mixin.DataHelperMixin)(_m_module
     return pageIndex === pageCount - 1;
   }
   load() {
-    var _this$_dataSource;
-    return (_this$_dataSource = this._dataSource) === null || _this$_dataSource === void 0 ? void 0 : _this$_dataSource.load();
+    var _this$_dataSource2;
+    return (_this$_dataSource2 = this._dataSource) === null || _this$_dataSource2 === void 0 ? void 0 : _this$_dataSource2.load();
   }
   /**
    * @extended: editing, virtual_scrolling
    */
   reload(reload, changesOnly) {
-    var _this$_dataSource2;
-    return (_this$_dataSource2 = this._dataSource) === null || _this$_dataSource2 === void 0 ? void 0 : _this$_dataSource2.reload(reload, changesOnly);
+    var _this$_dataSource3;
+    return (_this$_dataSource3 = this._dataSource) === null || _this$_dataSource3 === void 0 ? void 0 : _this$_dataSource3.reload(reload, changesOnly);
   }
   push() {
-    var _this$_dataSource3;
+    var _this$_dataSource4;
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-    return (_this$_dataSource3 = this._dataSource) === null || _this$_dataSource3 === void 0 ? void 0 : _this$_dataSource3.push(...args);
+    return (_this$_dataSource4 = this._dataSource) === null || _this$_dataSource4 === void 0 ? void 0 : _this$_dataSource4.push(...args);
   }
   itemsCount() {
-    var _this$_dataSource4;
-    return this._dataSource ? (_this$_dataSource4 = this._dataSource) === null || _this$_dataSource4 === void 0 ? void 0 : _this$_dataSource4.itemsCount() : 0;
+    var _this$_dataSource5;
+    return this._dataSource ? (_this$_dataSource5 = this._dataSource) === null || _this$_dataSource5 === void 0 ? void 0 : _this$_dataSource5.itemsCount() : 0;
   }
   totalItemsCount() {
-    var _this$_dataSource5;
-    return this._dataSource ? (_this$_dataSource5 = this._dataSource) === null || _this$_dataSource5 === void 0 ? void 0 : _this$_dataSource5.totalItemsCount() : 0;
+    var _this$_dataSource6;
+    return this._dataSource ? (_this$_dataSource6 = this._dataSource) === null || _this$_dataSource6 === void 0 ? void 0 : _this$_dataSource6.totalItemsCount() : 0;
   }
   hasKnownLastPage() {
-    var _this$_dataSource6;
-    return this._dataSource ? (_this$_dataSource6 = this._dataSource) === null || _this$_dataSource6 === void 0 ? void 0 : _this$_dataSource6.hasKnownLastPage() : true;
+    var _this$_dataSource7;
+    return this._dataSource ? (_this$_dataSource7 = this._dataSource) === null || _this$_dataSource7 === void 0 ? void 0 : _this$_dataSource7.hasKnownLastPage() : true;
   }
   /**
    * @extended: state_storing
    */
   isLoaded() {
-    var _this$_dataSource7;
-    return this._dataSource ? (_this$_dataSource7 = this._dataSource) === null || _this$_dataSource7 === void 0 ? void 0 : _this$_dataSource7.isLoaded() : true;
+    var _this$_dataSource8;
+    return this._dataSource ? (_this$_dataSource8 = this._dataSource) === null || _this$_dataSource8 === void 0 ? void 0 : _this$_dataSource8.isLoaded() : true;
   }
   totalCount() {
-    var _this$_dataSource8;
-    return this._dataSource ? (_this$_dataSource8 = this._dataSource) === null || _this$_dataSource8 === void 0 ? void 0 : _this$_dataSource8.totalCount() : 0;
+    var _this$_dataSource9;
+    return this._dataSource ? (_this$_dataSource9 = this._dataSource) === null || _this$_dataSource9 === void 0 ? void 0 : _this$_dataSource9.totalCount() : 0;
   }
   hasLoadOperation() {
-    var _this$_dataSource9;
-    const operationTypes = ((_this$_dataSource9 = this._dataSource) === null || _this$_dataSource9 === void 0 ? void 0 : _this$_dataSource9.operationTypes()) ?? {};
+    var _this$_dataSource0;
+    const operationTypes = ((_this$_dataSource0 = this._dataSource) === null || _this$_dataSource0 === void 0 ? void 0 : _this$_dataSource0.operationTypes()) ?? {};
     return Object.keys(operationTypes).some(type => operationTypes[type]);
   }
   /**
@@ -67496,7 +67575,7 @@ exports.getCacheItem = getCacheItem;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VIEWPORT_TOP_NEW_ROW_POSITION = exports.VIEWPORT_BOTTOM_NEW_ROW_POSITION = exports.TARGET_COMPONENT_NAME = exports.ROW_SELECTED_CLASS = exports.ROW_SELECTED = exports.ROW_REMOVED = exports.ROW_MODIFIED = exports.ROW_INSERTED = exports.ROW_CLASS = exports.ROW_BASED_MODES = exports.REQUIRED_EDITOR_LABELLEDBY_MODES = exports.READONLY_CLASS = exports.PAGE_TOP_NEW_ROW_POSITION = exports.PAGE_BOTTOM_NEW_ROW_POSITION = exports.MODES_WITH_DELAYED_FOCUS = exports.METHOD_NAMES = exports.LINK_ICON_CLASS = exports.LINK_CLASS = exports.LAST_NEW_ROW_POSITION = exports.INSERT_INDEX = exports.FORM_BUTTONS_CONTAINER_CLASS = exports.FOCUS_OVERLAY_CLASS = exports.FOCUSABLE_ELEMENT_SELECTOR = exports.FOCUSABLE_ELEMENT_CLASS = exports.FIRST_NEW_ROW_POSITION = exports.FILTER_ROW_CLASS = exports.EDIT_ROW = exports.EDIT_POPUP_FORM_CLASS = exports.EDIT_POPUP_CLASS = exports.EDIT_MODE_ROW = exports.EDIT_MODE_POPUP = exports.EDIT_MODE_FORM = exports.EDIT_MODE_CELL = exports.EDIT_MODE_BATCH = exports.EDIT_MODES = exports.EDIT_LINK_CLASS = exports.EDIT_ICON_CLASS = exports.EDIT_FORM_ITEM_CLASS = exports.EDIT_FORM_CLASS = exports.EDIT_BUTTON_CLASS = exports.EDITOR_CELL_CLASS = exports.EDITORS_INPUT_SELECTOR = exports.EDITING_POPUP_OPTION_NAME = exports.EDITING_NAMESPACE = exports.EDITING_FORM_OPTION_NAME = exports.EDITING_EDITROWKEY_OPTION_NAME = exports.EDITING_EDITCOLUMNNAME_OPTION_NAME = exports.EDITING_CHANGES_OPTION_NAME = exports.DROPDOWN_EDITOR_OVERLAY_CLASS = exports.DEFAULT_START_EDIT_ACTION = exports.DATA_ROW_CLASS = exports.DATA_EDIT_DATA_UPDATE_TYPE = exports.DATA_EDIT_DATA_REMOVE_TYPE = exports.DATA_EDIT_DATA_INSERT_TYPE = exports.COMMAND_EDIT_WITH_ICONS_CLASS = exports.COMMAND_EDIT_CLASS = exports.CELL_MODIFIED_CLASS = exports.CELL_MODIFIED = exports.CELL_FOCUS_DISABLED_CLASS = exports.CELL_BASED_MODES = exports.BUTTON_NAMES = exports.BUTTON_CLASS = exports.ADD_ROW_BUTTON_CLASS = exports.ACTION_OPTION_NAMES = void 0;
+exports.VIEWPORT_TOP_NEW_ROW_POSITION = exports.VIEWPORT_BOTTOM_NEW_ROW_POSITION = exports.TARGET_COMPONENT_NAME = exports.ROW_SELECTED_CLASS = exports.ROW_SELECTED = exports.ROW_REMOVED = exports.ROW_MODIFIED = exports.ROW_INSERTED = exports.ROW_CLASS = exports.ROW_BASED_MODES = exports.REQUIRED_EDITOR_LABELLEDBY_MODES = exports.READONLY_CLASS = exports.PAGE_TOP_NEW_ROW_POSITION = exports.PAGE_BOTTOM_NEW_ROW_POSITION = exports.MODES_WITH_DELAYED_FOCUS = exports.METHOD_NAMES = exports.LINK_ICON_CLASS = exports.LINK_CLASS = exports.LAST_NEW_ROW_POSITION = exports.INSERT_INDEX = exports.FORM_BUTTONS_CONTAINER_CLASS = exports.FOCUS_OVERLAY_CLASS = exports.FOCUSABLE_ELEMENT_SELECTOR = exports.FOCUSABLE_ELEMENT_CLASS = exports.FIRST_NEW_ROW_POSITION = exports.FILTER_ROW_CLASS = exports.EDIT_ROW = exports.EDIT_POPUP_FORM_CLASS = exports.EDIT_POPUP_CLASS = exports.EDIT_MODE_ROW = exports.EDIT_MODE_POPUP = exports.EDIT_MODE_FORM = exports.EDIT_MODE_CELL = exports.EDIT_MODE_BATCH = exports.EDIT_MODES = exports.EDIT_LINK_CLASS = exports.EDIT_ICON_CLASS = exports.EDIT_FORM_ITEM_CLASS = exports.EDIT_FORM_CLASS = exports.EDIT_BUTTON_CLASS = exports.EDITOR_CELL_CLASS = exports.EDITORS_TEXTAREA_SELECTOR = exports.EDITORS_INPUT_SELECTOR = exports.EDITING_POPUP_OPTION_NAME = exports.EDITING_NAMESPACE = exports.EDITING_FORM_OPTION_NAME = exports.EDITING_EDITROWKEY_OPTION_NAME = exports.EDITING_EDITCOLUMNNAME_OPTION_NAME = exports.EDITING_CHANGES_OPTION_NAME = exports.DROPDOWN_EDITOR_OVERLAY_CLASS = exports.DEFAULT_START_EDIT_ACTION = exports.DATA_ROW_CLASS = exports.DATA_EDIT_DATA_UPDATE_TYPE = exports.DATA_EDIT_DATA_REMOVE_TYPE = exports.DATA_EDIT_DATA_INSERT_TYPE = exports.COMMAND_EDIT_WITH_ICONS_CLASS = exports.COMMAND_EDIT_CLASS = exports.CELL_MODIFIED_CLASS = exports.CELL_MODIFIED = exports.CELL_FOCUS_DISABLED_CLASS = exports.CELL_BASED_MODES = exports.BUTTON_NAMES = exports.BUTTON_CLASS = exports.ADD_ROW_BUTTON_CLASS = exports.ACTION_OPTION_NAMES = void 0;
 const EDITOR_CELL_CLASS = exports.EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = exports.ROW_CLASS = 'dx-row';
 const CELL_MODIFIED_CLASS = exports.CELL_MODIFIED_CLASS = 'dx-cell-modified';
@@ -67509,8 +67588,9 @@ const EDITING_FORM_OPTION_NAME = exports.EDITING_FORM_OPTION_NAME = 'editing.for
 const EDITING_EDITROWKEY_OPTION_NAME = exports.EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
 const EDITING_EDITCOLUMNNAME_OPTION_NAME = exports.EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 const TARGET_COMPONENT_NAME = exports.TARGET_COMPONENT_NAME = 'targetComponent';
+const EDITORS_TEXTAREA_SELECTOR = exports.EDITORS_TEXTAREA_SELECTOR = 'textarea:not([hidden])';
 const EDITORS_INPUT_SELECTOR = exports.EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-const FOCUSABLE_ELEMENT_SELECTOR = exports.FOCUSABLE_ELEMENT_SELECTOR = `[tabindex]:not([disabled]), ${EDITORS_INPUT_SELECTOR}:not([disabled])`;
+const FOCUSABLE_ELEMENT_SELECTOR = exports.FOCUSABLE_ELEMENT_SELECTOR = `[tabindex]:not([disabled]), ${EDITORS_INPUT_SELECTOR}:not([disabled]), ${EDITORS_TEXTAREA_SELECTOR}:not([disabled])`;
 const EDIT_MODE_BATCH = exports.EDIT_MODE_BATCH = 'batch';
 const EDIT_MODE_ROW = exports.EDIT_MODE_ROW = 'row';
 const EDIT_MODE_CELL = exports.EDIT_MODE_CELL = 'cell';
@@ -69501,22 +69581,30 @@ class EditingControllerImpl extends _m_modules.default.ViewController {
   }
   getColumnTemplate(options) {
     const {
-      column
+      column,
+      row,
+      rowType
     } = options;
-    const rowIndex = options.row && options.row.rowIndex;
+    const rowIndex = row === null || row === void 0 ? void 0 : row.rowIndex;
     let template;
     const isRowMode = this.isRowBasedEditMode();
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
-    let editingStartOptions;
-    if ((column.showEditorAlways || column.setCellValue && (isRowEditing && column.allowEditing || isCellEditing)) && (options.rowType === 'data' || options.rowType === 'detailAdaptive') && !column.command) {
-      const allowUpdating = this.allowUpdating(options);
-      if (((allowUpdating || isRowEditing) && column.allowEditing || isCellEditing) && (isRowEditing || !isRowMode)) {
+    const isEditableRowType = rowType === 'data' || rowType === 'detailAdaptive';
+    const isEditableByRowState = isRowEditing && !!column.allowEditing;
+    const needsEditorTemplate = !!column.showEditorAlways || column.setCellValue && (isEditableByRowState || isCellEditing);
+    if (needsEditorTemplate && isEditableRowType && !column.command) {
+      const allowUpdating = !!this.allowUpdating(options);
+      const canModifyCell = (allowUpdating || isRowEditing || !!(row !== null && row !== void 0 && row.isNewRow)) && !!column.allowEditing;
+      const isEditable = (canModifyCell || isCellEditing) && (isRowEditing || !isRowMode);
+      if (isEditable) {
+        // eslint-disable-next-line @typescript-eslint/init-declarations
+        let editingStartOptions;
         if (column.showEditorAlways && !isRowMode) {
           editingStartOptions = {
             cancel: false,
-            key: options.row.isNewRow ? undefined : options.row.key,
-            data: options.row.data,
+            key: row !== null && row !== void 0 && row.isNewRow ? undefined : row.key,
+            data: row.data,
             column
           };
           this._isEditingStart(editingStartOptions);
@@ -69528,7 +69616,7 @@ class EditingControllerImpl extends _m_modules.default.ViewController {
         }
       }
       template = column.editCellTemplate || this._getDefaultEditorTemplate();
-    } else if (column.command === 'detail' && options.rowType === 'detail' && isRowEditing) {
+    } else if (column.command === 'detail' && rowType === 'detail' && isRowEditing) {
       template = this === null || this === void 0 ? void 0 : this.getEditFormTemplate(options);
     }
     return template;
@@ -73180,6 +73268,14 @@ const columnHeadersView = Base => class ColumnHeadersViewFilterRowExtender exten
         const editorDataSource = editor.option('dataSource');
         const shouldUpdateFilter = !filterChanged || !(0, _common.equalByValue)(editorDataSource.__dataGridSourceFilter || null, filter);
         if (shouldUpdateFilter) {
+          const {
+            selectedItem,
+            items = []
+          } = editor.option();
+          const hasSelectedItem = items.some(item => (0, _common.equalByValue)(item, selectedItem));
+          if (!hasSelectedItem) {
+            editor.option('items', [...items, selectedItem]);
+          }
           const lookupDataSource = _m_utils.default.getWrappedLookupDataSource(column, dataSource, filter);
           editor.option('dataSource', lookupDataSource);
         }
@@ -75521,7 +75617,7 @@ class HeaderFilterView extends _m_modules.default.View {
         // T321243
         component.option('animation', component._getDefaultOptions().animation);
       },
-      _loopFocus: true
+      tabFocusLoopEnabled: true
     };
     if (!(0, _type.isDefined)(that._popupContainer)) {
       that._popupContainer = that._createComponent($element, _ui.default, dxPopupOptions);
@@ -76459,6 +76555,7 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
     const isCell = $element.is('td');
     const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
     if (isCell && needSetFocusPosition) {
+      this._focusView();
       this._updateFocusedCellPosition($element);
     }
   }
@@ -77536,7 +77633,7 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0 ? 'upArrow' : 'downArrow';
           $cell = this._getNextCell(direction);
         }
-        if ((0, _m_keyboard_navigation_utils.isElementDefined)($cell)) {
+        if ($cell && (0, _m_keyboard_navigation_utils.isElementDefined)($cell)) {
           if ($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(_const2.EDIT_FORM_ITEM_CLASS))) {
             const isCommandCell = $cell.is(_const2.COMMAND_CELL_SELECTOR);
             const $focusedElementInsideCell = $cell.find(':focus');
@@ -77815,7 +77912,7 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
         const visibleRowIndex = this._rowsView.getRowIndex($row);
         const row = rowItems[visibleRowIndex];
         const isCellEditing = editingController && this._isCellEditMode() && editingController.isEditing();
-        const isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex);
+        const isRowEditingInCurrentRow = editingController === null || editingController === void 0 ? void 0 : editingController.isEditRow(visibleRowIndex);
         const isEditing = isRowEditingInCurrentRow || isCellEditing;
         if (column.command) {
           if (this._isLegacyNavigation()) {
@@ -77852,37 +77949,59 @@ class KeyboardNavigationController extends _m_keyboard_navigation_core.KeyboardN
     return $result;
   }
   _getNextCell(keyCode, elementType, cellPosition) {
-    const focusedCellPosition = cellPosition || this._focusedCellPosition;
-    const isRowFocusType = this.isRowFocusType();
-    const includeCommandCells = isRowFocusType || ['next', 'previous'].includes(keyCode);
-    let $cell;
-    let $row;
-    if (this._focusedView && focusedCellPosition) {
-      const newFocusedCellPosition = this._getNewPositionByCode(focusedCellPosition, elementType, keyCode);
-      $cell = (0, _renderer.default)(this._getCell(newFocusedCellPosition));
-      const isLastCellOnDirection = keyCode === 'previous' ? this._isFirstValidCell(newFocusedCellPosition) : this._isLastValidCell(newFocusedCellPosition);
-      if ((0, _m_keyboard_navigation_utils.isElementDefined)($cell) && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
-        if (isRowFocusType) {
-          $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedCellPosition.columnIndex);
-        } else {
-          $cell = this._getNextCell(keyCode, 'cell', newFocusedCellPosition);
-        }
-      }
-      $row = (0, _m_keyboard_navigation_utils.isElementDefined)($cell) && $cell.parent();
-      if (this._hasSkipRow($row)) {
-        const rowIndex = this._getRowIndex($row);
-        if (!this._isLastRow(rowIndex)) {
-          $cell = this._getNextCell(keyCode, 'row', {
-            columnIndex: focusedCellPosition.columnIndex,
-            rowIndex
-          });
-        } else {
-          return null;
-        }
-      }
-      return (0, _m_keyboard_navigation_utils.isElementDefined)($cell) ? $cell : null;
+    const focusedPosition = cellPosition ?? this._focusedCellPosition;
+    if (!this._focusedView || !focusedPosition) {
+      return null;
     }
-    return null;
+    const newPosition = this._getNewPositionByCode(focusedPosition, elementType, keyCode);
+    const $cell = (0, _renderer.default)(this._getCell(newPosition));
+    const $adjustedCell = this.adjustCellOnVerticalNav($cell, newPosition, keyCode);
+    const $validCell = this.resolveInvalidCell($adjustedCell, newPosition, keyCode);
+    return this.resolveHiddenRowCell($validCell, focusedPosition, keyCode);
+  }
+  // T1322130, T1322440: During vertical navigation, command cells (e.g. expand)
+  // may be invalid because their column inherits groupIndex from the grouped data column.
+  // Find the first valid data cell in the target row instead of recursing to the next row.
+  adjustCellOnVerticalNav($cell, position, keyCode) {
+    const isVerticalNav = keyCode === 'upArrow' || keyCode === 'downArrow';
+    if (!isVerticalNav || !(0, _m_keyboard_navigation_utils.isElementDefined)($cell) || this._isCellValid($cell)) {
+      return $cell;
+    }
+    const visibleColumns = this._columnsController.getVisibleColumns(null, true);
+    const column = visibleColumns[position.columnIndex];
+    if ((column === null || column === void 0 ? void 0 : column.command) === 'expand') {
+      return this.getFirstValidCellInRow($cell.parent(), position.columnIndex) ?? $cell;
+    }
+    return $cell;
+  }
+  resolveInvalidCell($cell, position, keyCode) {
+    if (!(0, _m_keyboard_navigation_utils.isElementDefined)($cell) || this._isCellValid($cell)) {
+      return $cell;
+    }
+    const isRowFocus = this.isRowFocusType();
+    const includeCommandCells = isRowFocus || keyCode === 'next' || keyCode === 'previous';
+    const isBoundaryCell = keyCode === 'previous' ? this._isFirstValidCell(position) : this._isLastValidCell(position);
+    if (!this._isCellInRow(position, includeCommandCells) || isBoundaryCell) {
+      return $cell;
+    }
+    return isRowFocus ? this.getFirstValidCellInRow($cell.parent(), position.columnIndex) : this._getNextCell(keyCode, 'cell', position);
+  }
+  resolveHiddenRowCell($cell, originalPosition, keyCode) {
+    if (!(0, _m_keyboard_navigation_utils.isElementDefined)($cell)) {
+      return null;
+    }
+    const $row = $cell.parent();
+    if (!this._hasSkipRow($row)) {
+      return $cell;
+    }
+    const rowIndex = this._getRowIndex($row);
+    if (this._isLastRow(rowIndex)) {
+      return null;
+    }
+    return this._getNextCell(keyCode, 'row', {
+      columnIndex: originalPosition.columnIndex,
+      rowIndex
+    });
   }
   // #endregion DOM_Manipulation
   // #region Editing
@@ -79876,6 +79995,7 @@ function normalizeGroupingLoadOptions(group) {
 }
 var _default = exports["default"] = {
   renderNoDataText($element) {
+    var _this$_dataController, _this$_dataController2;
     const that = this;
     $element = $element || this.element();
     if (!$element) {
@@ -79884,14 +80004,14 @@ var _default = exports["default"] = {
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isLoading = this._dataController.isLoading();
+    const isDefaultLoading = this._dataController.isLoading() && !((_this$_dataController = (_this$_dataController2 = this._dataController).isCustomLoading) !== null && _this$_dataController !== void 0 && _this$_dataController.call(_this$_dataController2));
     if (!noDataElement.length) {
       noDataElement = (0, _renderer.default)('<span>').addClass(noDataClass);
     }
     if (!noDataElement.parent().is($element)) {
       noDataElement.appendTo($element);
     }
-    if (isVisible && !isLoading) {
+    if (isVisible && !isDefaultLoading) {
       noDataElement.removeClass('dx-hidden').text(that._getNoDataText());
     } else {
       noDataElement.addClass('dx-hidden');
@@ -81397,7 +81517,6 @@ var _data = __webpack_require__(31000);
 var _m_utils = _interopRequireDefault(__webpack_require__(53226));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/method-signature-style */
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
@@ -81602,7 +81721,6 @@ const rowsView = Base => class SearchRowsViewExtender extends Base {
       for (let i = 0; i < $contents.length; i++) {
         const node = $contents.get(i);
         if (node.nodeType === 3) {
-          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           const normalizedText = stringNormalizer(node.textContent ?? node.nodeValue ?? '');
           if (normalizedText.includes(normalizedSearchText)) {
             resultTextNodes.push(node);
@@ -85049,7 +85167,7 @@ class ValidatingController extends _m_modules.default.Controller {
           const change = editingController.getChangeByKey(key);
           const oldData = editingController._getOldData(key);
           return {
-            data: (0, _array_utils.createObjectWithChanges)(oldData, change === null || change === void 0 ? void 0 : change.data),
+            data: change ? (0, _array_utils.createObjectWithChanges)(oldData, change.data) : Object.assign({}, oldData ?? parameters.data),
             column
           };
         },
@@ -85901,7 +86019,8 @@ const validatingEditorFactoryExtender = Base => class ValidatingEditorFactoryExt
   }
   _getCurrentFocusElement($focus) {
     if (this._editingController.isEditing()) {
-      return $focus.find(_const.EDITORS_INPUT_SELECTOR).first();
+      const selector = [_const.EDITORS_INPUT_SELECTOR, _const.EDITORS_TEXTAREA_SELECTOR].join(', ');
+      return $focus.find(selector).first();
     }
     return $focus;
   }
@@ -94680,7 +94799,7 @@ class ColumnChooser extends _inferno.Component {
       "dragEnabled": true,
       "resizeEnabled": true,
       "showCloseButton": true,
-      "_loopFocus": true,
+      "tabFocusLoopEnabled": true,
       "toolbarItems": toolbarItems,
       "wrapperAttr": {
         class: this.getPopupWrapperClass()
@@ -121453,6 +121572,7 @@ var _type = __webpack_require__(11528);
 var _form = _interopRequireDefault(__webpack_require__(74075));
 var _themes = __webpack_require__(52071);
 var _m_date_serialization = __webpack_require__(62897);
+var _m_drop_down_editor = _interopRequireDefault(__webpack_require__(28906));
 var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
 var _constants = __webpack_require__(46912);
 var _appointment_groups_utils = __webpack_require__(11649);
@@ -121535,6 +121655,7 @@ const DATE_OPTIONS_GROUP_NAME = 'dateOptionsGroup';
 const START_DATE_GROUP_NAME = 'startDateGroup';
 const END_DATE_GROUP_NAME = 'endDateGroup';
 const RESOURCES_GROUP_NAME = 'resourcesGroup';
+const RESOURCE_EDITORS_GROUP_NAME = 'resourceEditorsGroup';
 const SUBJECT_GROUP_NAME = 'subjectGroup';
 const REPEAT_GROUP_NAME = 'repeatGroup';
 const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
@@ -121553,6 +121674,7 @@ const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
 const SUBJECT_ICON_NAME = 'subjectIcon';
 const DATE_ICON_NAME = 'dateIcon';
 const REPEAT_ICON_NAME = 'repeatIcon';
+const RESOURCES_GROUP_ICON_NAME = 'resourcesGroupIcon';
 const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 class AppointmentForm {
   get dxForm() {
@@ -121620,8 +121742,8 @@ class AppointmentForm {
     const iconsShowMode = this.getIconsShowMode();
     const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
     const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
-    this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
-    this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
+    this.applyFormItemDefaults(mainGroup, showMainGroupIcons);
+    this.applyFormItemDefaults(recurrenceGroup, showRecurrenceGroupIcons);
     const editingConfig = this.scheduler.getEditingConfig();
     const customizedItems = (0, _m_customize_form_items.customizeFormItems)(items, editingConfig === null || editingConfig === void 0 || (_editingConfig$form = editingConfig.form) === null || _editingConfig$form === void 0 ? void 0 : _editingConfig$form.items);
     this.createForm(customizedItems);
@@ -121717,10 +121839,6 @@ class AppointmentForm {
       name: SUBJECT_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       items: [{
         name: SUBJECT_ICON_NAME,
         colSpan: 1,
@@ -121744,10 +121862,6 @@ class AppointmentForm {
       name: DATE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       items: [{
         name: DATE_ICON_NAME,
         colSpan: 1,
@@ -121974,10 +122088,6 @@ class AppointmentForm {
     return {
       name: REPEAT_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [{
         name: REPEAT_ICON_NAME,
@@ -122025,10 +122135,6 @@ class AppointmentForm {
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [{
         name: DESCRIPTION_ICON_NAME,
@@ -122059,11 +122165,12 @@ class AppointmentForm {
         dataAccessor
       } = resourceLoader;
       const dataField = resourceLoader.resourceIndex;
+      const name = `${dataField}Editor`;
       const label = resourceLoader.resourceName ?? dataField;
       const editorType = resourceLoader.allowMultiple ? 'dxTagBox' : 'dxSelectBox';
       return {
         itemType: 'simple',
-        name: dataField,
+        name,
         dataField,
         label: {
           text: label
@@ -122083,18 +122190,14 @@ class AppointmentForm {
         name: RESOURCES_GROUP_NAME,
         itemType: 'group',
         visible: resourcesItems.length > 0,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2
-        },
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [{
-          name: `${RESOURCES_GROUP_NAME}Icon`,
+          name: RESOURCES_GROUP_ICON_NAME,
           colSpan: 1,
           cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
           template: (0, _utils.createFormIconTemplate)('addcircleoutline')
         }, {
-          name: `${RESOURCES_GROUP_NAME}Content`,
+          name: RESOURCE_EDITORS_GROUP_NAME,
           itemType: 'group',
           colSpan: 1,
           items: resourcesItems
@@ -122107,10 +122210,6 @@ class AppointmentForm {
       return {
         itemType: 'group',
         name: `${dataField}Group`,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2
-        },
         cssClass: CLASSES.groupWithIcon,
         items: [{
           colSpan: 1,
@@ -122131,14 +122230,11 @@ class AppointmentForm {
       items: resourcesItems
     };
   }
-  setStylingModeToEditors(item, showIcon) {
+  applyFormItemDefaults(item, showIcon) {
     const itemClasses = (item.cssClass ?? '').split(' ');
     const isIconItem = itemClasses.includes(CLASSES.formIcon);
     if (isIconItem) {
-      const isHidden = itemClasses.includes(CLASSES.hidden);
-      if (!showIcon && !isHidden) {
-        item.cssClass += ` ${CLASSES.hidden}`;
-      }
+      item.visible = showIcon;
       return;
     }
     if (item.itemType === 'simple') {
@@ -122152,8 +122248,15 @@ class AppointmentForm {
     if (item.itemType === 'group') {
       var _groupItem$items;
       const groupItem = item;
+      if (itemClasses.includes(CLASSES.groupWithIcon)) {
+        const colCount = showIcon ? 2 : 1;
+        groupItem.colCount = colCount;
+        groupItem.colCountByScreen = {
+          xs: colCount
+        };
+      }
       (_groupItem$items = groupItem.items) === null || _groupItem$items === void 0 || _groupItem$items.forEach(child => {
-        this.setStylingModeToEditors(child, showIcon);
+        this.applyFormItemDefaults(child, showIcon);
       });
     }
   }
@@ -122178,7 +122281,6 @@ class AppointmentForm {
   }
   showMainGroup() {
     var _editingConfig$popup;
-    this._popup.updateToolbarForMainGroup();
     const currentHeight = this.dxPopup.option('height');
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = (editingConfig === null || editingConfig === void 0 || (_editingConfig$popup = editingConfig.popup) === null || _editingConfig$popup === void 0 ? void 0 : _editingConfig$popup.height) ?? 'auto';
@@ -122194,9 +122296,14 @@ class AppointmentForm {
       this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
       this._$recurrenceGroup.attr('inert', true);
     }
+    this._popup.updateToolbarForMainGroup();
   }
   showRecurrenceGroup() {
-    this._popup.updateToolbarForRecurrenceGroup();
+    const repeatEditor = this.dxForm.getEditor(REPEAT_EDITOR_NAME);
+    if (repeatEditor instanceof _m_drop_down_editor.default) {
+      repeatEditor.close();
+    }
+    this.updateAnimationOffset();
     const currentHeight = this.dxPopup.option('height');
     if (currentHeight === 'auto' || currentHeight === undefined) {
       const overlayHeight = this.dxPopup.$overlayContent().get(0).clientHeight;
@@ -122211,6 +122318,7 @@ class AppointmentForm {
       this._$recurrenceGroup.removeAttr('inert');
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
     }
+    this._popup.updateToolbarForRecurrenceGroup();
   }
   saveRecurrenceValue() {
     const {
@@ -122306,6 +122414,17 @@ class AppointmentForm {
     this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
+  }
+  updateAnimationOffset() {
+    if (!this._$mainGroup) {
+      return;
+    }
+    const formElement = this.dxForm.$element()[0];
+    const mainGroupElement = this._$mainGroup[0];
+    const formRect = formElement.getBoundingClientRect();
+    const groupRect = mainGroupElement.getBoundingClientRect();
+    const topOffset = groupRect.top - formRect.top;
+    formElement.style.setProperty('--dx-scheduler-animation-top', `${topOffset}px`);
   }
   focusFirstFocusableInGroup($group) {
     const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get(0);
@@ -122781,10 +122900,10 @@ class AppointmentPopup {
     this.state.action = config.action;
     this.state.excludeInfo = config.excludeInfo;
     if (!this.popup) {
-      const popupConfig = this._createPopupConfig();
-      this.popup = this._createPopup(popupConfig);
+      const popupConfig = this.createPopupConfig();
+      this.popup = this.createPopup(popupConfig);
     }
-    this.popup.option('toolbarItems', (0, _index.getPopupToolbarItems)(config.isToolbarVisible, e => this._doneButtonClickHandler(e)));
+    this.popup.option('toolbarItems', (0, _index.getPopupToolbarItems)(config.isToolbarVisible, e => this.doneButtonClickHandler(e)));
     this.popup.show();
   }
   hide() {
@@ -122794,22 +122913,22 @@ class AppointmentPopup {
     var _this$popup;
     (_this$popup = this.popup) === null || _this$popup === void 0 || _this$popup.$element().remove();
   }
-  _createPopup(options) {
+  createPopup(options) {
     const popupElement = (0, _renderer.default)('<div>').addClass(APPOINTMENT_POPUP_CLASS).appendTo(this.scheduler.getElement());
     return this.scheduler.createComponent(popupElement, _ui.default, options);
   }
-  _createPopupConfig() {
+  createPopupConfig() {
     return Object.assign({}, POPUP_CONFIG, {
       onHiding: () => this.scheduler.focus(),
-      contentTemplate: () => this._createPopupContent(),
-      onShowing: e => this._onShowing(e),
+      contentTemplate: () => this.createPopupContent(),
+      onShowing: e => this.onShowing(e),
       wrapperAttr: {
         class: APPOINTMENT_POPUP_CLASS
       }
     });
   }
-  _onShowing(e) {
-    this._updateForm();
+  onShowing(e) {
+    this.updateForm();
     e.component.$overlayContent().attr('aria-label', _message.default.format('dxScheduler-ariaEditForm'));
     const arg = {
       form: this.form.dxForm,
@@ -122826,25 +122945,25 @@ class AppointmentPopup {
       }
     });
   }
-  _createPopupContent() {
-    this._createForm();
+  createPopupContent() {
+    this.createForm();
     return this.form.dxForm.$element(); // TODO
   }
-  _createFormData(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
+  createFormData(rawAppointment) {
+    const appointment = this.createAppointmentAdapter(rawAppointment);
     const resourceManager = this.scheduler.getResourceManager();
     const rawAppointmentGroupValues = (0, _appointment_groups_utils.getRawAppointmentGroupValues)(rawAppointment, resourceManager.resources);
     return Object.assign({}, rawAppointment, rawAppointmentGroupValues, {
       repeat: Boolean(appointment.recurrenceRule)
     });
   }
-  _createForm() {
+  createForm() {
     const rawAppointment = this.state.appointment.data;
-    const formData = this._createFormData(rawAppointment);
+    const formData = this.createFormData(rawAppointment);
     this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
   }
-  _isReadOnly(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
+  isReadOnly(rawAppointment) {
+    const appointment = this.createAppointmentAdapter(rawAppointment);
     if (rawAppointment && appointment.disabled) {
       return true;
     }
@@ -122853,16 +122972,16 @@ class AppointmentPopup {
     }
     return !this.scheduler.getEditingConfig().allowUpdating;
   }
-  _createAppointmentAdapter(rawAppointment) {
+  createAppointmentAdapter(rawAppointment) {
     return new _appointment_adapter.AppointmentAdapter(rawAppointment, this.scheduler.getDataAccessors());
   }
-  _updateForm() {
+  updateForm() {
     const {
       data
     } = this.state.appointment;
-    const appointment = this._createFormData(data);
-    const formData = this._createAppointmentAdapter(appointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment').source;
-    this.form.readOnly = this._isReadOnly(formData);
+    const appointment = this.createFormData(data);
+    const formData = this.createAppointmentAdapter(appointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment').source;
+    this.form.readOnly = this.isReadOnly(formData);
     this.form.updateFormData(formData);
   }
   triggerResize() {
@@ -122893,7 +123012,7 @@ class AppointmentPopup {
     // @ts-expect-error
     const deferred = new _deferred.Deferred();
     const validation = this.form.dxForm.validate();
-    isShowLoadPanel && this._showLoadPanel();
+    isShowLoadPanel && this.showLoadPanel();
     (0, _deferred.when)((validation === null || validation === void 0 ? void 0 : validation.complete) || validation).done(validation => {
       if (validation && !validation.isValid) {
         (0, _m_loading.hide)();
@@ -122903,10 +123022,10 @@ class AppointmentPopup {
       const {
         repeat
       } = this.form.formData;
-      const adapter = this._createAppointmentAdapter(this.form.formData);
+      const adapter = this.createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter.clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
       const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
-      this._addMissingDSTTime(adapter, clonedAdapter);
+      this.addMissingDSTTime(adapter, clonedAdapter);
       if (shouldClearRecurrenceRule) {
         clonedAdapter.recurrenceRule = '';
       }
@@ -122933,18 +123052,18 @@ class AppointmentPopup {
     });
     return deferred.promise();
   }
-  _doneButtonClickHandler(e) {
+  doneButtonClickHandler(e) {
     e.cancel = true;
     this.saveEditDataAsync();
   }
   saveEditDataAsync() {
     // @ts-expect-error
     const deferred = new _deferred.Deferred();
-    if (this._tryLockSaveChanges()) {
+    if (this.tryLockSaveChanges()) {
       (0, _deferred.when)(this.saveChangesAsync(true)).done(() => {
         if (this.state.lastEditData) {
           // TODO
-          const adapter = this._createAppointmentAdapter(this.state.lastEditData);
+          const adapter = this.createAppointmentAdapter(this.state.lastEditData);
           const {
             startDate,
             endDate,
@@ -122958,13 +123077,13 @@ class AppointmentPopup {
           this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
           this.state.lastEditData = null;
         }
-        this._unlockSaveChanges();
+        this.unlockSaveChanges();
         deferred.resolve();
       });
     }
     return deferred.promise();
   }
-  _showLoadPanel() {
+  showLoadPanel() {
     const container = this.popup.$overlayContent();
     (0, _m_loading.show)({
       container,
@@ -122973,25 +123092,25 @@ class AppointmentPopup {
       }
     });
   }
-  _tryLockSaveChanges() {
+  tryLockSaveChanges() {
     if (this.state.saveChangesLocker === false) {
       this.state.saveChangesLocker = true;
       return true;
     }
     return false;
   }
-  _unlockSaveChanges() {
+  unlockSaveChanges() {
     this.state.saveChangesLocker = false;
   }
   // NOTE: Fix ticket T1102713
-  _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+  addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
     const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
-    clonedAppointmentAdapter.startDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.startDate, clonedAppointmentAdapter.startDate);
+    clonedAppointmentAdapter.startDate = this.addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.startDate, clonedAppointmentAdapter.startDate);
     if (clonedAppointmentAdapter.endDate) {
-      clonedAppointmentAdapter.endDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.endDate, clonedAppointmentAdapter.endDate);
+      clonedAppointmentAdapter.endDate = this.addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.endDate, clonedAppointmentAdapter.endDate);
     }
   }
-  _addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
+  addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
     var _timeZoneCalculator$g, _timeZoneCalculator$g2;
     const originTimezoneShift = (_timeZoneCalculator$g = timeZoneCalculator.getOffsets(originFormDate)) === null || _timeZoneCalculator$g === void 0 ? void 0 : _timeZoneCalculator$g.common;
     const clonedTimezoneShift = (_timeZoneCalculator$g2 = timeZoneCalculator.getOffsets(clonedDate)) === null || _timeZoneCalculator$g2 === void 0 ? void 0 : _timeZoneCalculator$g2.common;
@@ -123059,10 +123178,9 @@ class AppointmentPopup {
     this.state.action = config.action;
     this.state.allowSaving = config.allowSaving;
     this.state.excludeInfo = config.excludeInfo;
-    if (!this._popup) {
-      const popupConfig = this._createPopupConfig();
-      this._createPopup(popupConfig);
-    }
+    this.disposePopup();
+    const popupConfig = this.createPopupConfig();
+    this.createPopup(popupConfig);
     this._popup.show();
   }
   hide() {
@@ -123070,16 +123188,22 @@ class AppointmentPopup {
     (_this$_popup2 = this._popup) === null || _this$_popup2 === void 0 || _this$_popup2.hide();
   }
   dispose() {
-    var _this$_popup3;
-    this.form.dispose();
-    (_this$_popup3 = this._popup) === null || _this$_popup3 === void 0 || _this$_popup3.dispose();
-    this._popup = undefined;
+    this.disposePopup();
   }
-  _createPopup(options) {
+  disposePopup() {
+    if (this._popup) {
+      const $element = this._popup.$element();
+      this.form.dispose();
+      this._popup.dispose();
+      $element.remove();
+      this._popup = undefined;
+    }
+  }
+  createPopup(options) {
     const popupElement = (0, _renderer.default)('<div>').addClass(APPOINTMENT_POPUP_CLASS).appendTo(this.scheduler.getElement());
     this.scheduler.createComponent(popupElement, _ui.default, options);
   }
-  _createPopupConfig() {
+  createPopupConfig() {
     const editingConfig = this.scheduler.getEditingConfig();
     const customPopupOptions = (editingConfig === null || editingConfig === void 0 ? void 0 : editingConfig.popup) ?? {};
     this.customPopupOptions = customPopupOptions;
@@ -123111,7 +123235,7 @@ class AppointmentPopup {
       },
       onShowing: e => {
         var _customPopupOptions$o3;
-        this._onShowing(e);
+        this.onShowing(e);
         customPopupOptions === null || customPopupOptions === void 0 || (_customPopupOptions$o3 = customPopupOptions.onShowing) === null || _customPopupOptions$o3 === void 0 || _customPopupOptions$o3.call(customPopupOptions, e);
       },
       wrapperAttr: {
@@ -123124,8 +123248,8 @@ class AppointmentPopup {
       onShowing: defaultPopupConfig.onShowing
     });
   }
-  _onShowing(e) {
-    this._updateForm();
+  onShowing(e) {
+    this.updateForm();
     e.component.$overlayContent().attr('aria-label', _message.default.format('dxScheduler-ariaEditForm'));
     const arg = {
       form: this.form.dxForm,
@@ -123142,7 +123266,7 @@ class AppointmentPopup {
       }
     });
   }
-  _isReadOnly(appointmentAdapter) {
+  isReadOnly(appointmentAdapter) {
     if (Boolean(appointmentAdapter.source) && appointmentAdapter.disabled) {
       return true;
     }
@@ -123151,18 +123275,18 @@ class AppointmentPopup {
     }
     return !this.scheduler.getEditingConfig().allowUpdating;
   }
-  _createAppointmentAdapter(rawAppointment) {
+  createAppointmentAdapter(rawAppointment) {
     return new _appointment_adapter.AppointmentAdapter(rawAppointment, this.scheduler.getDataAccessors());
   }
-  _updateForm() {
+  updateForm() {
     const rawAppointment = this.state.appointment.data;
-    const appointmentAdapter = this._createAppointmentAdapter(rawAppointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment');
-    const formData = this._createFormData(appointmentAdapter);
-    this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    const appointmentAdapter = this.createAppointmentAdapter(rawAppointment).clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment');
+    const formData = this.createFormData(appointmentAdapter);
+    this.form.readOnly = this.isReadOnly(appointmentAdapter);
     this.form.formData = formData;
     this.form.showMainGroup();
   }
-  _createFormData(appointmentAdapter) {
+  createFormData(appointmentAdapter) {
     const {
       resources
     } = this.scheduler.getResourceManager();
@@ -123214,16 +123338,16 @@ class AppointmentPopup {
     // @ts-expect-error
     const deferred = new _deferred.Deferred();
     const validation = this.form.dxForm.validate();
-    isShowLoadPanel && this._showLoadPanel();
+    isShowLoadPanel && this.showLoadPanel();
     (0, _deferred.when)((validation === null || validation === void 0 ? void 0 : validation.complete) ?? validation).done(validation => {
       if (validation && !validation.isValid) {
         (0, _m_loading.hide)();
         deferred.resolve(false);
         return;
       }
-      const adapter = this._createAppointmentAdapter(this.form.formData);
+      const adapter = this.createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter.clone().calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
-      this._addMissingDSTTime(adapter, clonedAdapter);
+      this.addMissingDSTTime(adapter, clonedAdapter);
       const appointment = clonedAdapter.source;
       switch (this.state.action) {
         case ACTION_TO_APPOINTMENT.CREATE:
@@ -123246,18 +123370,18 @@ class AppointmentPopup {
     });
     return deferred.promise();
   }
-  _saveButtonClickHandler(e) {
+  saveButtonClickHandler(e) {
     e.cancel = true;
     this.saveEditDataAsync();
   }
   saveEditDataAsync() {
     // @ts-expect-error
     const deferred = new _deferred.Deferred();
-    if (this._tryLockSaveChanges()) {
+    if (this.tryLockSaveChanges()) {
       (0, _deferred.when)(this.saveChangesAsync(true)).done(() => {
         if (this.state.lastEditData) {
           // TODO
-          const adapter = this._createAppointmentAdapter(this.state.lastEditData);
+          const adapter = this.createAppointmentAdapter(this.state.lastEditData);
           const {
             startDate,
             endDate,
@@ -123271,13 +123395,13 @@ class AppointmentPopup {
           this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
           this.state.lastEditData = null;
         }
-        this._unlockSaveChanges();
+        this.unlockSaveChanges();
         deferred.resolve();
       });
     }
     return deferred.promise();
   }
-  _showLoadPanel() {
+  showLoadPanel() {
     const container = this.popup.$overlayContent();
     (0, _m_loading.show)({
       container,
@@ -123286,25 +123410,24 @@ class AppointmentPopup {
       }
     });
   }
-  _tryLockSaveChanges() {
+  tryLockSaveChanges() {
     if (this.state.saveChangesLocker === false) {
       this.state.saveChangesLocker = true;
       return true;
     }
     return false;
   }
-  _unlockSaveChanges() {
+  unlockSaveChanges() {
     this.state.saveChangesLocker = false;
   }
-  // NOTE: Fix ticket T1102713
-  _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+  addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
     const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
-    clonedAppointmentAdapter.startDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.startDate, clonedAppointmentAdapter.startDate);
+    clonedAppointmentAdapter.startDate = this.addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.startDate, clonedAppointmentAdapter.startDate);
     if (clonedAppointmentAdapter.endDate) {
-      clonedAppointmentAdapter.endDate = this._addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.endDate, clonedAppointmentAdapter.endDate);
+      clonedAppointmentAdapter.endDate = this.addMissingDSTShiftToDate(timeZoneCalculator, formAppointmentAdapter.endDate, clonedAppointmentAdapter.endDate);
     }
   }
-  _addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
+  addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
     var _timeZoneCalculator$g, _timeZoneCalculator$g2;
     const originTimezoneShift = (_timeZoneCalculator$g = timeZoneCalculator.getOffsets(originFormDate)) === null || _timeZoneCalculator$g === void 0 ? void 0 : _timeZoneCalculator$g.common;
     const clonedTimezoneShift = (_timeZoneCalculator$g2 = timeZoneCalculator.getOffsets(clonedDate)) === null || _timeZoneCalculator$g2 === void 0 ? void 0 : _timeZoneCalculator$g2.common;
@@ -123337,7 +123460,7 @@ class AppointmentPopup {
         toolbar: 'top',
         location: 'after',
         options: {
-          onClick: e => this._saveButtonClickHandler(e),
+          onClick: e => this.saveButtonClickHandler(e),
           stylingMode: 'contained',
           type: 'default',
           text: _message.default.format('dxScheduler-editPopupSaveButtonText')
@@ -123386,7 +123509,7 @@ class AppointmentPopup {
         toolbar: 'top',
         location: 'after',
         options: {
-          onClick: e => this._saveButtonClickHandler(e),
+          onClick: e => this.saveButtonClickHandler(e),
           stylingMode: 'contained',
           type: 'default',
           text: _message.default.format('dxScheduler-editPopupSaveButtonText')
@@ -123571,10 +123694,6 @@ class RecurrenceForm {
     return {
       name: GROUP_NAMES.recurrenceStartDateGroup,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       cssClass: CLASSES.groupWithIcon,
       items: [{
         name: ICON_NAMES.recurrenceStartDateIcon,
@@ -123603,10 +123722,6 @@ class RecurrenceForm {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleGroup,
       cssClass: `${CLASSES.recurrenceSettingsGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       items: [{
         name: ICON_NAMES.recurrenceRuleIcon,
         colSpan: 1,
@@ -123776,10 +123891,6 @@ class RecurrenceForm {
     return {
       name: GROUP_NAMES.recurrenceEndGroup,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2
-      },
       cssClass: `${CLASSES.groupWithIcon} ${CLASSES.recurrenceEndGroup}`,
       items: [{
         name: ICON_NAMES.recurrenceEndIcon,
@@ -124464,8 +124575,6 @@ const toMs = _date.default.dateToMilliseconds;
 class SchedulerAppointments extends _collection_widget.default {
   constructor() {
     super(...arguments);
-    // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
-    this.renderedElementsBySortedIndex = [];
     this._isResizing = false;
   }
   get isResizing() {
@@ -124482,6 +124591,9 @@ class SchedulerAppointments extends _collection_widget.default {
   }
   get dataAccessors() {
     return this.option('dataAccessors');
+  }
+  get sortedItems() {
+    return this.option('getSortedAppointments')();
   }
   getResourceManager() {
     return this.option('getResourceManager')();
@@ -124512,7 +124624,10 @@ class SchedulerAppointments extends _collection_widget.default {
   _supportedKeys() {
     const parentValue = super._supportedKeys();
     const kbnValue = this._kbn.getSupportedKeys();
-    return (0, _extend.extend)(parentValue, kbnValue);
+    return Object.assign({
+      enter: parentValue.enter,
+      space: parentValue.space
+    }, kbnValue);
   }
   getAppointmentSettings($item) {
     return $item.data(_constants.APPOINTMENT_SETTINGS_KEY);
@@ -124522,8 +124637,25 @@ class SchedulerAppointments extends _collection_widget.default {
     return this._kbn.getFocusableItems();
   }
   _renderFocusTarget() {
-    const $item = this._kbn.getFocusableItemBySortedIndex(0);
-    this._kbn.resetTabIndex($item);
+    var _this$$itemBySortedIn;
+    if ((_this$$itemBySortedIn = this.$itemBySortedIndex) !== null && _this$$itemBySortedIn !== void 0 && _this$$itemBySortedIn.length) {
+      this._kbn.resetTabIndex(this._kbn.getFirstVisibleItem());
+    }
+  }
+  _cleanFocusState() {
+    this._focusedItemIndexBeforeRender = this._kbn.isNavigating ? this._kbn.focusedItemSortIndex : -1;
+    super._cleanFocusState();
+  }
+  _renderFocusState() {
+    super._renderFocusState();
+    if (this._focusedItemIndexBeforeRender !== -1) {
+      this._kbn.focusedItemSortIndex = this._focusedItemIndexBeforeRender;
+      this._kbn.isNavigating = false;
+      this._kbn.focus();
+      this._focusedItemIndexBeforeRender = -1;
+    } else {
+      this._kbn.focusedItemSortIndex = -1;
+    }
   }
   _focusInHandler(e) {
     super._focusInHandler(e);
@@ -124559,7 +124691,7 @@ class SchedulerAppointments extends _collection_widget.default {
       let {
         sortedIndex
       } = _ref;
-      return this.renderedElementsBySortedIndex[sortedIndex];
+      return this.$itemBySortedIndex[sortedIndex];
     });
     const diff = (0, _get_view_model_diff.getViewModelDiff)(previousValue, value, this.appointmentDataSource);
     diff.filter(item => !(0, _get_arrays_diff.isNeedToAdd)(item)).forEach((item, index) => {
@@ -124610,7 +124742,7 @@ class SchedulerAppointments extends _collection_widget.default {
     }
   }
   forceRepaintAllAppointments(items) {
-    this.renderedElementsBySortedIndex = [];
+    this.$itemBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       this._getAppointmentContainer(true).html('');
       this._getAppointmentContainer(false).html('');
@@ -124624,9 +124756,9 @@ class SchedulerAppointments extends _collection_widget.default {
     });
   }
   repaintAppointments(diff) {
-    this.renderedElementsBySortedIndex = [];
+    this.$itemBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
-      const isRepaintAll = this.isAgendaView || !diff.some(item => item.needToAdd === undefined && item.needToRemove === undefined);
+      const isRepaintAll = diff.every(item => Boolean(item.needToAdd ?? item.needToRemove));
       if (isRepaintAll) {
         this._getAppointmentContainer(true).html('');
         this._getAppointmentContainer(false).html('');
@@ -124651,7 +124783,7 @@ class SchedulerAppointments extends _collection_widget.default {
         }
         if (item.element) {
           item.element.data(_constants.APPOINTMENT_SETTINGS_KEY, item.item);
-          this.renderedElementsBySortedIndex[item.item.sortedIndex] = item.element;
+          this.$itemBySortedIndex[item.item.sortedIndex] = item.element;
         }
       });
     });
@@ -124714,7 +124846,9 @@ class SchedulerAppointments extends _collection_widget.default {
   }
   _init() {
     super._init();
+    this.$itemBySortedIndex = [];
     this._kbn = new _m_appointments_kbn.AppointmentsKeyboardNavigation(this);
+    this._focusedItemIndexBeforeRender = -1;
     this.$element().addClass(COMPONENT_CLASS);
     this._preventSingleAppointmentClick = false;
   }
@@ -124816,11 +124950,7 @@ class SchedulerAppointments extends _collection_widget.default {
     const $item = super._renderItem(index, item.itemData, container);
     $item.data(_constants.APPOINTMENT_SETTINGS_KEY, item);
     if (item.sortedIndex !== -1) {
-      // NOTE: fallback for integration testing
-      if (!this.renderedElementsBySortedIndex) {
-        this.renderedElementsBySortedIndex = [];
-      }
-      this.renderedElementsBySortedIndex[item.sortedIndex] = $item;
+      this.$itemBySortedIndex[item.sortedIndex] = $item;
     }
     return $item;
   }
@@ -124948,7 +125078,7 @@ class SchedulerAppointments extends _collection_widget.default {
       onResizeStart: e => {
         const $appointment = (0, _renderer.default)(e.element);
         this._isResizing = true;
-        this._kbn.$focusedItem = $appointment;
+        this._kbn.focus($appointment);
         if (this.invoke('needRecalculateResizableArea')) {
           const updatedArea = this._calculateResizableArea(this.getAppointmentSettings($appointment), $appointment.data('dxItemData'));
           e.component.option('area', updatedArea);
@@ -125178,11 +125308,11 @@ class SchedulerAppointments extends _collection_widget.default {
       allowDrag: this.option('allowDrag'),
       isCompact: appointment.isCompact
     });
-    this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
+    this.$itemBySortedIndex[appointment.sortedIndex] = $item;
     return $item;
   }
   moveAppointmentBack(dragEvent) {
-    const $appointment = this._kbn.$focusedItem;
+    const $appointment = this._kbn.$focusTarget();
     const size = this._initialSize;
     const coords = this._initialCoordinates;
     this._isResizing = false;
@@ -125194,7 +125324,7 @@ class SchedulerAppointments extends _collection_widget.default {
         dragEvent.cancel = true;
       }
     }
-    if ($appointment && !dragEvent) {
+    if ($appointment.get(0) && !dragEvent) {
       if (coords) {
         (0, _translator.move)($appointment, coords);
         delete this._initialSize;
@@ -125327,41 +125457,50 @@ exports.AppointmentsKeyboardNavigation = void 0;
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _m_element = __webpack_require__(93630);
 var _m_events_engine = _interopRequireDefault(__webpack_require__(36306));
-var _sorted_index_utils = __webpack_require__(44495);
+var _appointment_groups_utils = __webpack_require__(11649);
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class AppointmentsKeyboardNavigation {
   constructor(collection) {
-    this.$focusedItem = null;
+    this.focusedItemSortIndex = -1;
+    this.isNavigating = false;
     this._collection = collection;
   }
+  // TODO: make disabled appointments focusable and remove this method
   getFocusableItems() {
     const appts = this._collection._itemElements().not('.dx-state-disabled');
     const collectors = this._collection.$element().find('.dx-scheduler-appointment-collector');
     return appts.add(collectors);
   }
-  getFocusableItemBySortedIndex(sortedIndex) {
-    const $items = this.getFocusableItems();
-    const itemElement = $items.toArray().filter(itemElement => {
-      const $item = (0, _renderer.default)(itemElement);
-      const itemData = this._collection.getAppointmentSettings($item);
-      return itemData.sortedIndex === sortedIndex;
-    });
-    return (0, _renderer.default)(itemElement);
-  }
-  focus() {
-    if (this.$focusedItem) {
-      const focusedElement = (0, _m_element.getPublicElement)(this.$focusedItem);
-      this._collection.option('focusedElement', focusedElement);
-      _m_events_engine.default.trigger(focusedElement, 'focus');
+  focus($item) {
+    const $target = $item ?? this.$focusTarget();
+    if ($target.length) {
+      _m_events_engine.default.trigger($target, 'focus');
     }
   }
+  $focusTarget() {
+    const $items = this._collection.$itemBySortedIndex;
+    if (!$items) {
+      return (0, _renderer.default)();
+    }
+    const $item = $items[this.focusedItemSortIndex];
+    return $item || (0, _renderer.default)();
+  }
+  resetTabIndex($item) {
+    const $target = $item ?? this.$focusTarget();
+    this.getFocusableItems().attr('tabIndex', -1);
+    $target.attr('tabIndex', this._collection.option('tabIndex'));
+  }
   focusInHandler(e) {
-    this.$focusedItem = (0, _renderer.default)(e.target);
-    this._collection.option('focusedElement', (0, _m_element.getPublicElement)(this.$focusedItem));
+    const $target = (0, _renderer.default)(e.target);
+    const itemData = this._collection.getAppointmentSettings($target);
+    if (!itemData) {
+      return;
+    }
+    this.focusedItemSortIndex = itemData.sortedIndex;
+    this._collection.option('focusedElement', (0, _m_element.getPublicElement)(e.target));
   }
   focusOutHandler() {
-    const $item = this.getFocusableItemBySortedIndex(0);
-    this._collection.option('focusedElement', (0, _m_element.getPublicElement)($item));
+    this._collection.option('focusedElement', (0, _m_element.getPublicElement)(this.getFirstVisibleItem()));
   }
   getSupportedKeys() {
     return {
@@ -125371,27 +125510,6 @@ class AppointmentsKeyboardNavigation {
       home: this.homeHandler.bind(this),
       end: this.endHandler.bind(this)
     };
-  }
-  resetTabIndex($appointment) {
-    this.getFocusableItems().attr('tabIndex', -1);
-    $appointment.attr('tabIndex', this._collection.option('tabIndex'));
-  }
-  tabHandler(e) {
-    if (!this.$focusedItem) {
-      return;
-    }
-    const $focusableItems = this.getFocusableItems();
-    let index = this._collection.getAppointmentSettings(this.$focusedItem).sortedIndex;
-    let $nextAppointment = e.shiftKey ? (0, _sorted_index_utils.getPrevElement)(index, this._collection.renderedElementsBySortedIndex) : (0, _sorted_index_utils.getNextElement)(index, this._collection.renderedElementsBySortedIndex);
-    const lastIndex = $focusableItems.length - 1;
-    if ($nextAppointment || index > 0 && e.shiftKey || index < lastIndex && !e.shiftKey) {
-      e.preventDefault();
-      if (!$nextAppointment) {
-        e.shiftKey ? index-- : index++;
-        $nextAppointment = this.getFocusableItemBySortedIndex(index);
-      }
-      this.focusItem($nextAppointment);
-    }
   }
   delHandler(e) {
     if (this._collection.option('allowDelete')) {
@@ -125408,32 +125526,68 @@ class AppointmentsKeyboardNavigation {
       return;
     }
     this._collection.moveAppointmentBack();
-    const resizableInstance = this.$focusedItem.dxResizable('instance');
+    const resizableInstance = this.$focusTarget().dxResizable('instance');
     if (resizableInstance) {
       resizableInstance._detachEventHandlers();
       resizableInstance._attachEventHandlers();
       resizableInstance._toggleResizingClass(false);
     }
   }
-  homeHandler(e) {
-    e.preventDefault();
-    const $firstItem = this.getFocusableItems().first();
-    if (this.$focusedItem && $firstItem.is(this.$focusedItem)) {
+  tabHandler(e) {
+    const items = this._collection.sortedItems;
+    const nextIndex = this.focusedItemSortIndex + (e.shiftKey ? -1 : 1);
+    const nextItemData = items[nextIndex];
+    if (!nextItemData) {
       return;
     }
-    this.focusItem($firstItem);
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
+  }
+  homeHandler(e) {
+    const items = this._collection.sortedItems;
+    const nextItemData = items[0];
+    if (!nextItemData) {
+      return;
+    }
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
   }
   endHandler(e) {
-    e.preventDefault();
-    const $lastItem = this.getFocusableItems().last();
-    if (this.$focusedItem && $lastItem.is(this.$focusedItem)) {
+    const items = this._collection.sortedItems;
+    const nextItemData = items[items.length - 1];
+    if (!nextItemData) {
       return;
     }
-    this.focusItem($lastItem);
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
   }
-  focusItem($item) {
-    this.resetTabIndex($item);
-    _m_events_engine.default.trigger($item, 'focus');
+  focusByItemData(itemData) {
+    this.focusedItemSortIndex = itemData.sortedIndex;
+    if (this._collection.isVirtualScrolling) {
+      this.isNavigating = true;
+      this.scrollToByItemData(itemData);
+    }
+    this.focus();
+  }
+  scrollToByItemData(itemData) {
+    const date = new Date(Math.max(this._collection.invoke('getStartViewDate').getTime(), itemData.source.startDate));
+    const group = (0, _appointment_groups_utils.getRawAppointmentGroupValues)(itemData.itemData, this._collection.getResourceManager().resources);
+    this._collection.option('scrollTo')(date, {
+      group,
+      allDay: itemData.allDay
+    });
+  }
+  getFirstVisibleItem() {
+    const $items = this._collection.$itemBySortedIndex;
+    const $itemsPlainArray = Object.values($items);
+    const $firstItem = this._collection.isVirtualScrolling ? $itemsPlainArray.find($item => this.isItemVisibleInViewport($item)) ?? (0, _renderer.default)() : (0, _renderer.default)($itemsPlainArray[0]);
+    return $firstItem;
+  }
+  isItemVisibleInViewport($item) {
+    const $container = this._collection.$element().closest('.dx-scrollable-container');
+    const containerRect = $container.get(0).getBoundingClientRect();
+    const itemRect = $item.get(0).getBoundingClientRect();
+    return itemRect.top < containerRect.bottom && itemRect.bottom > containerRect.top && itemRect.left < containerRect.right && itemRect.right > containerRect.left;
   }
 }
 exports.AppointmentsKeyboardNavigation = AppointmentsKeyboardNavigation;
@@ -125824,46 +125978,6 @@ exports.getViewModelDiff = getViewModelDiff;
 
 /***/ },
 
-/***/ 44495
-(__unused_webpack_module, exports) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.isElementCanBeFocused = exports.getPrevElement = exports.getNextElement = void 0;
-const isElementCanBeFocused = $element => Boolean($element && $element.is(':visible') && !$element.hasClass('dx-state-disabled'));
-exports.isElementCanBeFocused = isElementCanBeFocused;
-const getPrevElement = function (sortedIndex) {
-  let renderedElementsBySortedIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  let index = sortedIndex - 1;
-  while (index >= 0) {
-    const $nextElement = renderedElementsBySortedIndex[index];
-    if (isElementCanBeFocused($nextElement)) {
-      return $nextElement;
-    }
-    index -= 1;
-  }
-  return undefined;
-};
-exports.getPrevElement = getPrevElement;
-const getNextElement = function (sortedIndex) {
-  let renderedElementsBySortedIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  let index = sortedIndex + 1;
-  while (index < renderedElementsBySortedIndex.length) {
-    const $nextElement = renderedElementsBySortedIndex[index];
-    if (isElementCanBeFocused($nextElement)) {
-      return $nextElement;
-    }
-    index += 1;
-  }
-  return undefined;
-};
-exports.getNextElement = getNextElement;
-
-/***/ },
-
 /***/ 32060
 (__unused_webpack_module, exports) {
 
@@ -125992,20 +126106,20 @@ const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
 const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 class SchedulerCalendar extends _widget.default {
   async show(target) {
-    var _this$_overlay2;
+    var _this$overlay2;
     if (!SchedulerCalendar._isMobileLayout()) {
-      var _this$_overlay;
-      (_this$_overlay = this._overlay) === null || _this$_overlay === void 0 || _this$_overlay.option('target', target);
+      var _this$overlay;
+      (_this$overlay = this.overlay) === null || _this$overlay === void 0 || _this$overlay.option('target', target);
     }
-    await ((_this$_overlay2 = this._overlay) === null || _this$_overlay2 === void 0 ? void 0 : _this$_overlay2.show());
+    await ((_this$overlay2 = this.overlay) === null || _this$overlay2 === void 0 ? void 0 : _this$overlay2.show());
   }
   async hide() {
-    var _this$_overlay3;
-    await ((_this$_overlay3 = this._overlay) === null || _this$_overlay3 === void 0 ? void 0 : _this$_overlay3.hide());
+    var _this$overlay3;
+    await ((_this$overlay3 = this.overlay) === null || _this$overlay3 === void 0 ? void 0 : _this$overlay3.hide());
   }
   _keyboardHandler(opts) {
-    var _this$_calendar;
-    return ((_this$_calendar = this._calendar) === null || _this$_calendar === void 0 ? void 0 : _this$_calendar._keyboardHandler(opts)) ?? false;
+    var _this$calendar;
+    return ((_this$calendar = this.calendar) === null || _this$calendar === void 0 ? void 0 : _this$calendar._keyboardHandler(opts)) ?? false;
   }
   _init() {
     super._init();
@@ -126021,8 +126135,8 @@ class SchedulerCalendar extends _widget.default {
     const overlayConfig = {
       contentTemplate: () => this._createOverlayContent(),
       onShown: () => {
-        var _this$_calendar2;
-        (_this$_calendar2 = this._calendar) === null || _this$_calendar2 === void 0 || _this$_calendar2.focus();
+        var _this$calendar2;
+        (_this$calendar2 = this.calendar) === null || _this$calendar2 === void 0 || _this$calendar2.focus();
       },
       defaultOptionsRules: [{
         device: () => isMobileLayout,
@@ -126039,14 +126153,14 @@ class SchedulerCalendar extends _widget.default {
       }]
     };
     if (isMobileLayout) {
-      this._overlay = this._createComponent(this.$element(), _ui2.default, overlayConfig);
+      this.overlay = this._createComponent(this.$element(), _ui2.default, overlayConfig);
     } else {
-      this._overlay = this._createComponent(this.$element(), _ui.default, overlayConfig);
+      this.overlay = this._createComponent(this.$element(), _ui.default, overlayConfig);
     }
   }
   _createOverlayContent() {
     const result = (0, _renderer.default)('<div>').addClass(CALENDAR_CLASS);
-    this._calendar = this._createComponent(result, _calendar.default, this._getCalendarOptions());
+    this.calendar = this._createComponent(result, _calendar.default, this._getCalendarOptions());
     if (SchedulerCalendar._isMobileLayout()) {
       const scrollable = this._createScrollable(result);
       return scrollable.$element();
@@ -126062,14 +126176,14 @@ class SchedulerCalendar extends _widget.default {
     return result;
   }
   _optionChanged(args) {
-    var _this$_calendar3;
+    var _this$calendar3;
     const {
       name,
       value
     } = args;
     switch (name) {
       case 'value':
-        (_this$_calendar3 = this._calendar) === null || _this$_calendar3 === void 0 || _this$_calendar3.option('value', value);
+        (_this$calendar3 = this.calendar) === null || _this$calendar3 === void 0 || _this$calendar3.option('value', value);
         break;
       default:
         break;
@@ -126364,7 +126478,7 @@ class SchedulerHeader extends _widget.default {
     });
   }
   onToolbarOptionChanged(fullName, value) {
-    var _this$_toolbar, _this$_toolbar2, _this$_toolbar3;
+    var _this$toolbar, _this$toolbar2, _this$toolbar3;
     const parts = (0, _data.getPathParts)(fullName);
     const optionName = fullName.replace(/^toolbar\./, '');
     this.option(fullName, value);
@@ -126374,13 +126488,13 @@ class SchedulerHeader extends _widget.default {
         this.repaint();
         break;
       case fullName === 'toolbar.items':
-        (_this$_toolbar = this._toolbar) === null || _this$_toolbar === void 0 || _this$_toolbar.option('items', value.map(item => this._parseItem(item)));
+        (_this$toolbar = this.toolbar) === null || _this$toolbar === void 0 || _this$toolbar.option('items', value.map(item => this._parseItem(item)));
         break;
       case parts[1] === 'items' && parts.length === 3:
-        (_this$_toolbar2 = this._toolbar) === null || _this$_toolbar2 === void 0 || _this$_toolbar2.option(optionName, this._parseItem(value));
+        (_this$toolbar2 = this.toolbar) === null || _this$toolbar2 === void 0 || _this$toolbar2.option(optionName, this._parseItem(value));
         break;
       default:
-        (_this$_toolbar3 = this._toolbar) === null || _this$_toolbar3 === void 0 || _this$_toolbar3.option(optionName, value);
+        (_this$toolbar3 = this.toolbar) === null || _this$toolbar3 === void 0 || _this$toolbar3.option(optionName, value);
     }
   }
   _init() {
@@ -126398,7 +126512,7 @@ class SchedulerHeader extends _widget.default {
     const config = this._createToolbarConfig();
     const toolbarElement = (0, _renderer.default)('<div>');
     toolbarElement.appendTo(this.$element());
-    this._toolbar = this._createComponent(toolbarElement, _toolbar.default, config);
+    this.toolbar = this._createComponent(toolbarElement, _toolbar.default, config);
   }
   _toggleVisibility() {
     const {
@@ -126449,9 +126563,9 @@ class SchedulerHeader extends _widget.default {
     onCurrentViewChange(view.name);
   }
   _updateCalendarValueAndCurrentDate(date) {
-    var _this$_calendar;
+    var _this$calendar;
     this._updateCurrentDate(date);
-    (_this$_calendar = this._calendar) === null || _this$_calendar === void 0 || _this$_calendar.option('value', date);
+    (_this$calendar = this.calendar) === null || _this$calendar === void 0 || _this$calendar.option('value', date);
   }
   _updateCurrentDate(date) {
     const {
@@ -126469,7 +126583,7 @@ class SchedulerHeader extends _widget.default {
       focusStateEnabled,
       tabIndex
     } = this.option();
-    this._calendar = this._createComponent('<div>', _m_calendar.default, {
+    this.calendar = this._createComponent('<div>', _m_calendar.default, {
       value: currentDate,
       min,
       max,
@@ -126477,17 +126591,17 @@ class SchedulerHeader extends _widget.default {
       focusStateEnabled,
       tabIndex,
       onValueChanged: async e => {
-        var _this$_calendar2;
+        var _this$calendar2;
         this._updateCurrentDate(e.value);
-        await ((_this$_calendar2 = this._calendar) === null || _this$_calendar2 === void 0 ? void 0 : _this$_calendar2.hide());
+        await ((_this$calendar2 = this.calendar) === null || _this$calendar2 === void 0 ? void 0 : _this$calendar2.hide());
       }
     });
-    this._calendar.$element().appendTo(this.$element());
+    this.calendar.$element().appendTo(this.$element());
   }
   _getCalendarOptionUpdater(name) {
     return value => {
-      if (this._calendar) {
-        this._calendar.option(name, value);
+      if (this.calendar) {
+        this.calendar.option(name, value);
       }
     };
   }
@@ -126532,8 +126646,8 @@ class SchedulerHeader extends _widget.default {
     this._updateCalendarValueAndCurrentDate(date);
   }
   async _showCalendar(e) {
-    var _this$_calendar3;
-    await ((_this$_calendar3 = this._calendar) === null || _this$_calendar3 === void 0 ? void 0 : _this$_calendar3.show(e.element));
+    var _this$calendar3;
+    await ((_this$calendar3 = this.calendar) === null || _this$calendar3 === void 0 ? void 0 : _this$calendar3.show(e.element));
   }
 }
 exports.SchedulerHeader = SchedulerHeader;
@@ -127215,8 +127329,8 @@ class CompactAppointmentsHelper {
       isCompact,
       items
     } = options;
-    const template = this._createTemplate(items.length, isCompact);
-    const button = this._createCompactButton(template, options);
+    const template = this.createTemplate(items.length, isCompact);
+    const button = this.createCompactButton(template, options);
     const $button = button.$element();
     this.elements.push($button);
     $button.data('items', items);
@@ -127229,27 +127343,27 @@ class CompactAppointmentsHelper {
     });
     this.elements = [];
   }
-  _onButtonClick(e, options) {
+  onButtonClick(e, options) {
     const $button = (0, _renderer.default)(e.element);
     this.instance.showAppointmentTooltipCore($button,
     // @ts-expect-error
-    $button.data('items'), this._getExtraOptionsForTooltip(options, $button));
+    $button.data('items'), this.getExtraOptionsForTooltip(options, $button));
   }
-  _getExtraOptionsForTooltip(options, $appointmentCollector) {
+  getExtraOptionsForTooltip(options, $appointmentCollector) {
     return {
-      clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
-      dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
+      clickEvent: this.clickEvent(options.onAppointmentClick).bind(this),
+      dragBehavior: options.allowDrag && this.createTooltipDragBehavior($appointmentCollector).bind(this),
       isButtonClick: true,
-      _loopFocus: true
+      tabFocusLoopEnabled: true
     };
   }
-  _clickEvent(onAppointmentClick) {
+  clickEvent(onAppointmentClick) {
     return e => {
       const clickEventArgs = this.instance._createEventArgs(e);
       onAppointmentClick(clickEventArgs);
     };
   }
-  _createTooltipDragBehavior($appointmentCollector) {
+  createTooltipDragBehavior($appointmentCollector) {
     return e => {
       const $element = (0, _renderer.default)(e.element);
       const $schedulerElement = (0, _renderer.default)(this.instance.element());
@@ -127267,24 +127381,24 @@ class CompactAppointmentsHelper {
         getItemData,
         getItemSettings
       };
-      workSpace._createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
-  _setPosition(element, position) {
+  setPosition(element, position) {
     (0, _translator.move)(element, {
       top: position.top,
       left: position.left
     });
   }
-  _createCompactButton(template, options) {
-    const $button = this._createCompactButtonElement(options);
+  createCompactButton(template, options) {
+    const $button = this.createCompactButtonElement(options);
     // @ts-expect-error
     return this.instance._createComponent($button, _button.default, {
       type: 'default',
       width: options.width,
       height: options.height,
-      onClick: e => this._onButtonClick(e, options),
-      template: this._renderTemplate(template, options.items, options.isCompact)
+      onClick: e => this.onButtonClick(e, options),
+      template: this.renderTemplate(template, options.items, options.isCompact)
     });
   }
   static measureCollectorDimensions($container, isCompact) {
@@ -127302,7 +127416,7 @@ class CompactAppointmentsHelper {
     $collector.remove();
     return geometry;
   }
-  _createCompactButtonElement(_ref) {
+  createCompactButtonElement(_ref) {
     let {
       isCompact,
       $container,
@@ -127310,15 +127424,15 @@ class CompactAppointmentsHelper {
       sortedIndex,
       items
     } = _ref;
-    const appointmentDate = this._getDateText(items[0].appointment, items[0].targetedAppointment);
+    const appointmentDate = this.getDateText(items[0].appointment, items[0].targetedAppointment);
     const result = (0, _renderer.default)('<div>').addClass(APPOINTMENT_COLLECTOR_CLASS).attr('aria-roledescription', appointmentDate).toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact).appendTo($container);
     result.data(_constants.APPOINTMENT_SETTINGS_KEY, {
       sortedIndex
     });
-    this._setPosition(result, coordinates);
+    this.setPosition(result, coordinates);
     return result;
   }
-  _renderTemplate(template, items, isCompact) {
+  renderTemplate(template, items, isCompact) {
     return new _function_template.FunctionTemplate(options => template.render({
       model: {
         appointmentCount: items.length,
@@ -127328,27 +127442,27 @@ class CompactAppointmentsHelper {
       container: options.container
     }));
   }
-  _createTemplate(count, isCompact) {
-    this._initButtonTemplate(count, isCompact);
-    return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
+  createTemplate(count, isCompact) {
+    this.initButtonTemplate(count, isCompact);
+    return this.instance.getAppointmentTemplate('appointmentCollectorTemplate');
   }
-  _initButtonTemplate(count, isCompact) {
+  initButtonTemplate(count, isCompact) {
     this.instance._templateManager.addDefaultTemplates({
-      appointmentCollector: new _function_template.FunctionTemplate(options => this._createButtonTemplate(count, (0, _renderer.default)(options.container), isCompact))
+      appointmentCollector: new _function_template.FunctionTemplate(options => this.createButtonTemplate(count, (0, _renderer.default)(options.container), isCompact))
     });
   }
-  _createButtonTemplate(appointmentCount, element, isCompact) {
+  createButtonTemplate(appointmentCount, element, isCompact) {
     const text = isCompact ? appointmentCount : _message.default.getFormatter('dxScheduler-moreAppointments')(appointmentCount);
     return element.append((0, _renderer.default)('<span>').text(text)).addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
   }
-  _localizeDate(date) {
+  localizeDate(date) {
     return `${_date.default.format(date, 'monthAndDay')}, ${_date.default.format(date, 'year')}`;
   }
-  _getDateText(appointment, targetedAppointment) {
+  getDateText(appointment, targetedAppointment) {
     const startDate = (targetedAppointment === null || targetedAppointment === void 0 ? void 0 : targetedAppointment.displayStartDate) ?? appointment.startDate;
     const endDate = (targetedAppointment === null || targetedAppointment === void 0 ? void 0 : targetedAppointment.displayEndDate) ?? appointment.endDate;
-    const startDateText = this._localizeDate(startDate);
-    const endDateText = this._localizeDate(endDate);
+    const startDateText = this.localizeDate(startDate);
+    const endDateText = this.localizeDate(endDate);
     return startDateText === endDateText ? startDateText : `${startDateText} - ${endDateText}`;
   }
 }
@@ -127481,29 +127595,29 @@ const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 const getStylingModeFunc = () => (0, _themes.isFluent)((0, _themes.current)()) ? 'filled' : undefined;
 class RecurrenceRule {
   constructor(rule) {
-    this._recurrenceRule = (0, _base.parseRecurrenceRule)(rule);
+    this.recurrenceRule = (0, _base.parseRecurrenceRule)(rule);
   }
   makeRules(string) {
-    this._recurrenceRule = (0, _base.parseRecurrenceRule)(string);
+    this.recurrenceRule = (0, _base.parseRecurrenceRule)(string);
   }
   makeRule(field, value) {
     if (!value || Array.isArray(value) && !value.length) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this._recurrenceRule[field];
+      delete this.recurrenceRule[field];
       return;
     }
     if ((0, _type.isDefined)(field)) {
       if (field === 'until') {
-        delete this._recurrenceRule.count;
+        delete this.recurrenceRule.count;
       }
       if (field === 'count') {
-        delete this._recurrenceRule.until;
+        delete this.recurrenceRule.until;
       }
-      this._recurrenceRule[field] = value;
+      this.recurrenceRule[field] = value;
     }
   }
   getRepeatEndRule() {
-    const rules = this._recurrenceRule;
+    const rules = this.recurrenceRule;
     if ('count' in rules) {
       return 'count';
     }
@@ -127513,13 +127627,13 @@ class RecurrenceRule {
     return 'never';
   }
   getRecurrenceString() {
-    return (0, _base.getRecurrenceString)(this._recurrenceRule);
+    return (0, _base.getRecurrenceString)(this.recurrenceRule);
   }
   getRules() {
-    return this._recurrenceRule;
+    return this.recurrenceRule;
   }
   getDaysFromByDayRule() {
-    return (0, _days_from_by_day_rule.daysFromByDayRule)(this._recurrenceRule);
+    return (0, _days_from_by_day_rule.daysFromByDayRule)(this.recurrenceRule);
   }
 }
 class RecurrenceEditor extends _editor.default {
@@ -127532,11 +127646,11 @@ class RecurrenceEditor extends _editor.default {
       firstDayOfWeek: undefined
     });
   }
-  _getFirstDayOfWeek() {
+  getFirstDayOfWeek() {
     const firstDayOfWeek = this.option('firstDayOfWeek');
     return (0, _type.isDefined)(firstDayOfWeek) ? firstDayOfWeek : _date.default.firstDayOfWeekIndex();
   }
-  _createComponent(element, name) {
+  createComponent(element, name) {
     let config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     // @ts-expect-error
     this._extendConfig(config, {
@@ -127548,23 +127662,23 @@ class RecurrenceEditor extends _editor.default {
   _init() {
     // @ts-expect-error
     super._init();
-    this._recurrenceRule = new RecurrenceRule(this.option('value'));
+    this.recurrenceRule = new RecurrenceRule(this.option('value'));
   }
   _render() {
     // @ts-expect-error
     super._render();
     this.$element().addClass(RECURRENCE_EDITOR);
-    this._$container = (0, _renderer.default)('<div>').addClass(RECURRENCE_EDITOR_CONTAINER).appendTo(this.$element());
-    this._prepareEditors();
-    this._renderEditors(this._$container);
-    this._updateRepeatInputAriaLabel();
+    this.$container = (0, _renderer.default)('<div>').addClass(RECURRENCE_EDITOR_CONTAINER).appendTo(this.$element());
+    this.prepareEditors();
+    this.renderEditors(this.$container);
+    this.updateRepeatInputAriaLabel();
   }
   getEditorByField(fieldName) {
     let editor = this.getRecurrenceForm().getEditor(fieldName);
     if (!(0, _type.isDefined)(editor)) {
       switch (fieldName) {
         case 'byday':
-          editor = this._weekEditor;
+          editor = this.weekEditor;
           break;
         default:
           break;
@@ -127572,24 +127686,24 @@ class RecurrenceEditor extends _editor.default {
     }
     return editor;
   }
-  _prepareEditors() {
-    const freq = (this._recurrenceRule.getRules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
-    this._editors = [this._createFreqEditor(freq), this._createIntervalEditor(freq), this._createRepeatOnLabel(freq), {
+  prepareEditors() {
+    const freq = (this.recurrenceRule.getRules().freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase();
+    this.editors = [this.createFreqEditor(freq), this.createIntervalEditor(freq), this.createRepeatOnLabel(freq), {
       itemType: 'group',
       cssClass: REPEAT_ON_EDITOR,
       colCount: 2,
       colCountByScreen: {
         xs: 2
       },
-      items: this._createRepeatOnEditor(freq)
+      items: this.createRepeatOnEditor(freq)
     }, {
       itemType: 'group',
       colCount: 2,
-      items: this._createRepeatEndEditor()
+      items: this.createRepeatEndEditor()
     }];
-    return this._editors;
+    return this.editors;
   }
-  _createFreqEditor(freq) {
+  createFreqEditor(freq) {
     return {
       dataField: 'freq',
       name: 'FREQ',
@@ -127606,15 +127720,15 @@ class RecurrenceEditor extends _editor.default {
         elementAttr: {
           class: FREQUENCY_EDITOR
         },
-        onValueChanged: args => this._valueChangedHandler(args)
+        onValueChanged: args => this.valueChangedHandler(args)
       },
       label: {
         text: _message.default.format('dxScheduler-editorLabelRecurrence')
       }
     };
   }
-  _createIntervalEditor(freq) {
-    const interval = this._recurrenceRule.getRules().interval || 1;
+  createIntervalEditor(freq) {
+    const interval = this.recurrenceRule.getRules().interval || 1;
     return {
       itemType: 'group',
       colCount: 2,
@@ -127637,7 +127751,7 @@ class RecurrenceEditor extends _editor.default {
           elementAttr: {
             class: INTERVAL_EDITOR
           },
-          onValueChanged: args => this._valueChangedHandler(args)
+          onValueChanged: args => this.valueChangedHandler(args)
         },
         label: {
           text: _message.default.format('dxScheduler-recurrenceRepeatEvery')
@@ -127649,7 +127763,7 @@ class RecurrenceEditor extends _editor.default {
       }]
     };
   }
-  _createRepeatOnLabel(freq) {
+  createRepeatOnLabel(freq) {
     return {
       itemType: 'group',
       cssClass: `${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`,
@@ -127661,24 +127775,24 @@ class RecurrenceEditor extends _editor.default {
       }]
     };
   }
-  _createRepeatOnEditor(freq) {
-    return [this._createByDayEditor(freq), this._createByMonthEditor(freq), this._createByMonthDayEditor(freq)];
+  createRepeatOnEditor(freq) {
+    return [this.createByDayEditor(freq), this.createByMonthEditor(freq), this.createByMonthDayEditor(freq)];
   }
-  _createByDayEditor(freq) {
+  createByDayEditor(freq) {
     return {
       dataField: 'byday',
       colSpan: 2,
       template: (_, itemElement) => {
-        const firstDayOfWeek = this._getFirstDayOfWeek();
-        const byDay = this._daysOfWeekByRules();
+        const firstDayOfWeek = this.getFirstDayOfWeek();
+        const byDay = this.daysOfWeekByRules();
         const localDaysNames = _date.default.getDayNames('abbreviated');
         const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
         const itemsButtonGroup = localDaysNames.slice(firstDayOfWeek).concat(localDaysNames.slice(0, firstDayOfWeek)).map((item, index) => ({
           text: item,
           key: dayNames[index]
         }));
-        this._$repeatOnWeek = (0, _renderer.default)('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(itemElement);
-        this._weekEditor = this._createComponent(this._$repeatOnWeek, _button_group.default, {
+        this.$repeatOnWeek = (0, _renderer.default)('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(itemElement);
+        this.weekEditor = this.createComponent(this.$repeatOnWeek, _button_group.default, {
           items: itemsButtonGroup,
           field: 'byday',
           selectionMode: 'multiple',
@@ -127686,9 +127800,9 @@ class RecurrenceEditor extends _editor.default {
           keyExpr: 'key',
           onSelectionChanged: e => {
             const selectedItemKeys = e.component.option('selectedItemKeys');
-            const selectedKeys = selectedItemKeys !== null && selectedItemKeys !== void 0 && selectedItemKeys.length ? selectedItemKeys : this._getDefaultByDayValue();
-            this._recurrenceRule.makeRule('byday', selectedKeys);
-            this._changeEditorValue();
+            const selectedKeys = selectedItemKeys !== null && selectedItemKeys !== void 0 && selectedItemKeys.length ? selectedItemKeys : this.getDefaultByDayValue();
+            this.recurrenceRule.makeRule('byday', selectedKeys);
+            this.changeEditorValue();
           }
         });
       },
@@ -127698,7 +127812,7 @@ class RecurrenceEditor extends _editor.default {
       }
     };
   }
-  _createByMonthEditor(freq) {
+  createByMonthEditor(freq) {
     const monthsName = _date.default.getMonthNames('wide');
     const months = [...Array(12)].map((_, i) => ({
       value: `${i + 1}`,
@@ -127711,14 +127825,14 @@ class RecurrenceEditor extends _editor.default {
         stylingMode: getStylingModeFunc(),
         field: 'bymonth',
         items: months,
-        value: this._monthOfYearByRules(),
+        value: this.monthOfYearByRules(),
         width: recurrentEditorSelectBoxWidth,
         displayExpr: 'text',
         valueExpr: 'value',
         elementAttr: {
           class: MONTH_OF_YEAR
         },
-        onValueChanged: args => this._valueChangedHandler(args)
+        onValueChanged: args => this.valueChangedHandler(args)
       },
       visible: freq === 'yearly',
       label: {
@@ -127726,7 +127840,7 @@ class RecurrenceEditor extends _editor.default {
       }
     };
   }
-  _createByMonthDayEditor(freq) {
+  createByMonthDayEditor(freq) {
     return {
       dataField: 'bymonthday',
       editorType: 'dxNumberBox',
@@ -127739,11 +127853,11 @@ class RecurrenceEditor extends _editor.default {
         field: 'bymonthday',
         showSpinButtons: true,
         useLargeSpinButtons: false,
-        value: this._dayOfMonthByRules(),
+        value: this.dayOfMonthByRules(),
         elementAttr: {
           class: DAY_OF_MONTH
         },
-        onValueChanged: args => this._valueChangedHandler(args)
+        onValueChanged: args => this.valueChangedHandler(args)
       },
       visible: freq === 'monthly' || freq === 'yearly',
       label: {
@@ -127751,8 +127865,8 @@ class RecurrenceEditor extends _editor.default {
       }
     };
   }
-  _createRepeatEndEditor() {
-    const repeatType = this._recurrenceRule.getRepeatEndRule();
+  createRepeatEndEditor() {
+    const repeatType = this.recurrenceRule.getRepeatEndRule();
     return [{
       colSpan: 2,
       template: _message.default.format('dxScheduler-recurrenceEnd')
@@ -127781,105 +127895,105 @@ class RecurrenceEditor extends _editor.default {
         elementAttr: {
           class: REPEAT_END_TYPE_EDITOR
         },
-        onValueChanged: args => this._repeatEndValueChangedHandler(args)
+        onValueChanged: args => this.repeatEndValueChangedHandler(args)
       }
     }, {
       colSpan: 1,
       itemType: 'group',
-      items: [this._getRepeatUntilEditorOptions(), this._getRepeatCountEditorOptions()]
+      items: [this.getRepeatUntilEditorOptions(), this.getRepeatCountEditorOptions()]
     }];
   }
-  _renderEditors($container) {
-    this._recurrenceForm = this._createComponent($container, _form.default, {
-      items: this._editors,
+  renderEditors($container) {
+    this.recurrenceForm = this.createComponent($container, _form.default, {
+      items: this.editors,
       showValidationSummary: false,
       scrollingEnabled: true,
       showColonAfterLabel: false,
       labelLocation: 'top'
     });
-    this._changeRepeatEndInputsVisibility();
+    this.changeRepeatEndInputsVisibility();
   }
   getRecurrenceForm() {
-    return this._recurrenceForm;
+    return this.recurrenceForm;
   }
   changeValueByVisibility(value) {
     if (value) {
       if (!this.option('value')) {
-        this._handleDefaults();
+        this.handleDefaults();
       }
     } else {
-      this._recurrenceRule.makeRules('');
+      this.recurrenceRule.makeRules('');
       this.option('value', '');
     }
   }
-  _handleDefaults() {
-    this._recurrenceRule.makeRule('freq', frequenciesMessages[defaultRecurrenceTypeIndex].value);
-    this._changeEditorValue();
+  handleDefaults() {
+    this.recurrenceRule.makeRule('freq', frequenciesMessages[defaultRecurrenceTypeIndex].value);
+    this.changeEditorValue();
   }
-  _changeEditorValue() {
-    this.option('value', this._recurrenceRule.getRecurrenceString() ?? '');
+  changeEditorValue() {
+    this.option('value', this.recurrenceRule.getRecurrenceString() ?? '');
   }
-  _daysOfWeekByRules() {
-    let daysByRule = this._recurrenceRule.getDaysFromByDayRule();
+  daysOfWeekByRules() {
+    let daysByRule = this.recurrenceRule.getDaysFromByDayRule();
     if (!daysByRule.length) {
-      daysByRule = this._getDefaultByDayValue();
+      daysByRule = this.getDefaultByDayValue();
     }
     return daysByRule;
   }
-  _getDefaultByDayValue() {
+  getDefaultByDayValue() {
     const startDate = this.option('startDate');
     const startDay = startDate.getDay();
     return [days[startDay]];
   }
-  _dayOfMonthByRules() {
-    let dayByRule = this._recurrenceRule.getRules().bymonthday;
+  dayOfMonthByRules() {
+    let dayByRule = this.recurrenceRule.getRules().bymonthday;
     if (!dayByRule) {
       dayByRule = this.option('startDate').getDate();
     }
     return dayByRule;
   }
-  _monthOfYearByRules() {
-    let monthByRule = this._recurrenceRule.getRules().bymonth;
+  monthOfYearByRules() {
+    let monthByRule = this.recurrenceRule.getRules().bymonth;
     if (!monthByRule) {
       monthByRule = this.option('startDate').getMonth() + 1;
     }
     return String(monthByRule);
   }
-  _repeatEndValueChangedHandler(args) {
+  repeatEndValueChangedHandler(args) {
     const {
       value
     } = args;
-    this._changeRepeatEndInputsVisibility(value);
+    this.changeRepeatEndInputsVisibility(value);
     if (value === 'until') {
-      this._recurrenceRule.makeRule(value, this._getUntilValue());
+      this.recurrenceRule.makeRule(value, this.getUntilValue());
     }
     if (value === 'count') {
-      this._recurrenceRule.makeRule(value, this._recurrenceForm.option('formData.count'));
+      this.recurrenceRule.makeRule(value, this.recurrenceForm.option('formData.count'));
     }
     if (value === 'never') {
-      this._recurrenceRule.makeRule('count', '');
-      this._recurrenceRule.makeRule('until', '');
+      this.recurrenceRule.makeRule('count', '');
+      this.recurrenceRule.makeRule('until', '');
     }
-    this._changeEditorValue();
-    this._updateRepeatInputAriaLabel();
+    this.changeEditorValue();
+    this.updateRepeatInputAriaLabel();
   }
-  _changeRepeatEndInputsVisibility() {
-    let value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this._recurrenceRule.getRepeatEndRule();
+  changeRepeatEndInputsVisibility() {
+    let value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.recurrenceRule.getRepeatEndRule();
     if (value === 'until') {
-      this._recurrenceForm.itemOption('until', 'visible', true);
-      this._recurrenceForm.itemOption('count', 'visible', false);
+      this.recurrenceForm.itemOption('until', 'visible', true);
+      this.recurrenceForm.itemOption('count', 'visible', false);
     }
     if (value === 'count') {
-      this._recurrenceForm.itemOption('until', 'visible', false);
-      this._recurrenceForm.itemOption('count', 'visible', true);
+      this.recurrenceForm.itemOption('until', 'visible', false);
+      this.recurrenceForm.itemOption('count', 'visible', true);
     }
     if (value === 'never') {
-      this._recurrenceForm.itemOption('until', 'visible', false);
-      this._recurrenceForm.itemOption('count', 'visible', false);
+      this.recurrenceForm.itemOption('until', 'visible', false);
+      this.recurrenceForm.itemOption('count', 'visible', false);
     }
   }
-  _getRepeatCountEditorOptions() {
-    const count = this._recurrenceRule.getRules().count || 1;
+  getRepeatCountEditorOptions() {
+    const count = this.recurrenceRule.getRules().count || 1;
     return {
       dataField: 'count',
       cssClass: REPEAT_COUNT_EDITOR,
@@ -127896,38 +128010,38 @@ class RecurrenceEditor extends _editor.default {
         showSpinButtons: true,
         useLargeSpinButtons: false,
         value: count,
-        onValueChanged: this._repeatCountValueChangeHandler.bind(this),
+        onValueChanged: this.repeatCountValueChangeHandler.bind(this),
         inputAttr: {
           'aria-label': _message.default.format('dxScheduler-recurrenceOccurrenceLabel')
         }
       }
     };
   }
-  _updateRepeatInputAriaLabel() {
+  updateRepeatInputAriaLabel() {
     const radioButtons = this.getEditorByField('repeatEnd').itemElements();
     const untilLabel = _message.default.format('dxScheduler-recurrenceOn');
-    const untilValue = this._recurrenceForm.getEditor('until').option('value');
+    const untilValue = this.recurrenceForm.getEditor('until').option('value');
     const untilValueFormat = `${_date.default.format(untilValue, 'd')} ${_date.default.format(untilValue, 'monthAndYear')}`;
-    const isUntilVisible = this._recurrenceForm.itemOption('until').visible;
+    const isUntilVisible = this.recurrenceForm.itemOption('until').visible;
     const countLabel = _message.default.format('dxScheduler-recurrenceAfter');
     const countPostfix = _message.default.format('dxScheduler-recurrenceRepeatCount');
-    const countValue = this._recurrenceForm.getEditor('count').option('value');
-    const isCountVisible = this._recurrenceForm.itemOption('count').visible;
+    const countValue = this.recurrenceForm.getEditor('count').option('value');
+    const isCountVisible = this.recurrenceForm.itemOption('count').visible;
     radioButtons[1].setAttribute('aria-label', isUntilVisible ? `${untilLabel} ${untilValueFormat}` : untilLabel);
     radioButtons[2].setAttribute('aria-label', isCountVisible ? `${countLabel} ${countValue} ${countPostfix}` : countLabel);
   }
-  _repeatCountValueChangeHandler(args) {
-    if (this._recurrenceRule.getRepeatEndRule() === 'count') {
+  repeatCountValueChangeHandler(args) {
+    if (this.recurrenceRule.getRepeatEndRule() === 'count') {
       const {
         value
       } = args;
-      this._recurrenceRule.makeRule('count', value);
-      this._changeEditorValue();
-      this._updateRepeatInputAriaLabel();
+      this.recurrenceRule.makeRule('count', value);
+      this.changeEditorValue();
+      this.updateRepeatInputAriaLabel();
     }
   }
-  _getRepeatUntilEditorOptions() {
-    const until = this._getUntilValue();
+  getRepeatUntilEditorOptions() {
+    const until = this.getUntilValue();
     return {
       dataField: 'until',
       label: {
@@ -127941,9 +128055,9 @@ class RecurrenceEditor extends _editor.default {
         value: until,
         type: 'date',
         width: repeatInputWidth,
-        onValueChanged: this._repeatUntilValueChangeHandler.bind(this),
+        onValueChanged: this.repeatUntilValueChangeHandler.bind(this),
         calendarOptions: {
-          firstDayOfWeek: this._getFirstDayOfWeek()
+          firstDayOfWeek: this.getFirstDayOfWeek()
         },
         useMaskBehavior: true,
         inputAttr: {
@@ -127952,24 +128066,24 @@ class RecurrenceEditor extends _editor.default {
       }
     };
   }
-  _formatUntilDate(date) {
-    const untilDate = this._recurrenceRule.getRules().until;
+  formatUntilDate(date) {
+    const untilDate = this.recurrenceRule.getRules().until;
     const isSameDate = _date2.default.sameDate(untilDate, date);
     return untilDate && isSameDate ? date : _date2.default.setToDayEnd(date);
   }
-  _repeatUntilValueChangeHandler(args) {
-    if (this._recurrenceRule.getRepeatEndRule() === 'until') {
-      const dateInTimeZone = this._formatUntilDate(new Date(args.value));
+  repeatUntilValueChangeHandler(args) {
+    if (this.recurrenceRule.getRepeatEndRule() === 'until') {
+      const dateInTimeZone = this.formatUntilDate(new Date(args.value));
       const getStartDateTimeZone = this.option('getStartDateTimeZone');
       const appointmentTimeZone = getStartDateTimeZone();
       const path = appointmentTimeZone ? 'fromAppointment' : 'fromGrid';
       const dateInLocaleTimeZone = this.option('timeZoneCalculator').createDate(dateInTimeZone, path, appointmentTimeZone);
-      this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
-      this._changeEditorValue();
-      this._updateRepeatInputAriaLabel();
+      this.recurrenceRule.makeRule('until', dateInLocaleTimeZone);
+      this.changeEditorValue();
+      this.updateRepeatInputAriaLabel();
     }
   }
-  _valueChangedHandler(args) {
+  valueChangedHandler(args) {
     const {
       value,
       previousValue
@@ -127978,71 +128092,71 @@ class RecurrenceEditor extends _editor.default {
     if (!this.option('visible')) {
       this.option('value', '');
     } else {
-      this._recurrenceRule.makeRule(field, value);
+      this.recurrenceRule.makeRule(field, value);
       if (field === 'freq') {
-        this._makeRepeatOnRule(value);
-        this._changeRepeatOnVisibility(value, previousValue);
+        this.makeRepeatOnRule(value);
+        this.changeRepeatOnVisibility(value, previousValue);
       }
-      this._changeEditorValue();
+      this.changeEditorValue();
     }
   }
-  _makeRepeatOnRule(value) {
+  makeRepeatOnRule(value) {
     if (value === 'daily' || value === 'hourly') {
-      this._recurrenceRule.makeRule('byday', '');
-      this._recurrenceRule.makeRule('bymonth', '');
-      this._recurrenceRule.makeRule('bymonthday', '');
+      this.recurrenceRule.makeRule('byday', '');
+      this.recurrenceRule.makeRule('bymonth', '');
+      this.recurrenceRule.makeRule('bymonthday', '');
     }
     if (value === 'weekly') {
-      this._recurrenceRule.makeRule('byday', this._daysOfWeekByRules());
-      this._recurrenceRule.makeRule('bymonth', '');
-      this._recurrenceRule.makeRule('bymonthday', '');
+      this.recurrenceRule.makeRule('byday', this.daysOfWeekByRules());
+      this.recurrenceRule.makeRule('bymonth', '');
+      this.recurrenceRule.makeRule('bymonthday', '');
     }
     if (value === 'monthly') {
-      this._recurrenceRule.makeRule('bymonthday', this._dayOfMonthByRules());
-      this._recurrenceRule.makeRule('bymonth', '');
-      this._recurrenceRule.makeRule('byday', '');
+      this.recurrenceRule.makeRule('bymonthday', this.dayOfMonthByRules());
+      this.recurrenceRule.makeRule('bymonth', '');
+      this.recurrenceRule.makeRule('byday', '');
     }
     if (value === 'yearly') {
-      this._recurrenceRule.makeRule('bymonthday', this._dayOfMonthByRules());
-      this._recurrenceRule.makeRule('bymonth', this._monthOfYearByRules());
-      this._recurrenceRule.makeRule('byday', '');
+      this.recurrenceRule.makeRule('bymonthday', this.dayOfMonthByRules());
+      this.recurrenceRule.makeRule('bymonth', this.monthOfYearByRules());
+      this.recurrenceRule.makeRule('byday', '');
     }
   }
   _optionChanged(args) {
-    var _this$_recurrenceForm, _this$_weekEditor;
+    var _this$recurrenceForm, _this$weekEditor;
     switch (args.name) {
       case 'readOnly':
-        (_this$_recurrenceForm = this._recurrenceForm) === null || _this$_recurrenceForm === void 0 || _this$_recurrenceForm.option('readOnly', args.value);
-        (_this$_weekEditor = this._weekEditor) === null || _this$_weekEditor === void 0 || _this$_weekEditor.option('readOnly', args.value);
+        (_this$recurrenceForm = this.recurrenceForm) === null || _this$recurrenceForm === void 0 || _this$recurrenceForm.option('readOnly', args.value);
+        (_this$weekEditor = this.weekEditor) === null || _this$weekEditor === void 0 || _this$weekEditor.option('readOnly', args.value);
         // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'value':
-        this._recurrenceRule.makeRules(args.value);
-        this._changeRepeatIntervalLabel();
-        this._changeRepeatEndInputsVisibility();
-        this._changeEditorsValue(this._recurrenceRule.getRules());
+        this.recurrenceRule.makeRules(args.value);
+        this.changeRepeatIntervalLabel();
+        this.changeRepeatEndInputsVisibility();
+        this.changeEditorsValue(this.recurrenceRule.getRules());
         // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'startDate':
-        this._makeRepeatOnRule(this._recurrenceRule.getRules().freq);
-        if ((0, _type.isDefined)(this._recurrenceRule.getRecurrenceString())) {
-          this._changeEditorValue();
+        this.makeRepeatOnRule(this.recurrenceRule.getRules().freq);
+        if ((0, _type.isDefined)(this.recurrenceRule.getRecurrenceString())) {
+          this.changeEditorValue();
         }
         break;
       case 'firstDayOfWeek':
-        if (this._weekEditor) {
+        if (this.weekEditor) {
           const localDaysNames = _date.default.getDayNames('abbreviated');
           const dayNames = days.slice(args.value).concat(days.slice(0, args.value));
           const itemsButtonGroup = localDaysNames.slice(args.value).concat(localDaysNames.slice(0, args.value)).map((item, index) => ({
             text: item,
             key: dayNames[index]
           }));
-          this._weekEditor.option('items', itemsButtonGroup);
+          this.weekEditor.option('items', itemsButtonGroup);
         }
-        if (this._recurrenceForm.itemOption('until').visible) {
-          this._recurrenceForm.getEditor('until').option('calendarOptions.firstDayOfWeek', this._getFirstDayOfWeek());
+        if (this.recurrenceForm.itemOption('until').visible) {
+          this.recurrenceForm.getEditor('until').option('calendarOptions.firstDayOfWeek', this.getFirstDayOfWeek());
         }
         break;
       default:
@@ -128050,79 +128164,79 @@ class RecurrenceEditor extends _editor.default {
         super._optionChanged(args);
     }
   }
-  _changeRepeatOnVisibility(freq, previousFreq) {
+  changeRepeatOnVisibility(freq, previousFreq) {
     if (freq !== previousFreq) {
-      this._recurrenceForm.itemOption('byday', 'visible', false);
-      this._recurrenceForm.itemOption('bymonthday', 'visible', false);
-      this._recurrenceForm.itemOption('bymonth', 'visible', false);
-      this._recurrenceForm.itemOption('repeatOnLabel', 'visible', freq && freq !== 'daily' && freq !== 'hourly');
+      this.recurrenceForm.itemOption('byday', 'visible', false);
+      this.recurrenceForm.itemOption('bymonthday', 'visible', false);
+      this.recurrenceForm.itemOption('bymonth', 'visible', false);
+      this.recurrenceForm.itemOption('repeatOnLabel', 'visible', freq && freq !== 'daily' && freq !== 'hourly');
       if (freq === 'weekly') {
-        this._recurrenceForm.itemOption('byday', 'visible', true);
+        this.recurrenceForm.itemOption('byday', 'visible', true);
       }
       if (freq === 'monthly') {
-        this._recurrenceForm.itemOption('bymonthday', 'visible', true);
+        this.recurrenceForm.itemOption('bymonthday', 'visible', true);
       }
       if (freq === 'yearly') {
-        this._recurrenceForm.itemOption('bymonthday', 'visible', true);
-        this._recurrenceForm.itemOption('bymonth', 'visible', true);
+        this.recurrenceForm.itemOption('bymonthday', 'visible', true);
+        this.recurrenceForm.itemOption('bymonth', 'visible', true);
       }
     }
   }
-  _changeRepeatIntervalLabel() {
+  changeRepeatIntervalLabel() {
     const {
       freq
-    } = this._recurrenceRule.getRules();
-    freq && this._recurrenceForm.itemOption('intervalLabel', 'template', _message.default.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`));
+    } = this.recurrenceRule.getRules();
+    freq && this.recurrenceForm.itemOption('intervalLabel', 'template', _message.default.format(`dxScheduler-recurrenceRepeat${freq.charAt(0).toUpperCase()}${freq.substr(1).toLowerCase()}`));
   }
-  _changeEditorsValue(rules) {
-    this._recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
-    this._changeDayOfWeekValue();
-    this._changeDayOfMonthValue();
-    this._changeMonthOfYearValue();
-    this._changeIntervalValue(rules.interval);
-    this._changeRepeatCountValue();
-    this._changeRepeatEndValue();
-    this._changeRepeatUntilValue();
+  changeEditorsValue(rules) {
+    this.recurrenceForm.getEditor('freq').option('value', (rules.freq || frequenciesMessages[defaultRecurrenceTypeIndex].value).toLowerCase());
+    this.changeDayOfWeekValue();
+    this.changeDayOfMonthValue();
+    this.changeMonthOfYearValue();
+    this.changeIntervalValue(rules.interval);
+    this.changeRepeatCountValue();
+    this.changeRepeatEndValue();
+    this.changeRepeatUntilValue();
   }
-  _changeIntervalValue(value) {
-    this._recurrenceForm.getEditor('interval').option('value', value || 1);
+  changeIntervalValue(value) {
+    this.recurrenceForm.getEditor('interval').option('value', value || 1);
   }
-  _changeRepeatEndValue() {
-    const repeatType = this._recurrenceRule.getRepeatEndRule();
-    this._recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
+  changeRepeatEndValue() {
+    const repeatType = this.recurrenceRule.getRepeatEndRule();
+    this.recurrenceForm.getEditor('repeatEnd').option('value', repeatType);
   }
-  _changeDayOfWeekValue() {
-    const isEditorVisible = this._recurrenceForm.itemOption('byday').visible;
+  changeDayOfWeekValue() {
+    const isEditorVisible = this.recurrenceForm.itemOption('byday').visible;
     if (isEditorVisible) {
-      const days = this._daysOfWeekByRules();
+      const days = this.daysOfWeekByRules();
       this.getEditorByField('byday').option('selectedItemKeys', days);
     }
   }
-  _changeDayOfMonthValue() {
-    const isEditorVisible = this._recurrenceForm.itemOption('bymonthday').visible;
+  changeDayOfMonthValue() {
+    const isEditorVisible = this.recurrenceForm.itemOption('bymonthday').visible;
     if (isEditorVisible) {
-      const day = this._dayOfMonthByRules();
-      this._recurrenceForm.getEditor('bymonthday').option('value', day);
+      const day = this.dayOfMonthByRules();
+      this.recurrenceForm.getEditor('bymonthday').option('value', day);
     }
   }
-  _changeMonthOfYearValue() {
-    const isEditorVisible = this._recurrenceForm.itemOption('bymonth').visible;
+  changeMonthOfYearValue() {
+    const isEditorVisible = this.recurrenceForm.itemOption('bymonth').visible;
     if (isEditorVisible) {
-      const month = this._monthOfYearByRules();
-      this._recurrenceForm.getEditor('bymonth').option('value', month);
+      const month = this.monthOfYearByRules();
+      this.recurrenceForm.getEditor('bymonth').option('value', month);
     }
   }
-  _changeRepeatCountValue() {
-    const count = this._recurrenceRule.getRules().count || 1;
-    this._recurrenceForm.getEditor('count').option('value', count);
+  changeRepeatCountValue() {
+    const count = this.recurrenceRule.getRules().count || 1;
+    this.recurrenceForm.getEditor('count').option('value', count);
   }
-  _changeRepeatUntilValue() {
-    this._recurrenceForm.getEditor('until').option('value', this._getUntilValue());
+  changeRepeatUntilValue() {
+    this.recurrenceForm.getEditor('until').option('value', this.getUntilValue());
   }
-  _getUntilValue() {
-    const untilDate = this._recurrenceRule.getRules().until;
+  getUntilValue() {
+    const untilDate = this.recurrenceRule.getRules().until;
     if (!untilDate) {
-      return this._formatUntilDate(new Date());
+      return this.formatUntilDate(new Date());
     }
     const getStartDateTimeZone = this.option('getStartDateTimeZone');
     const appointmentTimeZone = getStartDateTimeZone();
@@ -128274,7 +128388,7 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidget {
   constructor() {
     super(...arguments);
-    this._updatingAppointments = new Set();
+    this.updatingAppointments = new Set();
   }
   get timeZoneCalculator() {
     if (!this._timeZoneCalculator) {
@@ -128282,10 +128396,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     }
     return this._timeZoneCalculator;
   }
-  _postponeDataSourceLoading(promise) {
-    this.postponedOperations.add('_reloadDataSource', this._reloadDataSource.bind(this), promise);
+  postponeDataSourceLoading(promise) {
+    this.postponedOperations.add('_reloadDataSource', this.reloadDataSource.bind(this), promise);
   }
-  _postponeResourceLoading() {
+  postponeResourceLoading() {
     let forceReload = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this.getViewOption('groups');
@@ -128296,7 +128410,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     whenLoaded.done(() => {
       resolveCallbacks.resolve();
     });
-    this._postponeDataSourceLoading(whenLoaded);
+    this.postponeDataSourceLoading(whenLoaded);
     return resolveCallbacks.promise();
   }
   _optionChanged(args) {
@@ -128308,64 +128422,64 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     } = args;
     switch (args.name) {
       case 'customizeDateNavigatorText':
-        this._updateOption('header', name, value);
+        this.updateOption('header', name, value);
         break;
       case 'firstDayOfWeek':
-        this._updateOption('workSpace', name, value);
-        this._updateOption('header', name, value);
-        this._cleanPopup();
+        this.updateOption('workSpace', name, value);
+        this.updateOption('header', name, value);
+        this.cleanPopup();
         break;
       case 'currentDate':
         {
           const dateValue = this.getViewOption(name);
           this.option('selectedCellData', []);
-          this._updateOption('workSpace', name, dateValue);
-          this._updateOption('header', name, dateValue);
-          this._updateOption('header', 'startViewDate', this.getStartViewDate());
+          this.updateOption('workSpace', name, dateValue);
+          this.updateOption('header', name, dateValue);
+          this.updateOption('header', 'startViewDate', this.getStartViewDate());
           this._appointments.option('items', []);
-          this._setRemoteFilterIfNeeded();
-          this._postponeDataSourceLoading();
+          this.setRemoteFilterIfNeeded();
+          this.postponeDataSourceLoading();
           break;
         }
       case 'dataSource':
         // @ts-expect-error
         this._initDataSource();
-        this._postponeResourceLoading().done(() => {
+        this.postponeResourceLoading().done(() => {
           this.appointmentDataSource.setDataSource(this._dataSource);
-          this._setRemoteFilterIfNeeded();
-          this._updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
+          this.setRemoteFilterIfNeeded();
+          this.updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
         });
         break;
       case 'min':
       case 'max':
         {
           const value = this.getViewOption(name);
-          this._updateOption('header', name, value);
-          this._updateOption('workSpace', name, value);
+          this.updateOption('header', name, value);
+          this.updateOption('workSpace', name, value);
           break;
         }
       case 'views':
         if (this.currentView) {
           this.repaint();
         } else {
-          this._updateOption('header', 'views', this.views);
+          this.updateOption('header', 'views', this.views);
         }
         break;
       case 'useDropDownViewSwitcher':
-        this._updateOption('header', name, value);
+        this.updateOption('header', name, value);
         break;
       case 'currentView':
         this._appointments.option({
           items: [],
-          allowDrag: this._allowDragging(),
-          allowResize: this._allowResizing(),
-          itemTemplate: this._getAppointmentTemplate('appointmentTemplate')
+          allowDrag: this.allowDragging(),
+          allowResize: this.allowResizing(),
+          itemTemplate: this.getAppointmentTemplate('appointmentTemplate')
         });
-        this._postponeResourceLoading().done(() => {
-          var _this$_header;
-          this._refreshWorkSpace();
-          (_this$_header = this._header) === null || _this$_header === void 0 || _this$_header.option(this._headerConfig());
-          this._setRemoteFilterIfNeeded();
+        this.postponeResourceLoading().done(() => {
+          var _this$header;
+          this.refreshWorkSpace();
+          (_this$header = this.header) === null || _this$header === void 0 || _this$header.option(this.headerConfig());
+          this.setRemoteFilterIfNeeded();
           this._appointments.option('allowAllDayResize', value !== 'day');
         });
         // NOTE:
@@ -128384,39 +128498,39 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         this.repaint();
         break;
       case 'groups':
-        this._postponeResourceLoading().done(() => {
-          this._refreshWorkSpace();
-          this._setRemoteFilterIfNeeded();
+        this.postponeResourceLoading().done(() => {
+          this.refreshWorkSpace();
+          this.setRemoteFilterIfNeeded();
         });
         break;
       case 'resources':
         (_this$resourceManager = this.resourceManager) === null || _this$resourceManager === void 0 || _this$resourceManager.dispose();
         this.resourceManager = new _resource_manager.ResourceManager(this.option('resources'));
         this.updateAppointmentDataSource();
-        this._postponeResourceLoading().done(() => {
+        this.postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
-          this._refreshWorkSpace();
-          this._setRemoteFilterIfNeeded();
-          this._createAppointmentPopupForm();
+          this.refreshWorkSpace();
+          this.setRemoteFilterIfNeeded();
+          this.createAppointmentPopupForm();
         });
         break;
       case 'startDayHour':
       case 'endDayHour':
         this.updateAppointmentDataSource();
         this._appointments.option('items', []);
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         this._appointments.repaint();
-        this._setRemoteFilterIfNeeded();
-        this._postponeDataSourceLoading();
+        this.setRemoteFilterIfNeeded();
+        this.postponeDataSourceLoading();
         break;
       // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
         this.updateAppointmentDataSource();
         this._appointments.option('items', []);
-        this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
+        this.updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
         this._appointments.repaint();
-        this._setRemoteFilterIfNeeded();
-        this._postponeDataSourceLoading();
+        this.setRemoteFilterIfNeeded();
+        this.postponeDataSourceLoading();
         break;
       case StoreEventNames.ADDING:
       case StoreEventNames.ADDED:
@@ -128426,10 +128540,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       case StoreEventNames.DELETED:
       case 'onAppointmentFormOpening':
       case 'onAppointmentTooltipShowing':
-        this._actions[name] = this._createActionByOption(name);
+        this.actions[name] = this._createActionByOption(name);
         break;
       case 'onAppointmentRendered':
-        this._appointments.option('onItemRendered', this._getAppointmentRenderedAction());
+        this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
         break;
       case 'onAppointmentClick':
         this._appointments.option('onItemClick', this._createActionByOption(name));
@@ -128439,50 +128553,56 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         break;
       case 'onAppointmentContextMenu':
         this._appointments.option('onItemContextMenu', this._createActionByOption(name));
-        this._appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
+        this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
         break;
       case 'noDataText':
       case 'allowMultipleCellSelection':
       case 'selectedCellData':
       case 'accessKey':
       case 'onCellClick':
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         break;
       case 'onCellContextMenu':
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         break;
       case 'crossScrollingEnabled':
-        this._postponeResourceLoading().done(() => {
+        this.postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
-          this._refreshWorkSpace();
-          if (this._readyToRenderAppointments) {
+          this.refreshWorkSpace();
+          if (this.readyToRenderAppointments) {
             this._appointments.option('items', this._layoutManager.generateViewModel());
           }
         });
         break;
       case 'cellDuration':
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         this._appointments.option('items', []);
-        if (this._readyToRenderAppointments) {
-          this._updateOption('workSpace', 'hoursInterval', value / 60);
+        if (this.readyToRenderAppointments) {
+          this.updateOption('workSpace', 'hoursInterval', value / 60);
+          this._appointments.option('items', this._layoutManager.generateViewModel());
+        }
+        break;
+      case 'snapToCellsMode':
+        this._appointments.option('items', []);
+        if (this.readyToRenderAppointments) {
           this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'tabIndex':
       case 'focusStateEnabled':
-        this._updateOption('header', name, value);
-        this._updateOption('workSpace', name, value);
+        this.updateOption('header', name, value);
+        this.updateOption('workSpace', name, value);
         this._appointments.option(name, value);
         // @ts-expect-error
         super._optionChanged(args);
         break;
       case 'width':
         // TODO: replace with css
-        this._updateOption('header', name, value);
+        this.updateOption('header', name, value);
         if (this.option('crossScrollingEnabled')) {
-          this._updateOption('workSpace', 'width', value);
+          this.updateOption('workSpace', 'width', value);
         }
-        this._updateOption('workSpace', 'schedulerWidth', value);
+        this.updateOption('workSpace', 'schedulerWidth', value);
         // @ts-expect-error
         super._optionChanged(args);
         this._dimensionChanged(null, true);
@@ -128491,15 +128611,17 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         // @ts-expect-error
         super._optionChanged(args);
         this._dimensionChanged(null, true);
-        this._updateOption('workSpace', 'schedulerHeight', value);
+        this.updateOption('workSpace', 'schedulerHeight', value);
         break;
       case 'editing':
         {
-          this._initEditing();
-          const editing = this._editing;
-          this._bringEditingModeToAppointments(editing);
+          this.initEditing();
+          const {
+            editing
+          } = this;
+          this.bringEditingModeToAppointments(editing);
           this.hideAppointmentTooltip();
-          this._cleanPopup();
+          this.cleanPopup();
           break;
         }
       case 'showAllDayPanel':
@@ -128510,12 +128632,12 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       case 'indicatorUpdateInterval':
       case 'shadeUntilCurrentTime':
       case 'groupByDate':
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         this.repaint();
         break;
       case 'indicatorTime':
-        this._updateOption('workSpace', name, value);
-        this._updateOption('header', name, value);
+        this.updateOption('workSpace', name, value);
+        this.updateOption('header', name, value);
         this.repaint();
         break;
       case 'appointmentDragging':
@@ -128547,67 +128669,67 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       case 'recurrenceExceptionExpr':
       case 'disabledExpr':
       case 'visibleExpr':
-        this._updateExpression(name, value);
-        this._initAppointmentTemplate();
+        this.updateExpression(name, value);
+        this.initAppointmentTemplate();
         this.repaint();
         break;
       case 'adaptivityEnabled':
-        this._toggleAdaptiveClass();
+        this.toggleAdaptiveClass();
         this.repaint();
         break;
       case 'scrolling':
-        this.option('crossScrollingEnabled', this._isHorizontalVirtualScrolling() || this.option('crossScrollingEnabled'));
-        this._updateOption('workSpace', args.fullName, value);
+        this.option('crossScrollingEnabled', this.isHorizontalVirtualScrolling() || this.option('crossScrollingEnabled'));
+        this.updateOption('workSpace', args.fullName, value);
         break;
       case 'allDayPanelMode':
         this.updateAppointmentDataSource();
-        this._updateOption('workSpace', args.fullName, value);
+        this.updateOption('workSpace', args.fullName, value);
         break;
       case 'renovateRender':
-        this._updateOption('workSpace', name, value);
+        this.updateOption('workSpace', name, value);
         break;
       case '_draggingMode':
-        this._updateOption('workSpace', 'draggingMode', value);
+        this.updateOption('workSpace', 'draggingMode', value);
         break;
       case 'toolbar':
-        this._header ? this._header.onToolbarOptionChanged(args.fullName, value) : this.repaint();
+        this.header ? this.header.onToolbarOptionChanged(args.fullName, value) : this.repaint();
         break;
       default:
         // @ts-expect-error
         super._optionChanged(args);
     }
   }
-  _bringEditingModeToAppointments(editing) {
+  bringEditingModeToAppointments(editing) {
     const editingConfig = {
       allowDelete: editing.allowUpdating && editing.allowDeleting
     };
-    if (!this._isAgenda()) {
+    if (!this.isAgenda()) {
       editingConfig.allowDrag = editing.allowDragging;
       editingConfig.allowResize = editing.allowResizing;
-      editingConfig.allowAllDayResize = editing.allowResizing && this._supportAllDayResizing();
+      editingConfig.allowAllDayResize = editing.allowResizing && this.supportAllDayResizing();
     }
     this._appointments.option(editingConfig);
     this.repaint();
   }
-  _isAgenda() {
+  isAgenda() {
     return this.currentView.type === 'agenda';
   }
-  _allowDragging() {
-    return this._editing.allowDragging && !this._isAgenda();
+  allowDragging() {
+    return this.editing.allowDragging && !this.isAgenda();
   }
-  _allowResizing() {
-    return this._editing.allowResizing && !this._isAgenda();
+  allowResizing() {
+    return this.editing.allowResizing && !this.isAgenda();
   }
-  _allowAllDayResizing() {
-    return this._editing.allowResizing && this._supportAllDayResizing();
+  allowAllDayResizing() {
+    return this.editing.allowResizing && this.supportAllDayResizing();
   }
-  _supportAllDayResizing() {
+  supportAllDayResizing() {
     return this.currentView.type !== 'day' || this.currentView.intervalCount > 1;
   }
-  _isAllDayExpanded() {
+  isAllDayExpanded() {
     return this.option('showAllDayPanel') && this._layoutManager.hasAllDayAppointments();
   }
-  _setRemoteFilterIfNeeded() {
+  setRemoteFilterIfNeeded() {
     const dataSource = this._dataSource;
     const remoteFiltering = this.option('remoteFiltering');
     if (!this._workSpace || !remoteFiltering || !dataSource) {
@@ -128628,7 +128750,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     });
     dataSource.filter(filter);
   }
-  _reloadDataSource() {
+  reloadDataSource() {
     // @ts-expect-error
     const result = new _deferred.Deferred();
     if (this._dataSource) {
@@ -128657,9 +128779,9 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       contentReadyBase();
       result === null || result === void 0 || result.resolve();
     };
-    if (this._workSpaceRecalculation) {
-      var _this$_workSpaceRecal;
-      (_this$_workSpaceRecal = this._workSpaceRecalculation) === null || _this$_workSpaceRecal === void 0 || _this$_workSpaceRecal.done(() => {
+    if (this.workSpaceRecalculation) {
+      var _this$workSpaceRecalc;
+      (_this$workSpaceRecalc = this.workSpaceRecalculation) === null || _this$workSpaceRecalc === void 0 || _this$workSpaceRecalc.done(() => {
         fireContentReady();
       });
     } else {
@@ -128674,11 +128796,11 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     if (!this._isVisible()) {
       return;
     }
-    this._toggleSmallClass();
+    this.toggleSmallClass();
     const workspace = this.getWorkSpace();
-    if (!this._isAgenda() && this._layoutManager && workspace && !(0, _is_agenda_workpace_component.isAgendaWorkspaceComponent)(workspace)) {
+    if (!this.isAgenda() && this._layoutManager && workspace && !(0, _is_agenda_workpace_component.isAgendaWorkspaceComponent)(workspace)) {
       if (isForce || !isFixedHeight || !isFixedWidth) {
-        workspace.option('allDayExpanded', this._isAllDayExpanded());
+        workspace.option('allDayExpanded', this.isAllDayExpanded());
         workspace._dimensionChanged();
         const appointments = this._layoutManager.generateViewModel();
         this._appointments.option('items', appointments);
@@ -128686,21 +128808,21 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     }
     this.hideAppointmentTooltip();
     // TODO popup
-    this._appointmentPopup.triggerResize();
-    this._appointmentPopup.updatePopupFullScreenMode();
+    this.appointmentPopup.triggerResize();
+    this.appointmentPopup.updatePopupFullScreenMode();
   }
   _clean() {
-    this._cleanPopup();
+    this.cleanPopup();
     // @ts-expect-error
     super._clean();
   }
-  _toggleSmallClass() {
+  toggleSmallClass() {
     const {
       width
     } = (0, _position.getBoundingRect)(this.$element().get(0));
     this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
   }
-  _toggleAdaptiveClass() {
+  toggleAdaptiveClass() {
     this.$element().toggleClass(WIDGET_ADAPTIVE_CLASS, this.option('adaptivityEnabled'));
   }
   _visibilityChanged(visible) {
@@ -128711,14 +128833,14 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       paginate: false
     };
   }
-  _initAllDayPanel() {
+  initAllDayPanel() {
     if (this.option('allDayPanelMode') === 'hidden') {
       this.option('showAllDayPanel', false);
     }
   }
   _init() {
-    this._timeZonesPromise = _m_utils_time_zone.default.cacheTimeZones();
-    this._initExpressions({
+    this.timeZonesPromise = _m_utils_time_zone.default.cacheTimeZones();
+    this.initExpressions({
       startDateExpr: this.option('startDateExpr'),
       endDateExpr: this.option('endDateExpr'),
       startDateTimeZoneExpr: this.option('startDateTimeZoneExpr'),
@@ -128732,20 +128854,20 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       visibleExpr: this.option('visibleExpr')
     });
     super._init();
-    this._initAllDayPanel();
+    this.initAllDayPanel();
     // @ts-expect-error
     this._initDataSource();
-    this._customizeDataSourceLoadOptions();
+    this.customizeDataSourceLoadOptions();
     this.$element().addClass(WIDGET_CLASS);
-    this._initEditing();
+    this.initEditing();
     this.updateAppointmentDataSource();
-    this._initActions();
+    this.initActions();
     this._compactAppointmentsHelper = new _m_compact_appointments_helper.CompactAppointmentsHelper(this);
-    this._asyncTemplatesTimers = [];
-    this._dataSourceLoadedCallback = (0, _callbacks.default)();
-    this._subscribes = _m_subscribes.default;
+    this.asyncTemplatesTimers = [];
+    this.dataSourceLoadedCallback = (0, _callbacks.default)();
+    this.subscribes = _m_subscribes.default;
     this.resourceManager = new _resource_manager.ResourceManager(this.option('resources'));
-    this._notifyScheduler = new _m_widget_notify_scheduler.default({
+    this.notifyScheduler = new _m_widget_notify_scheduler.default({
       scheduler: this
     });
   }
@@ -128760,7 +128882,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       this.createAppointmentDataSource();
     }
   }
-  _customizeDataSourceLoadOptions() {
+  customizeDataSourceLoadOptions() {
     var _this$_dataSource;
     (_this$_dataSource = this._dataSource) === null || _this$_dataSource === void 0 || _this$_dataSource.on('customizeStoreLoadOptions', _ref => {
       let {
@@ -128771,7 +128893,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     });
   }
   _initTemplates() {
-    this._initAppointmentTemplate();
+    this.initAppointmentTemplate();
     this._templateManager.addDefaultTemplates({
       appointmentTooltip: new _empty_template.EmptyTemplate(),
       dropDownAppointment: new _empty_template.EmptyTemplate()
@@ -128779,7 +128901,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     // @ts-expect-error
     super._initTemplates();
   }
-  _initAppointmentTemplate() {
+  initAppointmentTemplate() {
     const {
       expr
     } = this._dataAccessors;
@@ -128808,11 +128930,11 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this._renderContentImpl();
   }
   _dataSourceChangedHandler(result) {
-    if (this._readyToRenderAppointments) {
-      this._workSpaceRecalculation.done(() => {
+    if (this.readyToRenderAppointments) {
+      this.workSpaceRecalculation.done(() => {
         this._layoutManager.prepareAppointments(result);
-        this._renderAppointments();
-        this._updateA11yStatus();
+        this.renderAppointments();
+        this.updateA11yStatus();
       });
     }
   }
@@ -128824,27 +128946,27 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     const scrolling = this.getViewOption('scrolling');
     return (scrolling === null || scrolling === void 0 ? void 0 : scrolling.mode) === 'virtual';
   }
-  _renderAppointments() {
+  renderAppointments() {
     const workspace = this.getWorkSpace();
     this._layoutManager.filterAppointments();
-    workspace.option('allDayExpanded', this._isAllDayExpanded());
+    workspace.option('allDayExpanded', this.isAllDayExpanded());
     // @ts-expect-error
     const viewModel = this._isVisible() ? this._layoutManager.generateViewModel() : [];
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
-    if (this._isAgenda()) {
+    if (this.isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
   }
-  _initExpressions(fields) {
+  initExpressions(fields) {
     this._dataAccessors = new _appointment_data_accessor.AppointmentDataAccessor(fields, Boolean((0, _config.default)().forceIsoDateParsing), this.option('dateSerializationFormat'));
   }
-  _updateExpression(name, value) {
+  updateExpression(name, value) {
     this._dataAccessors.updateExpression(name, value);
   }
-  _initEditing() {
+  initEditing() {
     const editing = this.option('editing');
-    this._editing = {
+    this.editing = {
       allowAdding: Boolean(editing),
       allowUpdating: Boolean(editing),
       allowDeleting: Boolean(editing),
@@ -128853,32 +128975,32 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       legacyForm: false
     };
     if ((0, _type.isObject)(editing)) {
-      this._editing = (0, _extend.extend)(this._editing, editing);
+      this.editing = (0, _extend.extend)(this.editing, editing);
     }
-    this._editing.allowDragging = this._editing.allowDragging && this._editing.allowUpdating;
-    this._editing.allowResizing = this._editing.allowResizing && this._editing.allowUpdating;
-    const isReadOnly = Object.values(Object.assign({}, this._editing, {
+    this.editing.allowDragging = this.editing.allowDragging && this.editing.allowUpdating;
+    this.editing.allowResizing = this.editing.allowResizing && this.editing.allowUpdating;
+    const isReadOnly = Object.values(Object.assign({}, this.editing, {
       form: undefined,
       popup: undefined
     })).every(value => !value);
     this.$element().toggleClass(WIDGET_READONLY_CLASS, isReadOnly);
   }
   _dispose() {
-    var _this$resourceManager2, _this$_appointmentToo, _this$_recurrenceDial;
+    var _this$resourceManager2, _this$appointmentTool, _this$recurrenceDialo;
     (_this$resourceManager2 = this.resourceManager) === null || _this$resourceManager2 === void 0 || _this$resourceManager2.dispose();
-    (_this$_appointmentToo = this._appointmentTooltip) === null || _this$_appointmentToo === void 0 || _this$_appointmentToo.dispose();
-    (_this$_recurrenceDial = this._recurrenceDialog) === null || _this$_recurrenceDial === void 0 || _this$_recurrenceDial.hide(RECURRENCE_EDITING_MODE.CANCEL);
+    (_this$appointmentTool = this.appointmentTooltip) === null || _this$appointmentTool === void 0 || _this$appointmentTool.dispose();
+    (_this$recurrenceDialo = this.recurrenceDialog) === null || _this$recurrenceDialo === void 0 || _this$recurrenceDialo.hide(RECURRENCE_EDITING_MODE.CANCEL);
     this.hideAppointmentPopup();
     this.hideAppointmentTooltip();
-    this._asyncTemplatesTimers.forEach(clearTimeout);
-    this._asyncTemplatesTimers = [];
+    this.asyncTemplatesTimers.forEach(clearTimeout);
+    this.asyncTemplatesTimers = [];
     // NOTE: Stop all scheduled macro tasks
     _index3.macroTaskArray.dispose();
     // @ts-expect-error
     super._dispose();
   }
-  _initActions() {
-    this._actions = {
+  initActions() {
+    this.actions = {
       onAppointmentAdding: this._createActionByOption(StoreEventNames.ADDING),
       onAppointmentAdded: this._createActionByOption(StoreEventNames.ADDED),
       onAppointmentUpdating: this._createActionByOption(StoreEventNames.UPDATING),
@@ -128889,7 +129011,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       onAppointmentTooltipShowing: this._createActionByOption('onAppointmentTooltipShowing')
     };
   }
-  _getAppointmentRenderedAction() {
+  getAppointmentRenderedAction() {
     return this._createActionByOption('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly']
     });
@@ -128897,7 +129019,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   _renderFocusTarget() {
     return (0, _common.noop)();
   }
-  _updateA11yStatus() {
+  updateA11yStatus() {
     const dateRange = this._workSpace.getDateRange();
     const indicatorTime = this.option('showCurrentTimeIndicator') ? (0, _index2.getToday)(this.option('indicatorTime'), this.timeZoneCalculator) : undefined;
     const label = (0, _a11y_status_text.getA11yStatusText)(this.currentView, dateRange[0], dateRange[1], this._layoutManager.filteredItems.length, indicatorTime);
@@ -128905,61 +129027,61 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this.setAria({
       label
     });
-    this._a11yStatus.text(label);
+    this.a11yStatus.text(label);
   }
-  _renderA11yStatus() {
-    this._a11yStatus = (0, _a11y_status_render.createA11yStatusContainer)();
-    this._a11yStatus.prependTo(this.$element());
+  renderA11yStatus() {
+    this.a11yStatus = (0, _a11y_status_render.createA11yStatusContainer)();
+    this.a11yStatus.prependTo(this.$element());
     // @ts-expect-error
     this.setAria({
       role: 'application'
     });
   }
-  _initMarkupOnResourceLoaded() {
+  initMarkupOnResourceLoaded() {
     if (!this._disposed) {
-      this._initMarkupCore();
-      this._reloadDataSource();
+      this.initMarkupCore();
+      this.reloadDataSource();
     }
   }
   _initMarkup() {
     super._initMarkup();
-    this._renderA11yStatus();
-    this._renderMainContainer();
-    this._renderHeader();
-    this._toggleAdaptiveClass();
+    this.renderA11yStatus();
+    this.renderMainContainer();
+    this.renderHeader();
+    this.toggleAdaptiveClass();
     this._layoutManager = new _appointments_layout_manager.default(this);
     // @ts-expect-error
-    this._appointments = this._createComponent('<div>', _m_appointment_collection.default, this._appointmentsConfig());
-    this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
-    this._appointmentTooltip = new (this.option('adaptivityEnabled') ? _m_mobile_tooltip_strategy.MobileTooltipStrategy : _m_desktop_tooltip_strategy.DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
-    this._createAppointmentPopupForm();
+    this._appointments = this._createComponent('<div>', _m_appointment_collection.default, this.appointmentsConfig());
+    this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
+    this.appointmentTooltip = new (this.option('adaptivityEnabled') ? _m_mobile_tooltip_strategy.MobileTooltipStrategy : _m_desktop_tooltip_strategy.DesktopTooltipStrategy)(this.getAppointmentTooltipOptions());
+    this.createAppointmentPopupForm();
     // @ts-expect-error
-    if (this._isDataSourceLoaded() || this._isDataSourceLoading()) {
-      this._initMarkupCore();
+    if (this.isDataSourceLoaded() || this._isDataSourceLoading()) {
+      this.initMarkupCore();
       this._dataSourceChangedHandler(this._dataSource.items());
       this._fireContentReadyAction();
     } else {
       const groups = this.getViewOption('groups');
       if (groups !== null && groups !== void 0 && groups.length) {
-        this.resourceManager.loadGroupResources(groups, true).then(() => this._initMarkupOnResourceLoaded());
+        this.resourceManager.loadGroupResources(groups, true).then(() => this.initMarkupOnResourceLoaded());
       } else {
-        this._initMarkupOnResourceLoaded();
+        this.initMarkupOnResourceLoaded();
       }
     }
   }
-  _createAppointmentPopupForm() {
-    var _this$_appointmentPop;
-    if (this._appointmentForm) {
-      var _this$_appointmentFor;
-      (_this$_appointmentFor = this._appointmentForm.form) === null || _this$_appointmentFor === void 0 || _this$_appointmentFor.dispose();
+  createAppointmentPopupForm() {
+    var _this$appointmentPopu;
+    if (this.appointmentForm) {
+      var _this$appointmentForm;
+      (_this$appointmentForm = this.appointmentForm.form) === null || _this$appointmentForm === void 0 || _this$appointmentForm.dispose();
     }
-    this._appointmentForm = this.createAppointmentForm();
-    (_this$_appointmentPop = this._appointmentPopup) === null || _this$_appointmentPop === void 0 || _this$_appointmentPop.dispose();
-    this._appointmentPopup = this.createAppointmentPopup(this._appointmentForm);
+    this.appointmentForm = this.createAppointmentForm();
+    (_this$appointmentPopu = this.appointmentPopup) === null || _this$appointmentPopu === void 0 || _this$appointmentPopu.dispose();
+    this.appointmentPopup = this.createAppointmentPopup(this.appointmentForm);
   }
-  _renderMainContainer() {
-    this._mainContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-container');
-    this.$element().append(this._mainContainer);
+  renderMainContainer() {
+    this.mainContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-container');
+    this.$element().append(this.mainContainer);
   }
   createAppointmentForm() {
     const scheduler = {
@@ -128967,14 +129089,14 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       getDataAccessors: () => this._dataAccessors,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
-      getEditingConfig: () => this._editing,
+      getEditingConfig: () => this.editing,
       getResourceManager: () => this.resourceManager,
       getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
       getStartDayHour: () => this.option('startDayHour'),
       getCalculatedEndDate: startDateWithStartHour => this._workSpace.calculateEndDate(startDateWithStartHour),
       getTimeZoneCalculator: () => this.timeZoneCalculator
     };
-    if (this._editing.legacyForm) {
+    if (this.editing.legacyForm) {
       scheduler.createResourceEditorModel = () => (0, _popup_utils.createResourceEditorModel)(this.resourceManager.resourceById);
       return new _m_legacy_form.AppointmentForm(scheduler);
     }
@@ -128987,20 +129109,20 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       createComponent: (element, component, options) => this._createComponent(element, component, options),
       focus: () => this.focus(),
       getResourceManager: () => this.resourceManager,
-      getEditingConfig: () => this._editing,
+      getEditingConfig: () => this.editing,
       getTimeZoneCalculator: () => this.timeZoneCalculator,
       getDataAccessors: () => this._dataAccessors,
-      getAppointmentFormOpening: () => this._actions.onAppointmentFormOpening,
-      processActionResult: (arg, canceled) => this._processActionResult(arg, canceled),
+      getAppointmentFormOpening: () => this.actions.onAppointmentFormOpening,
+      processActionResult: (arg, canceled) => this.processActionResult(arg, canceled),
       addAppointment: appointment => this.addAppointment(appointment),
       updateAppointment: (sourceAppointment, updatedAppointment) => this.updateAppointment(sourceAppointment, updatedAppointment),
       updateScrollPosition: (startDate, appointmentGroupValues, inAllDayRow) => {
         this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
       }
     };
-    return this._editing.legacyForm ? new _m_legacy_popup.AppointmentPopup(scheduler, form) : new _m_popup.AppointmentPopup(scheduler, form);
+    return this.editing.legacyForm ? new _m_legacy_popup.AppointmentPopup(scheduler, form) : new _m_popup.AppointmentPopup(scheduler, form);
   }
-  _getAppointmentTooltipOptions() {
+  getAppointmentTooltipOptions() {
     const that = this;
     return {
       // @ts-expect-error
@@ -129008,7 +129130,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       container: that.$element(),
       getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
       addDefaultTemplates: that._templateManager.addDefaultTemplates.bind(that._templateManager),
-      getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
+      getAppointmentTemplate: that.getAppointmentTemplate.bind(that),
       showAppointmentPopup: that.showAppointmentPopup.bind(that),
       checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
@@ -129034,11 +129156,11 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   checkAndDeleteAppointment(appointment, targetedAppointment) {
     const targetedAdapter = new _appointment_adapter.AppointmentAdapter(targetedAppointment, this._dataAccessors);
     const deletingOptions = this.fireOnAppointmentDeleting(appointment, targetedAdapter);
-    this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
+    this.checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
       this.processDeleteAppointment(appointment, deletingOptions);
     }, true);
   }
-  _getExtraAppointmentTooltipOptions() {
+  getExtraAppointmentTooltipOptions() {
     return {
       rtlEnabled: this.option('rtlEnabled'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -129051,24 +129173,24 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
     return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
   }
-  _initMarkupCore() {
-    this._readyToRenderAppointments = (0, _window.hasWindow)();
-    this._workSpace && this._cleanWorkspace();
-    this._renderWorkSpace();
+  initMarkupCore() {
+    this.readyToRenderAppointments = (0, _window.hasWindow)();
+    this._workSpace && this.cleanWorkspace();
+    this.renderWorkSpace();
     this._appointments.option({
       fixedContainer: this._workSpace.getFixedContainer(),
       allDayContainer: this._workSpace.getAllDayContainer()
     });
-    this._waitAsyncTemplate(() => {
-      var _this$_workSpaceRecal2;
-      return (_this$_workSpaceRecal2 = this._workSpaceRecalculation) === null || _this$_workSpaceRecal2 === void 0 ? void 0 : _this$_workSpaceRecal2.resolve();
+    this.waitAsyncTemplate(() => {
+      var _this$workSpaceRecalc2;
+      return (_this$workSpaceRecalc2 = this.workSpaceRecalculation) === null || _this$workSpaceRecalc2 === void 0 ? void 0 : _this$workSpaceRecalc2.resolve();
     });
     this.createAppointmentDataSource();
-    this._setRemoteFilterIfNeeded();
-    this._validateKeyFieldIfAgendaExist();
-    this._updateA11yStatus();
+    this.setRemoteFilterIfNeeded();
+    this.validateKeyFieldIfAgendaExist();
+    this.updateA11yStatus();
   }
-  _isDataSourceLoaded() {
+  isDataSourceLoaded() {
     var _this$_dataSource2;
     return (_this$_dataSource2 = this._dataSource) === null || _this$_dataSource2 === void 0 ? void 0 : _this$_dataSource2.isLoaded();
   }
@@ -129078,18 +129200,18 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     // @ts-expect-error
     super._render();
   }
-  _renderHeader() {
+  renderHeader() {
     var _toolbarOptions$items;
     const toolbarOptions = this.option('toolbar');
     const isHeaderShown = Boolean(toolbarOptions.visible ?? ((_toolbarOptions$items = toolbarOptions.items) === null || _toolbarOptions$items === void 0 ? void 0 : _toolbarOptions$items.length));
     if (isHeaderShown) {
-      const $header = (0, _renderer.default)('<div>').appendTo(this._mainContainer);
-      const headerOptions = this._headerConfig();
+      const $header = (0, _renderer.default)('<div>').appendTo(this.mainContainer);
+      const headerOptions = this.headerConfig();
       // @ts-expect-error
-      this._header = this._createComponent($header, _m_header.SchedulerHeader, headerOptions);
+      this.header = this._createComponent($header, _m_header.SchedulerHeader, headerOptions);
     }
   }
-  _headerConfig() {
+  headerConfig() {
     return {
       currentView: this.currentView,
       views: this.views,
@@ -129112,22 +129234,24 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       }
     };
   }
-  _appointmentsConfig() {
+  appointmentsConfig() {
     const config = {
       getResourceManager: () => this.resourceManager,
       getAppointmentDataSource: () => this.appointmentDataSource,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
+      scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
-      notifyScheduler: this._notifyScheduler,
-      onItemRendered: this._getAppointmentRenderedAction(),
+      notifyScheduler: this.notifyScheduler,
+      onItemRendered: this.getAppointmentRenderedAction(),
       onItemClick: this._createActionByOption('onAppointmentClick'),
       onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
       onAppointmentDblClick: this._createActionByOption('onAppointmentDblClick'),
       tabIndex: this.option('tabIndex'),
       focusStateEnabled: this.option('focusStateEnabled'),
-      allowDrag: this._allowDragging(),
-      allowDelete: this._editing.allowUpdating && this._editing.allowDeleting,
-      allowResize: this._allowResizing(),
-      allowAllDayResize: this._allowAllDayResizing(),
+      allowDrag: this.allowDragging(),
+      allowDelete: this.editing.allowUpdating && this.editing.allowDeleting,
+      allowResize: this.allowResizing(),
+      allowAllDayResize: this.allowAllDayResizing(),
       rtlEnabled: this.option('rtlEnabled'),
       groups: this.getViewOption('groups'),
       groupByDate: this.getViewOption('groupByDate'),
@@ -129141,67 +129265,67 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         var _this$_workSpace2;
         return (_this$_workSpace2 = this._workSpace) === null || _this$_workSpace2 === void 0 ? void 0 : _this$_workSpace2.viewDataProvider;
       },
-      isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
+      isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => (0, _index2.isDateAndTimeView)(this._workSpace.type),
       onContentReady: () => {
         var _this$_workSpace3;
-        (_this$_workSpace3 = this._workSpace) === null || _this$_workSpace3 === void 0 || _this$_workSpace3.option('allDayExpanded', this._isAllDayExpanded());
+        (_this$_workSpace3 = this._workSpace) === null || _this$_workSpace3 === void 0 || _this$_workSpace3.option('allDayExpanded', this.isAllDayExpanded());
       }
     };
     return config;
   }
-  _renderWorkSpace() {
+  renderWorkSpace() {
     const currentViewOptions = this.currentView;
     if (!currentViewOptions) {
       return;
     }
-    if (this._isAgenda()) {
+    if (this.isAgenda()) {
       this.renderAgendaWorkspace();
     } else {
       this.renderGridWorkspace();
     }
-    this._recalculateWorkspace();
+    this.recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+      this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
   renderGridWorkspace() {
-    if (this._readyToRenderAppointments) {
-      this._toggleSmallClass();
+    if (this.readyToRenderAppointments) {
+      this.toggleSmallClass();
       // TODO(9): Get rid of it as soon as you can. Workspace didn't render
       Promise.resolve().then(() => {
         var _this$_workSpace4;
-        this._toggleSmallClass();
+        this.toggleSmallClass();
         (_this$_workSpace4 = this._workSpace) === null || _this$_workSpace4 === void 0 || _this$_workSpace4.updateHeaderEmptyCellWidth();
       });
     }
-    const $workSpace = (0, _renderer.default)('<div>').appendTo(this._mainContainer);
+    const $workSpace = (0, _renderer.default)('<div>').appendTo(this.mainContainer);
     const currentViewType = this.currentView.type;
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
-    const workSpaceConfig = this._workSpaceConfig(this.currentView);
+    const workSpaceConfig = this.workSpaceConfig(this.currentView);
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
-    this._allowDragging() && this._workSpace.initDragBehavior(this, this._all);
-    this._workSpace._attachTablesEvents();
+    this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
+    this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
   renderAgendaWorkspace() {
-    const $workSpace = (0, _renderer.default)('<div>').appendTo(this._mainContainer);
-    const workSpaceConfig = this._workSpaceConfig(this.currentView);
+    const $workSpace = (0, _renderer.default)('<div>').appendTo(this.mainContainer);
+    const workSpaceConfig = this.workSpaceConfig(this.currentView);
     const workSpaceComponent = VIEWS_CONFIG.agenda.workSpace;
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
-  _recalculateWorkspace() {
+  recalculateWorkspace() {
     // @ts-expect-error
-    this._workSpaceRecalculation = new _deferred.Deferred();
+    this.workSpaceRecalculation = new _deferred.Deferred();
     (0, _visibility_change.triggerResizeEvent)(this._workSpace.$element());
-    this._waitAsyncTemplate(() => {
+    this.waitAsyncTemplate(() => {
       this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
-  _workSpaceConfig(currentViewOptions) {
+  workSpaceConfig(currentViewOptions) {
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling && (!(0, _type.isDefined)(scrolling.orientation) || ['horizontal', 'both'].includes(scrolling.orientation));
@@ -129242,16 +129366,16 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: () => {
-        this._renderAppointments();
+      renderAppointments: () => {
+        this.renderAppointments();
       },
       onShowAllDayPanel: value => this.option('showAllDayPanel', value),
-      getHeaderHeight: () => _m_utils.utils.DOM.getHeaderHeight(this._header),
-      // onScrollEnd: () => this._appointments.updateResizableArea(),
+      getHeaderHeight: () => _m_utils.utils.DOM.getHeaderHeight(this.header),
+      onScrollEnd: () => this._appointments.updateResizableArea(),
       // TODO: SSR does not work correctly with renovated render
-      renovateRender: this._isRenovatedRender(isVirtualScrolling)
+      renovateRender: this.isRenovatedRender(isVirtualScrolling)
     }, currentViewOptions);
-    result.notifyScheduler = this._notifyScheduler;
+    result.notifyScheduler = this.notifyScheduler;
     result.groups = this.resourceManager.groupResources();
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
@@ -129264,21 +129388,21 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
     return result;
   }
-  _isRenovatedRender(isVirtualScrolling) {
+  isRenovatedRender(isVirtualScrolling) {
     return this.option('renovateRender') && (0, _window.hasWindow)() || isVirtualScrolling;
   }
-  _waitAsyncTemplate(callback) {
+  waitAsyncTemplate(callback) {
     if (this._options.silent('templatesRenderAsynchronously')) {
       const timer = setTimeout(() => {
         callback();
         clearTimeout(timer);
       });
-      this._asyncTemplatesTimers.push(timer);
+      this.asyncTemplatesTimers.push(timer);
     } else {
       callback();
     }
   }
-  _getAppointmentTemplate(optionName) {
+  getAppointmentTemplate(optionName) {
     var _this$currentView;
     if ((_this$currentView = this.currentView) !== null && _this$currentView !== void 0 && _this$currentView[optionName]) {
       return this._getTemplate(this.currentView[optionName]);
@@ -129286,23 +129410,28 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     // @ts-expect-error
     return this._getTemplateByOption(optionName);
   }
-  _updateOption(viewName, optionName, value) {
-    var _this;
-    (_this = this[`_${viewName}`]) === null || _this === void 0 || _this.option(optionName, value);
+  updateOption(viewName, optionName, value) {
+    if (viewName === 'header') {
+      var _this$header2;
+      (_this$header2 = this.header) === null || _this$header2 === void 0 || _this$header2.option(optionName, value);
+    } else {
+      var _this$_workSpace5;
+      (_this$_workSpace5 = this._workSpace) === null || _this$_workSpace5 === void 0 || _this$_workSpace5.option(optionName, value);
+    }
   }
-  _refreshWorkSpace() {
-    this._cleanWorkspace();
+  refreshWorkSpace() {
+    this.cleanWorkspace();
     delete this._workSpace;
-    this._renderWorkSpace();
-    if (this._readyToRenderAppointments) {
+    this.renderWorkSpace();
+    if (this.readyToRenderAppointments) {
       this._appointments.option({
         fixedContainer: this._workSpace.getFixedContainer(),
         allDayContainer: this._workSpace.getAllDayContainer()
       });
-      this._waitAsyncTemplate(() => this._workSpaceRecalculation.resolve());
+      this.waitAsyncTemplate(() => this.workSpaceRecalculation.resolve());
     }
   }
-  _cleanWorkspace() {
+  cleanWorkspace() {
     this._appointments.$element().detach();
     this._workSpace._dispose();
     this._workSpace.$element().remove();
@@ -129318,15 +129447,15 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return this._workSpace;
   }
   getHeader() {
-    return this._header;
+    return this.header;
   }
-  _cleanPopup() {
-    var _this$_appointmentPop2;
-    (_this$_appointmentPop2 = this._appointmentPopup) === null || _this$_appointmentPop2 === void 0 || _this$_appointmentPop2.dispose();
+  cleanPopup() {
+    var _this$appointmentPopu2;
+    (_this$appointmentPopu2 = this.appointmentPopup) === null || _this$appointmentPopu2 === void 0 || _this$appointmentPopu2.dispose();
   }
-  _checkRecurringAppointment(rawAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent, recurrenceEditMode) {
+  checkRecurringAppointment(rawAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent, recurrenceEditMode) {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
-    if (!(0, _validate_rule.validateRRule)(recurrenceRule) || !this._editing.allowUpdating) {
+    if (!(0, _validate_rule.validateRRule)(recurrenceRule) || !this.editing.allowUpdating) {
       callback();
       return;
     }
@@ -129336,20 +129465,20 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         callback();
         break;
       case 'occurrence':
-        this._excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+        this.excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
         break;
       default:
         if (dragEvent) {
           // @ts-expect-error
           dragEvent.cancel = new _deferred.Deferred();
         }
-        this._showRecurrenceChangeConfirm(isDeleted).done(editingMode => {
+        this.showRecurrenceChangeConfirm(isDeleted).done(editingMode => {
           editingMode === RECURRENCE_EDITING_MODE.SERIES && callback();
-          editingMode === RECURRENCE_EDITING_MODE.OCCURRENCE && this._excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
+          editingMode === RECURRENCE_EDITING_MODE.OCCURRENCE && this.excludeAppointmentFromSeries(rawAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent);
         }).fail(() => this._appointments.moveAppointmentBack(dragEvent));
     }
   }
-  _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
+  excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
     const appointment = (0, _index2.excludeFromRecurrence)(rawAppointment, exceptionDate, this._dataAccessors);
     const singleRawAppointment = Object.assign({}, newRawAppointment);
     /* eslint-disable @typescript-eslint/no-dynamic-delete */
@@ -129363,7 +129492,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       this.addAppointment(singleRawAppointment);
     }
     if (isPopupEditing) {
-      this._appointmentPopup.show(singleRawAppointment, {
+      this.appointmentPopup.show(singleRawAppointment, {
         isToolbarVisible: true,
         action: _m_legacy_popup.ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
         excludeInfo: {
@@ -129371,31 +129500,31 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
           updatedAppointment: appointment.source
         }
       });
-      this._editAppointmentData = rawAppointment;
+      this.editAppointmentData = rawAppointment;
     } else {
-      this._updateAppointment(rawAppointment, appointment.source, () => {
+      this.updateAppointmentCore(rawAppointment, appointment.source, () => {
         this._appointments.moveAppointmentBack(dragEvent);
       }, dragEvent);
     }
   }
-  _createRecurrenceException(appointment, exceptionDate) {
+  createRecurrenceException(appointment, exceptionDate) {
     const result = [];
     if (appointment.recurrenceException) {
       result.push(appointment.recurrenceException);
     }
-    result.push(this._getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
+    result.push(this.getSerializedDate(exceptionDate, appointment.startDate, appointment.allDay));
     return result.join();
   }
-  _getSerializedDate(date, startDate, isAllDay) {
+  getSerializedDate(date, startDate, isAllDay) {
     isAllDay && date.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
     return _date_serialization.default.serializeDate(date, UTC_FULL_DATE_FORMAT);
   }
-  _showRecurrenceChangeConfirm(isDeleted) {
+  showRecurrenceChangeConfirm(isDeleted) {
     const title = _message.default.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = _message.default.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = _message.default.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
     const occurrenceText = _message.default.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
-    this._recurrenceDialog = (0, _dialog.custom)({
+    this.recurrenceDialog = (0, _dialog.custom)({
       title,
       messageHtml: message,
       showCloseButton: true,
@@ -129421,9 +129550,9 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         }
       }
     });
-    return this._recurrenceDialog.show();
+    return this.recurrenceDialog.show();
   }
-  _getUpdatedData(rawAppointment) {
+  getUpdatedData(rawAppointment) {
     const viewOffset = this.getViewOffsetMs();
     const getConvertedFromGrid = date => {
       if (!date) {
@@ -129484,10 +129613,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return (0, _get_targeted_appointment.getTargetedAppointment)(appointment, settings, this._dataAccessors, this.resourceManager);
   }
   subscribe(subject, action) {
-    this._subscribes[subject] = _m_subscribes.default[subject] = action;
+    this.subscribes[subject] = _m_subscribes.default[subject] = action;
   }
   fire(subject) {
-    const callback = this._subscribes[subject];
+    const callback = this.subscribes[subject];
     if (!(0, _type.isFunction)(callback)) {
       throw _ui.default.Error('E1031', subject);
     }
@@ -129499,7 +129628,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   getTargetCellData() {
     return this._workSpace.getDataByDroppableCell();
   }
-  _updateAppointment(target, rawAppointment, onUpdatePrevented, dragEvent) {
+  updateAppointmentCore(target, rawAppointment, onUpdatePrevented, dragEvent) {
     const updatingOptions = {
       newData: rawAppointment,
       oldData: (0, _extend.extend)({}, target),
@@ -129513,40 +129642,40 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
         throw err;
       }
     }.bind(this);
-    this._actions[StoreEventNames.UPDATING](updatingOptions);
+    this.actions[StoreEventNames.UPDATING](updatingOptions);
     if (dragEvent && !(0, _type.isDeferred)(dragEvent.cancel)) {
       // @ts-expect-error
       dragEvent.cancel = new _deferred.Deferred();
     }
     if ((0, _type.isPromise)(updatingOptions.cancel) && dragEvent) {
-      this._updatingAppointments.add(target);
+      this.updatingAppointments.add(target);
     }
-    return this._processActionResult(updatingOptions, function (canceled) {
+    return this.processActionResult(updatingOptions, function (canceled) {
       // @ts-expect-error
       let deferred = new _deferred.Deferred();
       if (!canceled) {
-        this._expandAllDayPanel(rawAppointment);
+        this.expandAllDayPanel(rawAppointment);
         try {
           deferred = this.appointmentDataSource.update(target, rawAppointment).done(() => {
             dragEvent === null || dragEvent === void 0 || dragEvent.cancel.resolve(false);
           }).always(storeAppointment => {
-            this._updatingAppointments.delete(target);
-            this._onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment);
+            this.updatingAppointments.delete(target);
+            this.onDataPromiseCompleted(StoreEventNames.UPDATED, storeAppointment);
           }).fail(() => performFailAction());
         } catch (err) {
           performFailAction(err);
-          this._updatingAppointments.delete(target);
+          this.updatingAppointments.delete(target);
           deferred.resolve();
         }
       } else {
         performFailAction();
-        this._updatingAppointments.delete(target);
+        this.updatingAppointments.delete(target);
         deferred.resolve();
       }
       return deferred.promise();
     });
   }
-  _processActionResult(actionOptions, callback) {
+  processActionResult(actionOptions, callback) {
     // @ts-expect-error
     const deferred = new _deferred.Deferred();
     const resolveCallback = callbackResult => {
@@ -129564,21 +129693,21 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     }
     return deferred.promise();
   }
-  _expandAllDayPanel(appointment) {
-    if (!this._isAllDayExpanded() && this.appointmentTakesAllDay(appointment)) {
-      this._updateOption('workSpace', 'allDayExpanded', true);
+  expandAllDayPanel(appointment) {
+    if (!this.isAllDayExpanded() && this.appointmentTakesAllDay(appointment)) {
+      this.updateOption('workSpace', 'allDayExpanded', true);
     }
   }
-  _onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
+  onDataPromiseCompleted(handlerName, storeAppointment, appointment) {
     const args = {
       appointmentData: appointment || storeAppointment
     };
     if (storeAppointment instanceof Error) {
       args.error = storeAppointment;
     } else {
-      this._appointmentPopup.visible && this._appointmentPopup.hide();
+      this.appointmentPopup.visible && this.appointmentPopup.hide();
     }
-    this._actions[handlerName](args);
+    this.actions[handlerName](args);
     this._fireContentReadyAction();
   }
   getAppointmentsInstance() {
@@ -129588,7 +129717,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return this._layoutManager;
   }
   getActions() {
-    return this._actions;
+    return this.actions;
   }
   appointmentTakesAllDay(rawAppointment) {
     const appointment = new _appointment_adapter.AppointmentAdapter(rawAppointment, this._dataAccessors);
@@ -129615,8 +129744,8 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return startDateTimeStamp <= dayTimeStamp && dayTimeStamp <= endDateTimeStamp;
   }
   getStartViewDate() {
-    var _this$_workSpace5;
-    return (_this$_workSpace5 = this._workSpace) === null || _this$_workSpace5 === void 0 ? void 0 : _this$_workSpace5.getStartViewDate();
+    var _this$_workSpace6;
+    return (_this$_workSpace6 = this._workSpace) === null || _this$_workSpace6 === void 0 ? void 0 : _this$_workSpace6.getStartViewDate();
   }
   getEndViewDate() {
     return this._workSpace.getEndViewDate();
@@ -129641,17 +129770,17 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       rawAppointment = this.createPopupAppointment();
     }
     if (isCreateAppointment) {
-      delete this._editAppointmentData; // TODO
-      this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
+      delete this.editAppointmentData; // TODO
+      this.editing.allowAdding && this.appointmentPopup.show(rawAppointment, {
         isToolbarVisible: true,
         action: _m_legacy_popup.ACTION_TO_APPOINTMENT.CREATE
       });
     } else {
       const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
-      this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
-        this._editAppointmentData = rawAppointment; // TODO
-        this._appointmentPopup.show(rawAppointment, {
-          isToolbarVisible: this._editing.allowUpdating,
+      this.checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
+        this.editAppointmentData = rawAppointment; // TODO
+        this.appointmentPopup.show(rawAppointment, {
+          isToolbarVisible: this.editing.allowUpdating,
           action: _m_legacy_popup.ACTION_TO_APPOINTMENT.UPDATE
         });
       }, false, true);
@@ -129667,10 +129796,10 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return result;
   }
   hideAppointmentPopup(saveChanges) {
-    var _this$_appointmentPop3;
-    if ((_this$_appointmentPop3 = this._appointmentPopup) !== null && _this$_appointmentPop3 !== void 0 && _this$_appointmentPop3.visible) {
-      saveChanges && this._appointmentPopup.saveChangesAsync();
-      this._appointmentPopup.hide();
+    var _this$appointmentPopu3;
+    if ((_this$appointmentPopu3 = this.appointmentPopup) !== null && _this$appointmentPopu3 !== void 0 && _this$appointmentPopu3.visible) {
+      saveChanges && this.appointmentPopup.saveChangesAsync();
+      this.appointmentPopup.hide();
     }
   }
   // NOTE: public API
@@ -129700,17 +129829,17 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       targetElement: (0, _element.getPublicElement)(target)
     };
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
-    if (this._appointmentTooltip.isAlreadyShown(target)) {
+    if (this.appointmentTooltip.isAlreadyShown(target)) {
       this.hideAppointmentTooltip();
     } else {
-      this._processActionResult(arg, canceled => {
-        !canceled && this._appointmentTooltip.show(target, data, Object.assign({}, this._getExtraAppointmentTooltipOptions(), options));
+      this.processActionResult(arg, canceled => {
+        !canceled && this.appointmentTooltip.show(target, data, Object.assign({}, this.getExtraAppointmentTooltipOptions(), options));
       });
     }
   }
   hideAppointmentTooltip() {
-    var _this$_appointmentToo2;
-    (_this$_appointmentToo2 = this._appointmentTooltip) === null || _this$_appointmentToo2 === void 0 || _this$_appointmentToo2.hide();
+    var _this$appointmentTool2;
+    (_this$appointmentTool2 = this.appointmentTooltip) === null || _this$appointmentTool2 === void 0 || _this$appointmentTool2.hide();
   }
   scrollTo(date, groupValuesOrOptions, allDay) {
     let groupValues;
@@ -129722,7 +129851,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
       if ((0, _type.isDefined)(groupValuesOrOptions) || (0, _type.isDefined)(allDay)) {
-        _ui.default.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+        _ui.default.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', '26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
       }
       groupValues = groupValuesOrOptions;
       allDayValue = allDay;
@@ -129730,9 +129859,9 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
   }
   _isScrollOptionsObject(options) {
-    return Boolean(options) && typeof options === 'object' && ('align' in options || 'allDay' in options || 'group' in options);
+    return Boolean(options) && typeof options === 'object' && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
-  _isHorizontalVirtualScrolling() {
+  isHorizontalVirtualScrolling() {
     const scrolling = this.option('scrolling');
     const {
       orientation,
@@ -129750,18 +129879,18 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       appointmentData: serializedAppointment,
       cancel: false
     };
-    this._actions[StoreEventNames.ADDING](addingOptions);
-    return this._processActionResult(addingOptions, canceled => {
+    this.actions[StoreEventNames.ADDING](addingOptions);
+    return this.processActionResult(addingOptions, canceled => {
       if (canceled) {
         // @ts-expect-error
         return new _deferred.Deferred().resolve();
       }
-      this._expandAllDayPanel(serializedAppointment);
-      return this.appointmentDataSource.add(serializedAppointment).always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
+      this.expandAllDayPanel(serializedAppointment);
+      return this.appointmentDataSource.add(serializedAppointment).always(storeAppointment => this.onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
     });
   }
   updateAppointment(target, appointment) {
-    return this._updateAppointment(target, appointment);
+    return this.updateAppointmentCore(target, appointment);
   }
   deleteAppointment(rawAppointment) {
     const deletingOptions = this.fireOnAppointmentDeleting(rawAppointment);
@@ -129773,13 +129902,13 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
       targetedAppointmentData,
       cancel: false
     };
-    this._actions[StoreEventNames.DELETING](deletingOptions);
+    this.actions[StoreEventNames.DELETING](deletingOptions);
     return deletingOptions;
   }
   processDeleteAppointment(rawAppointment, deletingOptions) {
-    this._processActionResult(deletingOptions, function (canceled) {
+    this.processActionResult(deletingOptions, function (canceled) {
       if (!canceled) {
-        this.appointmentDataSource.remove(rawAppointment).always(storeAppointment => this._onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
+        this.appointmentDataSource.remove(rawAppointment).always(storeAppointment => this.onDataPromiseCompleted(StoreEventNames.DELETED, storeAppointment, rawAppointment));
       }
     });
   }
@@ -129787,14 +129916,14 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     if (typeof date === 'string') {
       date = new Date(date);
     }
-    this._checkRecurringAppointment(appointment, {}, date, () => {
+    this.checkRecurringAppointment(appointment, {}, date, () => {
       this.processDeleteAppointment(appointment, {
         cancel: false
       });
     }, true, false, null, recurrenceEditMode);
   }
   focus() {
-    if (this._editAppointmentData) {
+    if (this.editAppointmentData) {
       this._appointments.focus();
     } else {
       this._workSpace.focus();
@@ -129806,7 +129935,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
   getFirstDayOfWeek() {
     return (0, _type.isDefined)(this.getViewOption('firstDayOfWeek')) ? this.getViewOption('firstDayOfWeek') : _date.default.firstDayOfWeekIndex();
   }
-  _validateKeyFieldIfAgendaExist() {
+  validateKeyFieldIfAgendaExist() {
     if (!this.appointmentDataSource.isDataSourceInit) {
       return;
     }
@@ -129820,7 +129949,7 @@ class Scheduler extends _scheduler_options_base_widget.SchedulerOptionsBaseWidge
     return this._workSpace.dragBehavior;
   }
   _isAppointmentBeingUpdated(appointmentData) {
-    return this._updatingAppointments.has(appointmentData);
+    return this.updatingAppointments.has(appointmentData);
   }
   getViewOffsetMs() {
     const offsetFromOptions = this.getViewOption('offset');
@@ -129900,14 +130029,14 @@ const subscribes = {
     const {
       startDate
     } = info.sourceAppointment;
-    this._checkRecurringAppointment(options.target, options.data, startDate, () => {
-      this._updateAppointment(options.target, options.data, function () {
+    this.checkRecurringAppointment(options.target, options.data, startDate, () => {
+      this.updateAppointmentCore(options.target, options.data, function () {
         this._appointments.moveAppointmentBack();
       });
     });
   },
   getUpdatedData(rawAppointment) {
-    return this._getUpdatedData(rawAppointment);
+    return this.getUpdatedData(rawAppointment);
   },
   updateAppointmentAfterDrag(_ref) {
     let {
@@ -129922,7 +130051,7 @@ const subscribes = {
     } = _m_utils.utils.dataAccessors.getAppointmentSettings(element);
     // NOTE: enrich target appointment with additional data from the source
     // in case of one appointment of series will change
-    const targetedRawAppointment = (0, _extend.extend)({}, rawAppointment, this._getUpdatedData(rawAppointment));
+    const targetedRawAppointment = (0, _extend.extend)({}, rawAppointment, this.getUpdatedData(rawAppointment));
     const fromAllDay = Boolean(rawAppointment.allDay);
     const toAllDay = Boolean(targetedRawAppointment.allDay);
     const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
@@ -129935,8 +130064,8 @@ const subscribes = {
       return;
     }
     if (isDropToSelfScheduler && (!isDropToTheSameCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
-      this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
-        this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
+      this.checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
+        this.updateAppointmentCore(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
     } else {
       onCancel();
@@ -129964,10 +130093,8 @@ const subscribes = {
       allDay
     } = options;
     const groups = this.getViewOption('groups');
-    console.log('getResizableAppointmentArea1', options);
     if (groups !== null && groups !== void 0 && groups.length) {
-      if (allDay || !_constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
-        console.log('allDay and not vertical view');
+      if (allDay || this.currentView.type === 'month') {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
@@ -129976,7 +130103,7 @@ const subscribes = {
           bottom: 0
         };
       }
-      if (!allDay && _constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace._isVerticalGroupedWorkSpace()) {
+      if (!allDay && _constants.VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace.isVerticalGroupedWorkSpace()) {
         const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: 0,
@@ -130217,9 +130344,9 @@ class SchedulerTableCreator {
   makeGroupedTable(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
     let rows = [];
     if (type === this.VERTICAL) {
-      rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
+      rows = this.makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
     } else {
-      rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
+      rows = this.makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
     }
     return rows;
   }
@@ -130314,7 +130441,7 @@ class SchedulerTableCreator {
     putCellsToRows();
     return table;
   }
-  _makeFlexGroupedRowCells(group, repeatCount, cssClasses, cellTemplate) {
+  makeFlexGroupedRowCells(group, repeatCount, cssClasses, cellTemplate) {
     let repeatByDate = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
     const cells = [];
     const {
@@ -130347,7 +130474,7 @@ class SchedulerTableCreator {
     return cells;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount) {
+  makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount) {
     const cellTemplates = [];
     let repeatCount = 1;
     const cellsArray = [];
@@ -130361,7 +130488,7 @@ class SchedulerTableCreator {
         // eslint-disable-next-line operator-assignment
         repeatCount = groups[i - 1].items.length * repeatCount;
       }
-      const cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+      const cells = this.makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
       cells.forEach(cellIterator);
       cellsArray.push(cells);
     }
@@ -130381,7 +130508,7 @@ class SchedulerTableCreator {
       cellTemplates
     };
   }
-  _makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
+  makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
     let repeatCount = 1;
     const groupCount = groups.length;
     const rows = [];
@@ -130398,7 +130525,7 @@ class SchedulerTableCreator {
         // eslint-disable-next-line operator-assignment
         repeatCount = groups[i - 1].items.length * repeatCount;
       }
-      const cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
+      const cells = this.makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
       rows.push((0, _renderer.default)('<tr>').addClass(cssClasses.groupRowClass).append(cells.map(cellIterator)));
     }
     const maxCellCount = rows[groupCount - 1].find('th').length;
@@ -130417,7 +130544,7 @@ class SchedulerTableCreator {
       cellTemplates
     };
   }
-  _makeGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+  makeGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
     repeatByDate = repeatByDate || 1;
     repeatCount *= repeatByDate;
     const cells = [];
@@ -135030,7 +135157,7 @@ exports.SchedulerOptionsBaseWidget = SchedulerOptionsBaseWidget;
 
 /***/ },
 
-/***/ 40226
+/***/ 51930
 (__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -135064,14 +135191,16 @@ class CurrentTimeShader {
     return (0, _renderer.default)('<div>').addClass(DATE_TIME_SHADER_CLASS);
   }
   clean() {
-    this._$container && this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+    if (this._$container) {
+      this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+    }
   }
 }
 var _default = exports["default"] = CurrentTimeShader;
 
 /***/ },
 
-/***/ 18129
+/***/ 35577
 (__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -135082,25 +135211,28 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _position = __webpack_require__(41639);
 var _size = __webpack_require__(57653);
-var _m_current_time_shader = _interopRequireDefault(__webpack_require__(40226));
+var _current_time_shader = _interopRequireDefault(__webpack_require__(51930));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-class HorizontalCurrentTimeShader extends _m_current_time_shader.default {
+class HorizontalCurrentTimeShader extends _current_time_shader.default {
   renderShader() {
     const groupCount = this._workSpace._isHorizontalGroupedWorkSpace() ? this._workSpace._getGroupCount() : 1;
     for (let i = 0; i < groupCount; i += 1) {
       const isFirstShader = i === 0;
       const $shader = isFirstShader ? this._$shader : this.createShader();
       if (this._workSpace.isGroupedByDate()) {
-        this._customizeGroupedByDateShader($shader, i);
+        this.customizeGroupedByDateShader($shader, i);
       } else {
-        this._customizeShader($shader, i);
+        this.customizeShader($shader, i);
       }
-      !isFirstShader && this._shader.push($shader);
+      if (!isFirstShader) {
+        this._shader.push($shader);
+      }
     }
   }
-  _customizeShader($shader, groupIndex) {
+  customizeShader($shader, groupIndex) {
+    // @ts-expect-error
     const shaderWidth = this._workSpace.getIndicationWidth();
-    this._applyShaderWidth($shader, shaderWidth);
+    this.applyShaderWidth($shader, shaderWidth);
     if (groupIndex >= 1) {
       const workSpace = this._workSpace;
       const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
@@ -135109,24 +135241,24 @@ class HorizontalCurrentTimeShader extends _m_current_time_shader.default {
       $shader.css('left', 0);
     }
   }
-  _applyShaderWidth($shader, width) {
+  applyShaderWidth($shader, width) {
     const maxWidth = (0, _position.getBoundingRect)(this._$container.get(0)).width;
-    if (width > maxWidth) {
-      width = maxWidth;
-    }
     if (width > 0) {
-      (0, _size.setWidth)($shader, width);
+      (0, _size.setWidth)($shader, Math.min(width, maxWidth));
     }
   }
-  _customizeGroupedByDateShader($shader, groupIndex) {
+  customizeGroupedByDateShader($shader, groupIndex) {
+    // @ts-expect-error
     const cellCount = this._workSpace.getIndicationCellCount();
     const integerPart = Math.floor(cellCount);
     const fractionPart = cellCount - integerPart;
     const isFirstShaderPart = groupIndex === 0;
     const workSpace = this._workSpace;
-    const shaderWidth = isFirstShaderPart ? workSpace.getIndicationWidth() : fractionPart * workSpace.getCellWidth();
-    let shaderLeft;
-    this._applyShaderWidth($shader, shaderWidth);
+    const shaderWidth = isFirstShaderPart
+    // @ts-expect-error
+    ? workSpace.getIndicationWidth() : fractionPart * workSpace.getCellWidth();
+    let shaderLeft = 0;
+    this.applyShaderWidth($shader, shaderWidth);
     if (isFirstShaderPart) {
       shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
     } else {
@@ -135139,7 +135271,7 @@ var _default = exports["default"] = HorizontalCurrentTimeShader;
 
 /***/ },
 
-/***/ 28471
+/***/ 25167
 (__unused_webpack_module, exports, __webpack_require__) {
 
 
@@ -135150,15 +135282,15 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _size = __webpack_require__(57653);
-var _m_current_time_shader = _interopRequireDefault(__webpack_require__(40226));
+var _current_time_shader = _interopRequireDefault(__webpack_require__(51930));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
 const DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
-class VerticalCurrentTimeShader extends _m_current_time_shader.default {
+class VerticalCurrentTimeShader extends _current_time_shader.default {
   renderShader() {
-    let shaderHeight = this._getShaderHeight();
-    const maxHeight = this._getShaderMaxHeight();
+    let shaderHeight = this.getShaderHeight();
+    const maxHeight = this.getShaderMaxHeight();
     const isSolidShader = shaderHeight > maxHeight;
     if (shaderHeight > maxHeight) {
       shaderHeight = maxHeight;
@@ -135166,31 +135298,32 @@ class VerticalCurrentTimeShader extends _m_current_time_shader.default {
     (0, _size.setHeight)(this._$shader, shaderHeight);
     const groupCount = this._workSpace._getGroupCount() || 1;
     if (this._workSpace.isGroupedByDate()) {
-      this._renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
+      this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
     } else {
-      this._renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
+      this.renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);
     }
   }
-  _renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
-    for (let i = 0; i < groupCount; i++) {
-      const shaderWidth = this._getShaderWidth();
-      this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
-      !isSolidShader && this._renderBottomShader(this._$shader, maxHeight, shaderHeight, shaderWidth, i);
-      this._renderAllDayShader(shaderWidth, i);
+  renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
+    for (let i = 0; i < groupCount; i += 1) {
+      const shaderWidth = this.getShaderWidth();
+      this.renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
+      if (!isSolidShader) {
+        this.renderBottomShader(this._$shader, maxHeight, shaderHeight, shaderWidth, i);
+      }
+      this.renderAllDayShader(shaderWidth, i);
     }
   }
-  _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
-    const shaderWidth = this._getShaderWidth();
-    let bottomShaderWidth = shaderWidth - this._workSpace.getCellWidth();
-    if (shaderHeight < 0) {
-      shaderHeight = 0;
-      bottomShaderWidth = shaderWidth;
+  renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
+    const shaderWidth = this.getShaderWidth();
+    const bottomShaderWidth = shaderHeight < 0 ? shaderWidth : shaderWidth - this._workSpace.getCellWidth();
+    const normalizedShaderHeight = Math.max(shaderHeight, 0);
+    this.renderTopShader(this._$shader, normalizedShaderHeight, shaderWidth * groupCount, 0);
+    if (!isSolidShader) {
+      this.renderBottomShader(this._$shader, maxHeight, normalizedShaderHeight, bottomShaderWidth * groupCount + this._workSpace.getCellWidth(), 0);
     }
-    this._renderTopShader(this._$shader, shaderHeight, shaderWidth * groupCount, 0);
-    !isSolidShader && this._renderBottomShader(this._$shader, maxHeight, shaderHeight, bottomShaderWidth * groupCount + this._workSpace.getCellWidth(), 0);
-    this._renderAllDayShader(shaderWidth * groupCount, 0);
+    this.renderAllDayShader(shaderWidth * groupCount, 0);
   }
-  _renderTopShader($shader, height, width, i) {
+  renderTopShader($shader, height, width, i) {
     this._$topShader = (0, _renderer.default)('<div>').addClass(DATE_TIME_SHADER_TOP_CLASS);
     if (width) {
       (0, _size.setWidth)(this._$topShader, width);
@@ -135198,46 +135331,49 @@ class VerticalCurrentTimeShader extends _m_current_time_shader.default {
     if (height) {
       (0, _size.setHeight)(this._$topShader, height);
     }
-    this._$topShader.css('marginTop', this._getShaderTopOffset(i));
-    this._$topShader.css('left', this._getShaderOffset(i, width));
+    this._$topShader.css('marginTop', this.getShaderTopOffset(i));
+    this._$topShader.css('left', this.getShaderOffset(i, width));
     $shader.append(this._$topShader);
   }
-  _renderBottomShader($shader, maxHeight, height, width, i) {
+  renderBottomShader($shader, maxHeight, height, width, i) {
     this._$bottomShader = (0, _renderer.default)('<div>').addClass(DATE_TIME_SHADER_BOTTOM_CLASS);
     const shaderWidth = height < 0 ? width : width - this._workSpace.getCellWidth();
     const shaderHeight = height < 0 ? maxHeight : maxHeight - height;
     (0, _size.setWidth)(this._$bottomShader, shaderWidth);
     (0, _size.setHeight)(this._$bottomShader, shaderHeight);
-    this._$bottomShader.css('left', this._getShaderOffset(i, width - this._workSpace.getCellWidth()));
+    this._$bottomShader.css('left', this.getShaderOffset(i, width - this._workSpace.getCellWidth()));
     $shader.append(this._$bottomShader);
   }
-  _renderAllDayShader(shaderWidth, i) {
+  renderAllDayShader(shaderWidth, i) {
     if (this._workSpace.option('showAllDayPanel')) {
       this._$allDayIndicator = (0, _renderer.default)('<div>').addClass(DATE_TIME_SHADER_ALL_DAY_CLASS);
       (0, _size.setHeight)(this._$allDayIndicator, this._workSpace.getAllDayHeight());
       (0, _size.setWidth)(this._$allDayIndicator, shaderWidth);
-      this._$allDayIndicator.css('left', this._getShaderOffset(i, shaderWidth));
+      this._$allDayIndicator.css('left', this.getShaderOffset(i, shaderWidth));
       this._workSpace._$allDayPanel.prepend(this._$allDayIndicator);
     }
   }
-  _getShaderOffset(i, width) {
+  getShaderOffset(i, width) {
     return this._workSpace.getGroupedStrategy().getShaderOffset(i, width);
   }
-  _getShaderTopOffset(i) {
+  getShaderTopOffset(i) {
     return this._workSpace.getGroupedStrategy().getShaderTopOffset(i);
   }
-  _getShaderHeight() {
+  getShaderHeight() {
     return this._workSpace.getGroupedStrategy().getShaderHeight();
   }
-  _getShaderMaxHeight() {
+  getShaderMaxHeight() {
     return this._workSpace.getGroupedStrategy().getShaderMaxHeight();
   }
-  _getShaderWidth() {
+  getShaderWidth() {
     return this._workSpace.getGroupedStrategy().getShaderWidth();
   }
   clean() {
+    var _this$_workSpace;
     super.clean();
-    this._workSpace && this._workSpace._$allDayPanel && this._workSpace._$allDayPanel.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
+    if ((_this$_workSpace = this._workSpace) !== null && _this$_workSpace !== void 0 && _this$_workSpace._$allDayPanel) {
+      this._workSpace._$allDayPanel.find(`.${DATE_TIME_SHADER_ALL_DAY_CLASS}`).remove();
+    }
   }
 }
 var _default = exports["default"] = VerticalCurrentTimeShader;
@@ -135280,11 +135416,11 @@ const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = 'dx-scheduler-appointment-tooltip-wrap
 const MAX_TOOLTIP_HEIGHT = 200;
 class DesktopTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBase {
   prepareBeforeVisibleChanged(dataList) {
-    this._tooltip.option('position', {
+    this.tooltip.option('position', {
       my: 'bottom',
       at: 'top',
       boundary: this.getBoundary(dataList),
-      offset: this._extraOptions.offset,
+      offset: this.extraOptions.offset,
       collision: 'fit flipfit'
     });
   }
@@ -135293,9 +135429,9 @@ class DesktopTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBas
   }
   onShown() {
     super.onShown();
-    if (this._extraOptions.isButtonClick) {
-      this._list.focus();
-      this._list.option('focusedElement', null);
+    if (this.extraOptions.isButtonClick) {
+      this.list.focus();
+      this.list.option('focusedElement', null);
     }
   }
   // @ts-expect-error
@@ -135312,13 +135448,13 @@ class DesktopTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBas
     const tooltip = this._options.createComponent(tooltipElement, _m_tooltip.default, {
       target,
       maxHeight: MAX_TOOLTIP_HEIGHT,
-      rtlEnabled: this._extraOptions.rtlEnabled,
+      rtlEnabled: this.extraOptions.rtlEnabled,
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: {
         class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS
       },
-      _loopFocus: this._extraOptions._loopFocus
+      tabFocusLoopEnabled: this.extraOptions.tabFocusLoopEnabled
     });
     tooltip.setAria({
       role: 'dialog',
@@ -135327,7 +135463,7 @@ class DesktopTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBas
     return tooltip;
   }
   onListRender(e) {
-    return this._extraOptions.dragBehavior && this._extraOptions.dragBehavior(e);
+    return this.extraOptions.dragBehavior && this.extraOptions.dragBehavior(e);
   }
   onListItemContextMenu(e) {
     const contextMenuEventArgs = this._options.createEventArgs(e);
@@ -135433,11 +135569,11 @@ class MobileTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBase
   }
   setTooltipConfig() {
     const isTabletWidth = (0, _size.getWidth)((0, _window.getWindow)()) > 700;
-    const listHeight = (0, _size.getOuterHeight)(this._list.$element().find(CLASS.scrollableContent));
-    this._tooltip.option(isTabletWidth ? createTabletDeviceConfig(listHeight) : createPhoneDeviceConfig(listHeight));
+    const listHeight = (0, _size.getOuterHeight)(this.list.$element().find(CLASS.scrollableContent));
+    this.tooltip.option(isTabletWidth ? createTabletDeviceConfig(listHeight) : createPhoneDeviceConfig(listHeight));
   }
-  async _onShowing() {
-    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
+  async onShowing() {
+    this.tooltip.option('height', MAX_HEIGHT.DEFAULT);
     /*
     NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
     The first one sets initial sizes, the second updates them after rendering async templates
@@ -135452,7 +135588,7 @@ class MobileTooltipStrategy extends _m_tooltip_strategy_base.TooltipStrategyBase
       target: (0, _window.getWindow)(),
       hideOnOutsideClick: true,
       animation: animationConfig,
-      onShowing: () => this._onShowing(),
+      onShowing: () => this.onShowing(),
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: {
@@ -135493,27 +135629,27 @@ const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 class TooltipStrategyBase {
   constructor(options) {
     this.asyncTemplatePromises = new Set();
-    this._tooltip = null;
+    this.tooltip = null;
     this._options = options;
-    this._extraOptions = null;
+    this.extraOptions = null;
   }
   show(target, dataList, extraOptions) {
     if (this.canShowTooltip(dataList)) {
       this.hide();
-      this._extraOptions = extraOptions;
+      this.extraOptions = extraOptions;
       this.showCore(target, dataList);
     }
   }
   showCore(target, dataList) {
     const describedByValue = (0, _type.isRenderer)(target) && target.attr('aria-describedby');
-    if (!this._tooltip) {
-      this._tooltip = this.createTooltip(target, dataList);
+    if (!this.tooltip) {
+      this.tooltip = this.createTooltip(target, dataList);
     } else {
-      this.shouldUseTarget() && this._tooltip.option('target', target);
-      this._list.option('dataSource', dataList);
+      this.shouldUseTarget() && this.tooltip.option('target', target);
+      this.list.option('dataSource', dataList);
     }
     this.prepareBeforeVisibleChanged(dataList);
-    this._tooltip.option('visible', true);
+    this.tooltip.option('visible', true);
     describedByValue && target.attr('aria-describedby', describedByValue);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -135521,32 +135657,32 @@ class TooltipStrategyBase {
   isDeletingAllowed(appointment) {
     const {
       editing
-    } = this._extraOptions;
+    } = this.extraOptions;
     const disabled = this._options.getAppointmentDisabled(appointment);
     const isDeletingAllowed = editing === true || (editing === null || editing === void 0 ? void 0 : editing.allowDeleting) === true;
     return !disabled && isDeletingAllowed;
   }
   getContentTemplate(dataList) {
     return container => {
-      var _this$_list$registerK, _this$_list, _this$_list$registerK2, _this$_list2;
+      var _this$list$registerKe, _this$list, _this$list$registerKe2, _this$list2;
       const listElement = (0, _renderer.default)('<div>');
       (0, _renderer.default)(container).append(listElement);
-      this._list = this.createList(listElement, dataList);
-      (_this$_list$registerK = (_this$_list = this._list).registerKeyHandler) === null || _this$_list$registerK === void 0 || _this$_list$registerK.call(_this$_list, 'escape', () => {
+      this.list = this.createList(listElement, dataList);
+      (_this$list$registerKe = (_this$list = this.list).registerKeyHandler) === null || _this$list$registerKe === void 0 || _this$list$registerKe.call(_this$list, 'escape', () => {
         this.hide();
-        this._tooltip.option('target').focus();
+        this.tooltip.option('target').focus();
       });
-      (_this$_list$registerK2 = (_this$_list2 = this._list).registerKeyHandler) === null || _this$_list$registerK2 === void 0 || _this$_list$registerK2.call(_this$_list2, 'del', () => {
+      (_this$list$registerKe2 = (_this$list2 = this.list).registerKeyHandler) === null || _this$list$registerKe2 === void 0 || _this$list$registerKe2.call(_this$list2, 'del', () => {
         const {
           focusedElement
-        } = this._list.option();
+        } = this.list.option();
         if (!focusedElement) {
           return;
         }
         const {
           appointment,
           targetedAppointment
-        } = this._list._getItemData(focusedElement);
+        } = this.list._getItemData(focusedElement);
         if (!appointment) {
           return;
         }
@@ -135558,18 +135694,18 @@ class TooltipStrategyBase {
     };
   }
   isAlreadyShown(target) {
-    if (this._tooltip && this._tooltip.option('visible')) {
-      return this._tooltip.option('target')[0] === target[0];
+    if (this.tooltip && this.tooltip.option('visible')) {
+      return this.tooltip.option('target')[0] === target[0];
     }
     return undefined;
   }
   onShown() {
-    this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
+    this.list.option('focusStateEnabled', this.extraOptions.focusStateEnabled);
   }
   dispose() {}
   hide() {
-    if (this._tooltip) {
-      this._tooltip.option('visible', false);
+    if (this.tooltip) {
+      this.tooltip.option('visible', false);
     }
   }
   shouldUseTarget() {
@@ -135590,7 +135726,6 @@ class TooltipStrategyBase {
       onItemClick: e => this.onListItemClick(e),
       onItemContextMenu: this.onListItemContextMenu.bind(this),
       itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
-      _swipeEnabled: false,
       pageLoadMode: 'scrollBottom'
     };
   }
@@ -135616,7 +135751,7 @@ class TooltipStrategyBase {
     return this.createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
   createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
-    const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
+    const isButtonClicked = Boolean(this.extraOptions.isButtonClick);
     // @ts-expect-error
     return new _function_template.FunctionTemplate(options => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -135642,7 +135777,7 @@ class TooltipStrategyBase {
   }
   onListItemClick(e) {
     this.hide();
-    this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
+    this.extraOptions.clickEvent && this.extraOptions.clickEvent(e);
     this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -136494,6 +136629,7 @@ const DEFAULT_SCHEDULER_OPTIONS = exports.DEFAULT_SCHEDULER_OPTIONS = {
     mode: 'standard'
   },
   allDayPanelMode: 'all',
+  snapToCellsMode: undefined,
   toolbar: {
     disabled: false,
     multiline: false,
@@ -137530,20 +137666,28 @@ var _filter_appointments = __webpack_require__(12206);
 var _get_occurrences = __webpack_require__(73502);
 var _generate_agenda_view_model = __webpack_require__(46040);
 var _generate_grid_view_model = __webpack_require__(57196);
+var _option_manager = __webpack_require__(25644);
 var _get_appointment_info = __webpack_require__(673);
 var _prepare_appointments = __webpack_require__(90174);
 class AppointmentLayoutManager {
+  get filteredItems() {
+    return this._filteredItems;
+  }
+  get sortedItems() {
+    return this._sortedItems;
+  }
   // NOTE: Here we should pass global store. But right now scheduler component is global store
   constructor(schedulerStore) {
     this.schedulerStore = schedulerStore;
     this.preparedItems = [];
-    this.filteredItems = [];
+    this._filteredItems = [];
+    this._sortedItems = [];
   }
   prepareAppointments(items) {
     this.preparedItems = (0, _prepare_appointments.prepareAppointments)(this.schedulerStore, items);
   }
   filterAppointments() {
-    this.filteredItems = (0, _filter_appointments.filterAppointments)(this.schedulerStore, this.preparedItems);
+    this._filteredItems = (0, _filter_appointments.filterAppointments)(this.schedulerStore, this.preparedItems);
   }
   getOccurrences(startDate, endDate, rawAppointments) {
     const preparedAppointments = (0, _prepare_appointments.prepareAppointments)(this.schedulerStore, rawAppointments);
@@ -137551,19 +137695,21 @@ class AppointmentLayoutManager {
     return occurrences;
   }
   hasAllDayAppointments() {
-    return this.filteredItems.filter(item => item.isAllDayPanelOccupied).length > 0;
+    return this._filteredItems.filter(item => item.isAllDayPanelOccupied).length > 0;
   }
   generateViewModel() {
     const viewType = this.schedulerStore.currentView.type;
     if (viewType === 'agenda') {
-      const viewModel = (0, _generate_agenda_view_model.generateAgendaViewModel)(this.schedulerStore, this.filteredItems);
+      const viewModel = (0, _generate_agenda_view_model.generateAgendaViewModel)(this.schedulerStore, this._filteredItems);
       return viewModel.map(item => Object.assign({}, item, {
         isAgendaModel: true,
         info: (0, _get_appointment_info.getAgendaAppointmentInfo)(item)
       }));
     }
+    const optionManager = new _option_manager.OptionManager(this.schedulerStore);
+    this._sortedItems = (0, _generate_grid_view_model.sortAppointments)(optionManager, this._filteredItems);
+    const viewModel = (0, _generate_grid_view_model.generateGridViewModel)(this.schedulerStore, optionManager, this._sortedItems);
     const isSkipResizing = appointment => appointment.isAllDayPanelOccupied && viewType === 'day' && this.schedulerStore.currentView.intervalCount === 1;
-    const viewModel = (0, _generate_grid_view_model.generateGridViewModel)(this.schedulerStore, this.filteredItems);
     const toItem = item => ({
       itemData: item.itemData,
       allDay: item.isAllDayPanelOccupied,
@@ -138403,8 +138549,7 @@ exports.generateAgendaViewModel = generateAgendaViewModel;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.generateGridViewModel = void 0;
-var _option_manager = __webpack_require__(25644);
+exports.sortAppointments = exports.generateGridViewModel = void 0;
 var _add_collector = __webpack_require__(58607);
 var _add_direction = __webpack_require__(16665);
 var _add_emptiness = __webpack_require__(27602);
@@ -138419,23 +138564,16 @@ var _sorting = __webpack_require__(12628);
 var _split_by_parts = __webpack_require__(89959);
 var _virtual_screen_crop = __webpack_require__(29983);
 var _virtual_screen_filter = __webpack_require__(84751);
-const generateGridViewModel = (schedulerStore, items) => {
-  const optionManager = new _option_manager.OptionManager(schedulerStore);
+const sortAppointments = (optionManager, items) => {
   const {
-    viewOrientation,
     isMonthView,
-    isAdaptivityEnabled,
-    isTimelineView,
     hasAllDayPanel,
-    isVirtualScrolling,
+    snapToCellsMode,
     viewOffset,
     compareOptions: {
       endDayHour
     }
   } = optionManager.options;
-  const {
-    viewDataProvider
-  } = schedulerStore._workSpace;
   const step2 = (0, _maybe_split.maybeSplit)(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = (0, _group_by_group_index.groupByGroupIndex)(entities);
     const positionInsideGroup = byGroup.map(group => {
@@ -138447,14 +138585,29 @@ const generateGridViewModel = (schedulerStore, items) => {
       (0, _sorting.sortByStartDate)(innerStep1);
       (0, _sorting.sortByGroupIndex)(innerStep1);
       const innerStep2 = (0, _add_position.addPosition)(innerStep1, optionManager.getCells(panelName));
-      const innerStep3 = isMonthView || panelName === 'allDayPanel' ? (0, _snap_to_cells.snapToCells)(innerStep2, optionManager.getCells(panelName)) : innerStep2;
+      const innerStep3 = (0, _snap_to_cells.snapToCells)(innerStep2, optionManager.getCells(panelName), panelName === 'allDayPanel' ? 'always' : snapToCellsMode);
       const innerStep4 = (0, _add_collector.addCollector)(innerStep3, optionManager.getCollectorOptions(panelName));
       return innerStep4;
     });
     return positionInsideGroup.flat();
   });
   const step3 = (0, _add_sorted_index.addSortedIndex)(step2);
-  const step4 = (0, _virtual_screen_filter.filterByVirtualScreen)(step3, viewDataProvider, isVirtualScrolling);
+  return step3;
+};
+exports.sortAppointments = sortAppointments;
+const generateGridViewModel = (schedulerStore, optionManager, items) => {
+  const {
+    viewOrientation,
+    isMonthView,
+    isAdaptivityEnabled,
+    isTimelineView,
+    hasAllDayPanel,
+    isVirtualScrolling
+  } = optionManager.options;
+  const {
+    viewDataProvider
+  } = schedulerStore._workSpace;
+  const step4 = (0, _virtual_screen_filter.filterByVirtualScreen)(items, viewDataProvider, isVirtualScrolling);
   const step5 = (0, _maybe_split.maybeSplit)(step4, hasAllDayPanel, (entities, panelName) => {
     const innerStep = (0, _add_geometry.addGeometry)(entities, optionManager.getGeometryOptions(panelName));
     return innerStep;
@@ -138936,42 +139089,50 @@ const configByView = {
   day: {
     isTimelineView: false,
     isMonthView: false,
-    viewOrientation: 'vertical'
+    viewOrientation: 'vertical',
+    snapToCellsMode: 'never'
   },
   week: {
     isTimelineView: false,
     isMonthView: false,
-    viewOrientation: 'vertical'
+    viewOrientation: 'vertical',
+    snapToCellsMode: 'never'
   },
   workWeek: {
     isTimelineView: false,
     isMonthView: false,
-    viewOrientation: 'vertical'
+    viewOrientation: 'vertical',
+    snapToCellsMode: 'never'
   },
   month: {
     isTimelineView: false,
     isMonthView: true,
-    viewOrientation: 'horizontal'
+    viewOrientation: 'horizontal',
+    snapToCellsMode: 'always'
   },
   timelineDay: {
     isTimelineView: true,
     isMonthView: false,
-    viewOrientation: 'horizontal'
+    viewOrientation: 'horizontal',
+    snapToCellsMode: 'never'
   },
   timelineWeek: {
     isTimelineView: true,
     isMonthView: false,
-    viewOrientation: 'horizontal'
+    viewOrientation: 'horizontal',
+    snapToCellsMode: 'never'
   },
   timelineWorkWeek: {
     isTimelineView: true,
     isMonthView: false,
-    viewOrientation: 'horizontal'
+    viewOrientation: 'horizontal',
+    snapToCellsMode: 'never'
   },
   timelineMonth: {
     isTimelineView: true,
     isMonthView: true,
-    viewOrientation: 'horizontal'
+    viewOrientation: 'horizontal',
+    snapToCellsMode: 'always'
   }
 };
 const getViewModelOptions = schedulerStore => {
@@ -138986,16 +139147,19 @@ const getViewModelOptions = schedulerStore => {
   const {
     isTimelineView,
     isMonthView,
-    viewOrientation
+    viewOrientation,
+    snapToCellsMode: defaultSnapToCellsMode
   } = configByView[type];
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
   const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
   const allDayPanelMode = schedulerStore.getViewOption('allDayPanelMode');
+  const snapToCellsMode = schedulerStore.getViewOption('snapToCellsMode');
   const showAllDayPanel = schedulerStore.getViewOption('showAllDayPanel');
   const isVirtualScrolling = schedulerStore.isVirtualScrolling();
   return {
     type,
+    snapToCellsMode: snapToCellsMode ?? defaultSnapToCellsMode,
     viewOffset,
     groupOrientation,
     isGroupByDate,
@@ -140027,20 +140191,28 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.snapToCells = void 0;
+const getCellFill = (startDateUTC, endDateUTC, cell) => {
+  const cellDuration = cell.max - cell.min;
+  if (cellDuration <= 0) return 0;
+  const overlapStart = Math.max(startDateUTC, cell.min);
+  const overlapEnd = Math.min(endDateUTC, cell.max);
+  const overlapDuration = Math.max(0, overlapEnd - overlapStart);
+  return overlapDuration / cellDuration;
+};
 const snapToCells = function (entities, cells) {
-  let isSnapToCell = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  if (!isSnapToCell) {
-    return entities;
-  }
+  let mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'always';
+  if (mode === 'never') return entities;
   return entities.map(entity => {
-    const {
-      cellIndex,
-      endCellIndex
-    } = entity;
+    const startCell = cells[entity.cellIndex];
+    const endCell = cells[entity.endCellIndex];
+    const snapStart = mode === 'always' || getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > 0.5;
+    const snapEnd = mode === 'always' || getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > 0.5;
+    const startDateUTC = snapStart ? startCell.min : entity.startDateUTC;
+    const endDateUTC = snapEnd ? endCell.max : entity.endDateUTC;
     return Object.assign({}, entity, {
-      startDateUTC: cells[cellIndex].min,
-      endDateUTC: cells[endCellIndex].max,
-      duration: cells[endCellIndex].max - cells[cellIndex].min
+      startDateUTC,
+      endDateUTC,
+      duration: endDateUTC - startDateUTC
     });
   });
 };
@@ -140362,16 +140534,16 @@ class AppointmentDataSource {
   get isDataSourceInit() {
     return Boolean(this.dataSource);
   }
-  _getStoreKey(target) {
+  getStoreKey(target) {
     const store = this.dataSource.store();
     return store.keyOf(target);
   }
   setDataSource(dataSource) {
     this.dataSource = dataSource;
     this.cleanState();
-    this._initStoreChangeHandlers();
+    this.initStoreChangeHandlers();
   }
-  _initStoreChangeHandlers() {
+  initStoreChangeHandlers() {
     const {
       dataSource
     } = this;
@@ -140423,14 +140595,14 @@ class AppointmentDataSource {
     return this.dataSource.store().insert(rawAppointment).done(() => this.dataSource.load());
   }
   update(target, data) {
-    const key = this._getStoreKey(target);
+    const key = this.getStoreKey(target);
     // @ts-expect-error
     const d = new _deferred.Deferred();
     this.dataSource.store().update(key, data).done(result => this.dataSource.load().done(() => d.resolve(result)).fail(d.reject)).fail(d.reject);
     return d.promise();
   }
   remove(rawAppointment) {
-    const key = this._getStoreKey(rawAppointment);
+    const key = this.getStoreKey(rawAppointment);
     return this.dataSource.store().remove(key).done(() => this.dataSource.load());
   }
   destroy() {
@@ -140853,7 +141025,7 @@ const OUTER_CELL_MARGIN = 20;
 class SchedulerAgenda extends _m_work_space.default {
   constructor() {
     super(...arguments);
-    this._rows = [];
+    this.rows = [];
   }
   // eslint-disable-next-line class-methods-use-this
   _activeStateUnit() {
@@ -140863,7 +141035,7 @@ class SchedulerAgenda extends _m_work_space.default {
     return _constants_view.VIEWS.AGENDA;
   }
   getStartViewDate() {
-    return this._startViewDate;
+    return this.startViewDate;
   }
   _init() {
     super._init();
@@ -140888,17 +141060,17 @@ class SchedulerAgenda extends _m_work_space.default {
         break;
       case 'noDataText':
       case 'rowHeight':
-        this._recalculateAgenda(this._rows);
+        this.recalculateAgenda(this.rows);
         break;
       case 'groups':
         if (!(value !== null && value !== void 0 && value.length)) {
           if (this._$groupTable) {
             this._$groupTable.remove();
             this._$groupTable = null;
-            this._detachGroupCountClass();
+            this.detachGroupCountClass();
           }
         } else if (!this._$groupTable) {
-          this._initGroupTable();
+          this.initGroupTable();
           this._dateTableScrollable.$content().prepend(this._$groupTable);
         }
         super._optionChanged(args);
@@ -140919,90 +141091,87 @@ class SchedulerAgenda extends _m_work_space.default {
   supportAllDayRow() {
     return false;
   }
-  _isVerticalGroupedWorkSpace() {
+  isVerticalGroupedWorkSpace() {
     return false;
   }
-  _getElementClass() {
+  getElementClass() {
     return AGENDA_CLASS;
   }
-  _getRowCount() {
+  getRowCount() {
     return this.option('agendaDuration');
   }
   _getCellCount() {
     return 1;
   }
-  _getTimePanelRowCount() {
+  getTimePanelRowCount() {
     return this.option('agendaDuration');
   }
-  _renderAllDayPanel() {
+  renderAllDayPanel() {
     return (0, _common.noop)();
   }
-  _updateAllDayVisibility() {
+  updateAllDayVisibility() {
     return (0, _common.noop)();
   }
-  _updateAllDayHeight() {
-    return (0, _common.noop)();
-  }
-  _initWorkSpaceUnits() {
-    this._initGroupTable();
-    this._$timePanel = (0, _renderer.default)('<table>').attr('aria-hidden', true).addClass(_m_classes.TIME_PANEL_CLASS);
+  initWorkSpaceUnits() {
+    this.initGroupTable();
+    this.$timePanel = (0, _renderer.default)('<table>').attr('aria-hidden', true).addClass(_m_classes.TIME_PANEL_CLASS);
     this._$dateTable = (0, _renderer.default)('<table>').attr('aria-hidden', true).addClass(_m_classes.DATE_TABLE_CLASS);
     this._$dateTableScrollableContent = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-scrollable-content');
-    this._$dateTableContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-container');
+    this.$dateTableContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-container');
   }
-  _initGroupTable() {
+  initGroupTable() {
     const groups = this.option('groups');
     if (groups !== null && groups !== void 0 && groups.length) {
       this._$groupTable = (0, _renderer.default)('<table>').attr('aria-hidden', true).addClass(GROUP_TABLE_CLASS);
     }
   }
-  _renderView() {
-    this._startViewDate = _index.agendaUtils.calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
-    this._rows = [];
+  renderView() {
+    this.startViewDate = _index.agendaUtils.calculateStartViewDate(this.option('currentDate'), this.option('startDayHour'));
+    this.rows = [];
   }
-  _recalculateAgenda(rows) {
+  recalculateAgenda(rows) {
     let cellTemplates = [];
-    this._cleanView();
-    if (this._rowsIsEmpty(rows)) {
-      this._renderNoData();
+    this.cleanView();
+    if (this.rowsIsEmpty(rows)) {
+      this.renderNoData();
       return;
     }
-    this._rows = rows;
+    this.rows = rows;
     if (this._$groupTable) {
-      cellTemplates = this._renderGroupHeader();
-      this._setGroupHeaderCellsHeight();
+      cellTemplates = this.renderGroupHeader();
+      this.setGroupHeaderCellsHeight();
     }
-    this._renderTimePanel();
-    this._renderDateTable();
-    this._applyCellTemplates(cellTemplates);
+    this.renderTimePanel();
+    this.renderDateTable();
+    this.applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
   }
-  _renderNoData() {
-    this._$noDataContainer = (0, _renderer.default)('<div>').addClass(NODATA_CONTAINER_CLASS).html(this.option('noDataText'));
-    this._dateTableScrollable.$content().append(this._$noDataContainer);
+  renderNoData() {
+    this.$noDataContainer = (0, _renderer.default)('<div>').addClass(NODATA_CONTAINER_CLASS).html(this.option('noDataText'));
+    this._dateTableScrollable.$content().append(this.$noDataContainer);
   }
-  _setTableSizes() {
+  setTableSizes() {
     return (0, _common.noop)();
   }
-  _toggleHorizontalScrollClass() {
+  toggleHorizontalScrollClass() {
     return (0, _common.noop)();
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createCrossScrollingConfig(argument) {
+  createCrossScrollingConfig(argument) {
     return (0, _common.noop)();
   }
-  _setGroupHeaderCellsHeight() {
-    const $cells = this._getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
-    const rows = this._removeEmptyRows(this._rows);
+  setGroupHeaderCellsHeight() {
+    const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
+    const rows = this.removeEmptyRows(this.rows);
     if (!rows.length) {
       return;
     }
     for (let i = 0; i < $cells.length; i++) {
       const $cellContent = $cells.eq(i).find('.dx-scheduler-group-header-content');
-      (0, _size.setOuterHeight)($cellContent, this._getGroupRowHeight(rows[i]));
+      (0, _size.setOuterHeight)($cellContent, this.getGroupRowHeight(rows[i]));
     }
   }
-  _rowsIsEmpty(rows) {
+  rowsIsEmpty(rows) {
     let result = true;
     for (let i = 0; i < rows.length; i++) {
       const groupRow = rows[i];
@@ -141015,11 +141184,11 @@ class SchedulerAgenda extends _m_work_space.default {
     }
     return result;
   }
-  _attachGroupCountClass() {
+  attachGroupCountClass() {
     const className = (0, _index.getVerticalGroupCountClass)(this.option('groups'));
     this.$element().addClass(className);
   }
-  _removeEmptyRows(rows) {
+  removeEmptyRows(rows) {
     const result = [];
     const isEmpty = function (data) {
       return !data.some(value => value > 0);
@@ -141031,10 +141200,10 @@ class SchedulerAgenda extends _m_work_space.default {
     }
     return result;
   }
-  _getGroupHeaderContainer() {
+  getGroupHeaderContainer() {
     return this._$groupTable;
   }
-  _makeGroupRows() {
+  makeGroupRows() {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = this.option('getFilteredItems')();
     const tree = (0, _agenda_group_utils.reduceResourcesTree)(resourceManager.resourceById, resourceManager.groupsTree, allAppointments);
@@ -141045,7 +141214,7 @@ class SchedulerAgenda extends _m_work_space.default {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: _m_classes.GROUP_ROW_CLASS,
-      groupCellClass: this._getGroupHeaderClass(),
+      groupCellClass: this.getGroupHeaderClass(),
       groupCellCustomContent(cell, cellTextElement, index, node) {
         const container = _dom_adapter.default.createElement('div');
         container.className = getGroupHeaderContentClass;
@@ -141078,50 +141247,47 @@ class SchedulerAgenda extends _m_work_space.default {
       cellTemplates
     };
   }
-  _cleanView() {
+  cleanView() {
     this._$dateTable.empty();
-    this._$timePanel.empty();
+    this.$timePanel.empty();
     if (this._$groupTable) {
       this._$groupTable.empty();
     }
-    if (this._$noDataContainer) {
-      this._$noDataContainer.empty();
-      this._$noDataContainer.remove();
-      delete this._$noDataContainer;
+    if (this.$noDataContainer) {
+      this.$noDataContainer.empty();
+      this.$noDataContainer.remove();
+      delete this.$noDataContainer;
     }
   }
-  _createWorkSpaceElements() {
-    this._createWorkSpaceStaticElements();
+  createWorkSpaceElements() {
+    this.createWorkSpaceStaticElements();
   }
-  _createWorkSpaceStaticElements() {
-    this._$dateTableContainer.append(this._$dateTable);
+  createWorkSpaceStaticElements() {
+    this.$dateTableContainer.append(this._$dateTable);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
     if (this._$groupTable) {
       this._$dateTableScrollableContent.prepend(this._$groupTable);
     }
-    this._$dateTableScrollableContent.append(this._$timePanel, this._$dateTableContainer);
+    this._$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
     this.$element().append(this._dateTableScrollable.$element());
   }
-  _renderDateTable() {
-    this._renderTableBody({
+  renderDateTable() {
+    this.renderTableBody({
       container: (0, _element.getPublicElement)(this._$dateTable),
       rowClass: _m_classes.DATE_TABLE_ROW_CLASS,
-      cellClass: this._getDateTableCellClass()
+      cellClass: this.getDateTableCellClass()
     });
   }
-  _attachTablesEvents() {
+  attachTablesEvents() {
     return (0, _common.noop)();
   }
-  _attachEvents() {
-    return (0, _common.noop)();
-  }
-  _cleanCellDataCache() {
+  attachEvents() {
     return (0, _common.noop)();
   }
   isIndicationAvailable() {
     return false;
   }
-  _prepareCellTemplateOptions(text, date, rowIndex, $cell) {
+  prepareCellTemplateOptions(text, date, rowIndex, $cell) {
     const leaf = this.resourceManager.groupsLeafs[rowIndex];
     const groups = (leaf === null || leaf === void 0 ? void 0 : leaf.grouped) ?? {};
     const groupIndex = leaf === null || leaf === void 0 ? void 0 : leaf.groupIndex;
@@ -141137,10 +141303,10 @@ class SchedulerAgenda extends _m_work_space.default {
     };
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderTableBody(options, delayCellTemplateRendering) {
+  renderTableBody(options, delayCellTemplateRendering) {
     const cellTemplates = [];
     const cellTemplateOpt = options.cellTemplate;
-    this._$rows = [];
+    this.$rows = [];
     let i;
     const fillTableBody = function (rowIndex, rowSize) {
       if (rowSize) {
@@ -141149,7 +141315,7 @@ class SchedulerAgenda extends _m_work_space.default {
         let cellDayName;
         const $row = (0, _renderer.default)('<tr>');
         const $td = (0, _renderer.default)('<td>');
-        (0, _size.setHeight)($td, this._getRowHeight(rowSize));
+        (0, _size.setHeight)($td, this.getRowHeight(rowSize));
         if (options.getStartDate) {
           var _options$getStartDate;
           date = (_options$getStartDate = options.getStartDate) === null || _options$getStartDate === void 0 ? void 0 : _options$getStartDate.call(options, rowIndex);
@@ -141157,7 +141323,7 @@ class SchedulerAgenda extends _m_work_space.default {
           cellDayName = _date.default.format(date, _index.formatWeekday);
         }
         if (cellTemplateOpt !== null && cellTemplateOpt !== void 0 && cellTemplateOpt.render) {
-          const templateOptions = this._prepareCellTemplateOptions(`${cellDateNumber} ${cellDayName}`, date, i, $td);
+          const templateOptions = this.prepareCellTemplateOptions(`${cellDateNumber} ${cellDayName}`, date, i, $td);
           cellTemplates.push(cellTemplateOpt.render.bind(cellTemplateOpt, templateOptions));
         } else if (cellDateNumber && cellDayName) {
           $td.addClass(AGENDA_DATE_CLASS).text(`${cellDateNumber} ${cellDayName}`);
@@ -141169,57 +141335,57 @@ class SchedulerAgenda extends _m_work_space.default {
           $td.addClass(options.cellClass);
         }
         $row.append($td);
-        this._$rows.push($row);
+        this.$rows.push($row);
       }
     }.bind(this);
-    for (i = 0; i < this._rows.length; i++) {
-      (0, _iterator.each)(this._rows[i], fillTableBody);
-      this._setLastRowClass();
+    for (i = 0; i < this.rows.length; i++) {
+      (0, _iterator.each)(this.rows[i], fillTableBody);
+      this.setLastRowClass();
     }
-    (0, _renderer.default)(options.container).append((0, _renderer.default)('<tbody>').append(this._$rows));
-    this._applyCellTemplates(cellTemplates);
+    (0, _renderer.default)(options.container).append((0, _renderer.default)('<tbody>').append(this.$rows));
+    this.applyCellTemplates(cellTemplates);
   }
-  _setLastRowClass() {
-    if (this._rows.length > 1 && this._$rows.length) {
-      const $lastRow = this._$rows[this._$rows.length - 1];
+  setLastRowClass() {
+    if (this.rows.length > 1 && this.$rows.length) {
+      const $lastRow = this.$rows[this.$rows.length - 1];
       $lastRow.addClass(LAST_ROW_CLASS);
     }
   }
-  _renderTimePanel() {
-    this._renderTableBody({
-      container: (0, _element.getPublicElement)(this._$timePanel),
-      rowCount: this._getTimePanelRowCount(),
+  renderTimePanel() {
+    this.renderTableBody({
+      container: (0, _element.getPublicElement)(this.$timePanel),
+      rowCount: this.getTimePanelRowCount(),
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,
       cellTemplate: this.option('dateCellTemplate'),
-      getStartDate: this._getTimePanelStartDate.bind(this)
+      getStartDate: this.getTimePanelStartDate.bind(this)
     });
   }
-  _getTimePanelStartDate(rowIndex) {
+  getTimePanelStartDate(rowIndex) {
     const current = new Date(this.option('currentDate'));
     const cellDate = new Date(current.setDate(current.getDate() + rowIndex));
     return cellDate;
   }
-  _getRowHeight(rowSize) {
+  getRowHeight(rowSize) {
     const baseHeight = this.option('rowHeight');
     const innerOffset = (rowSize - 1) * INNER_CELL_MARGIN;
     return rowSize ? baseHeight * rowSize + innerOffset + OUTER_CELL_MARGIN : 0;
   }
-  _getGroupRowHeight(groupRows) {
+  getGroupRowHeight(groupRows) {
     if (!groupRows) {
       return;
     }
     let result = 0;
     for (let i = 0; i < groupRows.length; i++) {
-      result += this._getRowHeight(groupRows[i]);
+      result += this.getRowHeight(groupRows[i]);
     }
     return result;
   }
   renderAgendaLayout(appointments) {
-    this._renderView();
+    this.renderView();
     const rows = _index.agendaUtils.calculateRows(appointments, this.option('agendaDuration'), this.getStartViewDate(), this.resourceManager.groupCount());
-    this._recalculateAgenda(rows);
+    this.recalculateAgenda(rows);
   }
   getAgendaVerticalStepHeight() {
     return this.option('rowHeight');
@@ -141260,8 +141426,7 @@ class SchedulerAgenda extends _m_work_space.default {
   renovatedRenderSupported() {
     return false;
   }
-  _setSelectedCellsByCellData() {}
-  _getIntervalDuration() {
+  getTotalViewDuration() {
     return _date2.default.dateToMilliseconds('day') * this.option('intervalCount');
   }
   getDOMElementsMetaData() {
@@ -141366,7 +141531,7 @@ class CellsSelectionController {
         rowIndex
       };
     }
-    return (0, _index.isDateAndTimeView)(viewType) ? focusedCellPosition : this._processEdgeCell({
+    return (0, _index.isDateAndTimeView)(viewType) ? focusedCellPosition : this.processEdgeCell({
       nextColumnIndex,
       rowIndex,
       columnIndex,
@@ -141377,7 +141542,7 @@ class CellsSelectionController {
       step
     });
   }
-  _processEdgeCell(options) {
+  processEdgeCell(options) {
     const {
       nextColumnIndex,
       rowIndex,
@@ -141419,17 +141584,17 @@ class CellsSelectionController {
       currentCellData
     } = options;
     const isValidMultiSelection = isMultiSelection && isMultiSelectionAllowed;
-    const nextFocusedCellData = isValidMultiSelection ? this._getNextCellData(currentCellData, focusedCellData) : currentCellData;
+    const nextFocusedCellData = isValidMultiSelection ? this.getNextCellData(currentCellData, focusedCellData) : currentCellData;
     return nextFocusedCellData;
   }
-  _getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell) {
+  getNextCellData(nextFocusedCellData, focusedCellData, isVirtualCell) {
     if (isVirtualCell) {
       return focusedCellData;
     }
-    const isValidNextFocusedCell = this._isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
+    const isValidNextFocusedCell = this.isValidNextFocusedCell(nextFocusedCellData, focusedCellData);
     return isValidNextFocusedCell ? nextFocusedCellData : focusedCellData;
   }
-  _isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
+  isValidNextFocusedCell(nextFocusedCellData, focusedCellData) {
     if (!focusedCellData) {
       return true;
     }
@@ -141460,14 +141625,16 @@ exports["default"] = void 0;
 class CellsSelectionState {
   constructor(viewDataProvider) {
     this.viewDataProvider = viewDataProvider;
-    this._focusedCell = null;
-    this._selectedCells = null;
-    this._firstSelectedCell = null;
-    this._prevFocusedCell = null;
-    this._prevSelectedCells = null;
+    this.focusedCell = null;
+    this.selectedCells = null;
+    this.firstSelectedCell = null;
+    this.prevFocusedCell = null;
+    this.prevSelectedCells = null;
   }
   getFocusedCell() {
-    const focusedCell = this._focusedCell;
+    const {
+      focusedCell
+    } = this;
     if (!focusedCell) {
       return undefined;
     }
@@ -141491,7 +141658,7 @@ class CellsSelectionState {
   setFocusedCell(rowIndex, columnIndex, isAllDay) {
     if (rowIndex >= 0) {
       const cell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
-      this._focusedCell = cell;
+      this.focusedCell = cell;
     }
   }
   setSelectedCells(lastCellCoordinates) {
@@ -141507,44 +141674,44 @@ class CellsSelectionState {
     if (lastRowIndex < 0) {
       return;
     }
-    const firstCell = firstCellCoordinates ? viewDataProvider.getCellData(firstCellCoordinates.rowIndex, firstCellCoordinates.columnIndex, firstCellCoordinates.allDay) : this._firstSelectedCell;
+    const firstCell = firstCellCoordinates ? viewDataProvider.getCellData(firstCellCoordinates.rowIndex, firstCellCoordinates.columnIndex, firstCellCoordinates.allDay) : this.firstSelectedCell;
     const lastCell = viewDataProvider.getCellData(lastRowIndex, lastColumnIndex, isLastCellAllDay);
-    this._firstSelectedCell = firstCell;
-    this._selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
+    this.firstSelectedCell = firstCell;
+    this.selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
   }
   setSelectedCellsByData(selectedCellsData) {
-    this._selectedCells = selectedCellsData;
+    this.selectedCells = selectedCellsData;
   }
   getSelectedCells() {
-    return this._selectedCells;
+    return this.selectedCells;
   }
   releaseSelectedAndFocusedCells() {
     this.releaseSelectedCells();
     this.releaseFocusedCell();
   }
   releaseSelectedCells() {
-    this._prevSelectedCells = this._selectedCells;
-    this._prevFirstSelectedCell = this._firstSelectedCell;
-    this._selectedCells = null;
-    this._firstSelectedCell = null;
+    this.prevSelectedCells = this.selectedCells;
+    this.prevFirstSelectedCell = this.firstSelectedCell;
+    this.selectedCells = null;
+    this.firstSelectedCell = null;
   }
   releaseFocusedCell() {
-    this._prevFocusedCell = this._focusedCell;
-    this._focusedCell = null;
+    this.prevFocusedCell = this.focusedCell;
+    this.focusedCell = null;
   }
   restoreSelectedAndFocusedCells() {
-    this._selectedCells = this._selectedCells || this._prevSelectedCells;
-    this._focusedCell = this._focusedCell || this._prevFocusedCell;
-    this._firstSelectedCell = this._firstSelectedCell || this._prevFirstSelectedCell;
-    this._prevSelectedCells = null;
-    this._prevFirstSelectedCell = null;
-    this._prevFocusedCell = null;
+    this.selectedCells = this.selectedCells || this.prevSelectedCells;
+    this.focusedCell = this.focusedCell || this.prevFocusedCell;
+    this.firstSelectedCell = this.firstSelectedCell || this.prevFirstSelectedCell;
+    this.prevSelectedCells = null;
+    this.prevFirstSelectedCell = null;
+    this.prevFocusedCell = null;
   }
   clearSelectedAndFocusedCells() {
-    this._prevSelectedCells = null;
-    this._selectedCells = null;
-    this._prevFocusedCell = null;
-    this._focusedCell = null;
+    this.prevSelectedCells = null;
+    this.selectedCells = null;
+    this.prevFocusedCell = null;
+    this.focusedCell = null;
   }
 }
 exports["default"] = CellsSelectionState;
@@ -141573,7 +141740,7 @@ var _index2 = __webpack_require__(34396);
 var _m_classes = __webpack_require__(80126);
 var _m_table_creator = _interopRequireDefault(__webpack_require__(92201));
 var _m_utils_time_zone = _interopRequireDefault(__webpack_require__(18648));
-var _m_current_time_shader_horizontal = _interopRequireDefault(__webpack_require__(18129));
+var _current_time_shader_horizontal = _interopRequireDefault(__webpack_require__(35577));
 var _m_work_space_indicator = _interopRequireDefault(__webpack_require__(6523));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // NOTE: Renovation component import.
@@ -141601,36 +141768,36 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
     return _index.HeaderPanelTimelineComponent;
   }
   getGroupTableWidth() {
-    return this._$sidebarTable ? (0, _size.getOuterWidth)(this._$sidebarTable) : 0;
+    return this.$sidebarTable ? (0, _size.getOuterWidth)(this.$sidebarTable) : 0;
   }
-  _getTotalRowCount(groupCount) {
+  getTotalRowCount(groupCount) {
     if (this._isHorizontalGroupedWorkSpace()) {
-      return this._getRowCount();
+      return this.getRowCount();
     }
     groupCount = groupCount || 1;
-    return this._getRowCount() * groupCount;
+    return this.getRowCount() * groupCount;
   }
-  _getFormat() {
+  getFormat() {
     return 'shorttime';
   }
-  _getWorkSpaceHeight() {
+  getWorkSpaceHeight() {
     if (this.option('crossScrollingEnabled') && (0, _window.hasWindow)()) {
       return (0, _position.getBoundingRect)(this._$dateTable.get(0)).height;
     }
     return (0, _position.getBoundingRect)(this.$element().get(0)).height;
   }
-  _dateTableScrollableConfig() {
-    const config = super._dateTableScrollableConfig();
+  dateTableScrollableConfig() {
+    const config = super.dateTableScrollableConfig();
     const timelineConfig = {
       direction: HORIZONTAL
     };
     return this.option('crossScrollingEnabled') ? config : (0, _extend.extend)(config, timelineConfig);
   }
-  _needCreateCrossScrolling() {
+  needCreateCrossScrolling() {
     return true;
   }
-  _headerScrollableConfig() {
-    const config = super._headerScrollableConfig();
+  headerScrollableConfig() {
+    const config = super.headerScrollableConfig();
     return (0, _extend.extend)(config, {
       scrollByContent: true
     });
@@ -141638,28 +141805,28 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
   supportAllDayRow() {
     return false;
   }
-  _getGroupHeaderContainer() {
+  getGroupHeaderContainer() {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this._$thead;
     }
-    return this._$sidebarTable;
+    return this.$sidebarTable;
   }
-  _insertAllDayRowsIntoDateTable() {
+  insertAllDayRowsIntoDateTable() {
     return false;
   }
-  _needRenderWeekHeader() {
+  needRenderWeekHeader() {
     return false;
   }
-  _incrementDate(date) {
+  incrementDate(date) {
     date.setDate(date.getDate() + 1);
   }
   getIndicationCellCount() {
-    const timeDiff = this._getTimeDiff();
-    return this._calculateDurationInCells(timeDiff);
+    const timeDiff = this.getTimeDiff();
+    return this.calculateDurationInCells(timeDiff);
   }
-  _getTimeDiff() {
-    let today = this._getToday();
-    const date = this._getIndicationFirstViewDate();
+  getTimeDiff() {
+    let today = this.getToday();
+    const date = this.getIndicationFirstViewDate();
     const startViewDate = this.getStartViewDate();
     const dayLightOffset = _m_utils_time_zone.default.getDaylightOffsetInMs(startViewDate, today);
     if (dayLightOffset) {
@@ -141667,17 +141834,17 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
     }
     return today.getTime() - date.getTime();
   }
-  _calculateDurationInCells(timeDiff) {
-    const today = this._getToday();
+  calculateDurationInCells(timeDiff) {
+    const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
     let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
     if (today.getHours() > this.option('endDayHour')) {
-      duration = this._getCellCountInDay();
+      duration = this.getCellCountInDay();
     }
     if (duration < 0) {
       duration = 0;
     }
-    return differenceInDays * this._getCellCountInDay() + duration;
+    return differenceInDays * this.getCellCountInDay() + duration;
   }
   getIndicationWidth() {
     if (this.isGroupedByDate()) {
@@ -141688,44 +141855,44 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
     }
     return this.getIndicationCellCount() * this.getCellWidth();
   }
-  _isVerticalShader() {
+  isVerticalShader() {
     return false;
   }
-  _isCurrentTimeHeaderCell() {
+  isCurrentTimeHeaderCell() {
     return false;
   }
-  _setTableSizes() {
-    super._setTableSizes();
-    const minHeight = this._getWorkSpaceMinHeight();
-    (0, _size.setHeight)(this._$sidebarTable, minHeight);
+  setTableSizes() {
+    super.setTableSizes();
+    const minHeight = this.getWorkSpaceMinHeight();
+    (0, _size.setHeight)(this.$sidebarTable, minHeight);
     (0, _size.setHeight)(this._$dateTable, minHeight);
     this.virtualScrollingDispatcher.updateDimensions();
   }
-  _getWorkSpaceMinHeight() {
-    let minHeight = this._getWorkSpaceHeight();
+  getWorkSpaceMinHeight() {
+    let minHeight = this.getWorkSpaceHeight();
     const workspaceContainerHeight = (0, _size.getOuterHeight)(this._$flexContainer, true);
     if (minHeight < workspaceContainerHeight) {
       minHeight = workspaceContainerHeight;
     }
     return minHeight;
   }
-  _getCellCoordinatesByIndex(index) {
+  getCellCoordinatesByIndex(index) {
     return {
       columnIndex: index % this._getCellCount(),
       rowIndex: 0
     };
   }
-  _getCellByCoordinates(cellCoordinates, groupIndex) {
+  getCellElementByPosition(cellCoordinates, groupIndex) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
     return this._$dateTable.find('tr').eq(indexes.rowIndex).find('td').eq(indexes.columnIndex);
   }
-  _getWorkSpaceWidth() {
+  getWorkSpaceWidth() {
     return (0, _size.getOuterWidth)(this._$dateTable, true);
   }
-  _getIndicationFirstViewDate() {
+  getIndicationFirstViewDate() {
     return _date.default.trimTime(new Date(this.getStartViewDate()));
   }
-  _getIntervalBetween(currentDate, allDay) {
+  getIntervalBetween(currentDate, allDay) {
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
     const firstViewDate = this.getStartViewDate();
@@ -141737,7 +141904,7 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - fullDays * toMs('day');
     let tailDelta = 0;
-    const cellCount = this._getCellCountInDay() * (fullDays - this._getWeekendsCount(fullDays));
+    const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
     const gapBeforeAppt = apptStart - _date.default.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * this.option('hoursInterval') * toMs('hour');
     if (!allDay) {
@@ -141763,7 +141930,7 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
     return result;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getWeekendsCount(argument) {
+  getWeekendsCount(argument) {
     return 0;
   }
   getAllDayContainer() {
@@ -141784,12 +141951,12 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
   }
   renderRAllDayPanel() {}
   renderRTimeTable() {}
-  _renderGroupAllDayPanel() {}
+  renderGroupAllDayPanel() {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   generateRenderOptions(argument) {
     const options = super.generateRenderOptions(true);
     return Object.assign({}, options, {
-      isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
+      isGenerateWeekDaysHeaderData: this.needRenderWeekHeader(),
       getDateForHeaderText: _index2.timelineWeekUtils.getDateForHeaderText
     });
   }
@@ -141799,12 +141966,12 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
   _init() {
     super._init();
     this.$element().addClass(TIMELINE_CLASS);
-    this._$sidebarTable = (0, _renderer.default)('<div>').addClass(GROUP_TABLE_CLASS);
+    this.$sidebarTable = (0, _renderer.default)('<div>').addClass(GROUP_TABLE_CLASS);
   }
-  _getDefaultGroupStrategy() {
+  getDefaultGroupStrategy() {
     return 'vertical';
   }
-  _toggleGroupingDirectionClass() {
+  toggleGroupingDirectionClass() {
     this.$element().toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
   }
   _getDefaultOptions() {
@@ -141812,48 +141979,45 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
       groupOrientation: 'vertical'
     });
   }
-  _createWorkSpaceElements() {
-    this._createWorkSpaceScrollableElements();
+  createWorkSpaceElements() {
+    this.createWorkSpaceScrollableElements();
   }
-  _updateAllDayVisibility() {
+  updateAllDayVisibility() {
     return (0, _common.noop)();
   }
-  _updateAllDayHeight() {
-    return (0, _common.noop)();
-  }
-  _getDateHeaderTemplate() {
+  getDateHeaderTemplate() {
     return this.option('timeCellTemplate');
   }
-  _renderView() {
+  renderView() {
     let groupCellTemplates;
     if (!this.isRenovatedRender()) {
-      groupCellTemplates = this._renderGroupHeader();
+      groupCellTemplates = this.renderGroupHeader();
     }
     this.renderWorkSpace();
     if (this.isRenovatedRender()) {
       this.virtualScrollingDispatcher.updateDimensions();
     }
-    this._shader = new _m_current_time_shader_horizontal.default(this);
-    this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
-    if (this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+    this._shader = new _current_time_shader_horizontal.default(this);
+    this.$sidebarTable.appendTo(this._sidebarScrollable.$content());
+    if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
     }
     this.updateHeaderEmptyCellWidth();
-    this._applyCellTemplates(groupCellTemplates);
+    this.applyCellTemplates(groupCellTemplates);
   }
-  _setHorizontalGroupHeaderCellsHeight() {
+  setHorizontalGroupHeaderCellsHeight() {
     return (0, _common.noop)();
   }
-  _getTimePanelCells() {
+  getTimePanelCells() {
     return this.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
   }
-  _getCurrentTimePanelCellIndices() {
+  getCurrentTimePanelCellIndices() {
     const columnCountPerGroup = this._getCellCount();
-    const today = this._getToday();
+    const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const {
       columnIndex: currentTimeColumnIndex
-    } = this._getCellCoordinatesByIndex(index);
+    } = this.getCellCoordinatesByIndex(index);
     if (currentTimeColumnIndex === undefined) {
       return [];
     }
@@ -141863,23 +142027,23 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
   // --------------
   // These methods should be deleted when we get rid of old render
   // --------------
-  _renderTimePanel() {
+  renderTimePanel() {
     return (0, _common.noop)();
   }
-  _renderAllDayPanel() {
+  renderAllDayPanel() {
     return (0, _common.noop)();
   }
-  _createAllDayPanelElements() {
+  createAllDayPanelElements() {
     return (0, _common.noop)();
   }
-  _renderDateHeader() {
-    const $headerRow = super._renderDateHeader();
-    if (this._needRenderWeekHeader()) {
+  renderDateHeader() {
+    const $headerRow = super.renderDateHeader();
+    if (this.needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
       let currentDate = new Date(firstViewDate);
       const $cells = [];
       const groupCount = this._getGroupCount();
-      const cellCountInDay = this._getCellCountInDay();
+      const cellCountInDay = this.getCellCountInDay();
       const colSpan = this.isGroupedByDate() ? cellCountInDay * groupCount : cellCountInDay;
       const cellTemplate = this.option('dateCellTemplate');
       const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate() ? groupCount : 1;
@@ -141893,7 +142057,7 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
             model: Object.assign({
               text,
               date: new Date(currentDate)
-            }, this._getGroupsForDateHeaderTemplate(templateIndex, colSpan)),
+            }, this.getGroupsForDateHeaderTemplate(templateIndex, colSpan)),
             container: $th,
             index: templateIndex
           };
@@ -141906,49 +142070,46 @@ class SchedulerTimeline extends _m_work_space_indicator.default {
         if (templateIndex % cellsInGroup === cellsInGroup - 1) {
           currentDate = new Date(firstViewDate);
         } else {
-          this._incrementDate(currentDate);
+          this.incrementDate(currentDate);
         }
       }
       const $row = (0, _renderer.default)('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
       $headerRow.before($row);
     }
   }
-  _renderIndicator(height, rtlOffset, $container, groupCount) {
+  renderIndicator(height, rtlOffset, $container, groupCount) {
     let $indicator;
     const width = this.getIndicationWidth();
     if (this.option('groupOrientation') === 'vertical') {
-      $indicator = this._createIndicator($container);
+      $indicator = this.createIndicator($container);
       (0, _size.setHeight)($indicator, (0, _position.getBoundingRect)($container.get(0)).height);
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
     } else {
       for (let i = 0; i < groupCount; i++) {
         const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-        $indicator = this._createIndicator($container);
+        $indicator = this.createIndicator($container);
         (0, _size.setHeight)($indicator, (0, _position.getBoundingRect)($container.get(0)).height);
         $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
       }
     }
   }
-  _makeGroupRows(groups, groupByDate) {
+  makeGroupRows(groups, groupByDate) {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
     return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
       groupRowClass: _m_classes.GROUP_ROW_CLASS,
       groupHeaderRowClass: _m_classes.GROUP_ROW_CLASS,
-      groupHeaderClass: this._getGroupHeaderClass.bind(this),
+      groupHeaderClass: this.getGroupHeaderClass.bind(this),
       groupHeaderContentClass: _m_classes.GROUP_HEADER_CONTENT_CLASS
-    }, this._getCellCount() || 1, this.option('resourceCellTemplate'), this._getTotalRowCount(this._getGroupCount()), groupByDate);
+    }, this._getCellCount() || 1, this.option('resourceCellTemplate'), this.getTotalRowCount(this._getGroupCount()), groupByDate);
   }
   // Old render methods.
   // TODO Old render: delete these methods with the old render.
-  _setCurrentTimeCells() {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+  setCurrentTimeCells() {
+    const timePanelCells = this.getTimePanelCells();
+    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach(timePanelCellIndex => {
       timePanelCells.eq(timePanelCellIndex).addClass(_m_classes.HEADER_CURRENT_TIME_CELL_CLASS);
     });
-  }
-  _cleanCurrentTimeCells() {
-    this.$element().find(`.${_m_classes.HEADER_CURRENT_TIME_CELL_CLASS}`).removeClass(_m_classes.HEADER_CURRENT_TIME_CELL_CLASS);
   }
 }
 (0, _component_registrator.default)('dxSchedulerTimeline', SchedulerTimeline);
@@ -141974,11 +142135,11 @@ class SchedulerTimelineDay extends _m_timeline.default {
   get type() {
     return _constants_view.VIEWS.TIMELINE_DAY;
   }
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
-  _needRenderWeekHeader() {
-    return this._isWorkSpaceWithCount();
+  needRenderWeekHeader() {
+    return this.isWorkSpaceWithCount();
   }
 }
 (0, _component_registrator.default)('dxSchedulerTimelineDay', SchedulerTimelineDay);
@@ -142016,31 +142177,31 @@ class SchedulerTimelineMonth extends _m_timeline.default {
   get renovatedHeaderPanelComponent() {
     return _index.HeaderPanelComponent;
   }
-  _renderView() {
-    super._renderView();
-    this._updateScrollable();
+  renderView() {
+    super.renderView();
+    this.updateScrollable();
   }
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
-  _getDateHeaderTemplate() {
+  getDateHeaderTemplate() {
     return this.option('dateCellTemplate');
   }
-  _calculateDurationInCells(timeDiff) {
+  calculateDurationInCells(timeDiff) {
     return timeDiff / this.getCellDuration();
   }
   isIndicatorVisible() {
     return true;
   }
-  _getFormat() {
+  getFormat() {
     return _index2.formatWeekdayAndDay;
   }
-  _getIntervalBetween(currentDate) {
+  getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = _date.default.getTimezonesDifference(firstViewDate, currentDate);
     return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
   }
-  _getViewStartByOptions() {
+  getViewStartByOptions() {
     return _index2.monthUtils.getViewStartByOptions(this.option('startDate'), this.option('currentDate'), this.option('intervalCount'), _date.default.getFirstMonthDate(this.option('startDate')));
   }
   generateRenderOptions() {
@@ -142068,7 +142229,6 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
-var _position = __webpack_require__(41639);
 var _constants_view = __webpack_require__(43582);
 var _m_timeline = _interopRequireDefault(__webpack_require__(90214));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -142077,16 +142237,13 @@ class SchedulerTimelineWeek extends _m_timeline.default {
   get type() {
     return _constants_view.VIEWS.TIMELINE_WEEK;
   }
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
-  _getHeaderPanelCellWidth($headerRow) {
-    return (0, _position.getBoundingRect)($headerRow.children().first().get(0)).width;
-  }
-  _needRenderWeekHeader() {
+  needRenderWeekHeader() {
     return true;
   }
-  _incrementDate(date) {
+  incrementDate(date) {
     date.setDate(date.getDate() + 1);
   }
 }
@@ -142118,17 +142275,17 @@ class SchedulerTimelineWorkWeek extends _m_timeline_week.default {
   constructor() {
     // @ts-expect-error
     super(...arguments);
-    this._getWeekendsCount = _index.getWeekendsCount;
+    this.getWeekendsCount = _index.getWeekendsCount;
   }
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
-  _incrementDate(date) {
+  incrementDate(date) {
     const day = date.getDay();
     if (day === LAST_DAY_WEEK_INDEX) {
       date.setDate(date.getDate() + 2);
     }
-    super._incrementDate(date);
+    super.incrementDate(date);
   }
 }
 (0, _component_registrator.default)('dxSchedulerTimelineWorkWeek', SchedulerTimelineWorkWeek);
@@ -142170,25 +142327,25 @@ class VirtualScrollingDispatcher {
   constructor(options) {
     this.options = options;
     if (options) {
-      this._rowHeight = this.getCellHeight();
-      this._cellWidth = this.getCellWidth();
-      this._createVirtualScrollingBase();
+      this.rowHeightValue = this.getCellHeight();
+      this.cellWidthValue = this.getCellWidth();
+      this.createVirtualScrollingBase();
     }
   }
   get isRTL() {
     return this.options.isRTL();
   }
   get verticalVirtualScrolling() {
-    return this._verticalVirtualScrolling;
+    return this.verticalVirtualScrollingValue;
   }
   set verticalVirtualScrolling(value) {
-    this._verticalVirtualScrolling = value;
+    this.verticalVirtualScrollingValue = value;
   }
   get horizontalVirtualScrolling() {
-    return this._horizontalVirtualScrolling;
+    return this.horizontalVirtualScrollingValue;
   }
   set horizontalVirtualScrolling(value) {
-    this._horizontalVirtualScrolling = value;
+    this.horizontalVirtualScrollingValue = value;
   }
   get document() {
     return _dom_adapter.default.getDocument();
@@ -142200,19 +142357,19 @@ class VirtualScrollingDispatcher {
     return this.options.getSchedulerWidth();
   }
   get rowHeight() {
-    return this._rowHeight;
+    return this.rowHeightValue;
   }
   set rowHeight(value) {
-    this._rowHeight = value;
+    this.rowHeightValue = value;
   }
   get outlineCount() {
     return this.options.getScrolling().outlineCount;
   }
   get cellWidth() {
-    return this._cellWidth;
+    return this.cellWidthValue;
   }
   set cellWidth(value) {
-    this._cellWidth = value;
+    this.cellWidthValue = value;
   }
   get viewportWidth() {
     const width = this.width && this.options.getViewWidth();
@@ -142335,20 +142492,20 @@ class VirtualScrollingDispatcher {
     };
   }
   dispose() {
-    if (this._onScrollHandler) {
-      _events_engine.default.off(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
+    if (this.onScrollHandler) {
+      _events_engine.default.off(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this.onScrollHandler);
     }
   }
   createVirtualScrolling() {
     const isVerticalVirtualScrollingCreated = Boolean(this.verticalVirtualScrolling);
     const isHorizontalVirtualScrollingCreated = Boolean(this.horizontalVirtualScrolling);
     if (this.verticalScrollingAllowed !== isVerticalVirtualScrollingCreated || this.horizontalScrollingAllowed !== isHorizontalVirtualScrollingCreated) {
-      this._rowHeight = this.getCellHeight();
-      this._cellWidth = this.getCellWidth();
-      this._createVirtualScrollingBase();
+      this.rowHeightValue = this.getCellHeight();
+      this.cellWidthValue = this.getCellWidth();
+      this.createVirtualScrollingBase();
     }
   }
-  _createVirtualScrollingBase() {
+  createVirtualScrollingBase() {
     if (this.verticalScrollingAllowed) {
       this.verticalVirtualScrolling = new VerticalVirtualScrolling(Object.assign({}, this.options, {
         viewportHeight: this.viewportHeight,
@@ -142369,12 +142526,12 @@ class VirtualScrollingDispatcher {
   }
   attachScrollableEvents() {
     if (this.isAttachWindowScrollEvent()) {
-      this._attachWindowScroll();
+      this.attachWindowScroll();
     }
   }
-  _attachWindowScroll() {
+  attachWindowScroll() {
     const window = (0, _window.getWindow)();
-    this._onScrollHandler = this.options.createAction(() => {
+    this.onScrollHandler = this.options.createAction(() => {
       const {
         scrollX,
         scrollY
@@ -142386,7 +142543,7 @@ class VirtualScrollingDispatcher {
         });
       }
     });
-    _events_engine.default.on(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
+    _events_engine.default.on(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this.onScrollHandler);
   }
   handleOnScrollEvent(scrollPosition) {
     if (scrollPosition) {
@@ -142428,25 +142585,25 @@ exports.VirtualScrollingDispatcher = VirtualScrollingDispatcher;
 class VirtualScrollingBase {
   constructor(options) {
     this.options = options;
-    this._state = this.defaultState;
+    this.stateValue = this.defaultState;
     this.viewportSize = this.options.viewportSize;
-    this._itemSize = this.options.itemSize;
-    this._position = -1;
-    this._itemSizeChanged = false;
+    this.itemSizeValue = this.options.itemSize;
+    this.positionValue = -1;
+    this.itemSizeChanged = false;
     this.updateState(0);
   }
   get itemSize() {
-    return this._itemSize;
+    return this.itemSizeValue;
   }
   set itemSize(value) {
-    this._itemSizeChanged = this._itemSize !== value;
-    this._itemSize = value;
+    this.itemSizeChanged = this.itemSizeValue !== value;
+    this.itemSizeValue = value;
   }
   get state() {
-    return this._state;
+    return this.stateValue;
   }
   set state(value) {
-    this._state = value;
+    this.stateValue = value;
   }
   get startIndex() {
     return this.state.startIndex;
@@ -142482,10 +142639,10 @@ class VirtualScrollingBase {
     return this.getTotalItemCount() * this.itemSize - this.viewportSize;
   }
   get position() {
-    return this._position;
+    return this.positionValue;
   }
   set position(value) {
-    this._position = value;
+    this.positionValue = value;
   }
   needUpdateState(position) {
     const {
@@ -142497,7 +142654,7 @@ class VirtualScrollingBase {
       return true;
     }
     let isStartIndexChanged = false;
-    if (this._validateAndSavePosition(position)) {
+    if (this.validateAndSavePosition(position)) {
       if (position === 0 || position === this.maxScrollPosition) {
         return true;
       }
@@ -142508,7 +142665,7 @@ class VirtualScrollingBase {
     }
     return isStartIndexChanged;
   }
-  _validateAndSavePosition(position) {
+  validateAndSavePosition(position) {
     if (!(0, _type.isDefined)(position)) {
       return false;
     }
@@ -142516,21 +142673,21 @@ class VirtualScrollingBase {
     this.position = position;
     return result;
   }
-  _correctPosition(position) {
+  correctPosition(position) {
     return position >= 0 ? Math.min(position, this.maxScrollPosition) : -1;
   }
   updateState(position, isForce) {
-    position = this._correctPosition(position);
+    position = this.correctPosition(position);
     if (!this.needUpdateState(position) && !isForce) {
       return false;
     }
-    const itemsInfoBefore = this._calcItemInfoBefore(position);
-    const itemsDeltaBefore = this._calcItemDeltaBefore(itemsInfoBefore);
+    const itemsInfoBefore = this.calcItemInfoBefore(position);
+    const itemsDeltaBefore = this.calcItemDeltaBefore(itemsInfoBefore);
     const {
       outlineCountAfter,
       virtualItemCountAfter,
       itemCountWithAfter
-    } = this._calcItemInfoAfter(itemsDeltaBefore);
+    } = this.calcItemInfoAfter(itemsDeltaBefore);
     const {
       virtualItemCountBefore,
       outlineCountBefore
@@ -142544,7 +142701,7 @@ class VirtualScrollingBase {
     this.state.itemCount = itemCount;
     this.state.outlineCountAfter = outlineCountAfter;
     this.state.virtualItemCountAfter = virtualItemCountAfter;
-    this._updateStateCore();
+    this.updateStateCore();
     return true;
   }
   reinitState(itemSize, isForceUpdate) {
@@ -142557,7 +142714,7 @@ class VirtualScrollingBase {
       this.updateState(position, isForceUpdate);
     }
   }
-  _calcItemInfoBefore(position) {
+  calcItemInfoBefore(position) {
     let virtualItemCountBefore = Math.floor(position / this.itemSize);
     const outlineCountBefore = Math.min(virtualItemCountBefore, this.outlineCount);
     virtualItemCountBefore -= outlineCountBefore;
@@ -142566,7 +142723,7 @@ class VirtualScrollingBase {
       outlineCountBefore
     };
   }
-  _calcItemDeltaBefore(itemInfoBefore) {
+  calcItemDeltaBefore(itemInfoBefore) {
     const {
       virtualItemCountBefore,
       outlineCountBefore
@@ -142580,7 +142737,7 @@ class VirtualScrollingBase {
   getRenderState() {
     throw 'getRenderState method should be implemented';
   }
-  _calcItemInfoAfter(itemsDeltaBefore) {
+  calcItemInfoAfter(itemsDeltaBefore) {
     const itemCountWithAfter = itemsDeltaBefore >= this.pageSize ? this.pageSize : itemsDeltaBefore;
     let virtualItemCountAfter = itemsDeltaBefore - itemCountWithAfter;
     const outlineCountAfter = virtualItemCountAfter > 0 ? Math.min(virtualItemCountAfter, this.outlineCount) : 0;
@@ -142593,7 +142750,7 @@ class VirtualScrollingBase {
       itemCountWithAfter
     };
   }
-  _updateStateCore() {
+  updateStateCore() {
     const {
       state
     } = this;
@@ -142623,7 +142780,7 @@ class VirtualScrollingBase {
     const virtualSizeAfter = virtualItemSizeAfter + outlineSizeAfter;
     const isAppend = prevVirtualSizeBefore < virtualSizeBefore;
     const isPrepend = prevVirtualSizeAfter < virtualSizeAfter;
-    const needAddItems = this._itemSizeChanged || isAppend || isPrepend;
+    const needAddItems = this.itemSizeChanged || isAppend || isPrepend;
     if (needAddItems) {
       this._updateStateVirtualItems(virtualItemSizeBefore, virtualItemSizeAfter);
     }
@@ -142705,30 +142862,31 @@ class HorizontalVirtualScrolling extends VirtualScrollingBase {
 }
 // We do not need this class in renovation
 class VirtualScrollingRenderer {
-  constructor(_workspace) {
-    this._workspace = _workspace;
-    this._renderAppointmentTimeoutID = null;
+  constructor(workspaceValue) {
+    this.workspaceValue = workspaceValue;
+    this.renderAppointmentTimeoutID = null;
   }
   getRenderTimeout() {
     return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
   }
   get workspace() {
-    return this._workspace;
+    return this.workspaceValue;
   }
   updateRender() {
     this._renderGrid();
-    this._renderAppointments();
+    this.renderAppointments();
   }
+  // TODO: make private once external usage in m_work_space.ts is removed
   _renderGrid() {
     this.workspace.renderWorkSpace(false);
   }
-  _renderAppointments() {
+  renderAppointments() {
     const renderTimeout = this.getRenderTimeout();
     if (renderTimeout >= 0) {
-      clearTimeout(this._renderAppointmentTimeoutID);
-      this._renderAppointmentTimeoutID = setTimeout(() => this.workspace.updateAppointments(), renderTimeout);
+      clearTimeout(this.renderAppointmentTimeoutID);
+      this.renderAppointmentTimeoutID = setTimeout(() => this.workspace.renderAppointments(), renderTimeout);
     } else {
-      this.workspace.updateAppointments();
+      this.workspace.renderAppointments();
     }
   }
 }
@@ -142777,7 +142935,7 @@ var _m_classes = __webpack_require__(80126);
 var _m_compact_appointments_helper = __webpack_require__(64787);
 var _m_table_creator = _interopRequireDefault(__webpack_require__(92201));
 var _m_utils = __webpack_require__(5327);
-var _m_current_time_shader_vertical = _interopRequireDefault(__webpack_require__(28471));
+var _current_time_shader_vertical = _interopRequireDefault(__webpack_require__(25167));
 var _appointment_groups_utils = __webpack_require__(11649);
 var _group_utils = __webpack_require__(76131);
 var _m_position_helper = __webpack_require__(39979);
@@ -142870,23 +143028,23 @@ class SchedulerWorkSpace extends _ui2.default {
     return '';
   }
   get viewDataProvider() {
-    if (!this._viewDataProvider) {
-      this._viewDataProvider = new _m_view_data_provider.default(this.type);
+    if (!this.viewDataProviderValue) {
+      this.viewDataProviderValue = new _m_view_data_provider.default(this.type);
     }
-    return this._viewDataProvider;
+    return this.viewDataProviderValue;
   }
   get cache() {
-    if (!this._cache) {
-      this._cache = new _global_cache.Cache();
+    if (!this.cacheValue) {
+      this.cacheValue = new _global_cache.Cache();
     }
-    return this._cache;
+    return this.cacheValue;
   }
   get resourceManager() {
     return this.option('getResourceManager')();
   }
   get cellsSelectionState() {
-    if (!this._cellsSelectionState) {
-      this._cellsSelectionState = new _m_cells_selection_state.default(this.viewDataProvider);
+    if (!this.cellsSelectionStateValue) {
+      this.cellsSelectionStateValue = new _m_cells_selection_state.default(this.viewDataProvider);
       const selectedCellsOption = this.option('selectedCellData');
       if ((selectedCellsOption === null || selectedCellsOption === void 0 ? void 0 : selectedCellsOption.length) > 0) {
         const validSelectedCells = selectedCellsOption.map(selectedCell => {
@@ -142898,24 +143056,24 @@ class SchedulerWorkSpace extends _ui2.default {
               groupIndex: 0
             });
           }
-          const groupIndex = this._getGroupIndexByGroupValues(groups);
+          const groupIndex = this.getGroupIndexByGroupValues(groups);
           return Object.assign({}, selectedCell, {
             groupIndex
           });
         });
-        this._cellsSelectionState.setSelectedCellsByData(validSelectedCells);
+        this.cellsSelectionStateValue.setSelectedCellsByData(validSelectedCells);
       }
     }
-    return this._cellsSelectionState;
+    return this.cellsSelectionStateValue;
   }
   get cellsSelectionController() {
-    if (!this._cellsSelectionController) {
-      this._cellsSelectionController = new _m_cells_selection_controller.CellsSelectionController();
+    if (!this.cellsSelectionControllerValue) {
+      this.cellsSelectionControllerValue = new _m_cells_selection_controller.CellsSelectionController();
     }
-    return this._cellsSelectionController;
+    return this.cellsSelectionControllerValue;
   }
   get isAllDayPanelVisible() {
-    return this._isShowAllDayPanel() && this.supportAllDayRow();
+    return this.isShowAllDayPanel() && this.supportAllDayRow();
   }
   get verticalGroupTableClass() {
     return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS;
@@ -142946,12 +143104,12 @@ class SchedulerWorkSpace extends _ui2.default {
     const clickHandler = function (e) {
       e.preventDefault();
       e.stopPropagation();
-      const selectedCells = this._getSelectedCellsData();
+      const selectedCells = this.getSelectedCellsData();
       if (selectedCells !== null && selectedCells !== void 0 && selectedCells.length) {
-        const selectedCellsElement = selectedCells.map(cellData => this._getCellByData(cellData)).filter(cell => Boolean(cell));
+        const selectedCellsElement = selectedCells.map(cellData => this.getCellByData(cellData)).filter(cell => Boolean(cell));
         e.target = selectedCellsElement;
-        this._showPopup = true;
-        this._cellClickAction({
+        this.showPopup = true;
+        this.cellClickAction({
           event: e,
           cellElement: (0, _renderer.default)(selectedCellsElement),
           cellData: selectedCells[0]
@@ -142964,10 +143122,10 @@ class SchedulerWorkSpace extends _ui2.default {
       e.stopPropagation();
       const focusedCellData = (_this$cellsSelectionS = this.cellsSelectionState.getFocusedCell()) === null || _this$cellsSelectionS === void 0 ? void 0 : _this$cellsSelectionS.cellData;
       if (focusedCellData) {
-        const isAllDayPanelCell = focusedCellData.allDay && !this._isVerticalGroupedWorkSpace();
+        const isAllDayPanelCell = focusedCellData.allDay && !this.isVerticalGroupedWorkSpace();
         const isMultiSelection = e.shiftKey;
         const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
-        const isRTL = this._isRTL();
+        const isRTL = this.isRTL();
         const groupCount = this._getGroupCount();
         const isGroupedByDate = this.isGroupedByDate();
         const isHorizontalGrouping = this._isHorizontalGroupedWorkSpace();
@@ -142989,7 +143147,7 @@ class SchedulerWorkSpace extends _ui2.default {
           isAllDayPanelCell,
           focusedCellData
         });
-        this._processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection && isMultiSelectionAllowed);
+        this.processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection && isMultiSelectionAllowed);
       }
     };
     // @ts-expect-error
@@ -143010,15 +143168,15 @@ class SchedulerWorkSpace extends _ui2.default {
       }
     });
   }
-  _isRTL() {
+  isRTL() {
     return this.option('rtlEnabled');
   }
-  _moveToCell($cell, isMultiSelection) {
+  moveToCell($cell, isMultiSelection) {
     if (!(0, _type.isDefined)($cell) || !$cell.length) {
       return;
     }
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
-    const currentCellData = this._getFullCellData($cell);
+    const currentCellData = this.getFullCellData($cell);
     const focusedCell = this.cellsSelectionState.getFocusedCell();
     if (!focusedCell) {
       return;
@@ -143031,9 +143189,9 @@ class SchedulerWorkSpace extends _ui2.default {
       focusedCellData,
       isVirtualCell: $cell.hasClass(_m_classes.VIRTUAL_CELL_CLASS)
     });
-    this._processNextSelectedCell(nextFocusedCellData, focusedCellData, isMultiSelectionAllowed && isMultiSelection);
+    this.processNextSelectedCell(nextFocusedCellData, focusedCellData, isMultiSelectionAllowed && isMultiSelection);
   }
-  _processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
+  processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
     const nextCellPosition = this.viewDataProvider.findCellPositionInMap({
       startDate: nextCellData.startDate,
       groupIndex: nextCellData.groupIndex,
@@ -143041,13 +143199,13 @@ class SchedulerWorkSpace extends _ui2.default {
       index: nextCellData.index
     });
     if (!this.viewDataProvider.isSameCell(focusedCellData, nextCellData)) {
-      const $cell = nextCellData.allDay && !this._isVerticalGroupedWorkSpace() ? this._dom_getAllDayPanelCell(nextCellPosition.columnIndex) : this._dom_getDateCell(nextCellPosition);
+      const $cell = nextCellData.allDay && !this.isVerticalGroupedWorkSpace() ? this.domGetAllDayPanelCell(nextCellPosition.columnIndex) : this.domGetDateCell(nextCellPosition);
       const isNextCellAllDay = nextCellData.allDay;
-      this._setSelectedCellsStateAndUpdateSelection(isNextCellAllDay, nextCellPosition, isMultiSelection, $cell);
+      this.setSelectedCellsStateAndUpdateSelection(isNextCellAllDay, nextCellPosition, isMultiSelection, $cell);
       this._dateTableScrollable.scrollToElement($cell);
     }
   }
-  _setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
+  setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
     const nextCellCoordinates = {
       rowIndex: cellPosition.rowIndex,
       columnIndex: cellPosition.columnIndex,
@@ -143060,9 +143218,9 @@ class SchedulerWorkSpace extends _ui2.default {
       this.cellsSelectionState.setSelectedCells(nextCellCoordinates, nextCellCoordinates);
     }
     this.updateCellsSelection();
-    this._updateSelectedCellDataOption(this._getSelectedCellsData(), $nextFocusedCell);
+    this.updateSelectedCellDataOption(this.getSelectedCellsData(), $nextFocusedCell);
   }
-  _hasAllDayClass($cell) {
+  hasAllDayClass($cell) {
     return $cell.hasClass(ALL_DAY_TABLE_CELL_CLASS);
   }
   _focusInHandler(e) {
@@ -143070,9 +143228,9 @@ class SchedulerWorkSpace extends _ui2.default {
     const $focusTarget = this._focusTarget();
     // T1312256: On macOS, e.target can be a child element of the workspace root
     const isTargetInsideWorkspace = $target.is($focusTarget) || $target.closest($focusTarget).length > 0;
-    if (isTargetInsideWorkspace && this._isCellClick) {
-      delete this._isCellClick;
-      delete this._contextMenuHandled;
+    if (isTargetInsideWorkspace && this.isCellClick) {
+      delete this.isCellClick;
+      delete this.contextMenuHandled;
       // @ts-expect-error
       super._focusInHandler.apply(this, arguments);
       this.cellsSelectionState.restoreSelectedAndFocusedCells();
@@ -143080,19 +143238,19 @@ class SchedulerWorkSpace extends _ui2.default {
         const cellCoordinates = {
           columnIndex: 0,
           rowIndex: 0,
-          allDay: this._isVerticalGroupedWorkSpace() && this.isAllDayPanelVisible
+          allDay: this.isVerticalGroupedWorkSpace() && this.isAllDayPanelVisible
         };
         this.cellsSelectionState.setFocusedCell(cellCoordinates.rowIndex, cellCoordinates.columnIndex, cellCoordinates.allDay);
         this.cellsSelectionState.setSelectedCells(cellCoordinates, cellCoordinates);
       }
       this.updateCellsSelection();
-      this._updateSelectedCellDataOption(this._getSelectedCellsData());
+      this.updateSelectedCellDataOption(this.getSelectedCellsData());
     }
   }
   _focusOutHandler() {
     // @ts-expect-error
     super._focusOutHandler.apply(this, arguments);
-    if (!this._contextMenuHandled && !this._disposed) {
+    if (!this.contextMenuHandled && !this._disposed) {
       this.cellsSelectionState.releaseSelectedAndFocusedCells();
       this.viewDataProvider.updateViewData(this.generateRenderOptions());
       this.updateCellsSelection();
@@ -143101,28 +143259,29 @@ class SchedulerWorkSpace extends _ui2.default {
   _focusTarget() {
     return this.$element();
   }
-  _isVerticalGroupedWorkSpace() {
+  isVerticalGroupedWorkSpace() {
     var _this$option;
     return Boolean((_this$option = this.option('groups')) === null || _this$option === void 0 ? void 0 : _this$option.length) && this.option('groupOrientation') === 'vertical';
   }
+  // TODO: make private once external usages in shaders, m_timeline.ts are removed
   _isHorizontalGroupedWorkSpace() {
     var _this$option2;
     return Boolean((_this$option2 = this.option('groups')) === null || _this$option2 === void 0 ? void 0 : _this$option2.length) && this.option('groupOrientation') === 'horizontal';
   }
-  _isWorkSpaceWithCount() {
+  isWorkSpaceWithCount() {
     return this.option('intervalCount') > 1;
   }
-  _isWorkspaceWithOddCells() {
+  isWorkspaceWithOddCells() {
     return this.option('hoursInterval') === 0.5 && !this.isVirtualScrolling();
   }
-  _getRealGroupOrientation() {
-    return this._isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
+  getRealGroupOrientation() {
+    return this.isVerticalGroupedWorkSpace() ? 'vertical' : 'horizontal';
   }
   createRAllDayPanelElements() {
     this._$allDayPanel = (0, _renderer.default)('<div>').addClass(ALL_DAY_PANEL_CLASS);
-    this._$allDayTitle = (0, _renderer.default)('<div>').appendTo(this._$headerPanelEmptyCell);
+    this.$allDayTitle = (0, _renderer.default)('<div>').appendTo(this.$headerPanelEmptyCell);
   }
-  _dateTableScrollableConfig() {
+  dateTableScrollableConfig() {
     let config = {
       useKeyboard: false,
       bounceEnabled: false,
@@ -143158,8 +143317,8 @@ class SchedulerWorkSpace extends _ui2.default {
         }
       }
     };
-    if (this._needCreateCrossScrolling()) {
-      config = (0, _extend.extend)(config, this._createCrossScrollingConfig(config));
+    if (this.needCreateCrossScrolling()) {
+      config = (0, _extend.extend)(config, this.createCrossScrollingConfig(config));
     }
     if (this.isVirtualScrolling() && (this.virtualScrollingDispatcher.horizontalScrollingAllowed || this.virtualScrollingDispatcher.height)) {
       const currentOnScroll = config.onScroll;
@@ -143172,7 +143331,7 @@ class SchedulerWorkSpace extends _ui2.default {
     }
     return config;
   }
-  _createCrossScrollingConfig(_ref3) {
+  createCrossScrollingConfig(_ref3) {
     let {
       onScroll
     } = _ref3;
@@ -143180,10 +143339,10 @@ class SchedulerWorkSpace extends _ui2.default {
       direction: 'both',
       onScroll: event => {
         onScroll === null || onScroll === void 0 || onScroll();
-        this._scrollSync.sidebar({
+        this.scrollSync.sidebar({
           top: event.scrollOffset.top
         });
-        this._scrollSync.header({
+        this.scrollSync.header({
           left: event.scrollOffset.left
         });
       },
@@ -143192,7 +143351,7 @@ class SchedulerWorkSpace extends _ui2.default {
       }
     };
   }
-  _headerScrollableConfig() {
+  headerScrollableConfig() {
     return {
       useKeyboard: false,
       showScrollbar: 'never',
@@ -143201,7 +143360,7 @@ class SchedulerWorkSpace extends _ui2.default {
       updateManually: true,
       bounceEnabled: false,
       onScroll: event => {
-        this._scrollSync.dateTable({
+        this.scrollSync.dateTable({
           left: event.scrollOffset.left
         });
       }
@@ -143210,34 +143369,34 @@ class SchedulerWorkSpace extends _ui2.default {
   _visibilityChanged(visible) {
     this.cache.clear();
     if (visible) {
-      this._updateGroupTableHeight();
+      this.updateGroupTableHeight();
     }
-    if (visible && this._needCreateCrossScrolling()) {
-      this._setTableSizes();
+    if (visible && this.needCreateCrossScrolling()) {
+      this.setTableSizes();
     }
   }
-  _setTableSizes() {
+  setTableSizes() {
     this.cache.clear();
-    this._attachTableClasses();
+    this.attachTableClasses();
     let cellWidth = this.getCellWidth();
     if (cellWidth < this.getCellMinWidth()) {
       cellWidth = this.getCellMinWidth();
     }
     const minWidth = this.getWorkSpaceMinWidth();
     const groupCount = this._getGroupCount();
-    const totalCellCount = this._getTotalCellCount(groupCount);
+    const totalCellCount = this.getTotalCellCount(groupCount);
     let width = cellWidth * totalCellCount;
     if (width < minWidth) {
       width = minWidth;
     }
     (0, _size.setWidth)(this._$headerPanel, width);
     (0, _size.setWidth)(this._$dateTable, width);
-    if (this._$allDayTable) {
-      (0, _size.setWidth)(this._$allDayTable, width);
+    if (this.$allDayTable) {
+      (0, _size.setWidth)(this.$allDayTable, width);
     }
-    this._attachHeaderTableClasses();
-    this._updateGroupTableHeight();
-    this._updateScrollable();
+    this.attachHeaderTableClasses();
+    this.updateGroupTableHeight();
+    this.updateScrollable();
   }
   getWorkSpaceMinWidth() {
     return this._groupedStrategy.getWorkSpaceMinWidth();
@@ -143249,19 +143408,19 @@ class SchedulerWorkSpace extends _ui2.default {
       return;
     }
     if (this.option('crossScrollingEnabled')) {
-      this._setTableSizes();
+      this.setTableSizes();
     }
     this.updateHeaderEmptyCellWidth();
-    this._updateScrollable();
+    this.updateScrollable();
     this.cache.clear();
   }
-  _needCreateCrossScrolling() {
+  needCreateCrossScrolling() {
     return this.option('crossScrollingEnabled');
   }
-  _getElementClass() {
+  getElementClass() {
     return (0, _common.noop)();
   }
-  _getRowCount() {
+  getRowCount() {
     return this.viewDataProvider.getRowCount({
       intervalCount: this.option('intervalCount'),
       currentDate: this.option('currentDate'),
@@ -143271,6 +143430,7 @@ class SchedulerWorkSpace extends _ui2.default {
       endDayHour: this.option('endDayHour')
     });
   }
+  // TODO: make private once external usages in grouped strategies, shaders, m_timeline.ts are removed
   _getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
@@ -143284,18 +143444,18 @@ class SchedulerWorkSpace extends _ui2.default {
   isRenovatedRender() {
     return this.renovatedRenderSupported() && this.option('renovateRender');
   }
-  _isVirtualModeOn() {
+  isVirtualModeOn() {
     return this.option('scrolling.mode') === 'virtual';
   }
   isVirtualScrolling() {
-    return this.isRenovatedRender() && this._isVirtualModeOn();
+    return this.isRenovatedRender() && this.isVirtualModeOn();
   }
-  _initVirtualScrolling() {
+  initVirtualScrolling() {
     if (this.virtualScrollingDispatcher) {
       this.virtualScrollingDispatcher.dispose();
       this.virtualScrollingDispatcher = null;
     }
-    this.virtualScrollingDispatcher = new _m_virtual_scrolling.VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
+    this.virtualScrollingDispatcher = new _m_virtual_scrolling.VirtualScrollingDispatcher(this.getVirtualScrollingDispatcherOptions());
     this.virtualScrollingDispatcher.attachScrollableEvents();
     this.renderer = new _m_virtual_scrolling.VirtualScrollingRenderer(this);
   }
@@ -143303,21 +143463,21 @@ class SchedulerWorkSpace extends _ui2.default {
     return (0, _index3.calculateIsGroupedAllDayPanel)(this.option('groups').length, this.option('groupOrientation'), this.isAllDayPanelVisible);
   }
   generateRenderOptions(isProvideVirtualCellsWidth) {
-    var _this$_getToday;
+    var _this$getToday;
     const groupCount = this._getGroupCount();
-    const groupOrientation = groupCount > 0 ? this.option('groupOrientation') : this._getDefaultGroupStrategy();
+    const groupOrientation = groupCount > 0 ? this.option('groupOrientation') : this.getDefaultGroupStrategy();
     const options = Object.assign({
       groupByDate: this.option('groupByDate'),
       startRowIndex: 0,
       startCellIndex: 0,
       groupOrientation,
-      today: (_this$_getToday = this._getToday) === null || _this$_getToday === void 0 ? void 0 : _this$_getToday.call(this),
+      today: (_this$getToday = this.getToday) === null || _this$getToday === void 0 ? void 0 : _this$getToday.call(this),
       getResourceManager: this.option('getResourceManager'),
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
       selectedCells: this.cellsSelectionState.getSelectedCells(),
       focusedCell: this.cellsSelectionState.getFocusedCell(),
-      headerCellTextFormat: this._getFormat(),
+      headerCellTextFormat: this.getFormat(),
       getDateForHeaderText: (_, date) => date,
       viewOffset: this.option('viewOffset'),
       startDayHour: this.option('startDayHour'),
@@ -143336,62 +143496,62 @@ class SchedulerWorkSpace extends _ui2.default {
   renovatedRenderSupported() {
     return true;
   }
-  _updateGroupTableHeight() {
-    if (this._isVerticalGroupedWorkSpace() && (0, _window.hasWindow)()) {
-      this._setHorizontalGroupHeaderCellsHeight();
+  updateGroupTableHeight() {
+    if (this.isVerticalGroupedWorkSpace() && (0, _window.hasWindow)()) {
+      this.setHorizontalGroupHeaderCellsHeight();
     }
   }
   updateHeaderEmptyCellWidth() {
-    if ((0, _window.hasWindow)() && this._isRenderHeaderPanelEmptyCell()) {
+    if ((0, _window.hasWindow)() && this.isRenderHeaderPanelEmptyCell()) {
       const timePanelWidth = this.getTimePanelWidth();
       const groupPanelWidth = this.getGroupTableWidth();
-      this._$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
+      this.$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
     }
   }
   updateHeaderPanelScrollbarPadding() {
     if ((0, _window.hasWindow)() && this._$headerPanelContainer) {
-      const scrollbarWidth = this._getScrollbarWidth();
+      const scrollbarWidth = this.getScrollbarWidth();
       this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
     }
   }
-  _getScrollbarWidth() {
+  getScrollbarWidth() {
     const containerElement = (0, _renderer.default)(this._dateTableScrollable.container()).get(0);
     const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
     return scrollbarWidth;
   }
-  _isGroupsSpecified(groupValues) {
+  isGroupsSpecified(groupValues) {
     var _this$option3;
     return ((_this$option3 = this.option('groups')) === null || _this$option3 === void 0 ? void 0 : _this$option3.length) && groupValues;
   }
-  _getGroupIndexByGroupValues(groupValues) {
+  getGroupIndexByGroupValues(groupValues) {
     return groupValues && (0, _appointment_groups_utils.getAppointmentGroupIndex)((0, _appointment_groups_utils.getSafeGroupValues)(groupValues), this.resourceManager.groupsLeafs)[0];
   }
-  _getViewStartByOptions() {
-    return (0, _index3.getViewStartByOptions)(this.option('startDate'), this.option('currentDate'), this._getIntervalDuration(), this.option('startDate') ? this._calculateViewStartDate() : undefined);
+  getViewStartByOptions() {
+    return (0, _index3.getViewStartByOptions)(this.option('startDate'), this.option('currentDate'), this.getTotalViewDuration(), this.option('startDate') ? this.calculateViewStartDate() : undefined);
   }
-  _getIntervalDuration() {
+  getTotalViewDuration() {
     return this.viewDataProvider.getIntervalDuration(this.option('intervalCount'));
   }
-  _getHeaderDate() {
+  getHeaderDate() {
     return this.getStartViewDate();
   }
-  _calculateViewStartDate() {
+  calculateViewStartDate() {
     return (0, _index3.calculateViewStartDate)(this.option('startDate'));
   }
-  _firstDayOfWeek() {
+  firstDayOfWeek() {
     return this.viewDataProvider.getFirstDayOfWeek(this.option('firstDayOfWeek'));
   }
-  _attachEvents() {
-    this._createSelectionChangedAction();
-    this._attachClickEvent();
-    this._attachContextMenuEvent();
+  attachEvents() {
+    this.createSelectionChangedAction();
+    this.attachClickEvent();
+    this.attachContextMenuEvent();
   }
-  _attachClickEvent() {
+  attachClickEvent() {
     const that = this;
     const pointerDownAction = this._createAction(e => {
-      that._pointerDownHandler(e.event);
+      that.pointerDownHandler(e.event);
     });
-    this._createCellClickAction();
+    this.createCellClickAction();
     const cellSelector = `.${DATE_TABLE_CELL_CLASS},.${ALL_DAY_TABLE_CELL_CLASS}`;
     const $element = this.$element();
     _events_engine.default.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
@@ -143407,45 +143567,45 @@ class SchedulerWorkSpace extends _ui2.default {
     });
     _events_engine.default.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, e => {
       const $cell = (0, _renderer.default)(e.target);
-      that._cellClickAction({
+      that.cellClickAction({
         event: e,
         cellElement: (0, _element.getPublicElement)($cell),
         cellData: that.getCellData($cell)
       });
     });
   }
-  _createCellClickAction() {
-    this._cellClickAction = this._createActionByOption('onCellClick', {
-      afterExecute: e => this._cellClickHandler(e.args[0].event)
+  createCellClickAction() {
+    this.cellClickAction = this._createActionByOption('onCellClick', {
+      afterExecute: e => this.cellClickHandler(e.args[0].event)
     });
   }
-  _createSelectionChangedAction() {
-    this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
+  createSelectionChangedAction() {
+    this.selectionChangedAction = this._createActionByOption('onSelectionChanged');
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _cellClickHandler(argument) {
-    if (this._showPopup) {
-      delete this._showPopup;
-      this._handleSelectedCellsClick();
+  cellClickHandler(argument) {
+    if (this.showPopup) {
+      delete this.showPopup;
+      this.handleSelectedCellsClick();
     }
   }
-  _pointerDownHandler(e) {
+  pointerDownHandler(e) {
     const $target = (0, _renderer.default)(e.target);
     if (!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
-      this._isCellClick = false;
+      this.isCellClick = false;
       return;
     }
-    this._isCellClick = true;
+    this.isCellClick = true;
     if ($target.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
-      this._showPopup = true;
+      this.showPopup = true;
     } else {
-      const cellCoordinates = this._getCoordinatesByCell($target);
-      const isAllDayCell = this._hasAllDayClass($target);
-      this._setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
+      const cellCoordinates = this.getCoordinatesByCell($target);
+      const isAllDayCell = this.hasAllDayClass($target);
+      this.setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
     }
   }
-  _handleSelectedCellsClick() {
-    const selectedCells = this._getSelectedCellsData();
+  handleSelectedCellsClick() {
+    const selectedCells = this.getSelectedCellsData();
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
     const result = {
@@ -143459,65 +143619,65 @@ class SchedulerWorkSpace extends _ui2.default {
     }
     this.option('onSelectedCellsClick')(result, lastCellData.groups);
   }
-  _attachContextMenuEvent() {
-    this._createContextMenuAction();
+  attachContextMenuEvent() {
+    this.createContextMenuAction();
     const cellSelector = `.${DATE_TABLE_CELL_CLASS},.${ALL_DAY_TABLE_CELL_CLASS}`;
     const $element = this.$element();
     const eventName = (0, _index.addNamespace)(_contextmenu.name, this.NAME);
     _events_engine.default.off($element, eventName, cellSelector);
-    _events_engine.default.on($element, eventName, cellSelector, this._contextMenuHandler.bind(this));
+    _events_engine.default.on($element, eventName, cellSelector, this.contextMenuHandler.bind(this));
   }
-  _contextMenuHandler(e) {
+  contextMenuHandler(e) {
     const $cell = (0, _renderer.default)(e.target);
-    this._contextMenuAction({
+    this.contextMenuAction({
       event: e,
       cellElement: (0, _element.getPublicElement)($cell),
       cellData: this.getCellData($cell)
     });
-    this._contextMenuHandled = true;
+    this.contextMenuHandled = true;
   }
-  _createContextMenuAction() {
-    this._contextMenuAction = this._createActionByOption('onCellContextMenu');
+  createContextMenuAction() {
+    this.contextMenuAction = this._createActionByOption('onCellContextMenu');
   }
-  _getGroupHeaderContainer() {
-    if (this._isVerticalGroupedWorkSpace()) {
+  getGroupHeaderContainer() {
+    if (this.isVerticalGroupedWorkSpace()) {
       return this._$groupTable;
     }
     return this._$thead;
   }
-  _getDateHeaderContainer() {
+  getDateHeaderContainer() {
     return this._$thead;
   }
-  _getCalculateHeaderCellRepeatCount() {
+  getCalculateHeaderCellRepeatCount() {
     return this._groupedStrategy.calculateHeaderCellRepeatCount();
   }
-  _updateScrollable() {
-    var _this$_headerScrollab, _this$_sidebarScrolla;
+  updateScrollable() {
+    var _this$headerScrollabl, _this$_sidebarScrolla;
     this._dateTableScrollable.update();
-    (_this$_headerScrollab = this._headerScrollable) === null || _this$_headerScrollab === void 0 || _this$_headerScrollab.update();
+    (_this$headerScrollabl = this.headerScrollable) === null || _this$headerScrollabl === void 0 || _this$headerScrollabl.update();
     (_this$_sidebarScrolla = this._sidebarScrollable) === null || _this$_sidebarScrolla === void 0 || _this$_sidebarScrolla.update();
     this.updateHeaderPanelScrollbarPadding();
   }
-  _getTimePanelRowCount() {
-    return this._getCellCountInDay();
+  getTimePanelRowCount() {
+    return this.getCellCountInDay();
   }
-  _getCellCountInDay() {
+  getCellCountInDay() {
     const hoursInterval = this.option('hoursInterval');
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
     return this.viewDataProvider.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
   }
-  _getTotalCellCount(groupCount) {
+  getTotalCellCount(groupCount) {
     return this._groupedStrategy.getTotalCellCount(groupCount);
   }
-  _getTotalRowCount(groupCount, includeAllDayPanelRows) {
+  getTotalRowCount(groupCount, includeAllDayPanelRows) {
     let result = this._groupedStrategy.getTotalRowCount(groupCount);
     if (includeAllDayPanelRows && this.isAllDayPanelVisible) {
       result += groupCount;
     }
     return result;
   }
-  _getGroupIndex(rowIndex, columnIndex) {
+  getGroupIndex(rowIndex, columnIndex) {
     return this._groupedStrategy.getGroupIndex(rowIndex, columnIndex);
   }
   calculateEndDate(startDate) {
@@ -143526,21 +143686,22 @@ class SchedulerWorkSpace extends _ui2.default {
     } = this.viewDataProvider;
     return viewDataGenerator.calculateEndDate(startDate, viewDataGenerator.getInterval(this.option('hoursInterval')), this.option('endDayHour'));
   }
+  // TODO: make private once external usages in grouped strategies, shaders, m_subscribes.ts, m_timeline.ts are removed
   _getGroupCount() {
     return this.resourceManager.groupCount();
   }
-  _attachTablesEvents() {
+  attachTablesEvents() {
     const element = this.$element();
-    this._attachDragEvents(element);
-    this._attachPointerEvents(element);
+    this.attachDragEvents(element);
+    this.attachPointerEvents(element);
   }
-  _detachDragEvents(element) {
+  detachDragEvents(element) {
     _events_engine.default.off(element, DragEventNames.ENTER);
     _events_engine.default.off(element, DragEventNames.LEAVE);
     _events_engine.default.off(element, DragEventNames.DROP);
   }
-  _attachDragEvents(element) {
-    this._detachDragEvents(element);
+  attachDragEvents(element) {
+    this.detachDragEvents(element);
     const onDragEnter = e => {
       if (!this.preventDefaultDragging) {
         this.removeDroppableCellClass();
@@ -143552,7 +143713,7 @@ class SchedulerWorkSpace extends _ui2.default {
         this.removeDroppableCellClass();
       }
     };
-    const onCheckDropTarget = (target, event) => !this._isOutsideScrollable(target, event);
+    const onCheckDropTarget = (target, event) => !this.isOutsideScrollable(target, event);
     _events_engine.default.on(element, DragEventNames.ENTER, DRAG_AND_DROP_SELECTOR, {
       checkDropTarget: onCheckDropTarget
     }, onDragEnter);
@@ -143571,7 +143732,7 @@ class SchedulerWorkSpace extends _ui2.default {
       });
     });
   }
-  _attachPointerEvents(element) {
+  attachPointerEvents(element) {
     let isPointerDown = false;
     _events_engine.default.off(element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
     _events_engine.default.off(element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
@@ -143590,15 +143751,15 @@ class SchedulerWorkSpace extends _ui2.default {
       if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
         e.preventDefault();
         e.stopPropagation();
-        this._moveToCell((0, _renderer.default)(e.target), true);
+        this.moveToCell((0, _renderer.default)(e.target), true);
       }
     });
   }
-  _getFormat() {
+  getFormat() {
     return abstract();
   }
   getWorkArea() {
-    return this._$dateTableContainer;
+    return this.$dateTableContainer;
   }
   getScrollable() {
     return this._dateTableScrollable;
@@ -143622,7 +143783,7 @@ class SchedulerWorkSpace extends _ui2.default {
     return this._$headerPanel && (0, _size.getOuterHeight)(this._$headerPanel, true);
   }
   getTimePanelWidth() {
-    return this._$timePanel && (0, _position.getBoundingRect)(this._$timePanel.get(0)).width;
+    return this.$timePanel && (0, _position.getBoundingRect)(this.$timePanel.get(0)).width;
   }
   getGroupTableWidth() {
     return this._$groupTable ? (0, _size.getOuterWidth)(this._$groupTable) : 0;
@@ -143630,9 +143791,9 @@ class SchedulerWorkSpace extends _ui2.default {
   getWorkSpaceLeftOffset() {
     return this._groupedStrategy.getLeftOffset();
   }
-  _getCellCoordinatesByIndex(index) {
-    const columnIndex = Math.floor(index / this._getRowCount());
-    const rowIndex = index - this._getRowCount() * columnIndex;
+  getCellCoordinatesByIndex(index) {
+    const columnIndex = Math.floor(index / this.getRowCount());
+    const rowIndex = index - this.getRowCount() * columnIndex;
     return {
       columnIndex,
       rowIndex
@@ -143640,7 +143801,7 @@ class SchedulerWorkSpace extends _ui2.default {
   }
   // TODO: necessary for old render
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getDateGenerationOptions() {
+  getDateGenerationOptions() {
     var _this$viewDataProvide;
     let isOldRender = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
     return {
@@ -143648,17 +143809,17 @@ class SchedulerWorkSpace extends _ui2.default {
       endDayHour: this.option('endDayHour'),
       interval: (_this$viewDataProvide = this.viewDataProvider.viewDataGenerator) === null || _this$viewDataProvide === void 0 ? void 0 : _this$viewDataProvide.getInterval(this.option('hoursInterval')),
       startViewDate: this.getStartViewDate(),
-      firstDayOfWeek: this._firstDayOfWeek()
+      firstDayOfWeek: this.firstDayOfWeek()
     };
   }
   // TODO: refactor current time indicator
-  _getIntervalBetween(currentDate, allDay) {
+  getIntervalBetween(currentDate, allDay) {
     const firstViewDate = this.getStartViewDate();
     const startDayTime = this.option('startDayHour') * HOUR_MS;
     const timeZoneOffset = _date.default.getTimezonesDifference(firstViewDate, currentDate);
     const fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset;
-    const days = this._getDaysOfInterval(fullInterval, startDayTime);
-    const weekendsCount = this._getWeekendsCount(days);
+    const days = this.getDaysOfInterval(fullInterval, startDayTime);
+    const weekendsCount = this.getWeekendsCount(days);
     let result = (days - weekendsCount) * DAY_MS;
     if (!allDay) {
       const {
@@ -143670,21 +143831,21 @@ class SchedulerWorkSpace extends _ui2.default {
     return result;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getWeekendsCount(argument) {
+  getWeekendsCount(argument) {
     return 0;
   }
-  _getDaysOfInterval(fullInterval, startDayTime) {
+  getDaysOfInterval(fullInterval, startDayTime) {
     return Math.floor((fullInterval + startDayTime) / DAY_MS);
   }
-  _updateIndex(index) {
-    return index * this._getRowCount();
+  updateIndex(index) {
+    return index * this.getRowCount();
   }
   getDroppableCell() {
-    return this._getDateTables().find(`.${DATE_TABLE_DROPPABLE_CELL_CLASS}`);
+    return this.getDateTables().find(`.${DATE_TABLE_DROPPABLE_CELL_CLASS}`);
   }
-  _getWorkSpaceWidth() {
+  getWorkSpaceWidth() {
     return this.cache.memo('workspaceWidth', () => {
-      if (this._needCreateCrossScrolling()) {
+      if (this.needCreateCrossScrolling()) {
         return (0, _position.getBoundingRect)(this._$dateTable.get(0)).width;
       }
       const totalWidth = (0, _position.getBoundingRect)(this.$element().get(0)).width;
@@ -143693,17 +143854,17 @@ class SchedulerWorkSpace extends _ui2.default {
       return totalWidth - timePanelWidth - groupTableWidth;
     });
   }
-  _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
+  getCellElementByPosition(cellCoordinates, groupIndex, inAllDayRow) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
-    return this._dom_getDateCell(indexes);
+    return this.domGetDateCell(indexes);
   }
-  _dom_getDateCell(position) {
+  domGetDateCell(position) {
     return this._$dateTable.find(`tr:not(.${VIRTUAL_ROW_CLASS})`).eq(position.rowIndex).find(`td:not(.${_m_classes.VIRTUAL_CELL_CLASS})`).eq(position.columnIndex);
   }
-  _dom_getAllDayPanelCell(columnIndex) {
+  domGetAllDayPanelCell(columnIndex) {
     return this._$allDayPanel.find('tr').eq(0).find('td').eq(columnIndex);
   }
-  _getCells(allDay, direction) {
+  getCells(allDay, direction) {
     const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
     if (direction === 'vertical') {
       let result = [];
@@ -143716,28 +143877,28 @@ class SchedulerWorkSpace extends _ui2.default {
     }
     return this.$element().find(`.${cellClass}`);
   }
-  _getFirstAndLastDataTableCell() {
+  getFirstAndLastDataTableCell() {
     const selector = this.isVirtualScrolling() ? `.${DATE_TABLE_CELL_CLASS}, .${_m_classes.VIRTUAL_CELL_CLASS}` : `.${DATE_TABLE_CELL_CLASS}`;
     const $cells = this.$element().find(selector);
     return [$cells[0], $cells[$cells.length - 1]];
   }
-  _getAllCells(allDay) {
-    if (this._isVerticalGroupedWorkSpace()) {
+  getAllCells(allDay) {
+    if (this.isVerticalGroupedWorkSpace()) {
       return this._$dateTable.find(`td:not(.${_m_classes.VIRTUAL_CELL_CLASS})`);
     }
     const cellClass = allDay && this.supportAllDayRow() ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
     return this.$element().find(`.${cellClass}`);
   }
-  _setHorizontalGroupHeaderCellsHeight() {
+  setHorizontalGroupHeaderCellsHeight() {
     const {
       height
     } = (0, _position.getBoundingRect)(this._$dateTable.get(0));
     (0, _size.setOuterHeight)(this._$groupTable, height);
   }
-  _getGroupHeaderCells() {
+  getGroupHeaderCells() {
     return this.$element().find(`.${GROUP_HEADER_CLASS}`);
   }
-  _getScrollCoordinates(date, groupIndex, allDay) {
+  getScrollCoordinates(date, groupIndex, allDay) {
     const currentDate = date || new Date(this.option('currentDate'));
     const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
     if (!cell) {
@@ -143746,7 +143907,7 @@ class SchedulerWorkSpace extends _ui2.default {
     currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(cell.cellData, cell.position, currentDate, (0, _index3.isDateAndTimeView)(this.type), this.viewDirection === 'vertical');
   }
-  _isOutsideScrollable(target, event) {
+  isOutsideScrollable(target, event) {
     const $dateTableScrollableElement = this._dateTableScrollable.$element();
     const scrollableSize = (0, _position.getBoundingRect)($dateTableScrollableElement.get(0));
     const window = (0, _window.getWindow)();
@@ -143764,7 +143925,7 @@ class SchedulerWorkSpace extends _ui2.default {
   keepOriginalHours() {
     return false;
   }
-  _normalizeCellData(cellData) {
+  normalizeCellData(cellData) {
     var _this$timeZoneCalcula, _this$timeZoneCalcula2;
     return (0, _extend.extend)(true, {}, {
       startDate: cellData.startDate,
@@ -143776,34 +143937,34 @@ class SchedulerWorkSpace extends _ui2.default {
       allDay: cellData.allDay
     });
   }
-  _getSelectedCellsData() {
+  getSelectedCellsData() {
     const selected = this.cellsSelectionState.getSelectedCells();
-    return selected === null || selected === void 0 ? void 0 : selected.map(this._normalizeCellData.bind(this));
+    return selected === null || selected === void 0 ? void 0 : selected.map(this.normalizeCellData.bind(this));
   }
   getCellData($cell) {
-    const cellData = this._getFullCellData($cell) ?? {};
-    return this._normalizeCellData(cellData);
+    const cellData = this.getFullCellData($cell) ?? {};
+    return this.normalizeCellData(cellData);
   }
-  _getFullCellData($cell) {
+  getFullCellData($cell) {
     const currentCell = $cell[0];
     if (currentCell) {
-      return this._getDataByCell($cell);
+      return this.getDataByCell($cell);
     }
     return undefined;
   }
-  _getVirtualRowOffset() {
+  getVirtualRowOffset() {
     return this.virtualScrollingDispatcher.virtualRowOffset;
   }
-  _getVirtualCellOffset() {
+  getVirtualCellOffset() {
     return this.virtualScrollingDispatcher.virtualCellOffset;
   }
-  _getDataByCell($cell) {
+  getDataByCell($cell) {
     const rowIndex = $cell.parent().index() - this.virtualScrollingDispatcher.topVirtualRowsCount;
     const columnIndex = $cell.index() - this.virtualScrollingDispatcher.leftVirtualCellsCount;
     const {
       viewDataProvider
     } = this;
-    const isAllDayCell = this._hasAllDayClass($cell);
+    const isAllDayCell = this.hasAllDayClass($cell);
     const cellData = viewDataProvider.getCellData(rowIndex, columnIndex, isAllDayCell);
     return cellData || undefined;
   }
@@ -143817,10 +143978,10 @@ class SchedulerWorkSpace extends _ui2.default {
     } = this.viewDataProvider;
     const timeInterval = inAllDayRow ? 24 * 60 * 60 * 1000 : viewDataGenerator.getInterval(this.option('hoursInterval'));
     const startViewDateOffset = (0, _index3.getStartViewDateTimeOffset)(this.getStartViewDate(), this.option('startDayHour'));
-    const dateTimeStamp = this._getIntervalBetween(date, inAllDayRow) + startViewDateOffset;
+    const dateTimeStamp = this.getIntervalBetween(date, inAllDayRow) + startViewDateOffset;
     let index = Math.floor(dateTimeStamp / timeInterval);
     if (inAllDayRow) {
-      index = this._updateIndex(index);
+      index = this.updateIndex(index);
     }
     if (index < 0) {
       index = 0;
@@ -143859,7 +144020,7 @@ class SchedulerWorkSpace extends _ui2.default {
     return (0, _m_position_helper.getCellHeight)(this.getDOMElementsMetaData());
   }
   getAllDayHeight() {
-    return (0, _m_position_helper.getAllDayHeight)(this.option('showAllDayPanel'), this._isVerticalGroupedWorkSpace(), this.getDOMElementsMetaData());
+    return (0, _m_position_helper.getAllDayHeight)(this.option('showAllDayPanel'), this.isVerticalGroupedWorkSpace(), this.getDOMElementsMetaData());
   }
   getMaxAllowedPosition(groupIndex) {
     return (0, _m_position_helper.getMaxAllowedPosition)(groupIndex, this.viewDataProvider, this.option('rtlEnabled'), this.getDOMElementsMetaData());
@@ -143873,7 +144034,7 @@ class SchedulerWorkSpace extends _ui2.default {
       horizontalScrollingState,
       verticalScrollingState
     } = this.virtualScrollingDispatcher;
-    const cellCount = (horizontalScrollingState === null || horizontalScrollingState === void 0 ? void 0 : horizontalScrollingState.itemCount) ?? this._getTotalCellCount(this._getGroupCount());
+    const cellCount = (horizontalScrollingState === null || horizontalScrollingState === void 0 ? void 0 : horizontalScrollingState.itemCount) ?? this.getTotalCellCount(this._getGroupCount());
     const cellWidth = this.getCellWidth();
     const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
     const leftCoordinateOffset = (horizontalScrollingState === null || horizontalScrollingState === void 0 ? void 0 : horizontalScrollingState.virtualItemSizeBefore) ?? 0;
@@ -143881,7 +144042,7 @@ class SchedulerWorkSpace extends _ui2.default {
     const topIndex = Math.floor(Math.floor(coordinates.top - topCoordinateOffset) / Math.floor(cellHeight));
     let leftIndex = (coordinates.left - leftCoordinateOffset) / cellWidth;
     leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
-    if (this._isRTL()) {
+    if (this.isRTL()) {
       leftIndex = cellCount - leftIndex - 1;
     }
     return cellCount * topIndex + leftIndex;
@@ -143909,15 +144070,15 @@ class SchedulerWorkSpace extends _ui2.default {
   }
   getGroupBounds(coordinates) {
     const groupBounds = this._groupedStrategy instanceof _m_work_space_grouped_strategy_vertical.default ? this.getGroupBoundsVertical(coordinates.groupIndex) : this.getGroupBoundsHorizontal(coordinates);
-    return this._isRTL() ? this.getGroupBoundsRtlCorrection(groupBounds) : groupBounds;
+    return this.isRTL() ? this.getGroupBoundsRtlCorrection(groupBounds) : groupBounds;
   }
   getGroupBoundsVertical(groupIndex) {
-    const $firstAndLastCells = this._getFirstAndLastDataTableCell();
+    const $firstAndLastCells = this.getFirstAndLastDataTableCell();
     return this._groupedStrategy.getGroupBoundsOffset(groupIndex, $firstAndLastCells);
   }
   getGroupBoundsHorizontal(coordinates) {
     const cellCount = this._getCellCount();
-    const $cells = this._getCells();
+    const $cells = this.getCells();
     const cellWidth = this.getCellWidth();
     const {
       groupedDataMap
@@ -143932,10 +144093,10 @@ class SchedulerWorkSpace extends _ui2.default {
     });
   }
   needRecalculateResizableArea() {
-    return this._isVerticalGroupedWorkSpace() && this.getScrollable().scrollTop() !== 0;
+    return this.isVerticalGroupedWorkSpace() && this.getScrollable().scrollTop() !== 0;
   }
   getCellByCoordinates(coordinates, allDay) {
-    const $cells = this._getCells(allDay);
+    const $cells = this.getCells(allDay);
     const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
     return $cells.eq(cellIndex);
   }
@@ -143965,8 +144126,8 @@ class SchedulerWorkSpace extends _ui2.default {
   }
   needUpdateScrollPosition(date, appointmentGroupValues) {
     let inAllDayRow = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-    const cells = this._getCellsInViewport(inAllDayRow);
-    const groupIndex = this._isGroupsSpecified(appointmentGroupValues) ? this._getGroupIndexByGroupValues(appointmentGroupValues) : 0;
+    const cells = this.getCellsInViewport(inAllDayRow);
+    const groupIndex = this.isGroupsSpecified(appointmentGroupValues) ? this.getGroupIndexByGroupValues(appointmentGroupValues) : 0;
     const time = date.getTime();
     const trimmedTime = _date.default.trimTime(date).getTime();
     return cells.reduce((currentResult, cell) => {
@@ -143983,11 +144144,11 @@ class SchedulerWorkSpace extends _ui2.default {
       return currentResult;
     }, true);
   }
-  _getCellsInViewport(inAllDayRow) {
+  getCellsInViewport(inAllDayRow) {
     const $scrollable = this.getScrollable().$element();
     const cellHeight = this.getCellHeight();
     const cellWidth = this.getCellWidth();
-    const totalColumnCount = this._getTotalCellCount(this._getGroupCount());
+    const totalColumnCount = this.getTotalCellCount(this._getGroupCount());
     const scrollableScrollTop = this.getScrollableScrollTop();
     const scrollableScrollLeft = this.getScrollableScrollLeft();
     const fullScrolledRowCount = scrollableScrollTop / cellHeight - this.virtualScrollingDispatcher.topVirtualRowsCount;
@@ -144003,7 +144164,7 @@ class SchedulerWorkSpace extends _ui2.default {
     }
     const rowCount = Math.floor(fullScrolledRowCount + (0, _size.getHeight)($scrollable) / cellHeight);
     const columnCount = Math.floor(fullScrolledColumnCount + (0, _size.getWidth)($scrollable) / cellWidth);
-    const $cells = this._getAllCells(inAllDayRow);
+    const $cells = this.getAllCells(inAllDayRow);
     const result = [];
     $cells.each(function (index) {
       const $cell = (0, _renderer.default)(this);
@@ -144019,12 +144180,12 @@ class SchedulerWorkSpace extends _ui2.default {
     let allDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
     let throwWarning = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     let align = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 'center';
-    if (!this._isValidScrollDate(date, throwWarning)) {
+    if (!this.isValidScrollDate(date, throwWarning)) {
       return;
     }
-    const groupIndex = this._getGroupCount() && groupValues ? this._getGroupIndexByGroupValues(groupValues) : 0;
+    const groupIndex = this._getGroupCount() && groupValues ? this.getGroupIndexByGroupValues(groupValues) : 0;
     const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
-    const coordinates = this._getScrollCoordinates(date, groupIndex, isScrollToAllDay);
+    const coordinates = this.getScrollCoordinates(date, groupIndex, isScrollToAllDay);
     if (!coordinates) {
       return;
     }
@@ -144039,7 +144200,7 @@ class SchedulerWorkSpace extends _ui2.default {
     const yShift = align === 'start' ? 0 : (scrollableHeight - cellHeight) / 2;
     const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
     let top = coordinates.top - scrollable.scrollTop() - yShift;
-    if (isScrollToAllDay && !this._isVerticalGroupedWorkSpace()) {
+    if (isScrollToAllDay && !this.isVerticalGroupedWorkSpace()) {
       top = 0;
     }
     if (this.option('templatesRenderAsynchronously')) {
@@ -144056,7 +144217,7 @@ class SchedulerWorkSpace extends _ui2.default {
       });
     }
   }
-  _isValidScrollDate(date) {
+  isValidScrollDate(date) {
     let throwWarning = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     const viewOffset = this.option('viewOffset');
     const min = new Date(this.getStartViewDate().getTime() + viewOffset);
@@ -144074,11 +144235,11 @@ class SchedulerWorkSpace extends _ui2.default {
     const $cell = $cellElement || this.getDroppableCell();
     $cell === null || $cell === void 0 || $cell.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
   }
-  _getCoordinatesByCell($cell) {
+  getCoordinatesByCell($cell) {
     const columnIndex = $cell.index() - this.virtualScrollingDispatcher.leftVirtualCellsCount;
     let rowIndex = $cell.parent().index();
-    const isAllDayCell = this._hasAllDayClass($cell);
-    const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
+    const isAllDayCell = this.hasAllDayClass($cell);
+    const isVerticalGrouping = this.isVerticalGroupedWorkSpace();
     if (!(isAllDayCell && !isVerticalGrouping)) {
       rowIndex -= this.virtualScrollingDispatcher.topVirtualRowsCount;
     }
@@ -144087,13 +144248,13 @@ class SchedulerWorkSpace extends _ui2.default {
       columnIndex
     };
   }
-  _isShowAllDayPanel() {
+  isShowAllDayPanel() {
     return this.option('showAllDayPanel');
   }
-  _getTimePanelCells() {
+  getTimePanelCells() {
     return this.$element().find(`.${TIME_PANEL_CELL_CLASS}`);
   }
-  _getRDateTableProps() {
+  getRDateTableProps() {
     return {
       viewData: this.viewDataProvider.viewData,
       viewContext: this.getR1ComponentsViewContext(),
@@ -144112,13 +144273,13 @@ class SchedulerWorkSpace extends _ui2.default {
     };
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateSelectedCellDataOption(selectedCellData, $nextFocusedCell) {
+  updateSelectedCellDataOption(selectedCellData, $nextFocusedCell) {
     this.option('selectedCellData', selectedCellData);
-    this._selectionChangedAction({
+    this.selectionChangedAction({
       selectedCellData
     });
   }
-  _getCellByData(cellData) {
+  getCellByData(cellData) {
     const {
       startDate,
       groupIndex,
@@ -144134,27 +144295,27 @@ class SchedulerWorkSpace extends _ui2.default {
     if (!position) {
       return undefined;
     }
-    return allDay && !this._isVerticalGroupedWorkSpace() ? this._dom_getAllDayPanelCell(position.columnIndex) : this._dom_getDateCell(position);
+    return allDay && !this.isVerticalGroupedWorkSpace() ? this.domGetAllDayPanelCell(position.columnIndex) : this.domGetDateCell(position);
   }
   // Must replace all DOM manipulations
   getDOMElementsMetaData() {
     return this.cache.memo('cellElementsMeta', () => ({
-      dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
-      allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo()
+      dateTableCellsMeta: this.getDateTableDOMElementsInfo(),
+      allDayPanelCellsMeta: this.getAllDayPanelDOMElementsInfo()
     }));
   }
   getPanelDOMSize(panelName) {
-    return panelName === 'allDayPanel' ? this.cache.memo('allDayPanelSize', () => (0, _position.getBoundingRect)(this._$allDayPanel.get(0))) : this.cache.memo('regularPanelSize', () => (0, _position.getBoundingRect)(this._getDateTable().get(0)));
+    return panelName === 'allDayPanel' ? this.cache.memo('allDayPanelSize', () => (0, _position.getBoundingRect)(this._$allDayPanel.get(0))) : this.cache.memo('regularPanelSize', () => (0, _position.getBoundingRect)(this.getDateTable().get(0)));
   }
   getCollectorDimension(isCollectorCompact, panelName) {
     return this.cache.memo(`collectorSize-${panelName}`, () => _m_compact_appointments_helper.CompactAppointmentsHelper.measureCollectorDimensions(panelName === 'allDayPanel' ? this.getAllDayContainer() : this.getFixedContainer(), isCollectorCompact));
   }
-  _getDateTableDOMElementsInfo() {
-    const dateTableCells = this._getAllCells(false);
+  getDateTableDOMElementsInfo() {
+    const dateTableCells = this.getAllCells(false);
     if (!dateTableCells.length || !(0, _window.hasWindow)()) {
       return [[{}]];
     }
-    const dateTable = this._getDateTable();
+    const dateTable = this.getDateTable();
     // We should use getBoundingClientRect in renovation
     const dateTableRect = (0, _position.getBoundingRect)(dateTable.get(0));
     const columnsCount = this.viewDataProvider.getColumnsCount();
@@ -144164,26 +144325,26 @@ class SchedulerWorkSpace extends _ui2.default {
       if (result.length === rowIndex) {
         result.push([]);
       }
-      this._addCellMetaData(result[rowIndex], cell, dateTableRect);
+      this.addCellMetaData(result[rowIndex], cell, dateTableRect);
     });
     return result;
   }
-  _getAllDayPanelDOMElementsInfo() {
+  getAllDayPanelDOMElementsInfo() {
     const result = [];
-    if (this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace() && (0, _window.hasWindow)()) {
-      const allDayCells = this._getAllCells(true);
+    if (this.isAllDayPanelVisible && !this.isVerticalGroupedWorkSpace() && (0, _window.hasWindow)()) {
+      const allDayCells = this.getAllCells(true);
       if (!allDayCells.length) {
         return [{}];
       }
       const allDayAppointmentContainer = this._$allDayPanel;
       const allDayPanelRect = (0, _position.getBoundingRect)(allDayAppointmentContainer.get(0));
       allDayCells.each((_, cell) => {
-        this._addCellMetaData(result, cell, allDayPanelRect);
+        this.addCellMetaData(result, cell, allDayPanelRect);
       });
     }
     return result;
   }
-  _addCellMetaData(cellMetaDataArray, cell, parentRect) {
+  addCellMetaData(cellMetaDataArray, cell, parentRect) {
     const cellRect = (0, _position.getBoundingRect)(cell);
     cellMetaDataArray.push({
       left: cellRect.left - parentRect.left,
@@ -144193,10 +144354,10 @@ class SchedulerWorkSpace extends _ui2.default {
     });
   }
   // TODO: remove along with old render
-  _oldRender_getAllDayCellData(groupIndex) {
+  oldRenderGetAllDayCellData(groupIndex) {
     return (cell, rowIndex, columnIndex) => {
       const validColumnIndex = columnIndex % this._getCellCount();
-      const options = this._getDateGenerationOptions(true);
+      const options = this.getDateGenerationOptions(true);
       let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(options, rowIndex, validColumnIndex);
       startDate = _date.default.trimTime(startDate);
       let validGroupIndex = groupIndex || 0;
@@ -144242,7 +144403,7 @@ class SchedulerWorkSpace extends _ui2.default {
     }
   }
   renderRDateTable() {
-    _m_utils.utils.renovation.renderComponent(this, this._$dateTable, _index2.DateTableComponent, 'renovatedDateTable', this._getRDateTableProps());
+    _m_utils.utils.renovation.renderComponent(this, this._$dateTable, _index2.DateTableComponent, 'renovatedDateTable', this.getRDateTableProps());
   }
   renderRGroupPanel() {
     var _this$option4;
@@ -144256,31 +144417,31 @@ class SchedulerWorkSpace extends _ui2.default {
       groupPanelData: this.viewDataProvider.getGroupPanelData(this.generateRenderOptions())
     };
     if ((_this$option4 = this.option('groups')) !== null && _this$option4 !== void 0 && _this$option4.length) {
-      this._attachGroupCountClass();
-      _m_utils.utils.renovation.renderComponent(this, this._getGroupHeaderContainer(), _index2.GroupPanelComponent, 'renovatedGroupPanel', options);
+      this.attachGroupCountClass();
+      _m_utils.utils.renovation.renderComponent(this, this.getGroupHeaderContainer(), _index2.GroupPanelComponent, 'renovatedGroupPanel', options);
     } else {
-      this._detachGroupCountClass();
+      this.detachGroupCountClass();
     }
   }
   renderRAllDayPanel() {
     const visible = this.isAllDayPanelVisible && !this.isGroupedAllDayPanel();
     if (visible) {
       var _this$virtualScrollin;
-      this._updateAllDayVisibility();
+      this.updateAllDayVisibility();
       const options = Object.assign({
         viewData: this.viewDataProvider.viewData,
         viewContext: this.getR1ComponentsViewContext(),
         dataCellTemplate: this.option('dataCellTemplate'),
         startCellIndex: 0
       }, ((_this$virtualScrollin = this.virtualScrollingDispatcher.horizontalVirtualScrolling) === null || _this$virtualScrollin === void 0 ? void 0 : _this$virtualScrollin.getRenderState()) || {});
-      _m_utils.utils.renovation.renderComponent(this, this._$allDayTable, _index2.AllDayTableComponent, 'renovatedAllDayPanel', options);
-      _m_utils.utils.renovation.renderComponent(this, this._$allDayTitle, _index2.AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
+      _m_utils.utils.renovation.renderComponent(this, this.$allDayTable, _index2.AllDayTableComponent, 'renovatedAllDayPanel', options);
+      _m_utils.utils.renovation.renderComponent(this, this.$allDayTitle, _index2.AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
-    this._updateAllDayVisibility();
-    this._updateScrollable();
+    this.updateAllDayVisibility();
+    this.updateScrollable();
   }
   renderRTimeTable() {
-    _m_utils.utils.renovation.renderComponent(this, this._$timePanel, _index2.TimePanelComponent, 'renovatedTimePanel', {
+    _m_utils.utils.renovation.renderComponent(this, this.$timePanel, _index2.TimePanelComponent, 'renovatedTimePanel', {
       viewContext: this.getR1ComponentsViewContext(),
       timePanelData: this.viewDataProvider.timePanelData,
       timeCellTemplate: this.option('timeCellTemplate'),
@@ -144291,9 +144452,9 @@ class SchedulerWorkSpace extends _ui2.default {
     var _this$option5;
     let isRenderDateHeader = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
     if ((_this$option5 = this.option('groups')) !== null && _this$option5 !== void 0 && _this$option5.length) {
-      this._attachGroupCountClass();
+      this.attachGroupCountClass();
     } else {
-      this._detachGroupCountClass();
+      this.detachGroupCountClass();
     }
     _m_utils.utils.renovation.renderComponent(this, this._$thead, this.renovatedHeaderPanelComponent, 'renovatedHeaderPanel', {
       viewContext: this.getR1ComponentsViewContext(),
@@ -144315,22 +144476,22 @@ class SchedulerWorkSpace extends _ui2.default {
     if (!this.dragBehavior && scheduler) {
       this.dragBehavior = new _m_appointment_drag_behavior.default(scheduler);
       const $rootElement = (0, _renderer.default)(scheduler.element());
-      this._createDragBehavior(this.getWorkArea(), $rootElement);
-      if (!this._isVerticalGroupedWorkSpace()) {
-        this._createDragBehavior(this._$allDayPanel, $rootElement);
+      this.createDragBehavior(this.getWorkArea(), $rootElement);
+      if (!this.isVerticalGroupedWorkSpace()) {
+        this.createDragBehavior(this._$allDayPanel, $rootElement);
       }
     }
   }
-  _createDragBehavior($targetElement, $rootElement) {
+  createDragBehavior($targetElement, $rootElement) {
     const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
     const getItemSettings = $itemElement => $itemElement.data(_constants.APPOINTMENT_SETTINGS_KEY);
     const options = {
       getItemData,
       getItemSettings
     };
-    this._createDragBehaviorBase($targetElement, $rootElement, options);
+    this.createDragBehaviorBase($targetElement, $rootElement, options);
   }
-  _createDragBehaviorBase(targetElement, rootElement, options) {
+  createDragBehaviorBase(targetElement, rootElement, options) {
     const container = this.$element().find(`.${_m_classes.FIXED_CONTAINER_CLASS}`);
     const disableDefaultDragging = () => {
       if (!this.isDefaultDraggingMode) {
@@ -144342,13 +144503,13 @@ class SchedulerWorkSpace extends _ui2.default {
         this.preventDefaultDragging = false;
       }
     };
-    this.dragBehavior.addTo(targetElement, createDragBehaviorConfig(container, rootElement, this.isDefaultDraggingMode, this.dragBehavior, enableDefaultDragging, disableDefaultDragging, () => this.getDroppableCell(), () => this._getDateTables(), () => this.removeDroppableCellClass(), () => this.getCellWidth(), options));
+    this.dragBehavior.addTo(targetElement, createDragBehaviorConfig(container, rootElement, this.isDefaultDraggingMode, this.dragBehavior, enableDefaultDragging, disableDefaultDragging, () => this.getDroppableCell(), () => this.getDateTables(), () => this.removeDroppableCellClass(), () => this.getCellWidth(), options));
   }
   // --------------
   // We do not need these methods in renovation
   // --------------
-  _isRenderHeaderPanelEmptyCell() {
-    return this._isVerticalGroupedWorkSpace();
+  isRenderHeaderPanelEmptyCell() {
+    return this.isVerticalGroupedWorkSpace();
   }
   _dispose() {
     // @ts-expect-error
@@ -144393,7 +144554,7 @@ class SchedulerWorkSpace extends _ui2.default {
       draggingMode: 'outlook',
       onScrollEnd: () => {},
       getHeaderHeight: undefined,
-      onRenderAppointments: () => {},
+      renderAppointments: () => {},
       onShowAllDayPanel: () => {},
       onSelectedCellsClick: () => {},
       timeZoneCalculator: undefined,
@@ -144414,63 +144575,63 @@ class SchedulerWorkSpace extends _ui2.default {
       case 'firstDayOfWeek':
       case 'currentDate':
       case 'startDate':
-        this._cleanWorkSpace();
+        this.cleanWorkSpace();
         break;
       case 'groups':
-        this._cleanView();
-        this._removeAllDayElements();
-        this._initGrouping();
+        this.cleanView();
+        this.removeAllDayElements();
+        this.initGrouping();
         this.repaint();
         break;
       case 'groupOrientation':
-        this._initGroupedStrategy();
-        this._createAllDayPanelElements();
-        this._removeAllDayElements();
-        this._cleanWorkSpace();
-        this._toggleGroupByDateClass();
+        this.initGroupedStrategy();
+        this.createAllDayPanelElements();
+        this.removeAllDayElements();
+        this.cleanWorkSpace();
+        this.toggleGroupByDateClass();
         break;
       case 'showAllDayPanel':
-        if (this._isVerticalGroupedWorkSpace()) {
-          this._cleanView();
-          this._removeAllDayElements();
-          this._initGrouping();
+        if (this.isVerticalGroupedWorkSpace()) {
+          this.cleanView();
+          this.removeAllDayElements();
+          this.initGrouping();
           this.repaint();
         } else if (!this.isRenovatedRender()) {
-          this._updateAllDayVisibility();
-          this._updateScrollable();
+          this.updateAllDayVisibility();
+          this.updateScrollable();
         } else {
           this.renderWorkSpace();
         }
         break;
       case 'allDayExpanded':
-        this._updateAllDayExpansion();
-        this._attachTablesEvents();
-        this._updateScrollable();
+        this.updateAllDayExpansion();
+        this.attachTablesEvents();
+        this.updateScrollable();
         break;
       case 'onSelectionChanged':
-        this._createSelectionChangedAction();
+        this.createSelectionChangedAction();
         break;
       case 'onCellClick':
-        this._createCellClickAction();
+        this.createCellClickAction();
         break;
       case 'onCellContextMenu':
-        this._attachContextMenuEvent();
+        this.attachContextMenuEvent();
         break;
       case 'intervalCount':
-        this._cleanWorkSpace();
-        this._toggleWorkSpaceCountClass();
+        this.cleanWorkSpace();
+        this.toggleWorkSpaceCountClass();
         break;
       case 'groupByDate':
-        this._cleanWorkSpace();
-        this._toggleGroupByDateClass();
+        this.cleanWorkSpace();
+        this.toggleGroupByDateClass();
         break;
       case 'crossScrollingEnabled':
-        this._toggleHorizontalScrollClass();
-        this._dateTableScrollable.option(this._dateTableScrollableConfig());
+        this.toggleHorizontalScrollClass();
+        this._dateTableScrollable.option(this.dateTableScrollableConfig());
         break;
       case 'allDayPanelMode':
         this.updateShowAllDayPanel();
-        this.updateAppointments();
+        this.renderAppointments();
         break;
       case 'width':
         // @ts-expect-error
@@ -144499,12 +144660,12 @@ class SchedulerWorkSpace extends _ui2.default {
     const isHiddenAllDayPanel = this.option('allDayPanelMode') === 'hidden';
     this.option('onShowAllDayPanel')(!isHiddenAllDayPanel);
   }
-  _getVirtualScrollingDispatcherOptions() {
+  getVirtualScrollingDispatcherOptions() {
     return {
       getCellHeight: this.getCellHeight.bind(this),
       getCellWidth: this.getCellWidth.bind(this),
       getCellMinWidth: this.getCellMinWidth.bind(this),
-      isRTL: this._isRTL.bind(this),
+      isRTL: this.isRTL.bind(this),
       getSchedulerHeight: () => this.option('schedulerHeight'),
       getSchedulerWidth: () => this.option('schedulerWidth'),
       getViewHeight: () => this.$element().height ? this.$element().height() : (0, _size.getHeight)(this.$element()),
@@ -144518,183 +144679,183 @@ class SchedulerWorkSpace extends _ui2.default {
       updateRender: this.updateRender.bind(this),
       updateGrid: this.updateGrid.bind(this),
       getGroupCount: this._getGroupCount.bind(this),
-      isVerticalGrouping: this._isVerticalGroupedWorkSpace.bind(this),
-      getTotalRowCount: this._getTotalRowCount.bind(this),
-      getTotalCellCount: this._getTotalCellCount.bind(this)
+      isVerticalGrouping: this.isVerticalGroupedWorkSpace.bind(this),
+      getTotalRowCount: this.getTotalRowCount.bind(this),
+      getTotalCellCount: this.getTotalCellCount.bind(this)
     };
   }
-  _cleanWorkSpace() {
-    this._cleanView();
-    this._toggleGroupedClass();
-    this._toggleWorkSpaceWithOddCells();
+  cleanWorkSpace() {
+    this.cleanView();
+    this.toggleGroupedClass();
+    this.toggleWorkSpaceWithOddCells();
     this.virtualScrollingDispatcher.updateDimensions(true);
-    this._renderView();
-    this.option('crossScrollingEnabled') && this._setTableSizes();
+    this.renderView();
+    this.option('crossScrollingEnabled') && this.setTableSizes();
     this.cache.clear();
   }
   _init() {
-    this._scrollSync = {};
-    this._viewDataProvider = null;
-    this._cellsSelectionState = null;
+    this.scrollSync = {};
+    this.viewDataProviderValue = null;
+    this.cellsSelectionStateValue = null;
     // @ts-expect-error
     super._init();
-    this._initGrouping();
-    this._toggleHorizontalScrollClass();
-    this._toggleWorkSpaceCountClass();
-    this._toggleGroupByDateClass();
-    this._toggleWorkSpaceWithOddCells();
-    this.$element().addClass(COMPONENT_CLASS).addClass(this._getElementClass());
+    this.initGrouping();
+    this.toggleHorizontalScrollClass();
+    this.toggleWorkSpaceCountClass();
+    this.toggleGroupByDateClass();
+    this.toggleWorkSpaceWithOddCells();
+    this.$element().addClass(COMPONENT_CLASS).addClass(this.getElementClass());
   }
-  _initPositionHelper() {
+  initPositionHelper() {
     this.positionHelper = new _m_position_helper.PositionHelper({
       key: this.option('key'),
       viewDataProvider: this.viewDataProvider,
       viewStartDayHour: this.option('startDayHour'),
       viewEndDayHour: this.option('endDayHour'),
       cellDuration: this.getCellDuration(),
-      groupedStrategy: this._groupedStrategy,
+      _groupedStrategy: this._groupedStrategy,
       isGroupedByDate: this.isGroupedByDate(),
       rtlEnabled: this.option('rtlEnabled'),
       startViewDate: this.getStartViewDate(),
-      isVerticalGrouping: this._isVerticalGroupedWorkSpace(),
+      isVerticalGrouping: this.isVerticalGroupedWorkSpace(),
       groupCount: this._getGroupCount(),
       isVirtualScrolling: this.isVirtualScrolling(),
       getDOMMetaDataCallback: this.getDOMElementsMetaData.bind(this)
     });
   }
-  _initGrouping() {
-    this._initGroupedStrategy();
-    this._toggleGroupingDirectionClass();
-    this._toggleGroupByDateClass();
+  initGrouping() {
+    this.initGroupedStrategy();
+    this.toggleGroupingDirectionClass();
+    this.toggleGroupByDateClass();
   }
   isVerticalOrientation() {
     var _this$option6;
-    const orientation = (_this$option6 = this.option('groups')) !== null && _this$option6 !== void 0 && _this$option6.length ? this.option('groupOrientation') : this._getDefaultGroupStrategy();
+    const orientation = (_this$option6 = this.option('groups')) !== null && _this$option6 !== void 0 && _this$option6.length ? this.option('groupOrientation') : this.getDefaultGroupStrategy();
     return orientation === 'vertical';
   }
-  _initGroupedStrategy() {
+  initGroupedStrategy() {
     const Strategy = this.isVerticalOrientation() ? _m_work_space_grouped_strategy_vertical.default : _m_work_space_grouped_strategy_horizontal.default;
     this._groupedStrategy = new Strategy(this);
   }
-  _getDefaultGroupStrategy() {
+  getDefaultGroupStrategy() {
     return 'horizontal';
   }
-  _toggleHorizontalScrollClass() {
+  toggleHorizontalScrollClass() {
     this.$element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option('crossScrollingEnabled'));
   }
-  _toggleGroupByDateClass() {
+  toggleGroupByDateClass() {
     this.$element().toggleClass(WORKSPACE_WITH_GROUP_BY_DATE_CLASS, this.isGroupedByDate());
   }
-  _toggleWorkSpaceCountClass() {
-    this.$element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this._isWorkSpaceWithCount());
+  toggleWorkSpaceCountClass() {
+    this.$element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this.isWorkSpaceWithCount());
   }
-  _toggleWorkSpaceWithOddCells() {
-    this.$element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this._isWorkspaceWithOddCells());
+  toggleWorkSpaceWithOddCells() {
+    this.$element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this.isWorkspaceWithOddCells());
   }
-  _toggleGroupingDirectionClass() {
-    this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this._isVerticalGroupedWorkSpace());
+  toggleGroupingDirectionClass() {
+    this.$element().toggleClass(VERTICAL_GROUPED_WORKSPACE_CLASS, this.isVerticalGroupedWorkSpace());
   }
-  _getDateTableCellClass(rowIndex, columnIndex) {
+  getDateTableCellClass(rowIndex, columnIndex) {
     const cellClass = `${DATE_TABLE_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS} ${VERTICAL_SIZES_CLASS}`;
     return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, columnIndex + 1, rowIndex, columnIndex);
   }
-  _getGroupHeaderClass(i) {
+  getGroupHeaderClass(i) {
     const cellClass = GROUP_HEADER_CLASS;
     return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
   }
-  _initWorkSpaceUnits() {
+  initWorkSpaceUnits() {
     this._$headerPanelContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-header-panel-container');
-    this._$headerTablesContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-header-tables-container');
+    this.$headerTablesContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-header-tables-container');
     this._$headerPanel = (0, _renderer.default)('<table>').attr('aria-hidden', true);
     this._$thead = (0, _renderer.default)('<thead>').appendTo(this._$headerPanel);
-    this._$headerPanelEmptyCell = (0, _renderer.default)('<div>').addClass('dx-scheduler-header-panel-empty-cell');
-    this._$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
-    this._$fixedContainer = (0, _renderer.default)('<div>').addClass(_m_classes.FIXED_CONTAINER_CLASS);
-    this._$allDayContainer = (0, _renderer.default)('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
+    this.$headerPanelEmptyCell = (0, _renderer.default)('<div>').addClass('dx-scheduler-header-panel-empty-cell');
+    this.$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
+    this.$fixedContainer = (0, _renderer.default)('<div>').addClass(_m_classes.FIXED_CONTAINER_CLASS);
+    this.$allDayContainer = (0, _renderer.default)('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
     this._$dateTableScrollableContent = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-scrollable-content');
-    this._$sidebarScrollableContent = (0, _renderer.default)('<div>').addClass('dx-scheduler-side-bar-scrollable-content');
-    this._initAllDayPanelElements();
+    this.$sidebarScrollableContent = (0, _renderer.default)('<div>').addClass('dx-scheduler-side-bar-scrollable-content');
+    this.initAllDayPanelElements();
     if (this.isRenovatedRender()) {
       this.createRAllDayPanelElements();
     } else {
-      this._createAllDayPanelElements();
+      this.createAllDayPanelElements();
     }
-    this._$timePanel = (0, _renderer.default)('<table>').addClass(_m_classes.TIME_PANEL_CLASS).attr('aria-hidden', true);
+    this.$timePanel = (0, _renderer.default)('<table>').addClass(_m_classes.TIME_PANEL_CLASS).attr('aria-hidden', true);
     this._$dateTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
-    this._$dateTableContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-container');
+    this.$dateTableContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-date-table-container');
     this._$groupTable = (0, _renderer.default)('<div>').addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
   }
-  _initAllDayPanelElements() {
-    this._allDayTitles = [];
-    this._allDayTables = [];
-    this._allDayPanels = [];
+  initAllDayPanelElements() {
+    this.allDayTitles = [];
+    this.allDayTables = [];
+    this.allDayPanels = [];
   }
-  _initDateTableScrollable() {
+  initDateTableScrollable() {
     const $dateTableScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
     // @ts-expect-error
-    this._dateTableScrollable = this._createComponent($dateTableScrollable, _scrollable.default, this._dateTableScrollableConfig());
-    this._scrollSync.dateTable = (0, _scroll.getMemoizeScrollTo)(() => this._dateTableScrollable);
+    this._dateTableScrollable = this._createComponent($dateTableScrollable, _scrollable.default, this.dateTableScrollableConfig());
+    this.scrollSync.dateTable = (0, _scroll.getMemoizeScrollTo)(() => this._dateTableScrollable);
   }
-  _createWorkSpaceElements() {
+  createWorkSpaceElements() {
     if (this.option('crossScrollingEnabled')) {
-      this._createWorkSpaceScrollableElements();
+      this.createWorkSpaceScrollableElements();
     } else {
-      this._createWorkSpaceStaticElements();
+      this.createWorkSpaceStaticElements();
     }
   }
-  _createWorkSpaceStaticElements() {
-    this._$dateTableContainer.append(this._$dateTable);
-    if (this._isVerticalGroupedWorkSpace()) {
-      this._$dateTableContainer.append(this._$allDayContainer);
-      this._$dateTableScrollableContent.append(this._$groupTable, this._$timePanel, this._$dateTableContainer);
+  createWorkSpaceStaticElements() {
+    this.$dateTableContainer.append(this._$dateTable);
+    if (this.isVerticalGroupedWorkSpace()) {
+      this.$dateTableContainer.append(this.$allDayContainer);
+      this._$dateTableScrollableContent.append(this._$groupTable, this.$timePanel, this.$dateTableContainer);
       this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
-      this._$headerTablesContainer.append(this._$headerPanel);
+      this.$headerTablesContainer.append(this._$headerPanel);
     } else {
       var _this$_$allDayPanel;
-      this._$dateTableScrollableContent.append(this._$timePanel, this._$dateTableContainer);
+      this._$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
       this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
-      this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
-      (_this$_$allDayPanel = this._$allDayPanel) === null || _this$_$allDayPanel === void 0 || _this$_$allDayPanel.append(this._$allDayContainer, this._$allDayTable);
+      this.$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
+      (_this$_$allDayPanel = this._$allDayPanel) === null || _this$_$allDayPanel === void 0 || _this$_$allDayPanel.append(this.$allDayContainer, this.$allDayTable);
     }
-    this._appendHeaderPanelEmptyCellIfNecessary();
-    this._$headerPanelContainer.append(this._$headerTablesContainer);
-    this.$element().append(this._$fixedContainer).append(this._$headerPanelContainer).append(this._dateTableScrollable.$element());
+    this.appendHeaderPanelEmptyCellIfNecessary();
+    this._$headerPanelContainer.append(this.$headerTablesContainer);
+    this.$element().append(this.$fixedContainer).append(this._$headerPanelContainer).append(this._dateTableScrollable.$element());
   }
-  _createWorkSpaceScrollableElements() {
-    this.$element().append(this._$fixedContainer);
+  createWorkSpaceScrollableElements() {
+    this.$element().append(this.$fixedContainer);
     this._$flexContainer = (0, _renderer.default)('<div>').addClass('dx-scheduler-work-space-flex-container');
-    this._createHeaderScrollable();
-    this._headerScrollable.$content().append(this._$headerPanel);
-    this._appendHeaderPanelEmptyCellIfNecessary();
-    this._$headerPanelContainer.append(this._$headerTablesContainer);
+    this.createHeaderScrollable();
+    this.headerScrollable.$content().append(this._$headerPanel);
+    this.appendHeaderPanelEmptyCellIfNecessary();
+    this._$headerPanelContainer.append(this.$headerTablesContainer);
     this.$element().append(this._$headerPanelContainer);
     this.$element().append(this._$flexContainer);
-    this._createSidebarScrollable();
+    this.createSidebarScrollable();
     this._$flexContainer.append(this._dateTableScrollable.$element());
-    this._$dateTableContainer.append(this._$dateTable);
-    this._$dateTableScrollableContent.append(this._$dateTableContainer);
+    this.$dateTableContainer.append(this._$dateTable);
+    this._$dateTableScrollableContent.append(this.$dateTableContainer);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
-    if (this._isVerticalGroupedWorkSpace()) {
-      this._$dateTableContainer.append(this._$allDayContainer);
-      this._$sidebarScrollableContent.append(this._$groupTable, this._$timePanel);
+    if (this.isVerticalGroupedWorkSpace()) {
+      this.$dateTableContainer.append(this.$allDayContainer);
+      this.$sidebarScrollableContent.append(this._$groupTable, this.$timePanel);
     } else {
       var _this$_$allDayPanel2;
-      this._headerScrollable.$content().append(this._$allDayPanel);
-      (_this$_$allDayPanel2 = this._$allDayPanel) === null || _this$_$allDayPanel2 === void 0 || _this$_$allDayPanel2.append(this._$allDayContainer, this._$allDayTable);
-      this._$sidebarScrollableContent.append(this._$timePanel);
+      this.headerScrollable.$content().append(this._$allDayPanel);
+      (_this$_$allDayPanel2 = this._$allDayPanel) === null || _this$_$allDayPanel2 === void 0 || _this$_$allDayPanel2.append(this.$allDayContainer, this.$allDayTable);
+      this.$sidebarScrollableContent.append(this.$timePanel);
     }
-    this._sidebarScrollable.$content().append(this._$sidebarScrollableContent);
+    this._sidebarScrollable.$content().append(this.$sidebarScrollableContent);
   }
-  _appendHeaderPanelEmptyCellIfNecessary() {
-    this._isRenderHeaderPanelEmptyCell() && this._$headerPanelContainer.append(this._$headerPanelEmptyCell);
+  appendHeaderPanelEmptyCellIfNecessary() {
+    this.isRenderHeaderPanelEmptyCell() && this._$headerPanelContainer.append(this.$headerPanelEmptyCell);
   }
-  _createHeaderScrollable() {
-    const $headerScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS).appendTo(this._$headerTablesContainer);
+  createHeaderScrollable() {
+    const $headerScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS).appendTo(this.$headerTablesContainer);
     // @ts-expect-error
-    this._headerScrollable = this._createComponent($headerScrollable, _scrollable.default, this._headerScrollableConfig());
-    this._scrollSync.header = (0, _scroll.getMemoizeScrollTo)(() => this._headerScrollable);
+    this.headerScrollable = this._createComponent($headerScrollable, _scrollable.default, this.headerScrollableConfig());
+    this.scrollSync.header = (0, _scroll.getMemoizeScrollTo)(() => this.headerScrollable);
   }
-  _createSidebarScrollable() {
+  createSidebarScrollable() {
     const $timePanelScrollable = (0, _renderer.default)('<div>').addClass(SCHEDULER_SIDEBAR_SCROLLABLE_CLASS).appendTo(this._$flexContainer);
     // @ts-expect-error
     this._sidebarScrollable = this._createComponent($timePanelScrollable, _scrollable.default, {
@@ -144705,70 +144866,70 @@ class SchedulerWorkSpace extends _ui2.default {
       updateManually: true,
       bounceEnabled: false,
       onScroll: event => {
-        this._scrollSync.dateTable({
+        this.scrollSync.dateTable({
           top: event.scrollOffset.top
         });
       }
     });
-    this._scrollSync.sidebar = (0, _scroll.getMemoizeScrollTo)(() => this._sidebarScrollable);
+    this.scrollSync.sidebar = (0, _scroll.getMemoizeScrollTo)(() => this._sidebarScrollable);
   }
-  _attachTableClasses() {
-    this._addTableClass(this._$dateTable, _m_classes.DATE_TABLE_CLASS);
-    if (this._isVerticalGroupedWorkSpace()) {
+  attachTableClasses() {
+    this.addTableClass(this._$dateTable, _m_classes.DATE_TABLE_CLASS);
+    if (this.isVerticalGroupedWorkSpace()) {
       const groupCount = this._getGroupCount();
       for (let i = 0; i < groupCount; i++) {
-        this._addTableClass(this._allDayTables[i], ALL_DAY_TABLE_CLASS);
+        this.addTableClass(this.allDayTables[i], ALL_DAY_TABLE_CLASS);
       }
     } else if (!this.isRenovatedRender()) {
-      this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+      this.addTableClass(this.$allDayTable, ALL_DAY_TABLE_CLASS);
     }
   }
-  _attachHeaderTableClasses() {
-    this._addTableClass(this._$headerPanel, HEADER_PANEL_CLASS);
+  attachHeaderTableClasses() {
+    this.addTableClass(this._$headerPanel, HEADER_PANEL_CLASS);
   }
-  _addTableClass($el, className) {
+  addTableClass($el, className) {
     $el && !$el.hasClass(className) && $el.addClass(className);
   }
   _initMarkup() {
     this.cache.clear();
-    this._initWorkSpaceUnits();
-    this._initVirtualScrolling();
-    this._initDateTableScrollable();
-    this._createWorkSpaceElements();
+    this.initWorkSpaceUnits();
+    this.initVirtualScrolling();
+    this.initDateTableScrollable();
+    this.createWorkSpaceElements();
     // @ts-expect-error
     super._initMarkup();
     if (!this.option('crossScrollingEnabled')) {
-      this._attachTableClasses();
-      this._attachHeaderTableClasses();
+      this.attachTableClasses();
+      this.attachHeaderTableClasses();
     }
-    this._toggleGroupedClass();
-    this._renderView();
-    this._attachEvents();
+    this.toggleGroupedClass();
+    this.renderView();
+    this.attachEvents();
   }
   _render() {
     // @ts-expect-error
     super._render();
-    this._renderDateTimeIndication();
-    this._setIndicationUpdateInterval();
+    this.renderDateTimeIndication();
+    this.setIndicationUpdateInterval();
   }
-  _toggleGroupedClass() {
+  toggleGroupedClass() {
     this.$element().toggleClass(GROUPED_WORKSPACE_CLASS, this._getGroupCount() > 0);
   }
-  _renderView() {
+  renderView() {
     if (this.isRenovatedRender()) {
-      if (this._isVerticalGroupedWorkSpace()) {
+      if (this.isVerticalGroupedWorkSpace()) {
         this.renderRGroupPanel();
       }
     } else {
-      this._applyCellTemplates(this._renderGroupHeader());
+      this.applyCellTemplates(this.renderGroupHeader());
     }
     this.renderWorkSpace();
     if (this.isRenovatedRender()) {
       this.virtualScrollingDispatcher.updateDimensions();
     }
-    this._updateGroupTableHeight();
+    this.updateGroupTableHeight();
     this.updateHeaderEmptyCellWidth();
-    this._shader = new _m_current_time_shader_vertical.default(this);
+    this._shader = new _current_time_shader_vertical.default(this);
   }
   updateCellsSelection() {
     const renderOptions = this.generateRenderOptions();
@@ -144779,7 +144940,7 @@ class SchedulerWorkSpace extends _ui2.default {
       allDayPanel: true
     });
   }
-  _renderDateTimeIndication() {
+  renderDateTimeIndication() {
     return (0, _common.noop)();
   }
   renderCurrentDateTimeLineAndShader() {
@@ -144788,71 +144949,71 @@ class SchedulerWorkSpace extends _ui2.default {
   renderCurrentDateTimeIndication() {
     return (0, _common.noop)();
   }
-  _setIndicationUpdateInterval() {
+  setIndicationUpdateInterval() {
     return (0, _common.noop)();
   }
-  _detachGroupCountClass() {
+  detachGroupCountClass() {
     _m_classes.VERTICAL_GROUP_COUNT_CLASSES.forEach(className => {
       this.$element().removeClass(className);
     });
   }
-  _attachGroupCountClass() {
+  attachGroupCountClass() {
     const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
     this.$element().addClass(className);
   }
-  _getDateHeaderTemplate() {
+  getDateHeaderTemplate() {
     return this.option('dateCellTemplate');
   }
-  _updateAllDayVisibility() {
-    this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this._isShowAllDayPanel());
-    this._updateAllDayExpansion();
+  updateAllDayVisibility() {
+    this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, this.isShowAllDayPanel());
+    this.updateAllDayExpansion();
   }
-  _updateAllDayExpansion() {
-    const isExpanded = !this.option('allDayExpanded') && this._isShowAllDayPanel();
+  updateAllDayExpansion() {
+    const isExpanded = !this.option('allDayExpanded') && this.isShowAllDayPanel();
     this.cache.clear();
     this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, isExpanded);
   }
-  _getDateTables() {
-    return this._$dateTable.add(this._$allDayTable);
+  getDateTables() {
+    return this._$dateTable.add(this.$allDayTable);
   }
-  _getDateTable() {
+  getDateTable() {
     return this._$dateTable;
   }
-  _removeAllDayElements() {
-    var _this$_$allDayTable, _this$_$allDayTitle;
-    (_this$_$allDayTable = this._$allDayTable) === null || _this$_$allDayTable === void 0 || _this$_$allDayTable.remove();
-    (_this$_$allDayTitle = this._$allDayTitle) === null || _this$_$allDayTitle === void 0 || _this$_$allDayTitle.remove();
+  removeAllDayElements() {
+    var _this$$allDayTable, _this$$allDayTitle;
+    (_this$$allDayTable = this.$allDayTable) === null || _this$$allDayTable === void 0 || _this$$allDayTable.remove();
+    (_this$$allDayTitle = this.$allDayTitle) === null || _this$$allDayTitle === void 0 || _this$$allDayTitle.remove();
   }
-  _cleanView() {
+  cleanView() {
     var _this$_shader;
     this.cache.clear();
-    this._cleanTableWidths();
+    this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
     if (!this.isRenovatedRender()) {
-      var _this$_$allDayTable2, _this$_$sidebarTable;
+      var _this$$allDayTable2, _this$$sidebarTable;
       this._$thead.empty();
       this._$dateTable.empty();
-      this._$timePanel.empty();
+      this.$timePanel.empty();
       this._$groupTable.empty();
-      (_this$_$allDayTable2 = this._$allDayTable) === null || _this$_$allDayTable2 === void 0 || _this$_$allDayTable2.empty();
-      (_this$_$sidebarTable = this._$sidebarTable) === null || _this$_$sidebarTable === void 0 || _this$_$sidebarTable.empty();
+      (_this$$allDayTable2 = this.$allDayTable) === null || _this$$allDayTable2 === void 0 || _this$$allDayTable2.empty();
+      (_this$$sidebarTable = this.$sidebarTable) === null || _this$$sidebarTable === void 0 || _this$$sidebarTable.empty();
     }
     (_this$_shader = this._shader) === null || _this$_shader === void 0 || _this$_shader.clean();
-    delete this._interval;
+    delete this.interval;
   }
   _clean() {
     _events_engine.default.off(_dom_adapter.default.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-    this._disposeRenovatedComponents();
+    this.disposeRenovatedComponents();
     // @ts-expect-error
     super._clean();
   }
-  _cleanTableWidths() {
-    var _this$_$allDayTable3;
+  cleanTableWidths() {
+    var _this$$allDayTable3;
     this._$headerPanel.css('width', '');
     this._$dateTable.css('width', '');
-    (_this$_$allDayTable3 = this._$allDayTable) === null || _this$_$allDayTable3 === void 0 || _this$_$allDayTable3.css('width', '');
+    (_this$$allDayTable3 = this.$allDayTable) === null || _this$$allDayTable3 === void 0 || _this$$allDayTable3.css('width', '');
   }
-  _disposeRenovatedComponents() {
+  disposeRenovatedComponents() {
     var _this$renovatedAllDay, _this$renovatedDateTa, _this$renovatedTimePa, _this$renovatedGroupP, _this$renovatedHeader;
     (_this$renovatedAllDay = this.renovatedAllDayPanel) === null || _this$renovatedAllDay === void 0 || _this$renovatedAllDay.dispose();
     this.renovatedAllDayPanel = undefined;
@@ -144869,10 +145030,10 @@ class SchedulerWorkSpace extends _ui2.default {
     return this._groupedStrategy;
   }
   getFixedContainer() {
-    return this._$fixedContainer;
+    return this.$fixedContainer;
   }
   getAllDayContainer() {
-    return this._$allDayContainer;
+    return this.$allDayContainer;
   }
   updateRender() {
     this.renderer.updateRender();
@@ -144880,29 +145041,29 @@ class SchedulerWorkSpace extends _ui2.default {
   updateGrid() {
     this.renderer._renderGrid();
   }
-  updateAppointments() {
+  renderAppointments() {
     var _this$dragBehavior2;
-    this.option('onRenderAppointments')();
+    this.option('renderAppointments')();
     (_this$dragBehavior2 = this.dragBehavior) === null || _this$dragBehavior2 === void 0 || _this$dragBehavior2.updateDragSource();
   }
   // ----------------
   // These methods should be deleted when we get rid of old render
   // ----------------
-  _createAllDayPanelElements() {
+  createAllDayPanelElements() {
     const groupCount = this._getGroupCount();
-    if (this._isVerticalGroupedWorkSpace() && groupCount !== 0) {
+    if (this.isVerticalGroupedWorkSpace() && groupCount !== 0) {
       for (let i = 0; i < groupCount; i++) {
         const $allDayTitle = (0, _renderer.default)('<div>').addClass(ALL_DAY_TITLE_CLASS).text(_message.default.format('dxScheduler-allDay'));
-        this._allDayTitles.push($allDayTitle);
-        this._$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
-        this._allDayTables.push(this._$allDayTable);
-        this._$allDayPanel = (0, _renderer.default)('<div>').addClass(ALL_DAY_PANEL_CLASS).append(this._$allDayTable);
-        this._allDayPanels.push(this._$allDayPanel);
+        this.allDayTitles.push($allDayTitle);
+        this.$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
+        this.allDayTables.push(this.$allDayTable);
+        this._$allDayPanel = (0, _renderer.default)('<div>').addClass(ALL_DAY_PANEL_CLASS).append(this.$allDayTable);
+        this.allDayPanels.push(this._$allDayPanel);
       }
     } else {
-      this._$allDayTitle = (0, _renderer.default)('<div>').addClass(ALL_DAY_TITLE_CLASS).text(_message.default.format('dxScheduler-allDay')).appendTo(this.$element());
-      this._$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
-      this._$allDayPanel = (0, _renderer.default)('<div>').addClass(ALL_DAY_PANEL_CLASS).append(this._$allDayTable);
+      this.$allDayTitle = (0, _renderer.default)('<div>').addClass(ALL_DAY_TITLE_CLASS).text(_message.default.format('dxScheduler-allDay')).appendTo(this.$element());
+      this.$allDayTable = (0, _renderer.default)('<table>').attr('aria-hidden', true);
+      this._$allDayPanel = (0, _renderer.default)('<div>').addClass(ALL_DAY_PANEL_CLASS).append(this.$allDayTable);
     }
   }
   renderWorkSpace() {
@@ -144916,55 +145077,55 @@ class SchedulerWorkSpace extends _ui2.default {
       this.renderRWorkSpace(renderComponents);
     } else {
       // TODO Old render: Delete this old render block after the SSR tests check.
-      this._renderDateHeader();
-      this._renderTimePanel();
-      this._renderGroupAllDayPanel();
-      this._renderDateTable();
-      this._renderAllDayPanel();
+      this.renderDateHeader();
+      this.renderTimePanel();
+      this.renderGroupAllDayPanel();
+      this.renderDateTable();
+      this.renderAllDayPanel();
     }
-    this._initPositionHelper();
+    this.initPositionHelper();
   }
-  _renderGroupHeader() {
-    const $container = this._getGroupHeaderContainer();
+  renderGroupHeader() {
+    const $container = this.getGroupHeaderContainer();
     const groupCount = this._getGroupCount();
     let cellTemplates = [];
     if (groupCount) {
-      const groupRows = this._makeGroupRows(this.option('groups'), this.option('groupByDate'));
-      this._attachGroupCountClass();
+      const groupRows = this.makeGroupRows(this.option('groups'), this.option('groupByDate'));
+      this.attachGroupCountClass();
       $container.append(groupRows.elements);
       cellTemplates = groupRows.cellTemplates;
     } else {
-      this._detachGroupCountClass();
+      this.detachGroupCountClass();
     }
     return cellTemplates;
   }
-  _applyCellTemplates(templates) {
+  applyCellTemplates(templates) {
     templates === null || templates === void 0 || templates.forEach(template => {
       template();
     });
   }
-  _makeGroupRows(groups, groupByDate) {
-    const tableCreatorStrategy = this._isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
+  makeGroupRows(groups, groupByDate) {
+    const tableCreatorStrategy = this.isVerticalGroupedWorkSpace() ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
     return tableCreator.makeGroupedTable(tableCreatorStrategy, groups, {
       groupHeaderRowClass: _m_classes.GROUP_ROW_CLASS,
       groupRowClass: _m_classes.GROUP_ROW_CLASS,
-      groupHeaderClass: this._getGroupHeaderClass.bind(this),
+      groupHeaderClass: this.getGroupHeaderClass.bind(this),
       groupHeaderContentClass: _m_classes.GROUP_HEADER_CONTENT_CLASS
     }, this._getCellCount() || 1, this.option('resourceCellTemplate'), this._getGroupCount(), groupByDate);
   }
-  _renderDateHeader() {
-    const container = this._getDateHeaderContainer();
+  renderDateHeader() {
+    const container = this.getDateHeaderContainer();
     const $headerRow = (0, _renderer.default)('<tr>').addClass(HEADER_ROW_CLASS);
     const count = this._getCellCount();
-    const cellTemplate = this._getDateHeaderTemplate();
-    const repeatCount = this._getCalculateHeaderCellRepeatCount();
+    const cellTemplate = this.getDateHeaderTemplate();
+    const repeatCount = this.getCalculateHeaderCellRepeatCount();
     const templateCallbacks = [];
     const groupByDate = this.isGroupedByDate();
     if (!groupByDate) {
       for (let rowIndex = 0; rowIndex < repeatCount; rowIndex++) {
         for (let columnIndex = 0; columnIndex < count; columnIndex++) {
           const templateIndex = rowIndex * count + columnIndex;
-          this._renderDateHeaderTemplate($headerRow, columnIndex, templateIndex, cellTemplate, templateCallbacks);
+          this.renderDateHeaderTemplate($headerRow, columnIndex, templateIndex, cellTemplate, templateCallbacks);
         }
       }
       container.append($headerRow);
@@ -144972,15 +145133,15 @@ class SchedulerWorkSpace extends _ui2.default {
       const colSpan = groupByDate ? this._getGroupCount() : 1;
       for (let columnIndex = 0; columnIndex < count; columnIndex++) {
         const templateIndex = columnIndex * repeatCount;
-        const cellElement = this._renderDateHeaderTemplate($headerRow, columnIndex, templateIndex, cellTemplate, templateCallbacks);
+        const cellElement = this.renderDateHeaderTemplate($headerRow, columnIndex, templateIndex, cellTemplate, templateCallbacks);
         cellElement.attr('colSpan', colSpan);
       }
       container.prepend($headerRow);
     }
-    this._applyCellTemplates(templateCallbacks);
+    this.applyCellTemplates(templateCallbacks);
     return $headerRow;
   }
-  _renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks) {
+  renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks) {
     const validTemplateIndex = this.isGroupedByDate() ? Math.floor(templateIndex / this._getGroupCount()) : templateIndex;
     const {
       completeDateHeaderMap
@@ -144989,13 +145150,13 @@ class SchedulerWorkSpace extends _ui2.default {
       text,
       startDate: date
     } = completeDateHeaderMap[completeDateHeaderMap.length - 1][validTemplateIndex];
-    const $cell = (0, _renderer.default)('<th>').addClass(this._getHeaderPanelCellClass(panelCellIndex)).attr('title', text);
+    const $cell = (0, _renderer.default)('<th>').addClass(this.getHeaderPanelCellClass(panelCellIndex)).attr('title', text);
     if (cellTemplate !== null && cellTemplate !== void 0 && cellTemplate.render) {
       templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
         model: Object.assign({
           text,
           date
-        }, this._getGroupsForDateHeaderTemplate(templateIndex)),
+        }, this.getGroupsForDateHeaderTemplate(templateIndex)),
         index: templateIndex,
         container: (0, _element.getPublicElement)($cell)
       }));
@@ -145005,10 +145166,10 @@ class SchedulerWorkSpace extends _ui2.default {
     container.append($cell);
     return $cell;
   }
-  _getGroupsForDateHeaderTemplate(templateIndex) {
+  getGroupsForDateHeaderTemplate(templateIndex) {
     let indexMultiplier = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
     if (this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
-      const groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
+      const groupIndex = this.getGroupIndex(0, templateIndex * indexMultiplier);
       const groups = (0, _group_utils.getLeafGroupValues)(this.resourceManager.groupsLeafs, groupIndex);
       return {
         groups,
@@ -145017,49 +145178,49 @@ class SchedulerWorkSpace extends _ui2.default {
     }
     return {};
   }
-  _getHeaderPanelCellClass(i) {
+  getHeaderPanelCellClass(i) {
     const cellClass = `${HEADER_PANEL_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS}`;
     return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1, undefined, undefined, this.isGroupedByDate());
   }
-  _renderAllDayPanel(index) {
+  renderAllDayPanel(index) {
     let cellCount = this._getCellCount();
-    if (!this._isVerticalGroupedWorkSpace()) {
+    if (!this.isVerticalGroupedWorkSpace()) {
       cellCount *= this._getGroupCount() || 1;
     }
-    const cellTemplates = this._renderTableBody({
-      container: this._allDayPanels.length ? (0, _element.getPublicElement)(this._allDayTables[index]) : (0, _element.getPublicElement)(this._$allDayTable),
+    const cellTemplates = this.renderTableBody({
+      container: this.allDayPanels.length ? (0, _element.getPublicElement)(this.allDayTables[index]) : (0, _element.getPublicElement)(this.$allDayTable),
       rowCount: 1,
       cellCount,
-      cellClass: this._getAllDayPanelCellClass.bind(this),
+      cellClass: this.getAllDayPanelCellClass.bind(this),
       rowClass: ALL_DAY_TABLE_ROW_CLASS,
       cellTemplate: this.option('dataCellTemplate'),
       // TODO: remove along with old render
-      getCellData: this._oldRender_getAllDayCellData(index),
+      getCellData: this.oldRenderGetAllDayCellData(index),
       groupIndex: index
     }, true);
-    this._updateAllDayVisibility();
-    this._updateScrollable();
-    this._applyCellTemplates(cellTemplates);
+    this.updateAllDayVisibility();
+    this.updateScrollable();
+    this.applyCellTemplates(cellTemplates);
   }
-  _renderGroupAllDayPanel() {
-    if (this._isVerticalGroupedWorkSpace()) {
+  renderGroupAllDayPanel() {
+    if (this.isVerticalGroupedWorkSpace()) {
       const groupCount = this._getGroupCount();
       for (let i = 0; i < groupCount; i++) {
-        this._renderAllDayPanel(i);
+        this.renderAllDayPanel(i);
       }
     }
   }
-  _getAllDayPanelCellClass(i, j) {
+  getAllDayPanelCellClass(i, j) {
     const cellClass = `${ALL_DAY_TABLE_CELL_CLASS} ${HORIZONTAL_SIZES_CLASS}`;
     return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, j + 1);
   }
-  _renderTimePanel() {
+  renderTimePanel() {
     const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
     const getTimeCellGroups = rowIndex => {
-      if (!this._isVerticalGroupedWorkSpace()) {
+      if (!this.isVerticalGroupedWorkSpace()) {
         return {};
       }
-      const groupIndex = this._getGroupIndex(rowIndex, 0);
+      const groupIndex = this.getGroupIndex(rowIndex, 0);
       const groups = (0, _group_utils.getLeafGroupValues)(this.resourceManager.groupsLeafs, groupIndex);
       return {
         groupIndex,
@@ -145072,36 +145233,36 @@ class SchedulerWorkSpace extends _ui2.default {
         allDayPanelsCount = 1;
       }
       if (this.isGroupedAllDayPanel()) {
-        allDayPanelsCount = Math.ceil((rowIndex + 1) / this._getRowCount());
+        allDayPanelsCount = Math.ceil((rowIndex + 1) / this.getRowCount());
       }
       const validRowIndex = rowIndex + allDayPanelsCount;
       return this.viewDataProvider.completeTimePanelMap[validRowIndex][field];
     };
-    this._renderTableBody({
-      container: (0, _element.getPublicElement)(this._$timePanel),
-      rowCount: this._getTimePanelRowCount() * repeatCount,
+    this.renderTableBody({
+      container: (0, _element.getPublicElement)(this.$timePanel),
+      rowCount: this.getTimePanelRowCount() * repeatCount,
       cellCount: 1,
-      cellClass: this._getTimeCellClass.bind(this),
+      cellClass: this.getTimeCellClass.bind(this),
       rowClass: TIME_PANEL_ROW_CLASS,
       cellTemplate: this.option('timeCellTemplate'),
       getCellText: rowIndex => getData(rowIndex, 'text'),
       getCellDate: rowIndex => getData(rowIndex, 'startDate'),
-      groupCount: this._getGroupCount(),
-      allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined,
+      groupCount: this._getCellCount(),
+      allDayElements: this.insertAllDayRowsIntoDateTable() ? this.allDayTitles : undefined,
       getTemplateData: getTimeCellGroups.bind(this)
     });
   }
-  _getTimeCellClass(i) {
+  getTimeCellClass(i) {
     const cellClass = `${TIME_PANEL_CELL_CLASS} ${VERTICAL_SIZES_CLASS}`;
-    return this._isVerticalGroupedWorkSpace() ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i) : cellClass;
+    return this.isVerticalGroupedWorkSpace() ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i) : cellClass;
   }
-  _renderDateTable() {
+  renderDateTable() {
     const groupCount = this._getGroupCount();
-    this._renderTableBody({
+    this.renderTableBody({
       container: (0, _element.getPublicElement)(this._$dateTable),
-      rowCount: this._getTotalRowCount(groupCount),
-      cellCount: this._getTotalCellCount(groupCount),
-      cellClass: this._getDateTableCellClass.bind(this),
+      rowCount: this.getTotalRowCount(groupCount),
+      cellCount: this.getTotalCellCount(groupCount),
+      cellClass: this.getDateTableCellClass.bind(this),
       rowClass: _m_classes.DATE_TABLE_ROW_CLASS,
       cellTemplate: this.option('dataCellTemplate'),
       // TODO: remove along with old render
@@ -145109,7 +145270,7 @@ class SchedulerWorkSpace extends _ui2.default {
         const isGroupedAllDayPanel = this.isGroupedAllDayPanel();
         let validRowIndex = rowIndex;
         if (isGroupedAllDayPanel) {
-          const rowCount = this._getRowCount();
+          const rowCount = this.getRowCount();
           const allDayPanelsCount = Math.ceil(rowIndex / rowCount);
           validRowIndex += allDayPanelsCount;
         }
@@ -145117,23 +145278,23 @@ class SchedulerWorkSpace extends _ui2.default {
           cellData
         } = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex];
         return {
-          value: this._normalizeCellData(cellData),
+          value: this.normalizeCellData(cellData),
           fullValue: cellData,
           key: CELL_DATA
         };
       },
-      allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
+      allDayElements: this.insertAllDayRowsIntoDateTable() ? this.allDayPanels : undefined,
       groupCount,
       groupByDate: this.option('groupByDate')
     });
   }
-  _insertAllDayRowsIntoDateTable() {
+  insertAllDayRowsIntoDateTable() {
     return this._groupedStrategy.insertAllDayRowsIntoDateTable();
   }
-  _renderTableBody(options, delayCellTemplateRendering) {
+  renderTableBody(options, delayCellTemplateRendering) {
     let result = [];
     if (!delayCellTemplateRendering) {
-      this._applyCellTemplates(tableCreator.makeTable(options));
+      this.applyCellTemplates(tableCreator.makeTable(options));
     } else {
       result = tableCreator.makeTable(options);
     }
@@ -145296,11 +145457,11 @@ class SchedulerWorkSpaceDay extends _m_work_space_vertical.default {
   get type() {
     return _constants_view.VIEWS.DAY;
   }
-  _getElementClass() {
+  getElementClass() {
     return DAY_CLASS;
   }
-  _renderDateHeader() {
-    return this.option('intervalCount') === 1 ? null : super._renderDateHeader();
+  renderDateHeader() {
+    return this.option('intervalCount') === 1 ? null : super.renderDateHeader();
   }
   renderRHeaderPanel() {
     if (this.option('intervalCount') === 1) {
@@ -145328,6 +145489,7 @@ var _position = __webpack_require__(41639);
 var _const = __webpack_require__(79674);
 var _m_classes = __webpack_require__(80126);
 class HorizontalGroupedStrategy {
+  // TODO: make private once external usages in current_time_shader.ts, current_time_shader_horizontal.ts are removed
   constructor(_workSpace) {
     this._workSpace = _workSpace;
   }
@@ -145364,7 +145526,7 @@ class HorizontalGroupedStrategy {
     return this._workSpace._getCellCount() * groupCount;
   }
   getTotalRowCount() {
-    return this._workSpace._getRowCount();
+    return this._workSpace.getRowCount();
   }
   calculateTimeCellRepeatCount() {
     return 1;
@@ -145383,7 +145545,7 @@ class HorizontalGroupedStrategy {
   getLeftOffset() {
     return this._workSpace.getTimePanelWidth();
   }
-  _createGroupBoundOffset(startCell, endCell, cellWidth) {
+  createGroupBoundOffset(startCell, endCell, cellWidth) {
     const extraOffset = cellWidth / 2;
     const startOffset = startCell ? startCell.offset().left - extraOffset : 0;
     const endOffset = endCell ? endCell.offset().left + cellWidth + extraOffset : 0;
@@ -145394,16 +145556,16 @@ class HorizontalGroupedStrategy {
       bottom: 0
     };
   }
-  _getGroupedByDateBoundOffset($cells, cellWidth) {
+  getGroupedByDateBoundOffset($cells, cellWidth) {
     const firstCellIndex = 0;
     const lastCellIndex = $cells.length - 1;
     const startCell = $cells.eq(firstCellIndex);
     const endCell = $cells.eq(lastCellIndex);
-    return this._createGroupBoundOffset(startCell, endCell, cellWidth);
+    return this.createGroupBoundOffset(startCell, endCell, cellWidth);
   }
   getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates, groupedDataMap) {
     if (this._workSpace.isGroupedByDate()) {
-      return this._getGroupedByDateBoundOffset($cells, cellWidth);
+      return this.getGroupedByDateBoundOffset($cells, cellWidth);
     }
     let startCell;
     let endCell;
@@ -145417,24 +145579,24 @@ class HorizontalGroupedStrategy {
       startCell = $cells.eq(groupStartPosition.columnIndex);
       endCell = $cells.eq(groupEndPosition.columnIndex);
     }
-    return this._createGroupBoundOffset(startCell, endCell, cellWidth);
+    return this.createGroupBoundOffset(startCell, endCell, cellWidth);
   }
   shiftIndicator($indicator, height, rtlOffset, groupIndex) {
-    const offset = this._getIndicatorOffset(groupIndex);
+    const offset = this.getIndicatorOffset(groupIndex);
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
     $indicator.css('left', horizontalOffset);
     $indicator.css('top', height);
   }
-  _getIndicatorOffset(groupIndex) {
+  getIndicatorOffset(groupIndex) {
     const groupByDay = this._workSpace.isGroupedByDate();
-    return groupByDay ? this._calculateGroupByDateOffset(groupIndex) : this._calculateOffset(groupIndex);
+    return groupByDay ? this.calculateGroupByDateOffset(groupIndex) : this.calculateOffset(groupIndex);
   }
-  _calculateOffset(groupIndex) {
+  calculateOffset(groupIndex) {
     const indicatorStartPosition = this._workSpace.getIndicatorOffset(groupIndex);
     const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * groupIndex;
     return indicatorStartPosition + offset;
   }
-  _calculateGroupByDateOffset(groupIndex) {
+  calculateGroupByDateOffset(groupIndex) {
     return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getCellWidth() * groupIndex;
   }
   getShaderOffset(i, width) {
@@ -145462,10 +145624,10 @@ class HorizontalGroupedStrategy {
   // ---------------
   addAdditionalGroupCellClasses(cellClass, index, i, j) {
     let applyUnconditionally = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-    cellClass = this._addLastGroupCellClass(cellClass, index, applyUnconditionally);
-    return this._addFirstGroupCellClass(cellClass, index, applyUnconditionally);
+    cellClass = this.addLastGroupCellClass(cellClass, index, applyUnconditionally);
+    return this.addFirstGroupCellClass(cellClass, index, applyUnconditionally);
   }
-  _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
+  addLastGroupCellClass(cellClass, index, applyUnconditionally) {
     if (applyUnconditionally) {
       return `${cellClass} ${_m_classes.LAST_GROUP_CELL_CLASS}`;
     }
@@ -145479,7 +145641,7 @@ class HorizontalGroupedStrategy {
     }
     return cellClass;
   }
-  _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
+  addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
     if (applyUnconditionally) {
       return `${cellClass} ${_m_classes.FIRST_GROUP_CELL_CLASS}`;
     }
@@ -145513,12 +145675,13 @@ var _const = __webpack_require__(79674);
 var _global_cache = __webpack_require__(23710);
 var _m_classes = __webpack_require__(80126);
 class VerticalGroupedStrategy {
+  // TODO: make private once external usages in current_time_shader.ts, current_time_shader_vertical.ts are removed
   constructor(_workSpace) {
     this._workSpace = _workSpace;
     this.cache = new _global_cache.Cache();
   }
   prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
-    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
+    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace.getRowCount();
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       rowIndex += groupIndex;
       if (!inAllDayRow) {
@@ -145531,7 +145694,7 @@ class VerticalGroupedStrategy {
     };
   }
   getGroupIndex(rowIndex) {
-    return Math.floor(rowIndex / this._workSpace._getRowCount());
+    return Math.floor(rowIndex / this._workSpace.getRowCount());
   }
   calculateHeaderCellRepeatCount() {
     return 1;
@@ -145543,13 +145706,13 @@ class VerticalGroupedStrategy {
     return this._workSpace._getCellCount();
   }
   getTotalRowCount() {
-    return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
+    return this._workSpace.getRowCount() * this._workSpace._getGroupCount();
   }
   calculateTimeCellRepeatCount() {
     return this._workSpace._getGroupCount() || 1;
   }
   getWorkSpaceMinWidth() {
-    let minWidth = this._workSpace._getWorkSpaceWidth();
+    let minWidth = this._workSpace.getWorkSpaceWidth();
     const workSpaceElementWidth = (0, _position.getBoundingRect)(this._workSpace.$element().get(0)).width;
     const workspaceContainerWidth = workSpaceElementWidth - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * _const.WORK_SPACE_BORDER_PX;
     if (minWidth < workspaceContainerWidth) {
@@ -145586,20 +145749,20 @@ class VerticalGroupedStrategy {
       const {
         right
       } = $lastCell.getBoundingClientRect();
-      this._groupBoundsOffset = {
+      this.groupBoundsOffset = {
         left,
         right,
         top: topOffset,
         bottom: bottomOffset
       };
-      return this._groupBoundsOffset;
+      return this.groupBoundsOffset;
     });
   }
   shiftIndicator($indicator, height, rtlOffset, i) {
     const offset = this._workSpace.getIndicatorOffset(0);
     const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-    let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+    let verticalOffset = this._workSpace.getRowCount() * this._workSpace.getCellHeight() * i;
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
     }
@@ -145608,7 +145771,7 @@ class VerticalGroupedStrategy {
   }
   getShaderOffset(i, width) {
     const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-    return this._workSpace.option('rtlEnabled') ? (0, _position.getBoundingRect)(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+    return this._workSpace.option('rtlEnabled') ? (0, _position.getBoundingRect)(this.$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getShaderTopOffset(i) {
@@ -145622,7 +145785,7 @@ class VerticalGroupedStrategy {
     return height;
   }
   getShaderMaxHeight() {
-    let height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
+    let height = this._workSpace.getRowCount() * this._workSpace.getCellHeight();
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       height += this._workSpace.getCellHeight();
     }
@@ -145639,17 +145802,17 @@ class VerticalGroupedStrategy {
   // ------------
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addAdditionalGroupCellClasses(cellClass, index, i, j) {
-    cellClass = this._addLastGroupCellClass(cellClass, i + 1);
-    return this._addFirstGroupCellClass(cellClass, i + 1);
+    cellClass = this.addLastGroupCellClass(cellClass, i + 1);
+    return this.addFirstGroupCellClass(cellClass, i + 1);
   }
-  _addLastGroupCellClass(cellClass, index) {
-    if (index % this._workSpace._getRowCount() === 0) {
+  addLastGroupCellClass(cellClass, index) {
+    if (index % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${_m_classes.LAST_GROUP_CELL_CLASS}`;
     }
     return cellClass;
   }
-  _addFirstGroupCellClass(cellClass, index) {
-    if ((index - 1) % this._workSpace._getRowCount() === 0) {
+  addFirstGroupCellClass(cellClass, index) {
+    if ((index - 1) % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${_m_classes.FIRST_GROUP_CELL_CLASS}`;
     }
     return cellClass;
@@ -145685,15 +145848,14 @@ const toMs = _date.default.dateToMilliseconds;
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 class SchedulerWorkSpaceIndicator extends _m_work_space.default {
-  // @ts-expect-error
-  _getToday() {
+  getToday() {
     const viewOffset = this.option('viewOffset');
     const today = (0, _index.getToday)(this.option('indicatorTime'), this.timeZoneCalculator);
     return _date2.dateUtilsTs.addOffsets(today, -viewOffset);
   }
   isIndicationOnView() {
     if (this.option('showCurrentTimeIndicator')) {
-      const today = this._getToday();
+      const today = this.getToday();
       const endViewDate = _date.default.trimTime(this.getEndViewDate());
       return _date.default.dateInRange(today, this.getStartViewDate(), new Date(endViewDate.getTime() + toMs('day')));
     }
@@ -145703,11 +145865,11 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
     if (!(0, _window.hasWindow)()) {
       return false;
     }
-    const today = this._getToday();
+    const today = this.getToday();
     return today >= _date.default.trimTime(new Date(this.getStartViewDate()));
   }
   isIndicatorVisible() {
-    const today = this._getToday();
+    const today = this.getToday();
     // Subtracts 1 ms from the real endViewDate instead of 1 minute
     const endViewDate = new Date(this.getEndViewDate().getTime() + toMs('minute') - 1);
     const firstViewDate = new Date(this.getStartViewDate());
@@ -145715,65 +145877,65 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
     endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
     return _date.default.dateInRange(today, firstViewDate, endViewDate);
   }
-  _renderIndicator(height, rtlOffset, $container, groupCount) {
+  renderIndicator(height, rtlOffset, $container, groupCount) {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
     for (let i = 0; i < repeatCount; i++) {
-      const $indicator = this._createIndicator($container);
+      const $indicator = this.createIndicator($container);
       (0, _size.setWidth)($indicator, groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
       this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
     }
   }
-  _createIndicator($container) {
+  createIndicator($container) {
     const $indicator = (0, _renderer.default)('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
     $container.append($indicator);
     return $indicator;
   }
-  _getRtlOffset(width) {
+  getRtlOffset(width) {
     return this.option('rtlEnabled') ? (0, _position.getBoundingRect)(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
-  _setIndicationUpdateInterval() {
+  setIndicationUpdateInterval() {
     if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
       return;
     }
-    this._clearIndicatorUpdateInterval();
-    this._indicatorInterval = setInterval(() => {
+    this.clearIndicatorUpdateInterval();
+    this.indicatorInterval = setInterval(() => {
       this.renderCurrentDateTimeIndication();
     }, this.option('indicatorUpdateInterval'));
   }
-  _clearIndicatorUpdateInterval() {
-    if (this._indicatorInterval) {
-      clearInterval(this._indicatorInterval);
-      delete this._indicatorInterval;
+  clearIndicatorUpdateInterval() {
+    if (this.indicatorInterval) {
+      clearInterval(this.indicatorInterval);
+      delete this.indicatorInterval;
     }
   }
-  _isVerticalShader() {
+  isVerticalShader() {
     return true;
   }
   getIndicationWidth() {
     const cellCount = this._getCellCount();
-    const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
+    const cellSpan = Math.min(this.getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
     return Math.min(width, maxWidth);
   }
   getIndicatorOffset() {
-    const cellSpan = this._getIndicatorDaysSpan() - 1;
+    const cellSpan = this.getIndicatorDaysSpan() - 1;
     const offset = cellSpan * this.getCellWidth();
     return offset;
   }
-  _getIndicatorDaysSpan() {
-    const today = this._getToday();
+  getIndicatorDaysSpan() {
+    const today = this.getToday();
     const viewStartTime = this.getStartViewDate().getTime();
     let timeDiff = today.getTime() - viewStartTime;
     if (this.option('type') === 'workWeek') {
-      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const weekendDays = this.getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
       timeDiff -= weekendDays;
     }
     return Math.ceil((timeDiff + 1) / toMs('day'));
   }
   getIndicationHeight() {
-    const today = _m_utils_time_zone.default.getDateWithoutTimezoneChange(this._getToday());
+    const today = _m_utils_time_zone.default.getDateWithoutTimezoneChange(this.getToday());
     const cellHeight = this.getCellHeight();
     const date = new Date(this.getStartViewDate());
     if (this.isIndicationOnView()) {
@@ -145784,7 +145946,7 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
     return cellCount * cellHeight;
   }
   _dispose() {
-    this._clearIndicatorUpdateInterval();
+    this.clearIndicatorUpdateInterval();
     super._dispose.apply(this, arguments);
   }
   renderCurrentDateTimeIndication() {
@@ -145801,51 +145963,51 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
   }
   renderCurrentDateTimeLineAndShader() {
     var _this$_shader;
-    this._cleanDateTimeIndicator();
+    this.cleanDateTimeIndicator();
     (_this$_shader = this._shader) === null || _this$_shader === void 0 || _this$_shader.clean();
-    this._renderDateTimeIndication();
+    this.renderDateTimeIndication();
   }
-  _isCurrentTimeHeaderCell(headerIndex) {
+  isCurrentTimeHeaderCell(headerIndex) {
     if (this.isIndicationOnView()) {
       const {
         completeDateHeaderMap
       } = this.viewDataProvider;
       const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
-      return _date.default.sameDate(date, this._getToday());
+      return _date.default.sameDate(date, this.getToday());
     }
     return false;
   }
-  _getHeaderPanelCellClass(i) {
-    const cellClass = super._getHeaderPanelCellClass(i);
-    if (this._isCurrentTimeHeaderCell(i)) {
+  getHeaderPanelCellClass(i) {
+    const cellClass = super.getHeaderPanelCellClass(i);
+    if (this.isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${_m_classes.HEADER_CURRENT_TIME_CELL_CLASS}`;
     }
     return cellClass;
   }
-  _cleanView() {
-    super._cleanView();
-    this._cleanDateTimeIndicator();
+  cleanView() {
+    super.cleanView();
+    this.cleanDateTimeIndicator();
   }
   _dimensionChanged() {
     super._dimensionChanged();
     this.renderCurrentDateTimeLineAndShader();
   }
-  _cleanDateTimeIndicator() {
+  cleanDateTimeIndicator() {
     this.$element().find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
-  _cleanWorkSpace() {
-    super._cleanWorkSpace();
-    this._renderDateTimeIndication();
-    this._setIndicationUpdateInterval();
+  cleanWorkSpace() {
+    super.cleanWorkSpace();
+    this.renderDateTimeIndication();
+    this.setIndicationUpdateInterval();
   }
   _optionChanged(args) {
     switch (args.name) {
       case 'showCurrentTimeIndicator':
       case 'indicatorTime':
-        this._cleanWorkSpace();
+        this.cleanWorkSpace();
         break;
       case 'indicatorUpdateInterval':
-        this._setIndicationUpdateInterval();
+        this.setIndicationUpdateInterval();
         break;
       case 'showAllDayPanel':
       case 'allDayExpanded':
@@ -145868,13 +146030,13 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
       shadeUntilCurrentTime: true
     });
   }
-  _getCurrentTimePanelCellIndices() {
-    const rowCountPerGroup = this._getTimePanelRowCount();
-    const today = this._getToday();
+  getCurrentTimePanelCellIndices() {
+    const rowCountPerGroup = this.getTimePanelRowCount();
+    const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const {
       rowIndex: currentTimeRowIndex
-    } = this._getCellCoordinatesByIndex(index);
+    } = this.getCellCoordinatesByIndex(index);
     if (currentTimeRowIndex === undefined) {
       return [];
     }
@@ -145884,10 +146046,10 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
     } else {
       cellIndices = currentTimeRowIndex % 2 === 0 ? [currentTimeRowIndex - 1, currentTimeRowIndex] : [currentTimeRowIndex, currentTimeRowIndex + 1];
     }
-    const verticalGroupCount = this._isVerticalGroupedWorkSpace() ? this._getGroupCount() : 1;
+    const verticalGroupCount = this.isVerticalGroupedWorkSpace() ? this._getGroupCount() : 1;
     return [...new Array(verticalGroupCount)].reduce((currentIndices, _, groupIndex) => [...currentIndices, ...cellIndices.map(cellIndex => rowCountPerGroup * groupIndex + cellIndex)], []);
   }
-  _renderDateTimeIndication() {
+  renderDateTimeIndication() {
     if (!this.isIndicationAvailable()) {
       return;
     }
@@ -145900,24 +146062,20 @@ class SchedulerWorkSpaceIndicator extends _m_work_space.default {
     const groupCount = this._getGroupCount() || 1;
     const $container = this._dateTableScrollable.$content();
     const height = this.getIndicationHeight();
-    const rtlOffset = this._getRtlOffset(this.getCellWidth());
-    this._renderIndicator(height, rtlOffset, $container, groupCount);
+    const rtlOffset = this.getRtlOffset(this.getCellWidth());
+    this.renderIndicator(height, rtlOffset, $container, groupCount);
     // TODO Old render: delete this code with the old render.
     if (!this.isRenovatedRender()) {
-      this._setCurrentTimeCells();
+      this.setCurrentTimeCells();
     }
   }
-  // Temporary new render methods.
   // TODO Old render: replace base call methods by these after the deleting of the old render.
-  _setCurrentTimeCells() {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+  setCurrentTimeCells() {
+    const timePanelCells = this.getTimePanelCells();
+    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach(timePanelCellIndex => {
       timePanelCells.eq(timePanelCellIndex).addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
     });
-  }
-  _cleanCurrentTimeCells() {
-    this.$element().find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`).removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
   }
 }
 (0, _component_registrator.default)('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator);
@@ -145957,19 +146115,19 @@ class SchedulerWorkSpaceMonth extends _m_work_space_indicator.default {
   get type() {
     return _constants_view.VIEWS.MONTH;
   }
-  _getElementClass() {
+  getElementClass() {
     return MONTH_CLASS;
   }
-  _getFormat() {
+  getFormat() {
     return _index2.formatWeekday;
   }
-  _getIntervalBetween(currentDate) {
+  getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = _date.default.getTimezonesDifference(firstViewDate, currentDate);
     return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
   }
-  _getDateGenerationOptions() {
-    return Object.assign({}, super._getDateGenerationOptions(), {
+  getDateGenerationOptions() {
+    return Object.assign({}, super.getDateGenerationOptions(), {
       cellCountInDay: 1
     });
   }
@@ -145982,17 +146140,17 @@ class SchedulerWorkSpaceMonth extends _m_work_space_indicator.default {
     return this.cache.memo('cellWidth', () => {
       const DAYS_IN_WEEK = 7;
       let averageWidth = 0;
-      const cells = this._getCells().slice(0, DAYS_IN_WEEK);
+      const cells = this.getCells().slice(0, DAYS_IN_WEEK);
       cells.each((index, element) => {
         averageWidth += (0, _window.hasWindow)() ? (0, _position.getBoundingRect)(element).width : 0;
       });
       return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;
     });
   }
-  _insertAllDayRowsIntoDateTable() {
+  insertAllDayRowsIntoDateTable() {
     return false;
   }
-  _getCellCoordinatesByIndex(index) {
+  getCellCoordinatesByIndex(index) {
     const rowIndex = Math.floor(index / this._getCellCount());
     const columnIndex = index - this._getCellCount() * rowIndex;
     return {
@@ -146000,14 +146158,14 @@ class SchedulerWorkSpaceMonth extends _m_work_space_indicator.default {
       columnIndex
     };
   }
-  _needCreateCrossScrolling() {
+  needCreateCrossScrolling() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
+    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
-  _getViewStartByOptions() {
+  getViewStartByOptions() {
     return _index2.monthUtils.getViewStartByOptions(this.option('startDate'), this.option('currentDate'), this.option('intervalCount'), _date.default.getFirstMonthDate(this.option('startDate')));
   }
-  _updateIndex(index) {
+  updateIndex(index) {
     return index;
   }
   isIndicationAvailable() {
@@ -146031,51 +146189,48 @@ class SchedulerWorkSpaceMonth extends _m_work_space_indicator.default {
   needApplyCollectorOffset() {
     return true;
   }
-  _getHeaderDate() {
-    return this._getViewStartByOptions();
+  getHeaderDate() {
+    return this.getViewStartByOptions();
   }
   renderRAllDayPanel() {}
   renderRTimeTable() {}
   renderRDateTable() {
-    _m_utils.utils.renovation.renderComponent(this, this._$dateTable, _index.DateTableMonthComponent, 'renovatedDateTable', this._getRDateTableProps());
+    _m_utils.utils.renovation.renderComponent(this, this._$dateTable, _index.DateTableMonthComponent, 'renovatedDateTable', this.getRDateTableProps());
   }
   // -------------
   // We need these methods for now but they are useless for renovation
   // -------------
-  _createWorkSpaceElements() {
-    if (this._isVerticalGroupedWorkSpace()) {
-      this._createWorkSpaceScrollableElements();
+  createWorkSpaceElements() {
+    if (this.isVerticalGroupedWorkSpace()) {
+      this.createWorkSpaceScrollableElements();
     } else {
-      super._createWorkSpaceElements();
+      super.createWorkSpaceElements();
     }
   }
-  _updateAllDayVisibility() {
-    return (0, _common.noop)();
-  }
-  _updateAllDayHeight() {
+  updateAllDayVisibility() {
     return (0, _common.noop)();
   }
   // --------------
   // These methods should be deleted when we get rid of old render
   // --------------
-  _renderTimePanel() {
+  renderTimePanel() {
     return (0, _common.noop)();
   }
-  _renderAllDayPanel() {
+  renderAllDayPanel() {
     return (0, _common.noop)();
   }
-  _setMonthClassesToCell($cell, data) {
+  setMonthClassesToCell($cell, data) {
     $cell.toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate).toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting).toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
-  _createAllDayPanelElements() {}
-  _renderTableBody(options) {
+  createAllDayPanelElements() {}
+  renderTableBody(options) {
     options.getCellText = (rowIndex, columnIndex) => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
       return _index2.monthUtils.getCellText(date, this.option('intervalCount'));
     };
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
-    options.setAdditionalClasses = this._setMonthClassesToCell.bind(this);
-    super._renderTableBody(options);
+    options.setAdditionalClasses = this.setMonthClassesToCell.bind(this);
+    super.renderTableBody(options);
   }
 }
 (0, _component_registrator.default)('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
@@ -146096,7 +146251,7 @@ var _index = __webpack_require__(34396);
 var _m_work_space_indicator = _interopRequireDefault(__webpack_require__(6523));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class SchedulerWorkspaceVertical extends _m_work_space_indicator.default {
-  _getFormat() {
+  getFormat() {
     return _index.formatWeekdayAndDay;
   }
   generateRenderOptions() {
@@ -146105,7 +146260,7 @@ class SchedulerWorkspaceVertical extends _m_work_space_indicator.default {
       isGenerateTimePanelData: true
     });
   }
-  _isRenderHeaderPanelEmptyCell() {
+  isRenderHeaderPanelEmptyCell() {
     return true;
   }
 }
@@ -146132,11 +146287,11 @@ class SchedulerWorkSpaceWeek extends _m_work_space_vertical.default {
   get type() {
     return _constants_view.VIEWS.WEEK;
   }
-  _getElementClass() {
+  getElementClass() {
     return WEEK_CLASS;
   }
-  _calculateViewStartDate() {
-    return _index.weekUtils.calculateViewStartDate(this.option('startDate'), this._firstDayOfWeek());
+  calculateViewStartDate() {
+    return _index.weekUtils.calculateViewStartDate(this.option('startDate'), this.firstDayOfWeek());
   }
 }
 (0, _component_registrator.default)('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);
@@ -146166,9 +146321,9 @@ class SchedulerWorkSpaceWorkWeek extends _m_work_space_week.default {
   constructor() {
     // @ts-expect-error
     super(...arguments);
-    this._getWeekendsCount = _index.getWeekendsCount;
+    this.getWeekendsCount = _index.getWeekendsCount;
   }
-  _getElementClass() {
+  getElementClass() {
     return WORK_WEEK_CLASS;
   }
 }
@@ -146194,8 +146349,8 @@ const _excluded = ["startDate", "endDate", "isFirstGroupCell", "isLastGroupCell"
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 class DateHeaderDataGenerator {
-  constructor(_viewDataGenerator) {
-    this._viewDataGenerator = _viewDataGenerator;
+  constructor(viewDataGenerator) {
+    this.viewDataGenerator = viewDataGenerator;
   }
   getCompleteDateHeaderMap(options, completeViewDataMap) {
     const {
@@ -146203,14 +146358,14 @@ class DateHeaderDataGenerator {
     } = options;
     const result = [];
     if (isGenerateWeekDaysHeaderData) {
-      const weekDaysRow = this._generateWeekDaysHeaderRowMap(options, completeViewDataMap);
+      const weekDaysRow = this.generateWeekDaysHeaderRowMap(options, completeViewDataMap);
       result.push(weekDaysRow);
     }
-    const dateRow = this._generateHeaderDateRow(options, completeViewDataMap);
+    const dateRow = this.generateHeaderDateRow(options, completeViewDataMap);
     result.push(dateRow);
     return result;
   }
-  _generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
+  generateWeekDaysHeaderRowMap(options, completeViewDataMap) {
     const {
       isGroupedByDate,
       getResourceManager,
@@ -146224,12 +146379,12 @@ class DateHeaderDataGenerator {
     } = options;
     const resourceManager = getResourceManager();
     const groupCount = resourceManager.groupCount();
-    const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    const cellCountInDay = this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     const horizontalGroupCount = (0, _index.getHorizontalGroupCount)(groupCount, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
     const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate ? groupCount : 1;
-    const daysInGroup = this._viewDataGenerator.daysInInterval * intervalCount;
+    const daysInGroup = this.viewDataGenerator.daysInInterval * intervalCount;
     const daysInView = daysInGroup * datesRepeatCount;
     const weekDaysRow = [];
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
@@ -146244,7 +146399,7 @@ class DateHeaderDataGenerator {
     }
     return weekDaysRow;
   }
-  _generateHeaderDateRow(options, completeViewDataMap) {
+  generateHeaderDateRow(options, completeViewDataMap) {
     const {
       today,
       isGroupedByDate,
@@ -146266,7 +146421,7 @@ class DateHeaderDataGenerator {
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
     const isVerticalGrouping = groupOrientation === 'vertical';
-    const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+    const cellCountInGroupRow = this.viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
       viewType,
@@ -146274,7 +146429,7 @@ class DateHeaderDataGenerator {
       startDayHour,
       endDayHour
     });
-    const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    const cellCountInDay = this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     const slicedByColumnsData = isGroupedByDate ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0) : completeViewDataMap[index];
     // NOTE: Should leave dates as is when creating time row in timelines.
     const shouldShiftDatesForHeaderText = !(0, _index.isTimelineView)(viewType) || viewType === _constants_view.VIEWS.TIMELINE_MONTH;
@@ -146318,10 +146473,10 @@ class DateHeaderDataGenerator {
     let weekDayRowConfig = {};
     const validCellWidth = cellWidth || 0;
     if (isGenerateWeekDaysHeaderData) {
-      weekDayRowConfig = this._generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval), 0, validCellWidth);
+      weekDayRowConfig = this.generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, this.viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval), 0, validCellWidth);
       dataMap.push(weekDayRowConfig.dateRow);
     }
-    const datesRowConfig = this._generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, 1, isGenerateWeekDaysHeaderData ? 1 : 0, validCellWidth);
+    const datesRowConfig = this.generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, 1, isGenerateWeekDaysHeaderData ? 1 : 0, validCellWidth);
     dataMap.push(datesRowConfig.dateRow);
     return {
       dataMap,
@@ -146336,7 +146491,7 @@ class DateHeaderDataGenerator {
       isMonthDateHeader
     };
   }
-  _generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, baseColSpan, rowIndex, cellWidth) {
+  generateDateHeaderDataRow(options, completeDateHeaderMap, completeViewDataMap, baseColSpan, rowIndex, cellWidth) {
     const {
       startCellIndex,
       cellCount,
@@ -146388,7 +146543,7 @@ class GroupedDataMapProvider {
   constructor(viewDataGenerator, viewDataMap, completeViewDataMap, viewOptions) {
     this.groupedDataMap = viewDataGenerator.generateGroupedDataMap(viewDataMap);
     this.completeViewDataMap = completeViewDataMap;
-    this._viewOptions = viewOptions;
+    this.viewOptions = viewOptions;
   }
   getGroupStartDate(groupIndex) {
     var _firstRow$;
@@ -146472,8 +146627,8 @@ class GroupedDataMapProvider {
     } = this.groupedDataMap;
     const {
       viewOffset
-    } = this._viewOptions;
-    const rows = isAllDay && !this._viewOptions.isVerticalGrouping ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : [] : dateTableGroupedMap[groupIndex] || [];
+    } = this.viewOptions;
+    const rows = isAllDay && !this.viewOptions.isVerticalGrouping ? allDayPanelGroupedMap[groupIndex] ? [allDayPanelGroupedMap[groupIndex]] : [] : dateTableGroupedMap[groupIndex] || [];
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
       const row = rows[rowIndex];
       for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
@@ -146486,7 +146641,7 @@ class GroupedDataMapProvider {
           startDate: _date2.dateUtilsTs.addOffsets(cell.cellData.startDate, -viewOffset),
           endDate: _date2.dateUtilsTs.addOffsets(cell.cellData.endDate, -viewOffset)
         }) : originCellData;
-        if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
+        if (this.isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
           if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
             return cell.position;
           }
@@ -146507,7 +146662,7 @@ class GroupedDataMapProvider {
     } = _ref2;
     const {
       viewType
-    } = this._viewOptions;
+    } = this.viewOptions;
     const cellSecondIntervalOffset = this.getCellSecondIntervalOffset(originCellStartDate, originCellEndDate);
     const isCellCoversTwoIntervals = cellSecondIntervalOffset !== 0;
     switch (true) {
@@ -146537,7 +146692,7 @@ class GroupedDataMapProvider {
     const isInSecondInterval = startDate >= nextIntervalCellStartDate && startDate < nextIntervalCellEndDate;
     return isInOriginInterval || isInSecondInterval;
   }
-  _isSameGroupIndexAndIndex(cellData, groupIndex, index) {
+  isSameGroupIndexAndIndex(cellData, groupIndex, index) {
     return cellData.groupIndex === groupIndex && (index === undefined || cellData.index === index);
   }
   getCellsGroup(groupIndex) {
@@ -146643,8 +146798,8 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 const toMs = _date.default.dateToMilliseconds;
 class TimePanelDataGenerator {
-  constructor(_viewDataGenerator) {
-    this._viewDataGenerator = _viewDataGenerator;
+  constructor(viewDataGenerator) {
+    this.viewDataGenerator = viewDataGenerator;
   }
   getCompleteTimePanelMap(options, completeViewDataMap) {
     const {
@@ -146663,7 +146818,7 @@ class TimePanelDataGenerator {
     } = options;
     const rowsCount = completeViewDataMap.length - 1;
     const realEndViewDate = completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
-    const rowCountInGroup = this._viewDataGenerator.getRowCount({
+    const rowCountInGroup = this.viewDataGenerator.getRowCount({
       intervalCount,
       currentDate,
       viewType,
@@ -146671,7 +146826,7 @@ class TimePanelDataGenerator {
       startDayHour,
       endDayHour
     });
-    const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
+    const cellCountInGroupRow = this.viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
       viewType,
@@ -146748,11 +146903,11 @@ class TimePanelDataGenerator {
     };
     const {
       previousGroupedData: groupedData
-    } = this._generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
+    } = this.generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
     timePanelData.groupedData = groupedData;
     return timePanelData;
   }
-  _generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
+  generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
     return timePanelMap.reduce((_ref, cellData) => {
       let {
         previousGroupIndex,
@@ -146914,24 +147069,24 @@ class ViewDataGenerator {
       endDayHour
     });
     let viewDataMap = [];
-    const allDayPanelData = this._generateAllDayPanelData(options, rowCountInGroup, cellCountInGroupRow);
-    const viewCellsData = this._generateViewCellsData(options, rowCountInGroup, cellCountInGroupRow);
+    const allDayPanelData = this.generateAllDayPanelData(options, rowCountInGroup, cellCountInGroupRow);
+    const viewCellsData = this.generateViewCellsData(options, rowCountInGroup, cellCountInGroupRow);
     if (allDayPanelData) {
       viewDataMap.push(allDayPanelData);
     }
     viewDataMap.push(...viewCellsData);
     if (isHorizontalGrouping && !isGroupedByDate) {
-      viewDataMap = this._transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
+      viewDataMap = this.transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList);
     }
     if (isVerticalGrouping) {
-      viewDataMap = this._transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
+      viewDataMap = this.transformViewDataMapForVerticalGrouping(viewDataMap, groupsList);
     }
     if (isGroupedByDate) {
-      viewDataMap = this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
+      viewDataMap = this.transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
     }
-    return this._addKeysToCells(viewDataMap);
+    return this.addKeysToCells(viewDataMap);
   }
-  _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
+  transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
     const result = viewDataMap.map(row => row.slice());
     groupsList.slice(1).forEach((groups, index) => {
       const groupIndex = index + 1;
@@ -146945,7 +147100,7 @@ class ViewDataGenerator {
     });
     return result;
   }
-  _transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
+  transformViewDataMapForVerticalGrouping(viewDataMap, groupsList) {
     const result = viewDataMap.map(row => row.slice());
     groupsList.slice(1).forEach((groups, index) => {
       const groupIndex = index + 1;
@@ -146960,7 +147115,7 @@ class ViewDataGenerator {
     });
     return result;
   }
-  _transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
+  transformViewDataMapForGroupingByDate(viewDataMap, groupsList) {
     const correctedGroupList = groupsList.slice(1);
     const correctedGroupCount = correctedGroupList.length;
     const result = viewDataMap.map(cellsRow => {
@@ -146980,7 +147135,7 @@ class ViewDataGenerator {
     });
     return result;
   }
-  _addKeysToCells(viewDataMap) {
+  addKeysToCells(viewDataMap) {
     const totalColumnCount = viewDataMap[0].length;
     const {
       currentViewDataMap: result
@@ -147027,7 +147182,7 @@ class ViewDataGenerator {
     };
     let correctedStartRowIndex = startRowIndex;
     let allDayPanelMap = [];
-    if (this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
+    if (this.isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
       correctedStartRowIndex++;
       allDayPanelMap = sliceCells(completeViewDataMap[0], 0, startCellIndex, cellCount);
     }
@@ -147038,7 +147193,7 @@ class ViewDataGenerator {
       dateTableMap
     };
   }
-  _isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
+  isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible) {
     return !isVerticalGrouping && isAllDayPanelVisible;
   }
   getViewDataFromMap(completeViewDataMap, viewDataMap, options) {
@@ -147100,7 +147255,7 @@ class ViewDataGenerator {
       previousGroupIndex: -1,
       groupedData: []
     });
-    if (this._isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
+    if (this.isStandaloneAllDayPanel(isVerticalGrouping, isAllDayPanelVisible)) {
       groupedData[0].allDayPanel = allDayPanelMap.map(_ref4 => {
         let {
           cellData
@@ -147125,26 +147280,26 @@ class ViewDataGenerator {
       bottomVirtualRowCount: totalRowCount - startRowIndex - displayedRowCount
     };
   }
-  _generateViewCellsData(options, rowCount, cellCountInGroupRow) {
+  generateViewCellsData(options, rowCount, cellCountInGroupRow) {
     const viewCellsData = [];
     for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
-      viewCellsData.push(this._generateCellsRow(options, false, rowIndex, rowCount, cellCountInGroupRow));
+      viewCellsData.push(this.generateCellsRow(options, false, rowIndex, rowCount, cellCountInGroupRow));
     }
     return viewCellsData;
   }
-  _generateAllDayPanelData(options, rowCount, columnCount) {
+  generateAllDayPanelData(options, rowCount, columnCount) {
     if (!options.isAllDayPanelVisible) {
       return null;
     }
-    return this._generateCellsRow(options, true, 0, rowCount, columnCount);
+    return this.generateCellsRow(options, true, 0, rowCount, columnCount);
   }
-  _generateCellsRow(options, allDay, rowIndex, rowCount, columnCount) {
+  generateCellsRow(options, allDay, rowIndex, rowCount, columnCount) {
     const cellsRow = [];
     for (let columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
       const cellDataValue = this.getCellData(rowIndex, columnIndex, options, allDay);
       const index = rowIndex * columnCount + columnIndex;
-      const isFirstGroupCell = this._isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount);
-      const isLastGroupCell = this._isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount);
+      const isFirstGroupCell = this.isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount);
+      const isLastGroupCell = this.isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount);
       cellsRow.push(Object.assign({}, cellDataValue, {
         index,
         isFirstGroupCell,
@@ -147306,7 +147461,7 @@ class ViewDataGenerator {
       dateTableGroupedMap
     };
   }
-  _isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
+  isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
     const {
       groupOrientation,
       getResourceManager,
@@ -147321,7 +147476,7 @@ class ViewDataGenerator {
     }
     return rowIndex % rowCount === 0;
   }
-  _isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
+  isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
     const {
       groupOrientation,
       getResourceManager,
@@ -147348,14 +147503,14 @@ class ViewDataGenerator {
       allDayPanelMap,
       dateTableMap
     } = viewDataMap;
-    const nextDateTableMap = dateTableMap.map(row => this._markSelectedAndFocusedCellsInRow(row, selectedCells, focusedCell));
-    const nextAllDayMap = this._markSelectedAndFocusedCellsInRow(allDayPanelMap, selectedCells, focusedCell);
+    const nextDateTableMap = dateTableMap.map(row => this.markSelectedAndFocusedCellsInRow(row, selectedCells, focusedCell));
+    const nextAllDayMap = this.markSelectedAndFocusedCellsInRow(allDayPanelMap, selectedCells, focusedCell);
     return {
       allDayPanelMap: nextAllDayMap,
       dateTableMap: nextDateTableMap
     };
   }
-  _markSelectedAndFocusedCellsInRow(dataRow, selectedCells, focusedCell) {
+  markSelectedAndFocusedCellsInRow(dataRow, selectedCells, focusedCell) {
     return dataRow.map(cell => {
       const {
         index,
@@ -147491,7 +147646,7 @@ class ViewDataGeneratorMonth extends _m_view_data_generator.ViewDataGenerator {
     const data = super.getCellData(rowIndex, columnIndex, options, false);
     const startDate = _m_utils_time_zone.default.addOffsetsWithoutDST(data.startDate, -viewOffset);
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
-    data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
+    data.otherMonth = this.isOtherMonth(startDate, this.minVisibleDate, this.maxVisibleDate);
     data.isFirstDayMonthHighlighting = (0, _index.isFirstCellInMonthWithIntervalCount)(startDate, intervalCount);
     data.text = _index.monthUtils.getCellText(startDate, intervalCount);
     return data;
@@ -147522,9 +147677,9 @@ class ViewDataGeneratorMonth extends _m_view_data_generator.ViewDataGenerator {
     } = options;
     const firstMonthDate = _date2.default.getFirstMonthDate(startDate);
     const viewStart = _index.monthUtils.getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
-    this._minVisibleDate = new Date(viewStart.setDate(1));
+    this.minVisibleDate = new Date(viewStart.setDate(1));
     const nextMonthDate = new Date(viewStart.setMonth(viewStart.getMonth() + intervalCount));
-    this._maxVisibleDate = new Date(nextMonthDate.setDate(0));
+    this.maxVisibleDate = new Date(nextMonthDate.setDate(0));
   }
   getCellCount() {
     return DAYS_IN_WEEK;
@@ -147697,10 +147852,10 @@ class ViewDataProvider {
       dateTableMap: [],
       allDayPanelMap: []
     };
-    this._groupedDataMapProvider = null;
+    this.groupedDataMapProvider = null;
   }
   get groupedDataMap() {
-    return this._groupedDataMapProvider.groupedDataMap;
+    return this.groupedDataMapProvider.groupedDataMap;
   }
   get hiddenInterval() {
     return this.viewDataGenerator.hiddenInterval;
@@ -147715,8 +147870,8 @@ class ViewDataProvider {
     } = this;
     const dateHeaderDataGenerator = new _m_date_header_data_generator.DateHeaderDataGenerator(viewDataGenerator);
     const timePanelDataGenerator = new _m_time_panel_data_generator.TimePanelDataGenerator(viewDataGenerator);
-    const renderOptions = this._transformRenderOptions(options);
-    this._options = renderOptions;
+    const renderOptions = this.transformRenderOptions(options);
+    this.options = renderOptions;
     if (isGenerateNewViewData) {
       this.completeViewDataMap = viewDataGenerator.getCompleteViewDataMap(renderOptions);
       this.completeDateHeaderMap = dateHeaderDataGenerator.getCompleteDateHeaderMap(renderOptions, this.completeViewDataMap);
@@ -147726,7 +147881,7 @@ class ViewDataProvider {
     }
     this.viewDataMap = viewDataGenerator.generateViewDataMap(this.completeViewDataMap, renderOptions);
     this.updateViewData(renderOptions);
-    this._groupedDataMapProvider = new _m_grouped_data_map_provider.GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, {
+    this.groupedDataMapProvider = new _m_grouped_data_map_provider.GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, {
       isVerticalGrouping: renderOptions.isVerticalGrouping,
       viewType: renderOptions.viewType,
       viewOffset: options.viewOffset
@@ -147737,17 +147892,17 @@ class ViewDataProvider {
     }
   }
   createGroupedDataMapProvider() {
-    this._groupedDataMapProvider = new _m_grouped_data_map_provider.GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, {
-      isVerticalGrouping: this._options.isVerticalGrouping,
-      viewType: this._options.viewType
+    this.groupedDataMapProvider = new _m_grouped_data_map_provider.GroupedDataMapProvider(this.viewDataGenerator, this.viewDataMap, this.completeViewDataMap, {
+      isVerticalGrouping: this.options.isVerticalGrouping,
+      viewType: this.options.viewType
     });
   }
   updateViewData(options) {
-    const renderOptions = this._transformRenderOptions(options);
+    const renderOptions = this.transformRenderOptions(options);
     this.viewDataMapWithSelection = this.viewDataGenerator.markSelectedAndFocusedCells(this.viewDataMap, renderOptions);
     this.viewData = this.viewDataGenerator.getViewDataFromMap(this.completeViewDataMap, this.viewDataMapWithSelection, renderOptions);
   }
-  _transformRenderOptions(renderOptions) {
+  transformRenderOptions(renderOptions) {
     const {
         getResourceManager,
         groupOrientation,
@@ -147773,7 +147928,7 @@ class ViewDataProvider {
     });
   }
   getGroupPanelData(options) {
-    const renderOptions = this._transformRenderOptions(options);
+    const renderOptions = this.transformRenderOptions(options);
     const groupResources = renderOptions.getResourceManager().groupResources();
     if (groupResources.length > 0) {
       const cellCount = this.getCellCount(renderOptions);
@@ -147782,41 +147937,41 @@ class ViewDataProvider {
     return undefined;
   }
   getGroupStartDate(groupIndex) {
-    return this._groupedDataMapProvider.getGroupStartDate(groupIndex);
+    return this.groupedDataMapProvider.getGroupStartDate(groupIndex);
   }
   getGroupEndDate(groupIndex) {
-    return this._groupedDataMapProvider.getGroupEndDate(groupIndex);
+    return this.groupedDataMapProvider.getGroupEndDate(groupIndex);
   }
   findGroupCellStartDate(groupIndex, startDate, endDate) {
     let isFindByDate = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-    return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
+    return this.groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
   }
   findAllDayGroupCellStartDate(groupIndex) {
-    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
+    return this.groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
   findCellPositionInMap(cellInfo) {
     let isAppointmentRender = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
+    return this.groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
   getCellsGroup(groupIndex) {
-    return this._groupedDataMapProvider.getCellsGroup(groupIndex);
+    return this.groupedDataMapProvider.getCellsGroup(groupIndex);
   }
   getCompletedGroupsInfo() {
-    return this._groupedDataMapProvider.getCompletedGroupsInfo();
+    return this.groupedDataMapProvider.getCompletedGroupsInfo();
   }
   getGroupIndices() {
-    return this._groupedDataMapProvider.getGroupIndices();
+    return this.groupedDataMapProvider.getGroupIndices();
   }
   getLastGroupCellPosition(groupIndex) {
-    return this._groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
+    return this.groupedDataMapProvider.getLastGroupCellPosition(groupIndex);
   }
   getRowCountInGroup(groupIndex) {
-    return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
+    return this.groupedDataMapProvider.getRowCountInGroup(groupIndex);
   }
   getCellData(rowIndex, columnIndex) {
     let isAllDay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
     let rtlEnabled = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-    const row = isAllDay && !this._options.isVerticalGrouping ? this.viewDataMap.allDayPanelMap : this.viewDataMap.dateTableMap[rowIndex];
+    const row = isAllDay && !this.options.isVerticalGrouping ? this.viewDataMap.allDayPanelMap : this.viewDataMap.dateTableMap[rowIndex];
     const actualColumnIndex = !rtlEnabled ? columnIndex : row.length - 1 - columnIndex;
     const {
       cellData
@@ -147824,10 +147979,10 @@ class ViewDataProvider {
     return cellData;
   }
   getCellsByGroupIndexAndAllDay(groupIndex, isAllDay) {
-    const rowsPerGroup = this._getRowCountWithAllDayRows();
-    const isShowAllDayPanel = this._options.isAllDayPanelVisible;
-    const firstRowInGroup = this._options.isVerticalGrouping ? groupIndex * rowsPerGroup : 0;
-    const lastRowInGroup = this._options.isVerticalGrouping ? (groupIndex + 1) * rowsPerGroup - 1 : rowsPerGroup;
+    const rowsPerGroup = this.getRowCountWithAllDayRows();
+    const isShowAllDayPanel = this.options.isAllDayPanelVisible;
+    const firstRowInGroup = this.options.isVerticalGrouping ? groupIndex * rowsPerGroup : 0;
+    const lastRowInGroup = this.options.isVerticalGrouping ? (groupIndex + 1) * rowsPerGroup - 1 : rowsPerGroup;
     const correctedFirstRow = isShowAllDayPanel && !isAllDay ? firstRowInGroup + 1 : firstRowInGroup;
     const correctedLastRow = isAllDay ? correctedFirstRow : lastRowInGroup;
     return this.completeViewDataMap.slice(correctedFirstRow, correctedLastRow + 1).map(row => row.filter(_ref => {
@@ -147846,7 +148001,7 @@ class ViewDataProvider {
   }
   hasGroupAllDayPanel(groupIndex) {
     var _this$groupedDataMap$2;
-    if (this._options.isVerticalGrouping) {
+    if (this.options.isVerticalGrouping) {
       var _this$groupedDataMap$;
       return Boolean((_this$groupedDataMap$ = this.groupedDataMap.dateTableGroupedMap[groupIndex]) === null || _this$groupedDataMap$ === void 0 ? void 0 : _this$groupedDataMap$[0][0].cellData.allDay);
     }
@@ -147864,14 +148019,14 @@ class ViewDataProvider {
     const {
       completeViewDataMap
     } = this;
-    const showAllDayPanel = this._options.isAllDayPanelVisible;
+    const showAllDayPanel = this.options.isAllDayPanelVisible;
     let resultDiff = Number.MAX_VALUE;
     let resultCellData;
     let resultCellColumnIndex = -1;
     let resultCellRowIndex = -1;
     const getCellPosition = (columnIndex, rowIndex) => ({
       columnIndex,
-      rowIndex: showAllDayPanel && !this._options.isVerticalGrouping ? rowIndex - 1 : rowIndex
+      rowIndex: showAllDayPanel && !this.options.isVerticalGrouping ? rowIndex - 1 : rowIndex
     });
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
@@ -147910,7 +148065,7 @@ class ViewDataProvider {
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
     const {
       dateTableGroupedMap
-    } = this._groupedDataMapProvider.groupedDataMap;
+    } = this.groupedDataMapProvider.groupedDataMap;
     const groupedData = dateTableGroupedMap[groupIndex];
     let includedDays = 0;
     for (let rowIndex = 0; rowIndex < groupedData.length; rowIndex += 1) {
@@ -147993,22 +148148,22 @@ class ViewDataProvider {
     return completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
   }
   getStartViewDate() {
-    return this._options.startViewDate;
+    return this.options.startViewDate;
   }
   getIntervalDuration(intervalCount) {
     return this.viewDataGenerator._getIntervalDuration(intervalCount);
   }
   getLastCellEndDate() {
     const lastEndDate = new Date(this.getLastViewDate().getTime() - _date.default.dateToMilliseconds('minute'));
-    return _date2.dateUtilsTs.addOffsets(lastEndDate, -this._options.viewOffset);
+    return _date2.dateUtilsTs.addOffsets(lastEndDate, -this.options.viewOffset);
   }
   getLastViewDateByEndDayHour(endDayHour) {
     const lastCellEndDate = this.getLastCellEndDate();
     const endTime = _date.default.dateTimeFromDecimal(endDayHour);
     const endDateOfLastViewCell = new Date(lastCellEndDate.setHours(endTime.hours, endTime.minutes));
-    return this._adjustEndDateByDaylightDiff(lastCellEndDate, endDateOfLastViewCell);
+    return this.adjustEndDateByDaylightDiff(lastCellEndDate, endDateOfLastViewCell);
   }
-  _adjustEndDateByDaylightDiff(startDate, endDate) {
+  adjustEndDateByDaylightDiff(startDate, endDate) {
     const daylightDiff = _m_utils_time_zone.default.getDaylightOffsetInMs(startDate, endDate);
     const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
     return new Date(endDateOfLastViewCell.getTime() - _date.default.dateToMilliseconds('minute'));
@@ -148025,18 +148180,18 @@ class ViewDataProvider {
   getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
     return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
-  _getRowCountWithAllDayRows() {
-    const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
-    return this.getRowCount(this._options) + allDayRowCount;
+  getRowCountWithAllDayRows() {
+    const allDayRowCount = this.options.isAllDayPanelVisible ? 1 : 0;
+    return this.getRowCount(this.options) + allDayRowCount;
   }
   getFirstDayOfWeek(firstDayOfWeekOption) {
     return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
   }
   setViewOptions(options) {
-    this._options = this._transformRenderOptions(options);
+    this.options = this.transformRenderOptions(options);
   }
   getViewOptions() {
-    return this._options;
+    return this.options;
   }
   getViewPortGroupCount() {
     const {
@@ -153424,7 +153579,8 @@ class Chat extends _widget.default {
       onMessageEntered: undefined,
       onTypingEnd: undefined,
       onTypingStart: undefined,
-      onAttachmentDownloadClick: undefined
+      onAttachmentDownloadClick: undefined,
+      onInputFieldTextChanged: undefined
     });
   }
   _init() {
@@ -153443,6 +153599,7 @@ class Chat extends _widget.default {
     this._createTypingStartAction();
     this._createTypingEndAction();
     this._createAttachmentDownloadAction();
+    this._createInputFieldTextChangedAction();
   }
   _dataSourceLoadErrorHandler() {
     this.option('items', []);
@@ -153767,6 +153924,10 @@ class Chat extends _widget.default {
         if (name === 'text') {
           this.option('inputFieldText', value);
         }
+      },
+      onTextChanged: e => {
+        var _this$_inputFieldText;
+        (_this$_inputFieldText = this._inputFieldTextChangedAction) === null || _this$_inputFieldText === void 0 || _this$_inputFieldText.call(this, e);
       }
     };
     this._messageBox = this._createComponent($messageBox, _message_box.default, configuration);
@@ -153829,6 +153990,11 @@ class Chat extends _widget.default {
   }
   _createAttachmentDownloadAction() {
     this._attachmentDownloadAction = this._createActionByOption('onAttachmentDownloadClick', {
+      excludeValidators: ['disabled']
+    });
+  }
+  _createInputFieldTextChangedAction() {
+    this._inputFieldTextChangedAction = this._createActionByOption('onInputFieldTextChanged', {
       excludeValidators: ['disabled']
     });
   }
@@ -153962,6 +154128,9 @@ class Chat extends _widget.default {
       case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
         this._updateAttachmentDownloadHandler();
+        break;
+      case 'onInputFieldTextChanged':
+        this._createInputFieldTextChangedAction();
         break;
       case 'showDayHeaders':
       case 'showAvatar':
@@ -155191,7 +155360,8 @@ class MessageBox extends _dom_component.default {
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
       onTypingStart: undefined,
-      onTypingEnd: undefined
+      onTypingEnd: undefined,
+      onTextChanged: undefined
     });
   }
   _init() {
@@ -155274,11 +155444,12 @@ class MessageBox extends _dom_component.default {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
       },
-      onValueChanged: _ref => {
-        let {
-          value
-        } = _ref;
-        this.option('text', value);
+      onValueChanged: e => {
+        const {
+          onTextChanged
+        } = this.option();
+        this.option('text', e.value);
+        onTextChanged === null || onTextChanged === void 0 || onTextChanged(e);
       },
       onSend: e => {
         this._sendHandler(e);
@@ -157937,6 +158108,9 @@ class CollectionWidget extends _widget.default {
     }
     this.setAria('activedescendant', null, $target);
   }
+  _getItemIdTarget($target) {
+    return $target;
+  }
   _refreshItemId($target, needCleanItemId) {
     const {
       focusedElement
@@ -157945,10 +158119,11 @@ class CollectionWidget extends _widget.default {
     if (shouldSkipRefreshId) {
       return;
     }
+    const $idTarget = this._getItemIdTarget($target);
     if (!needCleanItemId && focusedElement) {
-      this.setAria('id', this.getFocusedItemId(), $target);
+      this.setAria('id', this.getFocusedItemId(), $idTarget);
     } else {
-      this.setAria('id', null, $target);
+      this.setAria('id', null, $idTarget);
     }
   }
   _isDisabled($element) {
@@ -163919,14 +164094,17 @@ class DateBox extends _m_drop_down_editor.default {
     const {
       [optionName]: optionValue
     } = this.option();
-    return _date_serialization.default.deserializeDate(optionValue);
+    const deserializedDate = _date_serialization.default.deserializeDate(optionValue);
+    return deserializedDate;
   }
   setDateOption(optionName, value) {
-    this.option(optionName, this._serializeDate(value));
+    const serializedDate = this._serializeDate(value);
+    this.option(optionName, serializedDate);
   }
   _serializeDate(date) {
     const serializationFormat = this._getSerializationFormat();
-    return _date_serialization.default.serializeDate(date, serializationFormat);
+    const serializedDate = _date_serialization.default.serializeDate(date, serializationFormat);
+    return serializedDate;
   }
   _clearValue() {
     const {
@@ -164210,7 +164388,9 @@ class DateBoxMask extends _date_box.default {
     const {
       text = ''
     } = this.option();
-    return caret.end - caret.start === text.length;
+    const caretStart = (caret === null || caret === void 0 ? void 0 : caret.start) ?? 0;
+    const caretEnd = (caret === null || caret === void 0 ? void 0 : caret.end) ?? 0;
+    return caretEnd - caretStart === text.length;
   }
   _getFormatPattern() {
     if (this._formatPattern) {
@@ -164529,7 +164709,8 @@ class DateBoxMask extends _date_box.default {
       text
     } = this.option();
     if (text) {
-      this._activePartIndex = (0, _date_boxMask.getDatePartIndexByPosition)(this._dateParts, this._caret().start);
+      var _this$_caret;
+      this._activePartIndex = (0, _date_boxMask.getDatePartIndexByPosition)(this._dateParts, ((_this$_caret = this._caret()) === null || _this$_caret === void 0 ? void 0 : _this$_caret.start) ?? 0);
       if (!this._isAllSelected()) {
         this._clearSearchValue();
         if ((0, _type.isDefined)(this._activePartIndex)) {
@@ -164551,6 +164732,7 @@ class DateBoxMask extends _date_box.default {
     const {
       text
     } = this.option();
+    // @ts-expect-error text
     const newText = this._replaceSelectedText(text, this._caret(), (0, _dom.clipboardText)(e));
     const date = _date3.default.parse(newText, this._getFormatPattern());
     if (date && this._isDateValid(date)) {
@@ -165936,7 +166118,10 @@ class CalendarStrategy extends _m_date_box.default {
     if (!this._widget) {
       return;
     }
-    this._widget.option('value', this.dateBoxValue());
+    const value = this.dateBoxValue();
+    this._widget.option({
+      value
+    });
   }
   textChangedHandler() {
     this._lastActionElement = 'input';
@@ -178856,10 +179041,13 @@ class Editor extends _widget.default {
     }
     return validationErrors;
   }
+  _toggleAriaDescribedBy(value) {
+    this.setAria('describedby', value);
+  }
   _disposeValidationMessage() {
     if (this._$validationMessage) {
       this._$validationMessage.remove();
-      this.setAria('describedby', null);
+      this._toggleAriaDescribedBy(null);
       this._$validationMessage = undefined;
       this._validationMessage = undefined;
     }
@@ -178890,7 +179078,7 @@ class Editor extends _widget.default {
       } = this.option();
       this._$validationMessage = (0, _renderer.default)('<div>').appendTo($element);
       const validationMessageContentId = `dx-${new _guid.default()}`;
-      this.setAria('describedby', validationMessageContentId);
+      this._toggleAriaDescribedBy(validationMessageContentId);
       // @ts-expect-error ts-error
       this._validationMessage = new _validation_message.default(this._$validationMessage, (0, _extend.extend)({
         validationErrors,
@@ -191306,11 +191494,7 @@ class Form extends _widget.default {
         layoutManager
       });
       const colCount = layoutManager._getColCount();
-      if (!this._groupsColCount.includes(colCount)) {
-        this._groupsColCount.push(colCount);
-      }
-      $group.addClass(_constants.GROUP_COL_COUNT_CLASS + colCount);
-      $group.attr(_constants.GROUP_COL_COUNT_ATTR, colCount);
+      this._applyGroupColCount($group, colCount);
     }
   }
   _itemGroupTemplate(item, options, $container) {
@@ -191376,7 +191560,13 @@ class Form extends _widget.default {
     instance.on('autoColCountChanged', () => {
       this._clearAutoColCountChangedTimeout();
       // eslint-disable-next-line no-restricted-globals
-      this.autoColCountChangedTimeoutId = setTimeout(() => !this._disposed && this._refresh(), 0);
+      this.autoColCountChangedTimeoutId = setTimeout(() => {
+        if (!this._disposed) {
+          this._isDimensionChangeRefresh = true;
+          this._refresh();
+          this._isDimensionChangeRefresh = false;
+        }
+      }, 0);
     });
     this._cachedLayoutManagers.push(instance);
     return instance;
@@ -191860,7 +192050,9 @@ class Form extends _widget.default {
     if (this._lastMarkupScreenFactor !== currentScreenFactor) {
       if (this._isColCountChanged(this._lastMarkupScreenFactor, currentScreenFactor)) {
         this._targetScreenFactor = currentScreenFactor;
+        this._isDimensionChangeRefresh = true;
         this._refresh();
+        this._isDimensionChangeRefresh = false;
         this._targetScreenFactor = undefined;
       }
       this._lastMarkupScreenFactor = currentScreenFactor;
@@ -191881,7 +192073,42 @@ class Form extends _widget.default {
     const editorSelector = `.${_m_text_editor.TEXTEDITOR_CLASS}.${_widget.FOCUSED_STATE_CLASS}:not(.${_m_drop_down_editor.DROP_DOWN_EDITOR_CLASS}) .${_m_text_editor.TEXTEDITOR_INPUT_CLASS}`;
     // @ts-expect-error ts-error
     _events_engine.default.trigger(this.$element().find(editorSelector), 'change');
+    if (this._isDimensionChangeRefresh) {
+      this._updateLayoutsOnDimensionChange();
+      return;
+    }
     super._refresh();
+  }
+  _updateLayoutsOnDimensionChange() {
+    this._cachedLayoutManagers.forEach(layoutManager => {
+      layoutManager.updateResponsiveBoxLayout();
+    });
+    this._updateGroupsColCount();
+    this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+  }
+  _applyGroupColCount($group, colCount) {
+    const oldColCount = $group.attr(_constants.GROUP_COL_COUNT_ATTR);
+    if (oldColCount) {
+      $group.removeClass(`${_constants.GROUP_COL_COUNT_CLASS}${oldColCount}`);
+    }
+    if (!this._groupsColCount.includes(colCount)) {
+      this._groupsColCount.push(colCount);
+    }
+    $group.addClass(`${_constants.GROUP_COL_COUNT_CLASS}${colCount}`).attr(_constants.GROUP_COL_COUNT_ATTR, colCount);
+  }
+  _updateGroupsColCount() {
+    this._groupsColCount = [];
+    this._cachedLayoutManagers.forEach(layoutManager => {
+      if (layoutManager === this._rootLayoutManager) {
+        return;
+      }
+      const $group = layoutManager.$element().closest(`.${_constants.FORM_GROUP_CLASS}`);
+      if (!$group.length) {
+        return;
+      }
+      const newColCount = layoutManager._getColCount();
+      this._applyGroupColCount($group, newColCount);
+    });
   }
   _updateIsDirty(dataField) {
     const editor = this.getEditor(dataField);
@@ -192210,7 +192437,7 @@ var _default = exports["default"] = Form;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports["default"] = void 0;
+exports["default"] = exports.LAYOUT_MANAGER_LAST_ROW_CLASS = exports.LAYOUT_MANAGER_LAST_COL_CLASS = exports.LAYOUT_MANAGER_FIRST_ROW_CLASS = exports.LAYOUT_MANAGER_FIRST_COL_CLASS = void 0;
 __webpack_require__(20780);
 __webpack_require__(48042);
 __webpack_require__(94319);
@@ -192241,10 +192468,10 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 // @ts-expect-error ts-error
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
-const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
-const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
-const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
-const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
+const LAYOUT_MANAGER_FIRST_ROW_CLASS = exports.LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+const LAYOUT_MANAGER_LAST_ROW_CLASS = exports.LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
+const LAYOUT_MANAGER_FIRST_COL_CLASS = exports.LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
+const LAYOUT_MANAGER_LAST_COL_CLASS = exports.LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const MIN_COLUMN_WIDTH = 200;
 class LayoutManager extends _widget.default {
   _getDefaultOptions() {
@@ -192552,7 +192779,6 @@ class LayoutManager extends _widget.default {
         }
       },
       itemTemplate(itemData, _index, itemElement) {
-        var _that$_items;
         const {
           location
         } = itemData;
@@ -192560,18 +192786,9 @@ class LayoutManager extends _widget.default {
           return;
         }
         const $itemElement = (0, _renderer.default)(itemElement);
-        const itemRenderedCountInPreviousRows = location.row * colCount;
-        const item = (_that$_items = that._items) === null || _that$_items === void 0 ? void 0 : _that$_items[location.col + itemRenderedCountInPreviousRows];
+        const item = that._getLayoutManagerItemByLocation(location);
         if (!item) {
           return;
-        }
-        const itemCssClassList = [item.cssClass ?? ''];
-        $itemElement.toggleClass(_constants.SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
-        if (location.row === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
-        }
-        if (location.col === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
         }
         const {
           isRoot
@@ -192579,15 +192796,9 @@ class LayoutManager extends _widget.default {
         if (item.itemType === _constants.SIMPLE_ITEM_TYPE && isRoot) {
           $itemElement.addClass(_constants.ROOT_SIMPLE_ITEM_CLASS);
         }
-        const isLastColumn = location.col === colCount - 1 || location.col + location.colspan === colCount;
-        const rowsCount = that._getRowsCount();
-        const isLastRow = location.row === rowsCount - 1;
-        if (isLastColumn) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_COL_CLASS);
-        }
-        if (isLastRow) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
-        }
+        $itemElement.toggleClass(_constants.SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
+        const itemCssClassList = [item.cssClass ?? ''];
+        itemCssClassList.push(...that._getLocationCssClasses(location));
         if (item.itemType !== 'empty') {
           itemCssClassList.push(_constants.FIELD_ITEM_CLASS);
           const {
@@ -192595,7 +192806,7 @@ class LayoutManager extends _widget.default {
           } = that.option();
           itemCssClassList.push(cssItemClass);
           if ((0, _type.isDefined)(item.col)) {
-            itemCssClassList.push(`dx-col-${item.col}`);
+            itemCssClassList.push(`${_constants.FORM_FIELD_ITEM_COL_CLASS}${item.col}`);
           }
         }
         templatesInfo.push({
@@ -192630,11 +192841,11 @@ class LayoutManager extends _widget.default {
       colCount = colCountByScreen[screenFactor] || colCount;
     }
     if (colCount === 'auto') {
-      if (this._cashedColCount) {
-        return this._cashedColCount;
+      if (this._cachedColCount) {
+        return this._cachedColCount;
       }
       colCount = this._getMaxColCount();
-      this._cashedColCount = colCount;
+      this._cachedColCount = colCount;
     }
     // @ts-expect-error ts-error
     return colCount < 1 ? 1 : colCount;
@@ -192653,7 +192864,7 @@ class LayoutManager extends _widget.default {
     return itemsCount < maxColCount ? itemsCount : maxColCount;
   }
   isCachedColCountObsolete() {
-    return !!this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
+    return !!this._cachedColCount && this._getMaxColCount() !== this._cachedColCount;
   }
   _prepareItemsWithMerging(colCount) {
     const items = (this._items ?? []).slice(0);
@@ -192688,8 +192899,7 @@ class LayoutManager extends _widget.default {
   }
   _setItems(items) {
     this._items = items;
-    // @ts-expect-error ts-error
-    this._cashedColCount = null; // T923489
+    this._cachedColCount = null; // T923489
   }
   _generateLayoutItems() {
     const items = this._items ?? [];
@@ -193117,9 +193327,100 @@ class LayoutManager extends _widget.default {
     }
   }
   _resetColCount() {
-    // @ts-expect-error ts-error
-    this._cashedColCount = null;
+    this._cachedColCount = null;
     this._invalidate();
+  }
+  updateResponsiveBoxLayout() {
+    if (!this._responsiveBox) {
+      return;
+    }
+    this._cachedColCount = null;
+    this._items = (this._items ?? []).filter(item => !item.merged);
+    const colCount = this._getColCount();
+    this._prepareItemsWithMerging(colCount);
+    const newLayoutItems = this._generateLayoutItems();
+    const {
+      items: responsiveBoxItems
+    } = this._responsiveBox.option();
+    const existingItems = responsiveBoxItems ?? [];
+    for (let i = 0; i < existingItems.length && i < newLayoutItems.length; i += 1) {
+      existingItems[i].location = newLayoutItems[i].location;
+    }
+    const newCols = this._generateRatio(colCount);
+    const newRows = this._generateRatio(this._getRowsCount(), true);
+    this._responsiveBox._options.silent({
+      cols: newCols,
+      rows: newRows
+    });
+    this._responsiveBox.repaint();
+    this._updateItemsCssClasses();
+  }
+  _getLocationBoundaryFlags(location) {
+    const colCount = this._getColCount();
+    const rowsCount = this._getRowsCount();
+    return {
+      isFirstCol: location.col === 0,
+      isLastCol: location.col === colCount - 1 || location.col + location.colspan === colCount,
+      isFirstRow: location.row === 0,
+      isLastRow: location.row === rowsCount - 1
+    };
+  }
+  _getLocationCssClasses(location) {
+    const cssClasses = [];
+    const locationFlags = this._getLocationBoundaryFlags(location);
+    if (locationFlags.isFirstRow) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+    }
+    if (locationFlags.isFirstCol) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
+    }
+    if (locationFlags.isLastCol) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
+    }
+    if (locationFlags.isLastRow) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+    }
+    return cssClasses;
+  }
+  _getLayoutManagerItemByLocation(location) {
+    var _this$_items3;
+    const colCount = this._getColCount();
+    const index = location.row * colCount + location.col;
+    return (_this$_items3 = this._items) === null || _this$_items3 === void 0 ? void 0 : _this$_items3[index];
+  }
+  _updateItemsCssClasses() {
+    const {
+      items: responsiveBoxItems
+    } = this._responsiveBox.option();
+    responsiveBoxItems === null || responsiveBoxItems === void 0 || responsiveBoxItems.forEach(responsiveBoxItem => {
+      const {
+        location
+      } = responsiveBoxItem;
+      if (!location || Array.isArray(location)) {
+        return;
+      }
+      const typedLocation = location;
+      const {
+        isFirstCol,
+        isLastCol,
+        isFirstRow,
+        isLastRow
+      } = this._getLocationBoundaryFlags(typedLocation);
+      const item = this._getLayoutManagerItemByLocation(typedLocation);
+      if (!item || item.itemType === 'empty') {
+        return;
+      }
+      const $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item);
+      $itemContainer.parent().toggleClass(_constants.SINGLE_COLUMN_ITEM_CONTENT, this.isSingleColumnMode());
+      $itemContainer.toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstCol).toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastCol).toggleClass(LAYOUT_MANAGER_FIRST_ROW_CLASS, isFirstRow).toggleClass(LAYOUT_MANAGER_LAST_ROW_CLASS, isLastRow);
+      const element = $itemContainer.get(0);
+      if (element) {
+        element.className = [...element.classList].filter(name => !name.startsWith(_constants.FORM_FIELD_ITEM_COL_CLASS)).join(' ');
+      }
+      if ((0, _type.isDefined)(typedLocation.col)) {
+        $itemContainer.addClass(`${_constants.FORM_FIELD_ITEM_COL_CLASS}${typedLocation.col}`);
+      }
+    });
   }
   linkEditorToDataField(editorInstance, dataField) {
     this.on('optionChanged', args => {
@@ -208224,7 +208525,6 @@ class ListBase extends _collection_widget.default {
       },
       useInkRipple: false,
       wrapItemText: false,
-      _swipeEnabled: true,
       showChevronExpr(data) {
         return data === null || data === void 0 ? void 0 : data.showChevron;
       },
@@ -208864,28 +209164,41 @@ class ListBase extends _collection_widget.default {
   _postprocessRenderItem(args) {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const {
-      _swipeEnabled
-    } = this.option();
-    if (_swipeEnabled) {
-      this._attachSwipeEvent((0, _renderer.default)(args.itemElement));
-    }
+    this._updateSwipeEventSubscription((0, _renderer.default)(args.itemElement));
   }
   _getElementClassToSkipRefreshId() {
     return LIST_GROUP_HEADER_CLASS;
   }
-  _attachSwipeEvent($itemElement) {
+  _updateSwipeEventSubscription() {
+    let $itemElement = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this._itemElements();
     // @ts-expect-error ts-error
     const endEventName = (0, _utils.addNamespace)(_swipe.end, this.NAME);
-    _events_engine.default.on($itemElement, endEventName, e => {
-      this._itemSwipeEndHandler(e);
-    });
+    _events_engine.default.off($itemElement, endEventName);
+    if (this.hasActionSubscription('onItemSwipe')) {
+      _events_engine.default.on($itemElement, endEventName, e => {
+        this._itemSwipeEndHandler(e);
+      });
+    }
   }
   _itemSwipeEndHandler(e) {
     this._itemDXEventHandler(e, 'onItemSwipe', {
       direction: e.offset < 0 ? 'left' : 'right'
     });
+  }
+  on(eventName, eventHandler) {
+    const result = super.on(eventName, eventHandler);
+    const hasItemSwipeHandler = eventName === 'itemSwipe' || (0, _type.isPlainObject)(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe');
+    if (hasItemSwipeHandler) {
+      this._updateSwipeEventSubscription();
+    }
+    return result;
+  }
+  off(eventName, eventHandler) {
+    const result = super.off(eventName, eventHandler);
+    if (eventName === 'itemSwipe') {
+      this._updateSwipeEventSubscription();
+    }
+    return result;
   }
   _nextButtonHandler() {
     var _this$_pageLoadingAct2;
@@ -209155,7 +209468,6 @@ class ListBase extends _collection_widget.default {
       case 'badgeExpr':
         this._invalidate();
         break;
-      case '_swipeEnabled':
       case '_onItemsRendered':
       case 'selectByClick':
         break;
@@ -214047,7 +214359,7 @@ class Lookup extends _m_drop_down_list.default {
       shading: dropDownOptions.shading,
       // @ts-expect-error ts-error
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
-      _loopFocus: shouldLoopFocusInsidePopup
+      tabFocusLoopEnabled: shouldLoopFocusInsidePopup
     });
     delete result.animation;
     delete result.position;
@@ -224293,7 +224605,7 @@ class NumberBoxMask extends _m_number_box.default {
       this._caretTimeout = setTimeout(() => {
         this._caretTimeout = undefined;
         const caret = this._caret();
-        if (caret.start === caret.end && this._useMaskBehavior()) {
+        if ((caret === null || caret === void 0 ? void 0 : caret.start) === (caret === null || caret === void 0 ? void 0 : caret.end) && this._useMaskBehavior()) {
           const text = this._getInputVal();
           const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
           if (decimalSeparatorIndex >= 0) {
@@ -224417,11 +224729,9 @@ class NumberBoxMask extends _m_number_box.default {
     const caret = this._caret();
     const text = this._getInputVal();
     let {
-      start
-    } = caret;
-    let {
-      end
-    } = caret;
+      start = 0,
+      end = 0
+    } = caret ?? {};
     this._lastKey = (0, _index.getChar)(e);
     this._lastKeyName = (0, _index.normalizeKeyName)(e);
     const isDeleteKey = this._isDeleteKey(this._lastKeyName);
@@ -224631,7 +224941,7 @@ class NumberBoxMask extends _m_number_box.default {
     const caret = this._caret();
     const point = _number2.default.getDecimalSeparator();
     const pointIndex = this._getTextSeparatorIndex(text);
-    const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
+    const isCaretOnFloat = pointIndex >= 0 && pointIndex < ((caret === null || caret === void 0 ? void 0 : caret.start) ?? 0);
     const textParts = this._removeStubs(text, true).split(point);
     if (!isCaretOnFloat || textParts.length !== 2) {
       return false;
@@ -224782,7 +225092,7 @@ class NumberBoxMask extends _m_number_box.default {
       return;
     }
     const caret = this._caret();
-    if (caret.start !== caret.end) {
+    if ((caret === null || caret === void 0 ? void 0 : caret.start) !== (caret === null || caret === void 0 ? void 0 : caret.end)) {
       if ((0, _index.normalizeKeyName)(e) === MINUS_KEY) {
         this._applyRevertedSign(e, caret, true);
         return;
@@ -225355,7 +225665,7 @@ class Overlay extends _widget.default {
       ignoreChildEvents: true,
       _checkParentVisibility: true,
       _fixWrapperPosition: false,
-      _loopFocus: false,
+      tabFocusLoopEnabled: false,
       _ignorePreventScrollEventsDeprecation: false,
       // NOTE: private option
       hideTopOverlayHandler: () => {
@@ -225874,13 +226184,12 @@ class Overlay extends _widget.default {
     };
   }
   _toggleTabTerminator(enabled) {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     const {
-      _loopFocus
+      tabFocusLoopEnabled
     } = this.option();
     // @ts-expect-error NAME has string | undefined type
     const eventName = (0, _utils.addNamespace)('keydown', this.NAME);
-    if (_loopFocus || enabled) {
+    if (tabFocusLoopEnabled || enabled) {
       _events_engine.default.on(_dom_adapter.default.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
@@ -226364,7 +226673,7 @@ class Overlay extends _widget.default {
     switch (name) {
       case 'animation':
         break;
-      case '_loopFocus':
+      case 'tabFocusLoopEnabled':
       case 'shading':
         {
           this._toggleShading(this._isVisible());
@@ -226957,6 +227266,19 @@ const POSITION_FLIP_MAP = {
   bottom: 'top',
   center: 'center'
 };
+const HOVER_EVENT_PAIRS = {
+  // eslint-disable-next-line spellcheck/spell-checker
+  mouseleave: 'mouseenter',
+  // eslint-disable-next-line spellcheck/spell-checker
+  mouseout: 'mouseover',
+  // eslint-disable-next-line spellcheck/spell-checker
+  pointerleave: 'pointerenter',
+  // eslint-disable-next-line spellcheck/spell-checker
+  dxhoverend: 'dxhoverstart'
+};
+const HOVER_HIDE_EVENTS = Object.keys(HOVER_EVENT_PAIRS);
+const HOVER_HIDE_DELAY = 50;
+const ESC_KEY_NAME = 'escape';
 class Popover extends _m_popup.default {
   _getDefaultOptions() {
     return Object.assign({}, super._getDefaultOptions(), {
@@ -227036,20 +227358,49 @@ class Popover extends _m_popup.default {
     var _this$$wrapper;
     super._init();
     this._renderArrow();
+    this._initEscapeKeyHandler();
     this._timeouts = {};
     this.$element().addClass(POPOVER_CLASS);
     (_this$$wrapper = this.$wrapper()) === null || _this$$wrapper === void 0 || _this$$wrapper.addClass(POPOVER_WRAPPER_CLASS);
     const {
-      toolbarItems
+      toolbarItems,
+      visible
     } = this.option();
     const isInteractive = toolbarItems === null || toolbarItems === void 0 ? void 0 : toolbarItems.length;
     this.setAria('role', isInteractive ? 'dialog' : 'tooltip');
+    if (visible) {
+      this._attachEscapeKeyHandler();
+    }
+  }
+  _initEscapeKeyHandler() {
+    this._documentEscapeKeyHandler = e => {
+      const {
+        visible
+      } = this.option();
+      const overlayStack = this._overlayStack();
+      const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
+      if ((0, _utils.normalizeKeyName)(e) === ESC_KEY_NAME && visible && isTopOverlay) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }
+    };
+  }
+  _attachEscapeKeyHandler() {
+    const eventName = (0, _utils.addNamespace)('keydown', this.NAME);
+    _events_engine.default.off(_dom_adapter.default.getDocument(), eventName, this._documentEscapeKeyHandler);
+    _events_engine.default.on(_dom_adapter.default.getDocument(), eventName, this._documentEscapeKeyHandler);
+  }
+  _detachEscapeKeyHandler() {
+    const eventName = (0, _utils.addNamespace)('keydown', this.NAME);
+    _events_engine.default.off(_dom_adapter.default.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
   _render() {
     // @ts-expect-error ts-error
     super._render.apply(this, arguments);
     this._detachEvents(this.option('target'));
     this._attachEvents();
+    this._detachHoverableOverlay();
+    this._attachHoverableOverlay();
   }
   _detachEvents(target) {
     this._detachEvent(target, 'show');
@@ -227059,10 +227410,71 @@ class Popover extends _m_popup.default {
     this._attachEvent('show');
     this._attachEvent('hide');
   }
+  _scheduleHoverHide() {
+    this._clearEventsTimeouts();
+    const hideDelay = this._getEventDelay('hideEvent');
+    if (hideDelay) {
+      // eslint-disable-next-line no-restricted-globals
+      this._timeouts.hide = setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }, hideDelay);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
+    }
+  }
+  // eslint-disable-next-line class-methods-use-this
+  _isHoverHideEventName(eventName) {
+    return HOVER_HIDE_EVENTS.some(hoverEvent => eventName.split(/\s+/).includes(hoverEvent));
+  }
+  _attachHoverableOverlay() {
+    const hideEventName = this._getEventName('hideEvent');
+    if (!hideEventName || !this._isHoverHideEventName(hideEventName)) {
+      return;
+    }
+    const $overlayContent = this.$overlayContent();
+    if (!$overlayContent.length) {
+      return;
+    }
+    const namespace = `${this.NAME}Hoverable`;
+    const activeHideEvents = hideEventName.split(/\s+/).filter(eventName => eventName in HOVER_EVENT_PAIRS);
+    const hoverInEventName = activeHideEvents.map(eventName => (0, _utils.addNamespace)(HOVER_EVENT_PAIRS[eventName], namespace)).join(' ');
+    const hoverOutEventName = activeHideEvents.map(eventName => (0, _utils.addNamespace)(eventName, namespace)).join(' ');
+    _events_engine.default.off($overlayContent, hoverInEventName);
+    _events_engine.default.on($overlayContent, hoverInEventName, () => {
+      this._clearEventsTimeouts();
+    });
+    _events_engine.default.off($overlayContent, hoverOutEventName);
+    _events_engine.default.on($overlayContent, hoverOutEventName, e => {
+      const {
+        target
+      } = this.option();
+      const {
+        relatedTarget
+      } = e;
+      if (target && relatedTarget instanceof Element && (0, _renderer.default)(relatedTarget).closest(target).length) {
+        return;
+      }
+      this._scheduleHoverHide();
+    });
+  }
+  _detachHoverableOverlay() {
+    const $overlayContent = this.$overlayContent();
+    if (!$overlayContent.length) {
+      return;
+    }
+    const namespace = `${this.NAME}Hoverable`;
+    const allEventNames = [...Object.keys(HOVER_EVENT_PAIRS), ...Object.values(HOVER_EVENT_PAIRS)].map(e => (0, _utils.addNamespace)(e, namespace)).join(' ');
+    _events_engine.default.off($overlayContent, allEventNames);
+  }
   _createEventHandler(name) {
     const action = this._createAction(() => {
-      const delay = this._getEventDelay(`${name}Event`);
+      const explicitDelay = this._getEventDelay(`${name}Event`);
       this._clearEventsTimeouts();
+      const hideEventName = name === 'hide' ? this._getEventName('hideEvent') : null;
+      const isHoverHide = hideEventName && this._isHoverHideEventName(hideEventName);
+      const delay = explicitDelay ?? (isHoverHide ? HOVER_HIDE_DELAY : 0);
       if (delay) {
         this._timeouts[name] = setTimeout(() => {
           this[name]();
@@ -227132,9 +227544,10 @@ class Popover extends _m_popup.default {
     return this._getEventNameByOption(optionValue);
   }
   _getEventDelay(optionName) {
-    const optionValue = this.option(optionName);
-    // @ts-expect-error
-    return (0, _type.isObject)(optionValue) && optionValue.delay;
+    const {
+      [optionName]: optionValue
+    } = this.option();
+    return (0, _type.isObject)(optionValue) ? optionValue.delay : undefined;
   }
   _renderArrow() {
     this._$arrow = (0, _renderer.default)('<div>').addClass(POPOVER_ARROW_CLASS).prependTo(this.$overlayContent());
@@ -227347,9 +227760,15 @@ class Popover extends _m_popup.default {
     this._clearEventTimeout('hide');
   }
   _clean() {
+    this._detachEscapeKeyHandler();
     this._detachEvents(this.option('target'));
+    this._detachHoverableOverlay();
     // @ts-expect-error ts-error
     super._clean.apply(this, arguments);
+  }
+  _dispose() {
+    this._detachEscapeKeyHandler();
+    super._dispose();
   }
   _optionChanged(args) {
     const {
@@ -227385,9 +227804,18 @@ class Popover extends _m_popup.default {
           } = this.option();
           this._detachEvent(target, eventName, event);
           this._attachEvent(eventName);
+          if (name === 'hideEvent') {
+            this._detachHoverableOverlay();
+            this._attachHoverableOverlay();
+          }
           break;
         }
       case 'visible':
+        if (value) {
+          this._attachEscapeKeyHandler();
+        } else {
+          this._detachEscapeKeyHandler();
+        }
         this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;
@@ -227630,6 +228058,7 @@ var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _resize_observer = _interopRequireDefault(__webpack_require__(11787));
 var _empty_template = __webpack_require__(48650);
 var _common = __webpack_require__(17781);
+var _dom = __webpack_require__(86858);
 var _extend = __webpack_require__(52576);
 var _inflector = __webpack_require__(53124);
 var _iterator = __webpack_require__(21274);
@@ -227642,7 +228071,6 @@ var _themes = __webpack_require__(52071);
 var _m_window = _interopRequireDefault(__webpack_require__(14470));
 var _overlay = _interopRequireDefault(__webpack_require__(79384));
 var zIndexPool = _interopRequireWildcard(__webpack_require__(27869));
-var _constants = __webpack_require__(50634);
 var _m_popup_drag = _interopRequireDefault(__webpack_require__(26513));
 var _m_popup_overflow_manager = __webpack_require__(27129);
 var _popup_position_controller = __webpack_require__(31523);
@@ -227657,16 +228085,16 @@ const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = exports.POPUP_CONTENT_CLASS = 'dx-popup-content';
 const POPUP_CONTENT_SCROLLABLE_CLASS = exports.POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const POPUP_TITLE_CLOSEBUTTON_CLASS = exports.POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
-const TEMPLATE_WRAPPER_CLASS = exports.TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const TEMPLATE_WRAPPER_CLASS = exports.TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
 const BUTTON_DEFAULT_TYPE = 'default';
 const BUTTON_NORMAL_TYPE = 'normal';
@@ -227679,6 +228107,7 @@ const HEIGHT_STRATEGIES = {
   inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS,
   flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS
 };
+const ESC_KEY_NAME = 'escape';
 const getButtonPlace = name => {
   const device = _devices.default.current();
   const {
@@ -227739,6 +228168,19 @@ class Popup extends _overlay.default {
       }
     });
   }
+  _keyboardHandler(options, onlyChildProcessing) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const {
+      _ignoreCloseOnChildEscape
+    } = this.option();
+    const e = options.originalEvent;
+    const $target = (0, _renderer.default)(e.target);
+    if (this._$content && !$target.is(this._$content) && options.keyName === ESC_KEY_NAME && !e.isDefaultPrevented() && !_ignoreCloseOnChildEscape) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
+    }
+    super._keyboardHandler(options, onlyChildProcessing);
+  }
   _getDefaultOptions() {
     return Object.assign({}, super._getDefaultOptions(), {
       fullScreen: false,
@@ -227759,7 +228201,9 @@ class Popup extends _overlay.default {
       bottomTemplate: 'bottom',
       useDefaultToolbarButtons: false,
       useFlatToolbarButtons: false,
-      autoResizeEnabled: true
+      autoResizeEnabled: true,
+      tabFocusLoopEnabled: false,
+      _ignoreCloseOnChildEscape: false
     });
   }
   _defaultOptionsRules() {
@@ -228049,7 +228493,7 @@ class Popup extends _overlay.default {
     if (!$content) {
       return;
     }
-    const $toolbarContainer = (0, _renderer.default)('<div>').addClass(POPUP_TITLE_CLASS).addClass(_constants.TOOLBAR_CLASS).insertBefore($content);
+    const $toolbarContainer = (0, _renderer.default)('<div>').addClass(POPUP_TITLE_CLASS).insertBefore($content);
     this._$topToolbar = this._renderToolbar('titleTemplate', items, $toolbarContainer, {
       onInitialized: e => {
         this._topToolbar = e.component;
@@ -228084,7 +228528,7 @@ class Popup extends _overlay.default {
     if (!$content) {
       return;
     }
-    const $toolbarContainer = (0, _renderer.default)('<div>').addClass(POPUP_BOTTOM_CLASS).addClass(_constants.TOOLBAR_CLASS).insertAfter($content);
+    const $toolbarContainer = (0, _renderer.default)('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter($content);
     this._$bottomToolbar = this._renderToolbar('bottomTemplate', items, $toolbarContainer, {
       compactMode: true,
       onInitialized: e => {
@@ -228153,10 +228597,9 @@ class Popup extends _overlay.default {
     const $result = (0, _renderer.default)(template.render({
       container: (0, _element.getPublicElement)($container)
     }));
-    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      $container.replaceWith($result);
-      // eslint-disable-next-line no-param-reassign
-      $container = $result;
+    const resultInContainer = (0, _dom.contains)($container.get(0), $result.get(0));
+    if (!resultInContainer) {
+      $container.append($result);
     }
     return $container;
   }
@@ -228246,6 +228689,7 @@ class Popup extends _overlay.default {
         // eslint-disable-next-line no-plusplus
         index++;
       }
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       item.toolbar = data.toolbar || item.toolbar || 'top';
       if (item && item.toolbar === toolbar) {
         if (isShortcut) {
@@ -228285,6 +228729,8 @@ class Popup extends _overlay.default {
     }
     return BUTTON_NORMAL_TYPE;
   }
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   _getToolbarItemByAlias(data) {
     const itemType = data.shortcut;
     if (!ALLOWED_TOOLBAR_ITEM_ALIASES.includes(itemType)) {
@@ -228296,6 +228742,7 @@ class Popup extends _overlay.default {
       integrationOptions: {},
       type: this._getToolbarButtonType(itemType),
       stylingMode: this._getToolbarButtonStylingMode(itemType)
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     }, data.options || {});
     const itemClass = `${POPUP_CLASS}-${itemType}`;
     this._toolbarItemClasses.push(itemClass);
@@ -228321,6 +228768,7 @@ class Popup extends _overlay.default {
   _toggleDisabledState(value) {
     var _this$$content;
     // @ts-expect-error ts-error
+    // eslint-disable-next-line prefer-rest-params
     super._toggleDisabledState(...arguments);
     (_this$$content = this.$content()) === null || _this$$content === void 0 || _this$$content.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
   }
@@ -229400,6 +229848,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
+var _guid = _interopRequireDefault(__webpack_require__(19427));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _common = __webpack_require__(17781);
 var _extend = __webpack_require__(52576);
@@ -229412,6 +229861,7 @@ const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
 const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const ITEM_CONTENT_CLASS = 'dx-item-content';
 class RadioCollection extends _collection_widget.default {
   _focusTarget() {
     return (0, _renderer.default)(this.element()).parent();
@@ -229423,11 +229873,7 @@ class RadioCollection extends _collection_widget.default {
   _getDefaultOptions() {
     const defaultOptions = super._getDefaultOptions();
     // @ts-expect-error
-    return (0, _extend.extend)(defaultOptions, _ui.default._dataExpressionDefaultOptions(), {
-      _itemAttributes: {
-        role: 'radio'
-      }
-    });
+    return (0, _extend.extend)(defaultOptions, _ui.default._dataExpressionDefaultOptions());
   }
   _initMarkup() {
     super._initMarkup();
@@ -229439,25 +229885,51 @@ class RadioCollection extends _collection_widget.default {
   _keyboardEventBindingTarget() {
     return this._focusTarget();
   }
+  // eslint-disable-next-line class-methods-use-this
+  _getItemIdTarget($target) {
+    const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+    if ($radioContainer.length) {
+      return $radioContainer;
+    }
+    return $target;
+  }
   _postprocessRenderItem(args) {
     const {
-      itemData: {
-        html
-      },
+      itemData,
       itemElement
     } = args;
+    const {
+      html
+    } = itemData;
+    const $itemElement = (0, _renderer.default)(itemElement);
     if (!html) {
       const $radio = (0, _renderer.default)('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
       (0, _renderer.default)('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
       const $radioContainer = (0, _renderer.default)('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
-      (0, _renderer.default)(itemElement).prepend($radioContainer);
+      $itemElement.prepend($radioContainer);
     }
     super._postprocessRenderItem(args);
+    // eslint-disable-next-line spellcheck/spell-checker
+    const aria = {
+      role: 'radio'
+    };
+    if (!html) {
+      const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const contentId = $itemContent.attr('id') || `dx-${new _guid.default()}`;
+      $itemContent.attr('id', contentId);
+      // eslint-disable-next-line spellcheck/spell-checker
+      aria.labelledby = contentId;
+    }
+    const $ariaTarget = this._getItemIdTarget($itemElement);
+    this.setAria(aria, $ariaTarget);
   }
   _processSelectableItem($itemElement, isSelected) {
     super._processSelectableItem($itemElement, isSelected);
     $itemElement.toggleClass(RADIO_BUTTON_CHECKED_CLASS, isSelected).find(`.${RADIO_BUTTON_ICON_CLASS}`).first().toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
-    this.setAria('checked', isSelected, $itemElement);
+    const $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+    const $ariaCheckedTarget = $radioContainer.length ? $radioContainer : $itemElement;
+    this.setAria('checked', isSelected, $ariaCheckedTarget);
   }
   _refreshContent() {
     this._prepareContent();
@@ -229608,11 +230080,15 @@ class RadioGroup extends _editor.default {
     const value = this._unwrappedValue(currentValue);
     this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
   }
-  _renderValidationState() {
-    var _this$_validationMess;
-    super._renderValidationState();
-    // @ts-expect-error
-    (_this$_validationMess = this._validationMessage) === null || _this$_validationMess === void 0 || _this$_validationMess.$content().attr('role', 'alert');
+  _toggleAriaDescribedBy(value) {
+    var _this$itemElements;
+    const targets = (_this$itemElements = this.itemElements()) === null || _this$itemElements === void 0 ? void 0 : _this$itemElements.toArray();
+    if (!(targets !== null && targets !== void 0 && targets.length)) {
+      return;
+    }
+    targets.forEach(element => {
+      this.setAria('describedby', value, (0, _renderer.default)(element));
+    });
   }
   _optionChanged(args) {
     const {
@@ -229738,13 +230214,13 @@ class RadioGroup extends _editor.default {
       layout
     } = this.option();
     if (layout === 'horizontal') {
-      var _this$itemElements;
-      (_this$itemElements = this.itemElements()) === null || _this$itemElements === void 0 || _this$itemElements.css('height', 'auto');
-    } else {
       var _this$itemElements2;
+      (_this$itemElements2 = this.itemElements()) === null || _this$itemElements2 === void 0 || _this$itemElements2.css('height', 'auto');
+    } else {
+      var _this$itemElements3;
       // @ts-expect-error
       const itemsCount = this.option('items').length;
-      (_this$itemElements2 = this.itemElements()) === null || _this$itemElements2 === void 0 || _this$itemElements2.css('height', `${100 / itemsCount}%`);
+      (_this$itemElements3 = this.itemElements()) === null || _this$itemElements3 === void 0 || _this$itemElements3.css('height', `${100 / itemsCount}%`);
     }
   }
   focus() {
@@ -237452,15 +237928,17 @@ class SliderHandle extends _widget.default {
     });
   }
   _clean() {
+    var _this$_sliderTooltip;
     super._clean();
+    (_this$_sliderTooltip = this._sliderTooltip) === null || _this$_sliderTooltip === void 0 || _this$_sliderTooltip.dispose();
     this._sliderTooltip = null;
   }
   _updateTooltipOptions(args) {
-    var _this$_sliderTooltip;
+    var _this$_sliderTooltip2;
     const tooltipOptions = _widget.default.getOptionsFromContainer(args);
     // @ts-expect-error ts-error
     this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
-    (_this$_sliderTooltip = this._sliderTooltip) === null || _this$_sliderTooltip === void 0 || _this$_sliderTooltip.option('visible', tooltipOptions.enabled);
+    (_this$_sliderTooltip2 = this._sliderTooltip) === null || _this$_sliderTooltip2 === void 0 || _this$_sliderTooltip2.option('visible', tooltipOptions.enabled);
   }
   _optionChanged(args) {
     const {
@@ -237470,8 +237948,8 @@ class SliderHandle extends _widget.default {
     switch (name) {
       case 'value':
         {
-          var _this$_sliderTooltip2;
-          (_this$_sliderTooltip2 = this._sliderTooltip) === null || _this$_sliderTooltip2 === void 0 || _this$_sliderTooltip2.option('value', value);
+          var _this$_sliderTooltip3;
+          (_this$_sliderTooltip3 = this._sliderTooltip) === null || _this$_sliderTooltip3 === void 0 || _this$_sliderTooltip3.option('value', value);
           this.setAria('valuenow', value);
           break;
         }
@@ -237483,12 +237961,12 @@ class SliderHandle extends _widget.default {
     }
   }
   updateTooltipPosition() {
-    var _this$_sliderTooltip3;
-    (_this$_sliderTooltip3 = this._sliderTooltip) === null || _this$_sliderTooltip3 === void 0 || _this$_sliderTooltip3.updatePosition();
+    var _this$_sliderTooltip4;
+    (_this$_sliderTooltip4 = this._sliderTooltip) === null || _this$_sliderTooltip4 === void 0 || _this$_sliderTooltip4.updatePosition();
   }
   repaint() {
-    var _this$_sliderTooltip4;
-    (_this$_sliderTooltip4 = this._sliderTooltip) === null || _this$_sliderTooltip4 === void 0 || _this$_sliderTooltip4.repaint();
+    var _this$_sliderTooltip5;
+    (_this$_sliderTooltip5 = this._sliderTooltip) === null || _this$_sliderTooltip5 === void 0 || _this$_sliderTooltip5.repaint();
   }
 }
 var _default = exports["default"] = SliderHandle;
@@ -239715,11 +240193,21 @@ class Splitter extends _collection_widget.default {
     }
     this._updateItemsRestrictions();
     const collapsedDelta = this._getCollapseDelta(item, !value, this._panesCacheSizeVisible, direction);
+    this._recalculateLayout(collapsedDelta, paneIndex);
+  }
+  _recalculateLayout(delta, paneIndex) {
     this._itemRestrictions.forEach(pane => {
-      pane.maxSize = undefined;
       pane.resizable = undefined;
     });
-    this._layout = (0, _layout.getNextLayout)(this.getLayout(), collapsedDelta, paneIndex, this._itemRestrictions);
+    const currentLayout = this.getLayout();
+    let newLayout = (0, _layout.getNextLayout)(currentLayout, delta, paneIndex, this._itemRestrictions);
+    if (newLayout === currentLayout) {
+      this._itemRestrictions.forEach(pane => {
+        pane.maxSize = undefined;
+      });
+      newLayout = (0, _layout.getNextLayout)(currentLayout, delta, paneIndex, this._itemRestrictions);
+    }
+    this._layout = newLayout;
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
   }
@@ -239783,15 +240271,7 @@ class Splitter extends _collection_widget.default {
     }
     this._updateItemsRestrictions();
     const collapsedDelta = this._getCollapseDelta(item, value, this._panesCacheSize, this._collapseDirection);
-    this._itemRestrictions.forEach(pane => {
-      if (item.collapsed) {
-        pane.maxSize = undefined;
-      }
-      pane.resizable = undefined;
-    });
-    this._layout = (0, _layout.getNextLayout)(this.getLayout(), collapsedDelta, this._activeResizeHandleIndex, this._itemRestrictions);
-    this._applyStylesFromLayout(this.getLayout());
-    this._updateItemSizes();
+    this._recalculateLayout(collapsedDelta, this._activeResizeHandleIndex);
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
     this._fireCollapsedStateChanged(!value, $item, this._savedCollapsingEvent);
@@ -243011,7 +243491,7 @@ var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
 var _renderer = _interopRequireDefault(__webpack_require__(64553));
 var _size = __webpack_require__(57653);
 var _window = __webpack_require__(3104);
-var _m_text_editor = _interopRequireDefault(__webpack_require__(19132));
+var _text_editor = _interopRequireDefault(__webpack_require__(25728));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // STYLE textBox
 const window = (0, _window.getWindow)();
@@ -243020,7 +243500,7 @@ const TEXTBOX_CLASS = 'dx-textbox';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const ICON_CLASS = 'dx-icon';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
-class TextBox extends _m_text_editor.default {
+class TextBox extends _text_editor.default {
   ctor(element, options) {
     if (options) {
       this._showClearButton = options.showClearButton;
@@ -244063,1080 +244543,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _component_registrator = _interopRequireDefault(__webpack_require__(92848));
-var _m_text_editor = _interopRequireDefault(__webpack_require__(19132));
+var _text_editor = _interopRequireDefault(__webpack_require__(25728));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-(0, _component_registrator.default)('dxTextEditor', _m_text_editor.default);
-var _default = exports["default"] = _m_text_editor.default;
-
-/***/ },
-
-/***/ 19132
-(__unused_webpack_module, exports, __webpack_require__) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _events_engine = _interopRequireDefault(__webpack_require__(92774));
-var _wheel = __webpack_require__(37373);
-var _index = __webpack_require__(98834);
-var _message = _interopRequireDefault(__webpack_require__(4671));
-var _renderer = _interopRequireDefault(__webpack_require__(64553));
-var _extend = __webpack_require__(52576);
-var _iterator = __webpack_require__(21274);
-var _string = __webpack_require__(54497);
-var _type = __webpack_require__(11528);
-var _m_selectors = __webpack_require__(62238);
-var _m_text_editor = _interopRequireDefault(__webpack_require__(34705));
-var _m_text_editorMask = __webpack_require__(97270);
-var _m_text_editorMask2 = _interopRequireDefault(__webpack_require__(9217));
-var _utils = _interopRequireDefault(__webpack_require__(99621));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const caret = _utils.default;
-const EMPTY_CHAR = ' ';
-const ESCAPED_CHAR = '\\';
-const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
-const FORWARD_DIRECTION = 'forward';
-const BACKWARD_DIRECTION = 'backward';
-const DROP_EVENT_NAME = 'drop';
-const buildInMaskRules = {
-  0: /[0-9]/,
-  9: /[0-9\s]/,
-  '#': /[-+0-9\s]/,
-  L(char) {
-    return isLiteralChar(char);
-  },
-  l(char) {
-    return isLiteralChar(char) || isSpaceChar(char);
-  },
-  C: /\S/,
-  c: /./,
-  A(char) {
-    return isLiteralChar(char) || isNumericChar(char);
-  },
-  a(char) {
-    return isLiteralChar(char) || isNumericChar(char) || isSpaceChar(char);
-  }
-};
-function isNumericChar(char) {
-  return /[0-9]/.test(char);
-}
-function isLiteralChar(char) {
-  const code = char.charCodeAt();
-  return code > 64 && code < 91 || code > 96 && code < 123 || code > 127;
-}
-function isSpaceChar(char) {
-  return char === ' ';
-}
-class TextEditorMask extends _m_text_editor.default {
-  _getDefaultOptions() {
-    return Object.assign({}, super._getDefaultOptions(), {
-      mask: '',
-      maskChar: '_',
-      maskRules: {},
-      maskInvalidMessage: _message.default.format('validation-mask'),
-      useMaskedValue: false,
-      showMaskMode: 'always'
-    });
-  }
-  _supportedKeys() {
-    const that = this;
-    const keyHandlerMap = {
-      del: that._maskStrategy.getHandler('del'),
-      enter: that._changeHandler
-    };
-    const result = super._supportedKeys();
-    (0, _iterator.each)(keyHandlerMap, (key, callback) => {
-      const parentHandler = result[key];
-      result[key] = function (e) {
-        that.option('mask') && callback.call(that, e);
-        parentHandler && parentHandler(e);
-      };
-    });
-    return result;
-  }
-  _getSubmitElement() {
-    return !this.option('mask') ? super._getSubmitElement() : this._$hiddenElement;
-  }
-  _init() {
-    super._init();
-    this._initMaskStrategy();
-  }
-  _initMaskStrategy() {
-    this._maskStrategy = new _m_text_editorMask2.default(this);
-  }
-  _initMarkup() {
-    this._renderHiddenElement();
-    super._initMarkup();
-  }
-  _attachMouseWheelEventHandlers() {
-    if (!this._hasMouseWheelHandler()) {
-      return;
-    }
-    const input = this._input();
-    // @ts-expect-error ts-error
-    const eventName = (0, _index.addNamespace)(_wheel.name, this.NAME);
-    const mouseWheelAction = this._createAction(e => {
-      const {
-        event
-      } = e;
-      if ((0, _m_selectors.focused)(input) && !(0, _index.isCommandKeyPressed)(event)) {
-        this._onMouseWheel(event);
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    });
-    _events_engine.default.off(input, eventName);
-    _events_engine.default.on(input, eventName, e => {
-      mouseWheelAction({
-        event: e
-      });
-    });
-  }
-  _hasMouseWheelHandler() {
-    return false;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onMouseWheel(e) {}
-  _useMaskBehavior() {
-    return Boolean(this.option('mask'));
-  }
-  _attachDropEventHandler() {
-    const useMaskBehavior = this._useMaskBehavior();
-    if (!useMaskBehavior) {
-      return;
-    }
-    // @ts-expect-error
-    const eventName = (0, _index.addNamespace)(DROP_EVENT_NAME, this.NAME);
-    const input = this._input();
-    _events_engine.default.off(input, eventName);
-    _events_engine.default.on(input, eventName, e => e.preventDefault());
-  }
-  _render() {
-    this._attachMouseWheelEventHandlers();
-    this._renderMask();
-    super._render();
-    this._attachDropEventHandler();
-  }
-  _renderHiddenElement() {
-    if (this.option('mask')) {
-      this._$hiddenElement = (0, _renderer.default)('<input>').attr('type', 'hidden').appendTo(this._inputWrapper());
-    }
-  }
-  _removeHiddenElement() {
-    this._$hiddenElement && this._$hiddenElement.remove();
-  }
-  _renderMask() {
-    this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
-    this._maskRulesChain = null;
-    this._maskStrategy.detachEvents();
-    if (!this.option('mask')) {
-      return;
-    }
-    this.$element().addClass(TEXTEDITOR_MASKED_CLASS);
-    this._maskStrategy.attachEvents();
-    this._parseMask();
-    this._renderMaskedValue();
-  }
-  _changeHandler(e) {
-    const $input = this._input();
-    const inputValue = $input.val();
-    if (inputValue === this._changedValue) {
-      return;
-    }
-    this._changedValue = inputValue;
-    const changeEvent = (0, _index.createEvent)(e, {
-      type: 'change'
-    });
-    // @ts-expect-error
-    _events_engine.default.trigger($input, changeEvent);
-  }
-  _parseMask() {
-    this._maskRules = (0, _extend.extend)({}, buildInMaskRules, this.option('maskRules'));
-    this._maskRulesChain = this._parseMaskRule(0);
-  }
-  _parseMaskRule(index) {
-    const {
-      mask
-    } = this.option();
-    // @ts-expect-error ts-error
-    if (index >= mask.length) {
-      // @ts-expect-error ts-error
-      return new _m_text_editorMask.EmptyMaskRule();
-    }
-    // @ts-expect-error
-    const currentMaskChar = mask[index];
-    const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
-    const result = isEscapedChar
-    // @ts-expect-error
-    ? new _m_text_editorMask.StubMaskRule({
-      maskChar: mask[index + 1]
-    }) : this._getMaskRule(currentMaskChar);
-    // @ts-expect-error
-    result.next(this._parseMaskRule(index + 1 + isEscapedChar));
-    return result;
-  }
-  _getMaskRule(pattern) {
-    let ruleConfig;
-    // @ts-expect-error
-    (0, _iterator.each)(this._maskRules, (rulePattern, allowedChars) => {
-      if (rulePattern === pattern) {
-        ruleConfig = {
-          pattern: rulePattern,
-          allowedChars
-        };
-        return false;
-      }
-    });
-    return (0, _type.isDefined)(ruleConfig) ? new _m_text_editorMask.MaskRule((0, _extend.extend)({
-      maskChar: this.option('maskChar') || ' '
-    }, ruleConfig)) : new _m_text_editorMask.StubMaskRule({
-      maskChar: pattern
-    });
-  }
-  _renderMaskedValue() {
-    if (!this._maskRulesChain) {
-      return;
-    }
-    const value = this.option('value') || '';
-    this._maskRulesChain.clear(this._normalizeChainArguments());
-    // @ts-expect-error ts-error
-    const chainArgs = {
-      length: value.length
-    };
-    chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
-    this._handleChain(chainArgs);
-    this._displayMask();
-  }
-  _replaceSelectedText(text, selection, char) {
-    if (char === undefined) {
-      return text;
-    }
-    const textBefore = text.slice(0, selection.start);
-    const textAfter = text.slice(selection.end);
-    const edited = textBefore + char + textAfter;
-    return edited;
-  }
-  _isMaskedValueMode() {
-    return this.option('useMaskedValue');
-  }
-  _displayMask(caret) {
-    caret = caret || this._caret();
-    this._renderValue();
-    this._caret(caret);
-  }
-  _isValueEmpty() {
-    return (0, _string.isEmpty)(this._value);
-  }
-  _shouldShowMask() {
-    const {
-      showMaskMode
-    } = this.option();
-    if (showMaskMode === 'onFocus') {
-      return (0, _m_selectors.focused)(this._input()) || !this._isValueEmpty();
-    }
-    return true;
-  }
-  _showMaskPlaceholder() {
-    if (this._shouldShowMask()) {
-      const text = this._maskRulesChain.text();
-      this.option('text', text);
-      const {
-        showMaskMode
-      } = this.option();
-      if (showMaskMode === 'onFocus') {
-        this._renderDisplayText(text);
-      }
-    }
-  }
-  _renderValue() {
-    if (this._maskRulesChain) {
-      this._showMaskPlaceholder();
-      if (this._$hiddenElement) {
-        const value = this._maskRulesChain.value();
-        const submitElementValue = !(0, _string.isEmpty)(value) ? this._getPreparedValue() : '';
-        this._$hiddenElement.val(submitElementValue);
-      }
-    }
-    return super._renderValue();
-  }
-  _getPreparedValue() {
-    return this._convertToValue().replace(/\s+$/, '');
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _valueChangeEventHandler(e, value) {
-    if (!this._maskRulesChain) {
-      // @ts-expect-error
-      super._valueChangeEventHandler.apply(this, arguments);
-      return;
-    }
-    this._saveValueChangeEvent(e);
-    this.option('value', this._getPreparedValue());
-  }
-  _isControlKeyFired(e) {
-    // @ts-expect-error
-    return this._isControlKey((0, _index.normalizeKeyName)(e)) || (0, _index.isCommandKeyPressed)(e);
-  }
-  _handleChain(args) {
-    const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
-    this._updateMaskInfo();
-    return handledCount;
-  }
-  _normalizeChainArguments(args) {
-    args = args || {};
-    args.index = 0;
-    args.fullText = this._maskRulesChain.text();
-    return args;
-  }
-  _convertToValue(text) {
-    if (this._isMaskedValueMode()) {
-      text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
-    } else {
-      text = text || this._value || '';
-    }
-    return text;
-  }
-  _replaceMaskCharWithEmpty(text) {
-    const {
-      maskChar
-    } = this.option();
-    // @ts-expect-error ts-error
-    return text.replace(new RegExp(maskChar, 'g'), EMPTY_CHAR);
-  }
-  _maskKeyHandler(e, keyHandler) {
-    if (this.option('readOnly')) {
-      return;
-    }
-    this.setForwardDirection();
-    e.preventDefault();
-    this._handleSelection();
-    const previousText = this._input().val();
-    const raiseInputEvent = () => {
-      if (previousText !== this._input().val()) {
-        // @ts-expect-error
-        _events_engine.default.trigger(this._input(), 'input');
-      }
-    };
-    const handled = keyHandler();
-    if (handled) {
-      handled.then(raiseInputEvent);
-    } else {
-      this.setForwardDirection();
-      this._adjustCaret();
-      this._displayMask();
-      this._maskRulesChain.reset();
-      raiseInputEvent();
-    }
-  }
-  _handleKey(key, direction) {
-    this._direction(direction || FORWARD_DIRECTION);
-    this._adjustCaret(key);
-    this._handleKeyChain(key);
-    this._moveCaret();
-  }
-  _handleSelection() {
-    if (!this._hasSelection()) {
-      return;
-    }
-    const caret = this._caret();
-    const emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
-    this._handleKeyChain(emptyChars);
-  }
-  _handleKeyChain(chars) {
-    const caret = this._caret();
-    const start = this.isForwardDirection() ? caret.start : caret.start - 1;
-    const end = this.isForwardDirection() ? caret.end : caret.end - 1;
-    const length = start === end ? 1 : end - start;
-    this._handleChain({
-      text: chars,
-      start,
-      length
-    });
-  }
-  _tryMoveCaretBackward() {
-    this.setBackwardDirection();
-    const currentCaret = this._caret().start;
-    this._adjustCaret();
-    return !currentCaret || currentCaret !== this._caret().start;
-  }
-  _adjustCaret(char) {
-    const caretStart = this._caret().start;
-    const isForwardDirection = this.isForwardDirection();
-    const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
-    this._caret({
-      start: caret,
-      end: caret
-    });
-  }
-  _moveCaret() {
-    const currentCaret = this._caret().start;
-    const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
-    const caret = this._maskRulesChain.isAccepted(maskRuleIndex) ? currentCaret + (this.isForwardDirection() ? 1 : -1) : currentCaret;
-    this._caret({
-      start: caret,
-      end: caret
-    });
-  }
-  _caret(position, force) {
-    const $input = this._input();
-    if (!$input.length) {
-      // @ts-expect-error
-      return;
-    }
-    if (!arguments.length) {
-      // @ts-expect-error
-      return caret($input);
-    }
-    caret($input, position, force);
-  }
-  _hasSelection() {
-    const caret = this._caret();
-    return caret.start !== caret.end;
-  }
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
-  _direction(direction) {
-    if (!arguments.length) {
-      return this._typingDirection;
-    }
-    this._typingDirection = direction;
-  }
-  setForwardDirection() {
-    this._direction(FORWARD_DIRECTION);
-  }
-  setBackwardDirection() {
-    this._direction(BACKWARD_DIRECTION);
-  }
-  isForwardDirection() {
-    return this._direction() === FORWARD_DIRECTION;
-  }
-  _updateMaskInfo() {
-    this._textValue = this._maskRulesChain.text();
-    this._value = this._maskRulesChain.value();
-  }
-  _clean() {
-    this._maskStrategy && this._maskStrategy.clean();
-    super._clean();
-  }
-  _validateMask() {
-    if (!this._maskRulesChain) {
-      return;
-    }
-    const isValid = (0, _string.isEmpty)(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
-    this.option({
-      isValid,
-      validationError: isValid ? null : {
-        editorSpecific: true,
-        message: this.option('maskInvalidMessage')
-      }
-    });
-  }
-  _updateHiddenElement() {
-    this._removeHiddenElement();
-    if (this.option('mask')) {
-      this._input().removeAttr('name');
-      this._renderHiddenElement();
-    }
-    const {
-      name
-    } = this.option();
-    this._setSubmitElementName(name);
-  }
-  _updateMaskOption() {
-    this._updateHiddenElement();
-    this._renderMask();
-    this._validateMask();
-    this._refreshValueChangeEvent();
-  }
-  _processEmptyMask(mask) {
-    if (mask) return;
-    const value = this.option('value');
-    this.option({
-      text: value,
-      isValid: true,
-      validationError: null
-    });
-    this.validationRequest.fire({
-      value,
-      editor: this
-    });
-    this._renderValue();
-  }
-  _optionChanged(args) {
-    switch (args.name) {
-      case 'mask':
-        this._updateMaskOption();
-        this._processEmptyMask(args.value);
-        break;
-      case 'maskChar':
-      case 'maskRules':
-      case 'useMaskedValue':
-        this._updateMaskOption();
-        break;
-      case 'value':
-        this._renderMaskedValue();
-        this._validateMask();
-        super._optionChanged(args);
-        this._changedValue = this._input().val();
-        break;
-      case 'maskInvalidMessage':
-        break;
-      case 'showMaskMode':
-        this.option('text', '');
-        this._renderValue();
-        break;
-      default:
-        super._optionChanged(args);
-    }
-  }
-  clear() {
-    const {
-      value: defaultValue
-    } = this._getDefaultOptions();
-    if (this.option('value') === defaultValue) {
-      this._renderMaskedValue();
-    }
-    super.clear();
-  }
-}
-var _default = exports["default"] = TextEditorMask;
-
-/***/ },
-
-/***/ 97270
-(__unused_webpack_module, exports, __webpack_require__) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.StubMaskRule = exports.MaskRule = exports.EmptyMaskRule = void 0;
-var _extend = __webpack_require__(52576);
-var _type = __webpack_require__(11528);
-/* eslint-disable max-classes-per-file */
-
-const EMPTY_CHAR = ' ';
-class BaseMaskRule {
-  constructor(config) {
-    this._value = EMPTY_CHAR;
-    (0, _extend.extend)(this, config);
-  }
-  next(rule) {
-    if (!arguments.length) {
-      return this._next;
-    }
-    this._next = rule;
-  }
-  _prepareHandlingArgs(args, config) {
-    config = config || {};
-    const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
-    args[handlingProperty] = config.str ?? args[handlingProperty];
-    args.start = config.start ?? args.start;
-    args.length = config.length ?? args.length;
-    args.index += 1;
-    return args;
-  }
-  first(index) {
-    index = index || 0;
-    return this.next().first(index + 1);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isAccepted(caret) {
-    return false;
-  }
-  adjustedCaret(caret, isForwardDirection, char) {
-    return isForwardDirection ? this._adjustedForward(caret, 0, char) : this._adjustedBackward(caret, 0, char);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _adjustedForward(caret, index, char) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _adjustedBackward(caret, index, char) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isValid(args) {}
-  reset() {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  clear(args) {}
-  text() {}
-  value() {}
-  rawValue() {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handle(args) {}
-}
-class EmptyMaskRule extends BaseMaskRule {
-  next() {}
-  handle() {
-    return 0;
-  }
-  text() {
-    return '';
-  }
-  value() {
-    return '';
-  }
-  first() {
-    return 0;
-  }
-  rawValue() {
-    return '';
-  }
-  adjustedCaret() {
-    return 0;
-  }
-  isValid() {
-    return true;
-  }
-}
-exports.EmptyMaskRule = EmptyMaskRule;
-class MaskRule extends BaseMaskRule {
-  text() {
-    return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
-  }
-  value() {
-    return this._value + this.next().value();
-  }
-  rawValue() {
-    return this._value + this.next().rawValue();
-  }
-  handle(args) {
-    const str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
-    if (!str || !str.length || !args.length) {
-      return 0;
-    }
-    if (args.start) {
-      return this.next().handle(this._prepareHandlingArgs(args, {
-        start: args.start - 1
-      }));
-    }
-    const char = str[0];
-    const rest = str.substring(1);
-    this._tryAcceptChar(char, args);
-    return this._accepted() ? this.next().handle(this._prepareHandlingArgs(args, {
-      str: rest,
-      length: args.length - 1
-    })) + 1 : this.handle(this._prepareHandlingArgs(args, {
-      str: rest,
-      length: args.length - 1
-    }));
-  }
-  clear(args) {
-    this._tryAcceptChar(EMPTY_CHAR, args);
-    this.next().clear(this._prepareHandlingArgs(args));
-  }
-  reset() {
-    this._accepted(false);
-    this.next().reset();
-  }
-  _tryAcceptChar(char, args) {
-    this._accepted(false);
-    if (!this._isAllowed(char, args)) {
-      return;
-    }
-    const acceptedChar = char === EMPTY_CHAR ? this.maskChar : char;
-    args.fullText = args.fullText.substring(0, args.index) + acceptedChar + args.fullText.substring(args.index + 1);
-    this._accepted(true);
-    this._value = char;
-  }
-  // @ts-expect-error
-  _accepted(value) {
-    if (!arguments.length) {
-      return !!this._isAccepted;
-    }
-    this._isAccepted = !!value;
-  }
-  first(index) {
-    return this._value === EMPTY_CHAR ? index || 0 : super.first(index);
-  }
-  _isAllowed(char, args) {
-    if (char === EMPTY_CHAR) {
-      return true;
-    }
-    return this._isValid(char, args);
-  }
-  _isValid(char, args) {
-    // @ts-expect-error
-    const {
-      allowedChars
-    } = this;
-    if (allowedChars instanceof RegExp) {
-      return allowedChars.test(char);
-    }
-    if ((0, _type.isFunction)(allowedChars)) {
-      return allowedChars(char, args.index, args.fullText);
-    }
-    if (Array.isArray(allowedChars)) {
-      return allowedChars.includes(char);
-    }
-    return allowedChars === char;
-  }
-  isAccepted(caret) {
-    return caret === 0 ? this._accepted() : this.next().isAccepted(caret - 1);
-  }
-  _adjustedForward(caret, index, char) {
-    if (index >= caret) {
-      return index;
-    }
-    return this.next()._adjustedForward(caret, index + 1, char) || index + 1;
-  }
-  _adjustedBackward(caret, index) {
-    if (index >= caret - 1) {
-      return caret;
-    }
-    return this.next()._adjustedBackward(caret, index + 1) || index + 1;
-  }
-  isValid(args) {
-    return this._isValid(this._value, args) && this.next().isValid(this._prepareHandlingArgs(args));
-  }
-}
-exports.MaskRule = MaskRule;
-class StubMaskRule extends MaskRule {
-  value() {
-    return this.next().value();
-  }
-  handle(args) {
-    const hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
-    const str = hasValueProperty ? args.value : args.text;
-    if (!str.length || !args.length) {
-      return 0;
-    }
-    if (args.start || hasValueProperty) {
-      return this.next().handle(this._prepareHandlingArgs(args, {
-        start: args.start && args.start - 1
-      }));
-    }
-    const char = str[0];
-    const rest = str.substring(1);
-    this._tryAcceptChar(char);
-    const nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, {
-      str: rest,
-      length: args.length - 1
-    }) : args;
-    return this.next().handle(nextArgs) + 1;
-  }
-  clear(args) {
-    this._accepted(false);
-    this.next().clear(this._prepareHandlingArgs(args));
-  }
-  _tryAcceptChar(char) {
-    this._accepted(this._isValid(char));
-  }
-  _isValid(char) {
-    return char === this.maskChar;
-  }
-  first(index) {
-    index = index || 0;
-    return this.next().first(index + 1);
-  }
-  _adjustedForward(caret, index, char) {
-    if (index >= caret && char === this.maskChar) {
-      return index;
-    }
-    if (caret === index + 1 && this._accepted()) {
-      return caret;
-    }
-    return this.next()._adjustedForward(caret, index + 1, char);
-  }
-  _adjustedBackward(caret, index) {
-    if (index >= caret - 1) {
-      return 0;
-    }
-    return this.next()._adjustedBackward(caret, index + 1);
-  }
-  isValid(args) {
-    return this.next().isValid(this._prepareHandlingArgs(args));
-  }
-}
-exports.StubMaskRule = StubMaskRule;
-
-/***/ },
-
-/***/ 9217
-(__unused_webpack_module, exports, __webpack_require__) {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _events_engine = _interopRequireDefault(__webpack_require__(92774));
-var _index = __webpack_require__(98834);
-var _browser = _interopRequireDefault(__webpack_require__(48314));
-var _dom = __webpack_require__(86858);
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const MASK_EVENT_NAMESPACE = 'dxMask';
-const BLUR_EVENT = 'blur beforedeactivate';
-const EMPTY_CHAR = ' ';
-const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
-const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
-const EVENT_NAMES = ['focusIn', 'focusOut', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
-function getEmptyString(length) {
-  return EMPTY_CHAR.repeat(length);
-}
-class MaskStrategy {
-  constructor(editor) {
-    this.editor = editor;
-  }
-  _editorOption() {
-    return this.editor.option(...arguments);
-  }
-  _editorInput() {
-    return this.editor._input();
-  }
-  _editorCaret(newCaret) {
-    if (!newCaret) {
-      return this.editor._caret();
-    }
-    this.editor._caret(newCaret);
-  }
-  _attachChangeEventHandler() {
-    // @ts-expect-error
-    if (!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
-      return;
-    }
-    const $input = this._editorInput();
-    const namespace = (0, _index.addNamespace)(BLUR_EVENT, MASK_EVENT_NAMESPACE);
-    _events_engine.default.on($input, namespace, e => {
-      this.editor._changeHandler(e);
-    });
-  }
-  _beforeInputHandler() {
-    // @ts-expect-error
-    this._previousText = this._editorOption('text');
-    this._prevCaret = this._editorCaret();
-  }
-  _inputHandler(event) {
-    const {
-      originalEvent
-    } = event;
-    if (!originalEvent) {
-      return;
-    }
-    const {
-      inputType
-    } = originalEvent;
-    if (HISTORY_INPUT_TYPES.includes(inputType)) {
-      this._handleHistoryInputEvent();
-    } else if (DELETE_INPUT_TYPES.includes(inputType)) {
-      this._handleBackwardDeleteInputEvent();
-    } else {
-      const currentCaret = this._editorCaret();
-      if (!currentCaret.end) {
-        return;
-      }
-      this._clearSelectedText();
-      this._autoFillHandler(originalEvent);
-      this._editorCaret(currentCaret);
-      this._handleInsertTextInputEvent(originalEvent.data);
-    }
-    // @ts-expect-error
-    if (this._editorOption('text') === this._previousText) {
-      event.stopImmediatePropagation();
-    }
-  }
-  _handleHistoryInputEvent() {
-    const caret = this._editorCaret();
-    this._updateEditorMask({
-      start: caret.start,
-      length: caret.end - caret.start,
-      text: ''
-    });
-    this._editorCaret(this._prevCaret);
-  }
-  _handleBackwardDeleteInputEvent() {
-    this._clearSelectedText(true);
-    const caret = this._editorCaret();
-    this.editor.setForwardDirection();
-    this.editor._adjustCaret();
-    const adjustedForwardCaret = this._editorCaret();
-    if (adjustedForwardCaret.start !== caret.start) {
-      this.editor.setBackwardDirection();
-      this.editor._adjustCaret();
-    }
-  }
-  _clearSelectedText(isDeleteInputEvent) {
-    const selectionLength = this._prevCaret && this._prevCaret.end - this._prevCaret.start;
-    const length = selectionLength || Number(isDeleteInputEvent);
-    const caret = this._editorCaret();
-    if (!this._isAutoFill()) {
-      this.editor.setBackwardDirection();
-      this._updateEditorMask({
-        start: caret.start,
-        length,
-        text: getEmptyString(length)
-      });
-    }
-  }
-  _handleInsertTextInputEvent(data) {
-    var _this$_prevCaret;
-    // NOTE: data has length > 1 when autosuggestion is applied.
-    const text = data ?? '';
-    this.editor.setForwardDirection();
-    const hasValidChars = this._updateEditorMask({
-      start: ((_this$_prevCaret = this._prevCaret) === null || _this$_prevCaret === void 0 ? void 0 : _this$_prevCaret.start) ?? 0,
-      length: text.length || 1,
-      text
-    });
-    if (!hasValidChars) {
-      this._editorCaret(this._prevCaret);
-    }
-  }
-  _updateEditorMask(args) {
-    const textLength = args.text.length;
-    const processedCharsCount = this.editor._handleChain(args);
-    this.editor._displayMask();
-    if (this.editor.isForwardDirection()) {
-      const {
-        start,
-        end
-      } = this._editorCaret();
-      const correction = processedCharsCount - textLength;
-      const hasSkippedStub = processedCharsCount > 1;
-      if (hasSkippedStub && textLength === 1) {
-        this._editorCaret({
-          start: start + correction,
-          end: end + correction
-        });
-      }
-      this.editor._adjustCaret();
-    }
-    return !!processedCharsCount;
-  }
-  _focusInHandler() {
-    this.editor._showMaskPlaceholder();
-    this.editor.setForwardDirection();
-    // @ts-expect-error
-    if (!this.editor._isValueEmpty() && this._editorOption('isValid')) {
-      this.editor._adjustCaret();
-    } else {
-      const caret = this.editor._maskRulesChain.first();
-      this._caretTimeout = setTimeout(() => {
-        this._editorCaret({
-          start: caret,
-          end: caret
-        });
-      }, 0);
-    }
-  }
-  _focusOutHandler(event) {
-    this.editor._changeHandler(event);
-    // @ts-expect-error
-    if (this._editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
-      // @ts-expect-error
-      this._editorOption('text', '');
-      this.editor._renderDisplayText('');
-    }
-  }
-  _delHandler(event) {
-    const {
-      editor
-    } = this;
-    editor._maskKeyHandler(event, () => {
-      if (!editor._hasSelection()) {
-        editor._handleKey(EMPTY_CHAR);
-      }
-    });
-  }
-  _cutHandler(event) {
-    const caret = this._editorCaret();
-    const selectedText = this._editorInput().val().substring(caret.start, caret.end);
-    this.editor._maskKeyHandler(event, () => (0, _dom.clipboardText)(event, selectedText));
-  }
-  _dropHandler() {
-    this._clearDragTimer();
-    this._dragTimer = setTimeout(() => {
-      const value = this.editor._convertToValue(this._editorInput().val());
-      // @ts-expect-error
-      this._editorOption('value', value);
-    });
-  }
-  _pasteHandler(event) {
-    const {
-      editor
-    } = this;
-    // @ts-expect-error
-    if (this._editorOption('disabled')) {
-      return;
-    }
-    const caret = this._editorCaret();
-    editor._maskKeyHandler(event, () => {
-      const pastedText = (0, _dom.clipboardText)(event);
-      const restText = editor._maskRulesChain.text().substring(caret.end);
-      const accepted = editor._handleChain({
-        text: pastedText,
-        start: caret.start,
-        length: pastedText.length
-      });
-      const newCaret = caret.start + accepted;
-      editor._handleChain({
-        text: restText,
-        start: newCaret,
-        length: restText.length
-      });
-      editor._caret({
-        start: newCaret,
-        end: newCaret
-      });
-    });
-  }
-  _autoFillHandler(event) {
-    const {
-      editor
-    } = this;
-    const inputVal = this._editorInput().val();
-    this._inputHandlerTimer = setTimeout(() => {
-      if (this._isAutoFill()) {
-        editor._maskKeyHandler(event, () => {
-          editor._handleChain({
-            text: inputVal,
-            start: 0,
-            length: inputVal.length
-          });
-        });
-        editor._validateMask();
-      }
-    });
-  }
-  _isAutoFill() {
-    const $input = this._editorInput();
-    if (_browser.default.webkit) {
-      const input = $input.get(0);
-      return (input === null || input === void 0 ? void 0 : input.matches(':-webkit-autofill')) ?? false;
-    }
-    return false;
-  }
-  _clearDragTimer() {
-    clearTimeout(this._dragTimer);
-  }
-  _clearTimers() {
-    this._clearDragTimer();
-    clearTimeout(this._caretTimeout);
-    clearTimeout(this._inputHandlerTimer);
-  }
-  getHandler(handlerName) {
-    return args => {
-      var _this;
-      (_this = this[`_${handlerName}Handler`]) === null || _this === void 0 || _this.call(this, args);
-    };
-  }
-  attachEvents() {
-    const $input = this._editorInput();
-    EVENT_NAMES.forEach(eventName => {
-      const namespace = (0, _index.addNamespace)(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
-      _events_engine.default.on($input, namespace, this.getHandler(eventName));
-    });
-    this._attachChangeEventHandler();
-  }
-  detachEvents() {
-    this._clearTimers();
-    _events_engine.default.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
-  }
-  clean() {
-    this._clearTimers();
-  }
-}
-exports["default"] = MaskStrategy;
+(0, _component_registrator.default)('dxTextEditor', _text_editor.default);
+var _default = exports["default"] = _text_editor.default;
 
 /***/ },
 
@@ -245401,6 +244811,1188 @@ class TextEditorLabel {
   }
 }
 exports.TextEditorLabel = TextEditorLabel;
+
+/***/ },
+
+/***/ 25728
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _events_engine = _interopRequireDefault(__webpack_require__(92774));
+var _wheel = __webpack_require__(37373);
+var _index = __webpack_require__(98834);
+var _message = _interopRequireDefault(__webpack_require__(4671));
+var _renderer = _interopRequireDefault(__webpack_require__(64553));
+var _extend = __webpack_require__(52576);
+var _string = __webpack_require__(54497);
+var _type = __webpack_require__(11528);
+var _m_selectors = __webpack_require__(62238);
+var _m_text_editor = _interopRequireDefault(__webpack_require__(34705));
+var _text_editorMask = __webpack_require__(42482);
+var _text_editorMask2 = _interopRequireDefault(__webpack_require__(73445));
+var _utils = _interopRequireDefault(__webpack_require__(99621));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const EMPTY_CHAR = ' ';
+const ESCAPED_CHAR = '\\';
+const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
+const FORWARD_DIRECTION = 'forward';
+const BACKWARD_DIRECTION = 'backward';
+const DROP_EVENT_NAME = 'drop';
+const isNumericChar = char => /[0-9]/.test(char);
+const isLiteralChar = char => {
+  const code = char.charCodeAt(0);
+  return code > 64 && code < 91 || code > 96 && code < 123 || code > 127;
+};
+const isSpaceChar = char => char === ' ';
+const buildInMaskRules = {
+  0: /[0-9]/,
+  9: /[0-9\s]/,
+  '#': /[-+0-9\s]/,
+  L(char) {
+    return isLiteralChar(char);
+  },
+  l(char) {
+    return isLiteralChar(char) || isSpaceChar(char);
+  },
+  C: /\S/,
+  c: /./,
+  A(char) {
+    return isLiteralChar(char) || isNumericChar(char);
+  },
+  a(char) {
+    return isLiteralChar(char) || isNumericChar(char) || isSpaceChar(char);
+  }
+};
+class TextEditorMask extends _m_text_editor.default {
+  _getDefaultOptions() {
+    return Object.assign({}, super._getDefaultOptions(), {
+      mask: '',
+      maskChar: '_',
+      maskRules: {},
+      maskInvalidMessage: _message.default.format('validation-mask'),
+      useMaskedValue: false,
+      showMaskMode: 'always'
+    });
+  }
+  _supportedKeys() {
+    const result = super._supportedKeys();
+    const keyHandlerMap = {
+      del: this._maskStrategy.getHandler('del'),
+      enter: this._changeHandler
+    };
+    Object.entries(keyHandlerMap).forEach(_ref => {
+      let [key, handler] = _ref;
+      const parentHandler = result[key];
+      result[key] = e => {
+        const {
+          mask
+        } = this.option();
+        if (mask && handler) {
+          handler.call(this, e);
+        }
+        parentHandler === null || parentHandler === void 0 || parentHandler(e);
+      };
+    });
+    return result;
+  }
+  _getSubmitElement() {
+    const {
+      mask
+    } = this.option();
+    const submitElement = !mask ? super._getSubmitElement() : this._$hiddenElement;
+    return submitElement;
+  }
+  _init() {
+    super._init();
+    this._initMaskStrategy();
+  }
+  _initMaskStrategy() {
+    // @ts-expect-error expected
+    this._maskStrategy = new _text_editorMask2.default(this);
+  }
+  _initMarkup() {
+    this._renderHiddenElement();
+    super._initMarkup();
+  }
+  _attachMouseWheelEventHandlers() {
+    if (!this._hasMouseWheelHandler()) {
+      return;
+    }
+    const input = this._input();
+    // @ts-expect-error addNamespace with second argument
+    const eventName = (0, _index.addNamespace)(_wheel.name, this.NAME);
+    const mouseWheelAction = this._createAction(e => {
+      const {
+        event
+      } = e;
+      if ((0, _m_selectors.focused)(input) && !(0, _index.isCommandKeyPressed)(event)) {
+        this._onMouseWheel(event);
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+    _events_engine.default.off(input, eventName);
+    _events_engine.default.on(input, eventName, e => {
+      mouseWheelAction({
+        event: e
+      });
+    });
+  }
+  _hasMouseWheelHandler() {
+    return false;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _onMouseWheel(e) {}
+  _useMaskBehavior() {
+    const {
+      mask
+    } = this.option();
+    return Boolean(mask);
+  }
+  _attachDropEventHandler() {
+    const useMaskBehavior = this._useMaskBehavior();
+    if (!useMaskBehavior) {
+      return;
+    }
+    // @ts-expect-error addNamespace with second argument
+    const eventName = (0, _index.addNamespace)(DROP_EVENT_NAME, this.NAME);
+    const input = this._input();
+    _events_engine.default.off(input, eventName);
+    _events_engine.default.on(input, eventName, e => {
+      e.preventDefault();
+    });
+  }
+  _render() {
+    this._attachMouseWheelEventHandlers();
+    this._renderMask();
+    super._render();
+    this._attachDropEventHandler();
+  }
+  _renderHiddenElement() {
+    const {
+      mask
+    } = this.option();
+    if (mask) {
+      this._$hiddenElement = (0, _renderer.default)('<input>').attr('type', 'hidden').appendTo(this._inputWrapper());
+    }
+  }
+  _removeHiddenElement() {
+    var _this$_$hiddenElement;
+    (_this$_$hiddenElement = this._$hiddenElement) === null || _this$_$hiddenElement === void 0 || _this$_$hiddenElement.remove();
+  }
+  _renderMask() {
+    this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
+    this._maskRulesChain = null;
+    this._maskStrategy.detachEvents();
+    const {
+      mask
+    } = this.option();
+    if (!mask) {
+      return;
+    }
+    this.$element().addClass(TEXTEDITOR_MASKED_CLASS);
+    this._maskStrategy.attachEvents();
+    this._parseMask();
+    this._renderMaskedValue();
+  }
+  _changeHandler(e) {
+    const $input = this._input();
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const inputValue = $input.val();
+    if (inputValue === this._changedValue) {
+      return;
+    }
+    this._changedValue = inputValue;
+    const changeEvent = (0, _index.createEvent)(e, {
+      type: 'change'
+    });
+    // @ts-expect-error eventsEngine with trigger
+    _events_engine.default.trigger($input, changeEvent);
+  }
+  _parseMask() {
+    const {
+      maskRules
+    } = this.option();
+    this._maskRules = (0, _extend.extend)({}, buildInMaskRules, maskRules);
+    this._maskRulesChain = this._parseMaskRule(0);
+  }
+  _parseMaskRule(index) {
+    const {
+      mask
+    } = this.option();
+    if (!(0, _type.isDefined)(mask) || index >= mask.length) {
+      return new _text_editorMask.EmptyMaskRule({});
+    }
+    const currentMaskChar = mask[index];
+    const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
+    const result = isEscapedChar ? new _text_editorMask.StubMaskRule({
+      maskChar: mask[index + 1]
+    }) : this._getMaskRule(currentMaskChar);
+    const nextIndex = index + 1 + Number(isEscapedChar);
+    const recursiveResult = this._parseMaskRule(nextIndex);
+    // @ts-expect-error EmptyMaskRule Liskov
+    result.next(recursiveResult);
+    return result;
+  }
+  _getMaskRule(pattern) {
+    if (!this._maskRules) {
+      return new _text_editorMask.StubMaskRule({
+        maskChar: pattern
+      });
+    }
+    const matchingEntry = Object.entries(this._maskRules).find(_ref2 => {
+      let [rulePattern] = _ref2;
+      return rulePattern === pattern;
+    });
+    if (matchingEntry) {
+      const [, allowedChars] = matchingEntry;
+      const ruleConfig = {
+        pattern,
+        allowedChars
+      };
+      const {
+        maskChar
+      } = this.option();
+      return new _text_editorMask.MaskRule((0, _extend.extend)(
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      {
+        maskChar: maskChar || ' '
+      }, ruleConfig));
+    }
+    return new _text_editorMask.StubMaskRule({
+      maskChar: pattern
+    });
+  }
+  _renderMaskedValue() {
+    if (!this._maskRulesChain) {
+      return;
+    }
+    const {
+      value: optionValue
+    } = this.option();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const value = optionValue || '';
+    this._maskRulesChain.clear(this._normalizeChainArguments());
+    const chainArgs = {
+      length: value === null || value === void 0 ? void 0 : value.length
+    };
+    const prop = this._isMaskedValueMode() ? 'text' : 'value';
+    chainArgs[prop] = value;
+    this._handleChain(chainArgs);
+    this._displayMask();
+  }
+  _replaceSelectedText(text, selection, char) {
+    if (char === undefined) {
+      return text;
+    }
+    const textBefore = text.slice(0, selection.start);
+    const textAfter = text.slice(selection.end);
+    const edited = `${textBefore}${char}${textAfter}`;
+    return edited;
+  }
+  _isMaskedValueMode() {
+    const {
+      useMaskedValue
+    } = this.option();
+    return Boolean(useMaskedValue);
+  }
+  _displayMask(caret) {
+    const currentCaret = caret ?? this._caret();
+    const finalCaret = {
+      start: (currentCaret === null || currentCaret === void 0 ? void 0 : currentCaret.start) ?? 0,
+      end: (currentCaret === null || currentCaret === void 0 ? void 0 : currentCaret.end) ?? 0
+    };
+    this._renderValue();
+    this._caret(finalCaret);
+  }
+  _isValueEmpty() {
+    return (0, _string.isEmpty)(this._value);
+  }
+  _shouldShowMask() {
+    const {
+      showMaskMode
+    } = this.option();
+    if (showMaskMode === 'onFocus') {
+      return (0, _m_selectors.focused)(this._input()) || !this._isValueEmpty();
+    }
+    return true;
+  }
+  _showMaskPlaceholder() {
+    if (this._shouldShowMask()) {
+      var _this$_maskRulesChain;
+      const text = (_this$_maskRulesChain = this._maskRulesChain) === null || _this$_maskRulesChain === void 0 ? void 0 : _this$_maskRulesChain.text();
+      this.option({
+        text
+      });
+      const {
+        showMaskMode
+      } = this.option();
+      if (showMaskMode === 'onFocus') {
+        this._renderDisplayText(text);
+      }
+    }
+  }
+  _renderValue() {
+    if (this._maskRulesChain) {
+      this._showMaskPlaceholder();
+      if (this._$hiddenElement) {
+        const value = this._maskRulesChain.value();
+        const submitElementValue = !(0, _string.isEmpty)(value) ? this._getPreparedValue() : '';
+        this._$hiddenElement.val(submitElementValue);
+      }
+    }
+    return super._renderValue();
+  }
+  _getPreparedValue() {
+    return this._convertToValue().replace(/\s+$/, '');
+  }
+  _valueChangeEventHandler() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    if (!this._maskRulesChain) {
+      // @ts-expect-error _valueChangeEventHandler
+      super._valueChangeEventHandler(...args);
+      return;
+    }
+    const [e] = args;
+    this._saveValueChangeEvent(e);
+    const preparedValue = this._getPreparedValue();
+    this.option({
+      value: preparedValue
+    });
+  }
+  _isControlKeyFired(e) {
+    const normalizedKeyName = (0, _index.normalizeKeyName)(e);
+    const isControlKey = (0, _type.isDefined)(normalizedKeyName) ? this._isControlKey(normalizedKeyName) : false;
+    return isControlKey || (0, _index.isCommandKeyPressed)(e);
+  }
+  _handleChain(args) {
+    var _this$_maskRulesChain2;
+    const handledCount = ((_this$_maskRulesChain2 = this._maskRulesChain) === null || _this$_maskRulesChain2 === void 0 ? void 0 : _this$_maskRulesChain2.handle(this._normalizeChainArguments(args))) ?? 0;
+    this._updateMaskInfo();
+    return handledCount;
+  }
+  _normalizeChainArguments(args) {
+    var _this$_maskRulesChain3;
+    return Object.assign({}, args, {
+      index: 0,
+      fullText: (_this$_maskRulesChain3 = this._maskRulesChain) === null || _this$_maskRulesChain3 === void 0 ? void 0 : _this$_maskRulesChain3.text()
+    });
+  }
+  _convertToValue(text) {
+    if (this._isMaskedValueMode()) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      return this._replaceMaskCharWithEmpty(text || this._textValue || '');
+    }
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return text || this._value || '';
+  }
+  _replaceMaskCharWithEmpty(text) {
+    const {
+      maskChar
+    } = this.option();
+    // @ts-expect-error ts-error
+    return text.replace(new RegExp(maskChar, 'g'), EMPTY_CHAR);
+  }
+  _maskKeyHandler(e, keyHandler) {
+    const {
+      readOnly
+    } = this.option();
+    if (readOnly) {
+      return;
+    }
+    this.setForwardDirection();
+    e.preventDefault();
+    this._handleSelection();
+    const previousText = this._input().val();
+    const raiseInputEvent = () => {
+      if (previousText !== this._input().val()) {
+        // @ts-expect-error trigger
+        _events_engine.default.trigger(this._input(), 'input');
+      }
+    };
+    const handled = keyHandler();
+    if (handled) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      handled.then(raiseInputEvent);
+    } else {
+      var _this$_maskRulesChain4;
+      this.setForwardDirection();
+      this._adjustCaret();
+      this._displayMask();
+      (_this$_maskRulesChain4 = this._maskRulesChain) === null || _this$_maskRulesChain4 === void 0 || _this$_maskRulesChain4.reset();
+      raiseInputEvent();
+    }
+  }
+  _handleKey(key, direction) {
+    this._direction(direction || FORWARD_DIRECTION);
+    this._adjustCaret(key);
+    this._handleKeyChain(key);
+    this._moveCaret();
+  }
+  _handleSelection() {
+    if (!this._hasSelection()) {
+      return;
+    }
+    const caret = this._caret();
+    const caretStart = (caret === null || caret === void 0 ? void 0 : caret.start) ?? 0;
+    const caretEnd = (caret === null || caret === void 0 ? void 0 : caret.end) ?? 0;
+    const emptyChars = new Array(caretEnd - caretStart + 1).join(EMPTY_CHAR);
+    this._handleKeyChain(emptyChars);
+  }
+  _handleKeyChain(chars) {
+    const caret = this._caret();
+    const caretStart = (caret === null || caret === void 0 ? void 0 : caret.start) ?? 0;
+    const caretEnd = (caret === null || caret === void 0 ? void 0 : caret.end) ?? 0;
+    const start = this.isForwardDirection() ? caretStart : caretStart - 1;
+    const end = this.isForwardDirection() ? caretEnd : caretEnd - 1;
+    const length = start === end ? 1 : end - start;
+    this._handleChain({
+      text: chars,
+      start,
+      length
+    });
+  }
+  _tryMoveCaretBackward() {
+    var _this$_caret, _this$_caret2;
+    this.setBackwardDirection();
+    const currentCaret = (_this$_caret = this._caret()) === null || _this$_caret === void 0 ? void 0 : _this$_caret.start;
+    this._adjustCaret();
+    return !currentCaret || currentCaret !== ((_this$_caret2 = this._caret()) === null || _this$_caret2 === void 0 ? void 0 : _this$_caret2.start);
+  }
+  _adjustCaret(char) {
+    var _this$_caret3, _this$_maskRulesChain5;
+    const caretStart = ((_this$_caret3 = this._caret()) === null || _this$_caret3 === void 0 ? void 0 : _this$_caret3.start) ?? 0;
+    const isForwardDirection = this.isForwardDirection();
+    const caret = (_this$_maskRulesChain5 = this._maskRulesChain) === null || _this$_maskRulesChain5 === void 0 ? void 0 : _this$_maskRulesChain5.adjustedCaret(caretStart, isForwardDirection, char ?? '');
+    this._caret({
+      start: caret,
+      end: caret
+    });
+  }
+  _moveCaret() {
+    var _this$_caret4, _this$_maskRulesChain6;
+    const currentCaret = ((_this$_caret4 = this._caret()) === null || _this$_caret4 === void 0 ? void 0 : _this$_caret4.start) ?? 0;
+    const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
+    const caret = (_this$_maskRulesChain6 = this._maskRulesChain) !== null && _this$_maskRulesChain6 !== void 0 && _this$_maskRulesChain6.isAccepted(maskRuleIndex) ? currentCaret + (this.isForwardDirection() ? 1 : -1) : currentCaret;
+    this._caret({
+      start: caret,
+      end: caret
+    });
+  }
+  _caret(position, force) {
+    const $input = this._input();
+    if (!$input.length) {
+      return undefined;
+    }
+    if (arguments.length > 0) {
+      (0, _utils.default)($input, position, force);
+      return undefined;
+    }
+    return (0, _utils.default)($input);
+  }
+  _hasSelection() {
+    const caret = this._caret();
+    return (caret === null || caret === void 0 ? void 0 : caret.start) !== (caret === null || caret === void 0 ? void 0 : caret.end);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
+  _direction(direction) {
+    if (!arguments.length) {
+      return this._typingDirection;
+    }
+    this._typingDirection = direction;
+  }
+  setForwardDirection() {
+    this._direction(FORWARD_DIRECTION);
+  }
+  setBackwardDirection() {
+    this._direction(BACKWARD_DIRECTION);
+  }
+  isForwardDirection() {
+    return this._direction() === FORWARD_DIRECTION;
+  }
+  _updateMaskInfo() {
+    var _this$_maskRulesChain7, _this$_maskRulesChain8;
+    this._textValue = (_this$_maskRulesChain7 = this._maskRulesChain) === null || _this$_maskRulesChain7 === void 0 ? void 0 : _this$_maskRulesChain7.text();
+    this._value = (_this$_maskRulesChain8 = this._maskRulesChain) === null || _this$_maskRulesChain8 === void 0 ? void 0 : _this$_maskRulesChain8.value();
+  }
+  _clean() {
+    var _this$_maskStrategy;
+    (_this$_maskStrategy = this._maskStrategy) === null || _this$_maskStrategy === void 0 || _this$_maskStrategy.clean();
+    super._clean();
+  }
+  _validateMask() {
+    if (!this._maskRulesChain) {
+      return;
+    }
+    const {
+      maskInvalidMessage,
+      value
+    } = this.option();
+    const defaultValidationError = {
+      editorSpecific: true,
+      message: maskInvalidMessage
+    };
+    const isValid = (0, _string.isEmpty)(value) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+    const validationError = isValid ? null : defaultValidationError;
+    this.option({
+      isValid,
+      validationError
+    });
+  }
+  _updateHiddenElement() {
+    this._removeHiddenElement();
+    const {
+      mask
+    } = this.option();
+    if (mask) {
+      this._input().removeAttr('name');
+      this._renderHiddenElement();
+    }
+    const {
+      name
+    } = this.option();
+    this._setSubmitElementName(name);
+  }
+  _updateMaskOption() {
+    this._updateHiddenElement();
+    this._renderMask();
+    this._validateMask();
+    this._refreshValueChangeEvent();
+  }
+  _processEmptyMask(mask) {
+    if (mask) {
+      return;
+    }
+    const {
+      value
+    } = this.option();
+    this.option({
+      text: value,
+      isValid: true,
+      validationError: null
+    });
+    this.validationRequest.fire({
+      value,
+      editor: this
+    });
+    this._renderValue();
+  }
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'mask':
+        this._updateMaskOption();
+        // @ts-expect-error as string
+        this._processEmptyMask(args.value);
+        break;
+      case 'maskChar':
+      case 'maskRules':
+      case 'useMaskedValue':
+        this._updateMaskOption();
+        break;
+      case 'value':
+        this._renderMaskedValue();
+        this._validateMask();
+        super._optionChanged(args);
+        // @ts-expect-error dxElementWrapper.val() should return string
+        this._changedValue = this._input().val();
+        break;
+      case 'maskInvalidMessage':
+        break;
+      case 'showMaskMode':
+        this.option({
+          text: ''
+        });
+        this._renderValue();
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+  clear() {
+    const {
+      value: defaultValue
+    } = this._getDefaultOptions();
+    const {
+      value
+    } = this.option();
+    if (value === defaultValue) {
+      this._renderMaskedValue();
+    }
+    super.clear();
+  }
+}
+var _default = exports["default"] = TextEditorMask;
+
+/***/ },
+
+/***/ 42482
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.StubMaskRule = exports.MaskRule = exports.EmptyMaskRule = void 0;
+var _extend = __webpack_require__(52576);
+var _type = __webpack_require__(11528);
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-classes-per-file */
+
+const EMPTY_CHAR = ' ';
+class BaseMaskRule {
+  constructor(config) {
+    this._value = EMPTY_CHAR;
+    (0, _extend.extend)(this, config);
+  }
+  next(rule) {
+    if (!arguments.length) {
+      return this._next;
+    }
+    this._next = rule;
+    return undefined;
+  }
+  _prepareHandlingArgs(args, config) {
+    const configuration = config ?? {};
+    const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
+    const finalConfig = Object.assign({}, args, {
+      start: configuration.start ?? args.start,
+      length: configuration.length ?? args.length,
+      index: (args.index ?? 0) + 1
+    });
+    finalConfig[handlingProperty] = configuration.str ?? args[handlingProperty];
+    return finalConfig;
+  }
+  first() {
+    let index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    const newIndex = index + 1;
+    return this.next().first(newIndex);
+  }
+  isAccepted(caret) {
+    return false;
+  }
+  adjustedCaret(caret, isForwardDirection, char) {
+    return isForwardDirection ? this._adjustedForward(caret, 0, char) : this._adjustedBackward(caret, 0, char);
+  }
+  _adjustedForward(caret, index, char) {}
+  _adjustedBackward(caret, index, char) {}
+  // @ts-expect-error return type
+  isValid(args) {}
+  reset() {}
+  clear(args) {}
+  // @ts-expect-error return type
+  text() {}
+  // @ts-expect-error return type
+  value() {}
+  // @ts-expect-error return type
+  rawValue() {}
+  // @ts-expect-error return type
+  handle(args) {}
+}
+class EmptyMaskRule extends BaseMaskRule {
+  // @ts-expect-error Liskov
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  next() {}
+  handle() {
+    return 0;
+  }
+  text() {
+    return '';
+  }
+  value() {
+    return '';
+  }
+  first() {
+    return 0;
+  }
+  rawValue() {
+    return '';
+  }
+  adjustedCaret() {
+    return 0;
+  }
+  isValid() {
+    return true;
+  }
+}
+exports.EmptyMaskRule = EmptyMaskRule;
+class MaskRule extends BaseMaskRule {
+  text() {
+    const isValueEqualEmptyChar = this._value === EMPTY_CHAR;
+    const value = isValueEqualEmptyChar ? this.maskChar : this._value;
+    const finalValue = `${value}${this.next().text() ?? ''}`;
+    return finalValue;
+  }
+  value() {
+    const finalValue = `${this._value}${this.next().value() ?? ''}`;
+    return finalValue;
+  }
+  rawValue() {
+    const finalValue = `${this._value}${this.next().rawValue() ?? ''}`;
+    return finalValue;
+  }
+  handle(args) {
+    const str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
+    if (!str || !str.length || !args.length) {
+      return 0;
+    }
+    if (args.start) {
+      return this.next().handle(this._prepareHandlingArgs(args, {
+        start: args.start - 1
+      }));
+    }
+    const char = str[0];
+    const rest = str.substring(1);
+    this._tryAcceptChar(char, args);
+    const isAccepted = this._accepted();
+    const rule = isAccepted ? this.next() : this;
+    const handlingArgs = this._prepareHandlingArgs(args, {
+      str: rest,
+      length: args.length - 1
+    });
+    const handledResult = rule.handle(handlingArgs);
+    const result = isAccepted ? handledResult + 1 : handledResult;
+    return result;
+  }
+  clear(args) {
+    this._tryAcceptChar(EMPTY_CHAR, args);
+    this.next().clear(this._prepareHandlingArgs(args));
+  }
+  reset() {
+    this._accepted(false);
+    this.next().reset();
+  }
+  _tryAcceptChar(char, args) {
+    var _args$fullText, _args$fullText2;
+    this._accepted(false);
+    if (!this._isAllowed(char, args)) {
+      return;
+    }
+    const acceptedChar = char === EMPTY_CHAR ? this.maskChar ?? '' : char;
+    const fullTextSubstring1 = ((_args$fullText = args.fullText) === null || _args$fullText === void 0 ? void 0 : _args$fullText.substring(0, args.index)) ?? '';
+    const fullTextSubstring2 = ((_args$fullText2 = args.fullText) === null || _args$fullText2 === void 0 ? void 0 : _args$fullText2.substring((args.index ?? 0) + 1)) ?? '';
+    args.fullText = `${fullTextSubstring1}${acceptedChar}${fullTextSubstring2}`;
+    this._accepted(true);
+    this._value = char;
+  }
+  // eslint-disable-next-line consistent-return
+  _accepted(value) {
+    if (!arguments.length) {
+      return !!this._isAccepted;
+    }
+    this._isAccepted = !!value;
+  }
+  first() {
+    let index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    return this._value === EMPTY_CHAR ? index : super.first(index);
+  }
+  _isAllowed(char, args) {
+    if (char === EMPTY_CHAR) {
+      return true;
+    }
+    return this._isValid(char, args);
+  }
+  _isValid(char, args) {
+    const {
+      allowedChars
+    } = this;
+    if (allowedChars instanceof RegExp) {
+      return allowedChars.test(char);
+    }
+    if ((0, _type.isFunction)(allowedChars)) {
+      return allowedChars(char, args === null || args === void 0 ? void 0 : args.index, args === null || args === void 0 ? void 0 : args.fullText);
+    }
+    if (Array.isArray(allowedChars)) {
+      return allowedChars.includes(char);
+    }
+    return allowedChars === char;
+  }
+  isAccepted(caret) {
+    return Boolean(caret === 0 ? this._accepted() : this.next().isAccepted(caret - 1));
+  }
+  _adjustedForward(caret, index, char) {
+    if (index >= caret) {
+      return index;
+    }
+    return this.next()._adjustedForward(caret, index + 1, char) || index + 1;
+  }
+  _adjustedBackward(caret, index) {
+    if (index >= caret - 1) {
+      return caret;
+    }
+    return this.next()._adjustedBackward(caret, index + 1) || index + 1;
+  }
+  isValid(args) {
+    return this._isValid(this._value, args) && this.next().isValid(this._prepareHandlingArgs(args));
+  }
+}
+exports.MaskRule = MaskRule;
+class StubMaskRule extends MaskRule {
+  value() {
+    return this.next().value();
+  }
+  handle(args) {
+    const hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
+    const str = hasValueProperty ? args.value : args.text;
+    if (!(str !== null && str !== void 0 && str.length) || !args.length) {
+      return 0;
+    }
+    if (args.start || hasValueProperty) {
+      const handlingArgs = this._prepareHandlingArgs(args, {
+        start: args.start && args.start - 1
+      });
+      return this.next().handle(handlingArgs);
+    }
+    const char = str[0];
+    const rest = str.substring(1);
+    this._tryAcceptChar(char);
+    const nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, {
+      str: rest,
+      length: args.length - 1
+    }) : args;
+    return (this.next().handle(nextArgs) ?? 0) + 1;
+  }
+  clear(args) {
+    this._accepted(false);
+    this.next().clear(this._prepareHandlingArgs(args));
+  }
+  _tryAcceptChar(char) {
+    this._accepted(this._isValid(char));
+  }
+  _isValid(char) {
+    return char === this.maskChar;
+  }
+  first() {
+    let index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    const newIndex = index + 1;
+    return this.next().first(newIndex);
+  }
+  _adjustedForward(caret, index, char) {
+    if (index >= caret && char === this.maskChar) {
+      return index;
+    }
+    if (caret === index + 1 && this._accepted()) {
+      return caret;
+    }
+    return this.next()._adjustedForward(caret, index + 1, char);
+  }
+  _adjustedBackward(caret, index) {
+    if (index >= caret - 1) {
+      return 0;
+    }
+    return this.next()._adjustedBackward(caret, index + 1);
+  }
+  isValid(args) {
+    return Boolean(this.next().isValid(this._prepareHandlingArgs(args)));
+  }
+}
+exports.StubMaskRule = StubMaskRule;
+
+/***/ },
+
+/***/ 73445
+(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _events_engine = _interopRequireDefault(__webpack_require__(92774));
+var _index = __webpack_require__(98834);
+var _browser = _interopRequireDefault(__webpack_require__(48314));
+var _dom = __webpack_require__(86858);
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+const MASK_EVENT_NAMESPACE = 'dxMask';
+const BLUR_EVENT = 'blur beforedeactivate';
+const EMPTY_CHAR = ' ';
+const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', 'deleteContent', 'deleteHardLineBackward'];
+const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
+const EVENT_NAMES = ['focusIn', 'focusOut', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
+const getEmptyString = length => EMPTY_CHAR.repeat(length);
+class MaskStrategy {
+  constructor(editor) {
+    this.editor = editor;
+  }
+  _editorOption(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  name,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  value) {
+    // eslint-disable-next-line prefer-rest-params
+    return this.editor.option(...arguments);
+  }
+  _editorInput() {
+    return this.editor._input();
+  }
+  // eslint-disable-next-line consistent-return
+  _editorCaret(newCaret) {
+    if (!newCaret) {
+      return this.editor._caret();
+    }
+    this.editor._caret(newCaret);
+  }
+  _attachChangeEventHandler() {
+    const valueChangeEvent = this._editorOption('valueChangeEvent');
+    if (!(valueChangeEvent !== null && valueChangeEvent !== void 0 && valueChangeEvent.split(' ').includes('change'))) {
+      return;
+    }
+    const $input = this._editorInput();
+    const namespace = (0, _index.addNamespace)(BLUR_EVENT, MASK_EVENT_NAMESPACE);
+    _events_engine.default.on($input, namespace, e => {
+      this.editor._changeHandler(e);
+    });
+  }
+  _beforeInputHandler() {
+    this._previousText = this._editorOption('text');
+    this._prevCaret = this._editorCaret();
+  }
+  _inputHandler(event) {
+    const {
+      originalEvent
+    } = event;
+    if (!originalEvent) {
+      return;
+    }
+    const {
+      inputType
+    } = originalEvent;
+    if (HISTORY_INPUT_TYPES.includes(inputType)) {
+      this._handleHistoryInputEvent();
+    } else if (DELETE_INPUT_TYPES.includes(inputType)) {
+      this._handleBackwardDeleteInputEvent();
+    } else {
+      const currentCaret = this._editorCaret();
+      if (!(currentCaret !== null && currentCaret !== void 0 && currentCaret.end)) {
+        return;
+      }
+      this._clearSelectedText();
+      this._autoFillHandler(originalEvent);
+      this._editorCaret(currentCaret);
+      this._handleInsertTextInputEvent(originalEvent.data);
+    }
+    if (this._editorOption('text') === this._previousText) {
+      event.stopImmediatePropagation();
+    }
+  }
+  _handleHistoryInputEvent() {
+    const caret = this._editorCaret();
+    this._updateEditorMask({
+      start: caret === null || caret === void 0 ? void 0 : caret.start,
+      length: ((caret === null || caret === void 0 ? void 0 : caret.end) ?? 0) - ((caret === null || caret === void 0 ? void 0 : caret.start) ?? 0),
+      text: ''
+    });
+    this._editorCaret(this._prevCaret);
+  }
+  _handleBackwardDeleteInputEvent() {
+    this._clearSelectedText(true);
+    const caret = this._editorCaret();
+    this.editor.setForwardDirection();
+    this.editor._adjustCaret();
+    const adjustedForwardCaret = this._editorCaret();
+    if ((adjustedForwardCaret === null || adjustedForwardCaret === void 0 ? void 0 : adjustedForwardCaret.start) !== (caret === null || caret === void 0 ? void 0 : caret.start)) {
+      this.editor.setBackwardDirection();
+      this.editor._adjustCaret();
+    }
+  }
+  _clearSelectedText(isDeleteInputEvent) {
+    const selectionLength = this._prevCaret && (this._prevCaret.end ?? 0) - (this._prevCaret.start ?? 0);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const length = selectionLength || Number(Boolean(isDeleteInputEvent));
+    const caret = this._editorCaret();
+    if (!this._isAutoFill()) {
+      this.editor.setBackwardDirection();
+      this._updateEditorMask({
+        start: caret === null || caret === void 0 ? void 0 : caret.start,
+        length,
+        text: getEmptyString(length)
+      });
+    }
+  }
+  _handleInsertTextInputEvent(data) {
+    var _this$_prevCaret;
+    // NOTE: data has length > 1 when autosuggestion is applied.
+    const text = data ?? '';
+    this.editor.setForwardDirection();
+    const hasValidChars = this._updateEditorMask({
+      start: ((_this$_prevCaret = this._prevCaret) === null || _this$_prevCaret === void 0 ? void 0 : _this$_prevCaret.start) ?? 0,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      length: text.length || 1,
+      text
+    });
+    if (!hasValidChars) {
+      this._editorCaret(this._prevCaret);
+    }
+  }
+  _updateEditorMask(args) {
+    var _args$text;
+    const textLength = ((_args$text = args.text) === null || _args$text === void 0 ? void 0 : _args$text.length) ?? 0;
+    const processedCharsCount = this.editor._handleChain(args) ?? 0;
+    this.editor._displayMask();
+    if (this.editor.isForwardDirection()) {
+      const {
+        start = 0,
+        end = 0
+      } = this._editorCaret() ?? {};
+      const correction = processedCharsCount - textLength;
+      const hasSkippedStub = processedCharsCount > 1;
+      if (hasSkippedStub && textLength === 1) {
+        this._editorCaret({
+          start: start + correction,
+          end: end + correction
+        });
+      }
+      this.editor._adjustCaret();
+    }
+    return Boolean(processedCharsCount);
+  }
+  _focusInHandler() {
+    this.editor._showMaskPlaceholder();
+    this.editor.setForwardDirection();
+    if (!this.editor._isValueEmpty() && this._editorOption('isValid')) {
+      this.editor._adjustCaret();
+    } else {
+      if (!this.editor._maskRulesChain) {
+        return;
+      }
+      const caret = this.editor._maskRulesChain.first();
+      // eslint-disable-next-line no-restricted-globals
+      this._caretTimeout = setTimeout(() => {
+        this._editorCaret({
+          start: caret,
+          end: caret
+        });
+      }, 0);
+    }
+  }
+  _focusOutHandler(event) {
+    this.editor._changeHandler(event);
+    if (this._editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
+      this._editorOption('text', '');
+      this.editor._renderDisplayText('');
+    }
+  }
+  _delHandler(event) {
+    this.editor._maskKeyHandler(event, () => {
+      if (!this.editor._hasSelection()) {
+        // @ts-expect-error bad editor type
+        this.editor._handleKey(EMPTY_CHAR);
+      }
+      return undefined;
+    });
+  }
+  _cutHandler(event) {
+    const caret = this._editorCaret();
+    const inputVal = this._editorInput().val();
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const selectedText = inputVal.substring(caret === null || caret === void 0 ? void 0 : caret.start, caret === null || caret === void 0 ? void 0 : caret.end);
+    this.editor._maskKeyHandler(event, () => (0, _dom.clipboardText)(event, selectedText));
+  }
+  _dropHandler() {
+    this._clearDragTimer();
+    // eslint-disable-next-line no-restricted-globals
+    this._dragTimer = setTimeout(() => {
+      // @ts-expect-error dxElementWrapper.val()
+      const value = this.editor._convertToValue(this._editorInput().val());
+      this._editorOption('value', value);
+    });
+  }
+  _pasteHandler(event) {
+    if (this._editorOption('disabled')) {
+      return;
+    }
+    const caret = this._editorCaret();
+    this.editor._maskKeyHandler(event, () => {
+      var _this$editor$_maskRul;
+      const pastedText = (0, _dom.clipboardText)(event);
+      if (!pastedText) {
+        return undefined;
+      }
+      const restText = (_this$editor$_maskRul = this.editor._maskRulesChain) === null || _this$editor$_maskRul === void 0 ? void 0 : _this$editor$_maskRul.text().substring((caret === null || caret === void 0 ? void 0 : caret.end) ?? 0);
+      const accepted = this.editor._handleChain({
+        text: pastedText,
+        start: caret === null || caret === void 0 ? void 0 : caret.start,
+        length: pastedText.length
+      });
+      const newCaret = ((caret === null || caret === void 0 ? void 0 : caret.start) ?? 0) + accepted;
+      this.editor._handleChain({
+        text: restText,
+        start: newCaret,
+        length: restText === null || restText === void 0 ? void 0 : restText.length
+      });
+      this.editor._caret({
+        start: newCaret,
+        end: newCaret
+      });
+      return undefined;
+    });
+  }
+  _autoFillHandler(event) {
+    const inputVal = this._editorInput().val();
+    // eslint-disable-next-line no-restricted-globals
+    this._inputHandlerTimer = setTimeout(() => {
+      if (this._isAutoFill()) {
+        this.editor._maskKeyHandler(event, () => {
+          this.editor._handleChain({
+            // @ts-expect-error dxElementWrapper.val()
+            text: inputVal,
+            start: 0,
+            length: inputVal.length
+          });
+          return undefined;
+        });
+        this.editor._validateMask();
+      }
+    });
+  }
+  _isAutoFill() {
+    const $input = this._editorInput();
+    if (_browser.default.webkit) {
+      const input = $input.get(0);
+      return (input === null || input === void 0 ? void 0 : input.matches(':-webkit-autofill')) ?? false;
+    }
+    return false;
+  }
+  _clearDragTimer() {
+    clearTimeout(this._dragTimer);
+  }
+  _clearTimers() {
+    this._clearDragTimer();
+    clearTimeout(this._caretTimeout);
+    clearTimeout(this._inputHandlerTimer);
+  }
+  getHandler(handlerName) {
+    return args => {
+      var _this;
+      (_this = this[`_${handlerName}Handler`]) === null || _this === void 0 || _this.call(this, args);
+    };
+  }
+  attachEvents() {
+    const $input = this._editorInput();
+    EVENT_NAMES.forEach(eventName => {
+      const namespace = (0, _index.addNamespace)(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
+      _events_engine.default.on($input, namespace, this.getHandler(eventName));
+    });
+    this._attachChangeEventHandler();
+  }
+  detachEvents() {
+    this._clearTimers();
+    _events_engine.default.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
+  }
+  clean() {
+    this._clearTimers();
+  }
+}
+exports["default"] = MaskStrategy;
 
 /***/ },
 
@@ -245806,8 +246398,8 @@ const getCaret = input => {
 };
 const setCaret = (input, selection) => {
   try {
-    input.selectionStart = selection.start;
-    input.selectionEnd = selection.end;
+    input.selectionStart = selection.start ?? null;
+    input.selectionEnd = selection.end ?? null;
   } catch {/** empty */}
 };
 exports.setCaret = setCaret;
@@ -247421,6 +248013,7 @@ class DropDownMenu extends _widget.default {
       showTitle: false,
       fullScreen: false,
       ignoreChildEvents: false,
+      _ignoreCloseOnChildEscape: true,
       _fixWrapperPosition: true
     });
     this._popup.registerKeyHandler('space', e => {

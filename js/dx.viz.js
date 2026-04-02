@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.viz.js)
 * Version: 26.1.0
-* Build date: Tue Mar 03 2026
+* Build date: Fri Mar 27 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
@@ -3726,6 +3726,9 @@ const getOffsetWithoutScale = function ($startElement) {
 };
 const position = function (what, options) {
   const $what = (0, _renderer.default)(what);
+  if (!$what.length) {
+    return undefined;
+  }
   if (!options) {
     return $what.offset();
   }
@@ -4467,9 +4470,6 @@ const resetPosition = function ($element, finishTransition) {
   $element.css(stylesConfig);
   clearCache($element);
   if (finishTransition) {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $element.get(0).offsetHeight;
     $element.css('transition', originalTransition);
   }
 };
@@ -19659,6 +19659,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.infernoRenderer = void 0;
+var _short = __webpack_require__(42222);
 var _dom_adapter = _interopRequireDefault(__webpack_require__(64960));
 var _element_data = __webpack_require__(74663);
 var _dependency_injector = _interopRequireDefault(__webpack_require__(89656));
@@ -19669,6 +19670,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 /* eslint-disable spellcheck/spell-checker */
 
 const remove = element => {
+  _short.keyboard.disposeProcessorsForSubtree(element);
   const {
     parentNode
   } = element;
@@ -24794,6 +24796,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
 const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
+const ISO_PARTIAL_DATE_PATTERN = /^\d{4,}(-\d{2})?$/;
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
@@ -24809,6 +24812,13 @@ const dateParser = function (text, skipISO8601Parsing) {
 function getTimePart(part) {
   return +part || 0;
 }
+function createLocalDateFromUTCTimestamp(timestamp) {
+  const utc = new Date(timestamp);
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+}
+function isISOPartialDateString(text) {
+  return ISO_PARTIAL_DATE_PATTERN.test(text);
+}
 function parseDate(text) {
   const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
   const parsedValue = !(0, _type.isDate)(text) && Date.parse(text);
@@ -24822,7 +24832,10 @@ function parseDate(text) {
       return newDate;
     }
   }
-  return (0, _type.isNumeric)(parsedValue) ? new Date(parsedValue) : text;
+  if (!(0, _type.isNumeric)(parsedValue)) {
+    return text;
+  }
+  return isISOPartialDateString(text) ? createLocalDateFromUTCTimestamp(parsedValue) : new Date(parsedValue);
 }
 function parseISO8601String(text) {
   let parts = text.match(ISO8601_PATTERN);
@@ -24931,6 +24944,7 @@ const getDateSerializationFormat = function (value) {
   }
 };
 const dateSerialization = exports.dateSerialization = {
+  createLocalDateFromUTCTimestamp,
   dateParser,
   deserializeDate,
   serializeDate,
@@ -36213,6 +36227,44 @@ const keyboard = exports.keyboard = {
       delete keyboardProcessors[listenerId];
     }
   },
+  disposeProcessorsForSubtree(root) {
+    if (!(root !== null && root !== void 0 && root.nodeType)) {
+      return;
+    }
+    const toElements = value => {
+      if (!value) {
+        return [];
+      }
+      if (value instanceof Element) {
+        return [value];
+      }
+      if (Array.isArray(value)) {
+        return value.filter(item => item instanceof Element);
+      }
+      const v = value;
+      if (typeof v.toArray === 'function') {
+        const arr = v.toArray();
+        if (Array.isArray(arr)) {
+          return arr.filter(item => item instanceof Element);
+        }
+      }
+      const first = v[0];
+      return first instanceof Element ? [first] : [];
+    };
+    const touchesRoot = value => {
+      const elements = toElements(value);
+      return elements.some(el => el === root || root.contains(el));
+    };
+    Object.keys(keyboardProcessors).forEach(id => {
+      const keyboardProcessor = keyboardProcessors[id];
+      if (!keyboardProcessor) {
+        return;
+      }
+      if (touchesRoot(keyboardProcessor._element) || touchesRoot(keyboardProcessor._focusTarget)) {
+        keyboard.off(id);
+      }
+    });
+  },
   // NOTE: For tests
   _getProcessor: listenerId => keyboardProcessors[listenerId]
 };
@@ -42777,6 +42829,7 @@ function normalizeGroupingLoadOptions(group) {
 }
 var _default = exports["default"] = {
   renderNoDataText($element) {
+    var _this$_dataController, _this$_dataController2;
     const that = this;
     $element = $element || this.element();
     if (!$element) {
@@ -42785,14 +42838,14 @@ var _default = exports["default"] = {
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isLoading = this._dataController.isLoading();
+    const isDefaultLoading = this._dataController.isLoading() && !((_this$_dataController = (_this$_dataController2 = this._dataController).isCustomLoading) !== null && _this$_dataController !== void 0 && _this$_dataController.call(_this$_dataController2));
     if (!noDataElement.length) {
       noDataElement = (0, _renderer.default)('<span>').addClass(noDataClass);
     }
     if (!noDataElement.parent().is($element)) {
       noDataElement.appendTo($element);
     }
-    if (isVisible && !isLoading) {
+    if (isVisible && !isDefaultLoading) {
       noDataElement.removeClass('dx-hidden').text(that._getNoDataText());
     } else {
       noDataElement.addClass('dx-hidden');
@@ -46842,10 +46895,13 @@ class Editor extends _widget.default {
     }
     return validationErrors;
   }
+  _toggleAriaDescribedBy(value) {
+    this.setAria('describedby', value);
+  }
   _disposeValidationMessage() {
     if (this._$validationMessage) {
       this._$validationMessage.remove();
-      this.setAria('describedby', null);
+      this._toggleAriaDescribedBy(null);
       this._$validationMessage = undefined;
       this._validationMessage = undefined;
     }
@@ -46876,7 +46932,7 @@ class Editor extends _widget.default {
       } = this.option();
       this._$validationMessage = (0, _renderer.default)('<div>').appendTo($element);
       const validationMessageContentId = `dx-${new _guid.default()}`;
-      this.setAria('describedby', validationMessageContentId);
+      this._toggleAriaDescribedBy(validationMessageContentId);
       // @ts-expect-error ts-error
       this._validationMessage = new _validation_message.default(this._$validationMessage, (0, _extend.extend)({
         validationErrors,
@@ -48707,7 +48763,7 @@ class Overlay extends _widget.default {
       ignoreChildEvents: true,
       _checkParentVisibility: true,
       _fixWrapperPosition: false,
-      _loopFocus: false,
+      tabFocusLoopEnabled: false,
       _ignorePreventScrollEventsDeprecation: false,
       // NOTE: private option
       hideTopOverlayHandler: () => {
@@ -49226,13 +49282,12 @@ class Overlay extends _widget.default {
     };
   }
   _toggleTabTerminator(enabled) {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     const {
-      _loopFocus
+      tabFocusLoopEnabled
     } = this.option();
     // @ts-expect-error NAME has string | undefined type
     const eventName = (0, _utils.addNamespace)('keydown', this.NAME);
-    if (_loopFocus || enabled) {
+    if (tabFocusLoopEnabled || enabled) {
       _events_engine.default.on(_dom_adapter.default.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
@@ -49716,7 +49771,7 @@ class Overlay extends _widget.default {
     switch (name) {
       case 'animation':
         break;
-      case '_loopFocus':
+      case 'tabFocusLoopEnabled':
       case 'shading':
         {
           this._toggleShading(this._isVisible());

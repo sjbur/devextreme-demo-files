@@ -1,5 +1,5 @@
 /*!
- * Knockout JavaScript library v3.5.1
+ * Knockout JavaScript library v3.5.2
  * (c) The Knockout.js team - http://knockoutjs.com/
  * License: MIT (http://www.opensource.org/licenses/mit-license.php)
  */
@@ -49,7 +49,7 @@ ko.exportSymbol = function(koPath, object) {
 ko.exportProperty = function(owner, publicName, object) {
     owner[publicName] = object;
 };
-ko.version = "3.5.1";
+ko.version = "3.5.2";
 
 ko.exportSymbol('version', ko.version);
 // For any options that may affect various areas of Knockout and aren't directly associated with data binding.
@@ -60,6 +60,19 @@ ko.options = {
 };
 
 //ko.exportSymbol('options', ko.options);   // 'options' isn't minified
+// Create a Trusted Types policy for Knockout's internal use (e.g., innerHTML, new Function)
+var koTrustedTypesPolicy;
+if (typeof trustedTypes !== 'undefined') {
+    try {
+        koTrustedTypesPolicy = trustedTypes['createPolicy']('knockout', {
+            'createHTML': function(s) { return s; },
+            'createScript': function(s) { return s; }
+        });
+    } catch (e) {
+        // Policy creation may fail if CSP restricts policy names or 'knockout' already exists
+    }
+}
+
 ko.utils = (function () {
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -107,16 +120,20 @@ ko.utils = (function () {
     // Note that, since IE 10 does not support conditional comments, the following logic only detects IE < 10.
     // Currently this is by design, since IE 10+ behaves correctly when treated as a standard browser.
     // If there is a future need to detect specific versions of IE10+, we will amend this.
-    var ieVersion = document && (function() {
-        var version = 3, div = document.createElement('div'), iElems = div.getElementsByTagName('i');
+    // Skip when Trusted Types is available (IE doesn't support Trusted Types)
+    var ieVersion;
+    if (!koTrustedTypesPolicy) {
+        ieVersion = document && (function() {
+            var version = 3, div = document.createElement('div'), iElems = div.getElementsByTagName('i');
 
-        // Keep constructing conditional HTML blocks until we hit one that resolves to an empty fragment
-        while (
-            div.innerHTML = '<!--[if gt IE ' + (++version) + ']><i></i><![endif]-->',
-            iElems[0]
-        ) {}
-        return version > 4 ? version : undefined;
-    }());
+            // Keep constructing conditional HTML blocks until we hit one that resolves to an empty fragment
+            while (
+                div.innerHTML = '<!--[if gt IE ' + (++version) + ']><i></i><![endif]-->',
+                iElems[0]
+            ) {}
+            return version > 4 ? version : undefined;
+        }());
+    }
     var isIe6 = ieVersion === 6,
         isIe7 = ieVersion === 7;
 
@@ -446,9 +463,14 @@ ko.utils = (function () {
                     jQueryEventAttachName = (typeof jQueryInstance(element)['on'] == 'function') ? 'on' : 'bind';
                 }
                 jQueryInstance(element)[jQueryEventAttachName](eventType, wrappedHandler);
-            } else if (!mustUseAttachEvent && typeof element.addEventListener == "function")
+            } else if (!mustUseAttachEvent && typeof element.addEventListener == "function") {
                 element.addEventListener(eventType, wrappedHandler, false);
-            else if (typeof element.attachEvent != "undefined") {
+
+                // Ensure handler is removed on node disposal to avoid leaks (see bug #2314)
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                    element.removeEventListener(eventType, wrappedHandler);
+                });
+            } else if (typeof element.attachEvent != "undefined") {
                 var attachEventHandler = function (event) { wrappedHandler.call(element, event); },
                     attachEventName = "on" + eventType;
                 element.attachEvent(attachEventName, attachEventHandler);
@@ -458,8 +480,7 @@ ko.utils = (function () {
                 ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                     element.detachEvent(attachEventName, attachEventHandler);
                 });
-            } else
-                throw new Error("Browser doesn't support addEventListener or attachEvent");
+            }
         },
 
         triggerEvent: function (element, eventType) {
@@ -941,7 +962,7 @@ ko.exportSymbol('utils.domNodeDisposal.removeDisposeCallback', ko.utils.domNodeD
                 documentContext.body.appendChild(div);
             }
 
-            div.innerHTML = markup;
+            div.innerHTML = koTrustedTypesPolicy ? koTrustedTypesPolicy['createHTML'](markup) : markup;
 
             if (mayRequireCreateElementHack) {
                 div.parentNode.removeChild(div);
@@ -998,8 +1019,13 @@ ko.exportSymbol('utils.domNodeDisposal.removeDisposeCallback', ko.utils.domNodeD
         html = ko.utils.unwrapObservable(html);
 
         if ((html !== null) && (html !== undefined)) {
-            if (typeof html != 'string')
+            if (typeof html != 'string') {
+                if (typeof trustedTypes !== 'undefined' && trustedTypes['isHTML'](html)) {
+                    node.innerHTML = html;
+                    return;
+                }
                 html = html.toString();
+            }
 
             // jQuery contains a lot of sophisticated code to parse arbitrary HTML fragments,
             // for example <tr> elements which are not normally allowed to exist on their own.
@@ -2161,14 +2187,23 @@ var computedFn = {
         trackingObj._version = target.getVersion();
     },
     haveDependenciesChanged: function () {
-        var id, dependency, dependencyTracking = this[computedState].dependencyTracking;
-        for (id in dependencyTracking) {
-            if (Object.prototype.hasOwnProperty.call(dependencyTracking, id)) {
-                dependency = dependencyTracking[id];
-                if ((this._evalDelayed && dependency._target._notificationIsPending) || dependency._target.hasChanged(dependency._version)) {
-                    return true;
+        var state = this[computedState];
+        if (state.isBeingEvaluated) {
+            return false;
+        }
+        state.isBeingEvaluated = true;
+        try {
+            var id, dependency, dependencyTracking = state.dependencyTracking;
+            for (id in dependencyTracking) {
+                if (Object.prototype.hasOwnProperty.call(dependencyTracking, id)) {
+                    dependency = dependencyTracking[id];
+                    if ((this._evalDelayed && dependency._target._notificationIsPending) || dependency._target.hasChanged(dependency._version)) {
+                        return true;
+                    }
                 }
             }
+        } finally {
+            state.isBeingEvaluated = false;
         }
     },
     markDirty: function () {
@@ -2559,6 +2594,8 @@ ko.exportSymbol('pureComputed', ko.pureComputed);
                 case "boolean":
                 case "number":
                 case "string":
+                case "bigint":
+                case "symbol":
                 case "function":
                     outputProperties[indexer] = propertyValue;
                     break;
@@ -3079,7 +3116,8 @@ ko.exportSymbol('jsonExpressionRewriting.insertPropertyAccessorsIntoJson', ko.ex
         firstChild: function(node) {
             if (!isStartComment(node)) {
                 if (node.firstChild && isEndComment(node.firstChild)) {
-                    throw new Error("Found invalid end comment, as the first child of " + node);
+                    if (DEBUG) throw new Error("Found invalid end comment, as the first child of " + node);
+                    return node.firstChild.nextSibling;
                 }
                 return node.firstChild;
             } else if (!node.nextSibling || isEndComment(node.nextSibling)) {
@@ -3096,7 +3134,8 @@ ko.exportSymbol('jsonExpressionRewriting.insertPropertyAccessorsIntoJson', ko.ex
 
             if (node.nextSibling && isEndComment(node.nextSibling)) {
                 if (isUnmatchedEndComment(node.nextSibling)) {
-                    throw Error("Found end comment without a matching opening comment, as child of " + node);
+                    if (DEBUG) throw Error("Found end comment without a matching opening comment, as child of " + node);
+                    return null;
                 } else {
                     return null;
                 }
@@ -3218,6 +3257,11 @@ ko.exportSymbol('virtualElements.setDomNodeChildren', ko.virtualElements.setDomN
         // Example result: with(sc1) { with(sc0) { return (expression) } }
         var rewrittenBindings = ko.expressionRewriting.preProcessBindings(bindingsString, options),
             functionBody = "with($context){with($data||{}){return{" + rewrittenBindings + "}}}";
+        if (koTrustedTypesPolicy) {
+            // new Function() doesn't accept TrustedScript in Chrome, so use eval instead. (https://issues.chromium.org/issues/40133092)
+            // eval returns the result of the last expression, so wrap as a function expression.
+            return eval(koTrustedTypesPolicy['createScript']("(function($context,$element){" + functionBody + "})"));
+        }
         return new Function("$context", "$element", functionBody);
     }
 })();
@@ -3439,7 +3483,7 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
             if (!bindingInfo.eventSubscribable) {
                 bindingInfo.eventSubscribable = new ko.subscribable;
             }
-            if (options && options['notifyImmediately'] && bindingInfo.notifiedEvents[event]) {
+            if (options && options['notifyImmediately'] && bindingInfo.notifiedEvents && bindingInfo.notifiedEvents[event]) {
                 ko.dependencyDetection.ignore(callback, context, [node]);
             }
             return bindingInfo.eventSubscribable.subscribe(callback, context, event);
@@ -3675,9 +3719,9 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
                 };
 
             // Use of allBindings as a function is maintained for backwards compatibility, but its use is deprecated
-            function allBindings() {
+            var allBindings = function() {
                 return ko.utils.objectMap(bindingsUpdater ? bindingsUpdater() : bindings, evaluateValueAccessor);
-            }
+            };
             // The following is the 3.x allBindings API
             allBindings['get'] = function(key) {
                 return bindings[key] && evaluateValueAccessor(getValueAccessor(key));
@@ -4171,8 +4215,8 @@ ko.exportSymbol('bindingProvider', ko.bindingProvider);
             // The config is the value of an AMD module
             if (amdRequire || window['require']) {
                 (amdRequire || window['require'])([config['require']], function (module) {
-                    if (module && typeof module === 'object' && module.__esModule && module.default) {
-                        module = module.default;
+                    if (module && typeof module === 'object' && module.__esModule && module['default']) {
+                        module = module['default'];
                     }
                     callback(module);
                 });
@@ -4547,7 +4591,7 @@ ko.bindingHandlers['checked'] = {
 
             if (valueIsArray) {
                 // When a checkbox is bound to an array, being checked represents its value being present in that array
-                element.checked = ko.utils.arrayIndexOf(modelValue, elemValue) >= 0;
+                element.checked = modelValue != null && ko.utils.arrayIndexOf(modelValue, elemValue) >= 0;
                 oldElemValue = elemValue;
             } else if (isCheckbox && elemValue === undefined) {
                 // When a checkbox is bound to any other value (not an array) and "checkedValue" is not defined,
@@ -5298,7 +5342,7 @@ ko.bindingHandlers['textInput'] = {
                 // IE 8 has a bug where it fails to fire 'propertychange' on the first update following a value change from
                 // JavaScript code. It also doesn't fire if you clear the entire value. To fix this, we bind to the following
                 // events too.
-                onEvent('keyup', updateModel);      // A single keystoke
+                onEvent('keyup', updateModel);      // A single keystroke
                 onEvent('keydown', updateModel);    // The first character when a key is held down
             }
             if (registerForSelectionChangeEvent) {
@@ -5496,9 +5540,12 @@ ko.bindingHandlers['value'] = {
 
         if (tagName === "select") {
             var updateFromModelComputed;
+            ko.utils.registerEventHandler(element, "change", function() {
+                if (updateFromModelComputed)
+                    valueUpdateHandler()
+            });
             ko.bindingEvent.subscribe(element, ko.bindingEvent.childrenComplete, function () {
                 if (!updateFromModelComputed) {
-                    ko.utils.registerEventHandler(element, "change", valueUpdateHandler);
                     updateFromModelComputed = ko.computed(updateFromModel, null, { disposeWhenNodeIsRemoved: element });
                 } else if (allBindings.get('valueAllowUnset')) {
                     updateFromModel();
@@ -6021,12 +6068,33 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
         var shouldHideDestroyed = (options['includeDestroyed'] === false) || (ko.options['foreachHidesDestroyed'] && !options['includeDestroyed']);
 
         if (!shouldHideDestroyed && !options['beforeRemove'] && ko.isObservableArray(arrayOrObservableArray)) {
-            setDomNodeChildrenFromArrayMapping(arrayOrObservableArray.peek());
+            // Guard against reentrancy (e.g., a binding init that modifies the array) by queueing updates.
+            var queuedChangeLists = [], isProcessing = false;
+            function processArrayChange(changeList) {
+                queuedChangeLists.push(changeList);
+                if (isProcessing) {
+                    return;
+                }
+                isProcessing = true;
+                try {
+                    while (queuedChangeLists.length) {
+                        try {
+                            setDomNodeChildrenFromArrayMapping(arrayOrObservableArray.peek(), queuedChangeLists[0]);
+                        } finally {
+                            queuedChangeLists.shift();
+                        }
+                    }
+                } finally {
+                    isProcessing = false;
+                }
+            }
 
-            var subscription = arrayOrObservableArray.subscribe(function (changeList) {
-                setDomNodeChildrenFromArrayMapping(arrayOrObservableArray(), changeList);
-            }, null, "arrayChange");
+            // Subscribe before initial rendering so that the arrayChange subscription is registered
+            // on the observable before any descendant bindings subscribe (fixes #2305).
+            var subscription = arrayOrObservableArray.subscribe(processArrayChange, null, "arrayChange");
             subscription.disposeWhenNodeIsRemoved(targetNode);
+
+            processArrayChange();
 
             return subscription;
         } else {
@@ -6048,10 +6116,13 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
     };
 
     var templateComputedDomDataKey = ko.utils.domData.nextKey();
-    function disposeOldComputedAndStoreNewOne(element, newComputed) {
+    function disposeOldComputed(element) {
         var oldComputed = ko.utils.domData.get(element, templateComputedDomDataKey);
         if (oldComputed && (typeof(oldComputed.dispose) == 'function'))
             oldComputed.dispose();
+    }
+
+    function storeNewComputed(element, newComputed) {
         ko.utils.domData.set(element, templateComputedDomDataKey, (newComputed && (!newComputed.isActive || newComputed.isActive())) ? newComputed : undefined);
     }
 
@@ -6112,12 +6183,15 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
                     shouldDisplay = ko.utils.unwrapObservable(options['if']);
                 if (shouldDisplay && 'ifnot' in options)
                     shouldDisplay = !ko.utils.unwrapObservable(options['ifnot']);
-
-                // Don't show anything if an empty name is given (see #2446)
-                if (shouldDisplay && !template) {
-                    shouldDisplay = false;
-                }
             }
+
+            // Don't show anything if an empty name is given (see #2446)
+            if (shouldDisplay && !template) {
+                shouldDisplay = false;
+            }
+
+            // Dispose the old computed before displaying data since in some cases, the code below can cause the old computed to update
+            disposeOldComputed(element);
 
             if ('foreach' in options) {
                 // Render once for each data point (treating data set as empty if shouldDisplay==false)
@@ -6138,8 +6212,7 @@ ko.exportSymbol('__tr_ambtns', ko.templateRewriting.applyMemoizedBindingsToNextS
                 templateComputed = ko.renderTemplate(template, innerBindingContext, options, element);
             }
 
-            // It only makes sense to have a single template computed per element (otherwise which one should have its output displayed?)
-            disposeOldComputedAndStoreNewOne(element, templateComputed);
+            storeNewComputed(element, templateComputed);
         }
     };
 
@@ -6314,7 +6387,8 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
         var nodesToDelete = [];
         var itemsToMoveFirstIndexes = [];
         var itemsForBeforeRemoveCallbacks = [];
-        var itemsForMoveCallbacks = [];
+        var itemsForBeforeMoveCallbacks = [];
+        var itemsForAfterMoveCallbacks = [];
         var itemsForAfterAddCallbacks = [];
         var mapData;
         var countWaitingForRemove = 0;
@@ -6323,14 +6397,16 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
             mapData = { arrayEntry: value, indexObservable: ko.observable(currentArrayIndex++) };
             newMappingResult.push(mapData);
             if (!isFirstExecution) {
-                itemsForAfterAddCallbacks.push(mapData);
+                itemsForAfterAddCallbacks[currentArrayIndex - 1] = mapData;
             }
         }
 
         function itemMovedOrRetained(oldPosition) {
             mapData = lastMappingResult[oldPosition];
-            if (currentArrayIndex !== mapData.indexObservable.peek())
-                itemsForMoveCallbacks.push(mapData);
+            if (currentArrayIndex !== mapData.indexObservable.peek()) {
+                itemsForBeforeMoveCallbacks[mapData.indexObservable.peek()] = mapData;
+                itemsForAfterMoveCallbacks[currentArrayIndex] = mapData;
+            }
             // Since updating the index might change the nodes, do so before calling fixUpContinuousNodeArray
             mapData.indexObservable(currentArrayIndex++);
             ko.utils.fixUpContinuousNodeArray(mapData.mappedNodes, domNode);
@@ -6340,9 +6416,11 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
         function callCallback(callback, items) {
             if (callback) {
                 for (var i = 0, n = items.length; i < n; i++) {
-                    ko.utils.arrayForEach(items[i].mappedNodes, function(node) {
-                        callback(node, i, items[i].arrayEntry);
-                    });
+                    if (items[i]) {
+                        ko.utils.arrayForEach(items[i].mappedNodes, function (node) {
+                            callback(node, i, items[i].arrayEntry);
+                        });
+                    }
                 }
             }
         }
@@ -6385,7 +6463,7 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
                                     if (mapData.arrayEntry === deletedItemDummyValue) {
                                         mapData = null;
                                     } else {
-                                        itemsForBeforeRemoveCallbacks.push(mapData);
+                                        itemsForBeforeRemoveCallbacks[mapData.indexObservable.peek()] = mapData;
                                     }
                                 }
                                 if (mapData) {
@@ -6423,7 +6501,7 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
         ko.utils.domData.set(domNode, lastMappingResultDomDataKey, newMappingResult);
 
         // Call beforeMove first before any changes have been made to the DOM
-        callCallback(options['beforeMove'], itemsForMoveCallbacks);
+        callCallback(options['beforeMove'], itemsForBeforeMoveCallbacks);
 
         // Next remove nodes for deleted items (or just clean if there's a beforeRemove callback)
         ko.utils.arrayForEach(nodesToDelete, options['beforeRemove'] ? ko.cleanNode : ko.removeNode);
@@ -6444,7 +6522,7 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
                 mapData = newMappingResult[i];
                 for (lastNode = undefined; i; ) {
                     if ((mappedNodes = newMappingResult[--i].mappedNodes) && mappedNodes.length) {
-                        lastNode = mappedNodes[mappedNodes.length-1];
+                        lastNode = mappedNodes[mappedNodes.length - 1];
                         break;
                     }
                 }
@@ -6474,7 +6552,7 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
         }
 
         // Restore the focused element if it had lost focus
-        if (activeElement && domNode.ownerDocument.activeElement != activeElement) {
+        if (activeElement && domNode.ownerDocument.activeElement != activeElement && typeof activeElement.focus === "function") {
             activeElement.focus();
         }
 
@@ -6489,11 +6567,13 @@ ko.exportSymbol('utils.compareArrays', ko.utils.compareArrays);
         // as already "removed" so we won't call beforeRemove for it again, and it ensures that the item won't match up
         // with an actual item in the array and appear as "retained" or "moved".
         for (i = 0; i < itemsForBeforeRemoveCallbacks.length; ++i) {
-            itemsForBeforeRemoveCallbacks[i].arrayEntry = deletedItemDummyValue;
+            if (itemsForBeforeRemoveCallbacks[i]) {
+                itemsForBeforeRemoveCallbacks[i].arrayEntry = deletedItemDummyValue;
+            }
         }
 
         // Finally call afterMove and afterAdd callbacks
-        callCallback(options['afterMove'], itemsForMoveCallbacks);
+        callCallback(options['afterMove'], itemsForAfterMoveCallbacks);
         callCallback(options['afterAdd'], itemsForAfterAddCallbacks);
     }
 })();
